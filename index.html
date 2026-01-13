@@ -4,14 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Rare Grade Tech - Imagination → Reality</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #4f46e5;       /* Indigo accent */
-      --primary-dark: #4338ca;
-      --text: #1f2937;
-      --light-bg: #f8fafc;
-      --card-bg: #ffffff;
-      --border: #e2e8f0;
+      --bg: #e6f0ff;              /* Soft light blue base */
+      --bg-gradient: linear-gradient(135deg, #e6f0ff 0%, #d6e6ff 100%);
+      --card-bg: rgba(255, 255, 255, 0.75);
+      --card-blur: blur(16px);
+      --primary: #5b6aff;         /* Soft indigo-blue AI accent */
+      --primary-dark: #3f51d1;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --glow: 0 0 30px rgba(91, 106, 255, 0.4);
+      --shadow: 0 20px 40px rgba(0,0,0,0.08);
     }
 
     * {
@@ -21,248 +28,229 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--light-bg);
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-gradient);
       color: var(--text);
       line-height: 1.6;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem 1rem;
+      padding: 0 1.5rem;
+    }
+
+    header.hero {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: 6rem 0 4rem;
       text-align: center;
     }
 
-    header {
-      padding: 4rem 1rem 2rem;
-      background: linear-gradient(135deg, #ffffff, #f1f5f9);
-      border-bottom: 1px solid var(--border);
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 20%, rgba(91,106,255,0.12) 0%, transparent 50%);
+      pointer-events: none;
     }
 
-    h1 {
-      font-size: 3.5rem;
-      margin-bottom: 0.5rem;
-      color: var(--primary);
+    .hero h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--primary), #a5b4fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1.2rem;
+      line-height: 0.95;
     }
 
-    .tagline {
-      font-size: 1.5rem;
-      color: #64748b;
-      margin-bottom: 2rem;
+    .hero .tagline {
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      color: var(--text-light);
+      max-width: 800px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 1rem 2.2rem;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: var(--glow);
+      transition: all 0.4s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 0 50px rgba(91,106,255,0.6);
+    }
+
+    section {
+      padding: 6rem 0;
+    }
+
+    h2.section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.2rem;
+      text-align: center;
+      margin-bottom: 4rem;
+      background: linear-gradient(90deg, var(--primary), #c7d2fe);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
     .purpose {
-      max-width: 800px;
-      margin: 3rem auto;
-    }
-
-    .purpose h2 {
-      color: var(--primary);
-      margin-bottom: 1rem;
-    }
-
-    .services {
-      padding: 3rem 1rem;
-    }
-
-    .services h2 {
-      font-size: 2.8rem;
-      margin-bottom: 3rem;
-      color: var(--primary);
-    }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-      justify-items: center;
-    }
-
-    .flip-card {
-      background-color: transparent;
-      width: 320px;
-      height: 380px;
-      perspective: 1000px;
-      cursor: pointer;
-    }
-
-    .flip-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      transform-style: preserve-3d;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      border-radius: 16px;
+      max-width: 900px;
+      margin: 0 auto;
       background: var(--card-bg);
+      backdrop-filter: var(--card-blur);
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 24px;
+      padding: 3rem;
+      box-shadow: var(--shadow);
     }
 
-    .flip-card:hover .flip-card-inner {
-      transform: rotateY(180deg);
-    }
-
-    .flip-card-front,
-    .flip-card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 16px;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .flip-card-front {
-      background: linear-gradient(135deg, #f8fafc, #ffffff);
-      border: 1px solid var(--border);
-    }
-
-    .flip-card-back {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      transform: rotateY(180deg);
-    }
-
-    .flip-card h3 {
+    .purpose h3 {
+      color: var(--primary);
       font-size: 1.8rem;
-      margin-bottom: 1rem;
+      margin: 2rem 0 1rem;
     }
 
-    .flip-card p {
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .service-card {
+      background: var(--card-bg);
+      backdrop-filter: var(--card-blur);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 24px;
+      padding: 2.5rem;
+      text-align: center;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: -50%;
+      background: radial-gradient(circle at 50% 50%, rgba(91,106,255,0.15), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.6s;
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .service-card:hover {
+      transform: translateY(-12px);
+      box-shadow: var(--glow), 0 30px 60px rgba(0,0,0,0.12);
+    }
+
+    .service-card h3 {
+      font-size: 1.9rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .service-card p {
+      color: var(--text-light);
       font-size: 1.1rem;
-      opacity: 0.9;
     }
 
     .cta {
-      padding: 4rem 1rem;
-      background: white;
-      border-radius: 16px;
-      margin: 3rem auto;
-      max-width: 700px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+      text-align: center;
+      padding: 8rem 0 6rem;
+      background: linear-gradient(135deg, rgba(230,240,255,0.8), rgba(214,230,255,0.6));
     }
 
     .cta h2 {
-      font-size: 2.5rem;
-      color: var(--primary);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.5rem;
       margin-bottom: 1.5rem;
+      color: var(--primary);
     }
 
     .phone {
-      font-size: 2.2rem;
-      font-weight: bold;
+      font-size: 3rem;
+      font-weight: 800;
       color: var(--primary-dark);
       margin: 1.5rem 0;
     }
 
     footer {
-      padding: 2rem 1rem;
+      padding: 4rem 0 2rem;
       text-align: center;
-      color: #64748b;
-      font-size: 0.95rem;
-      border-top: 1px solid var(--border);
-      margin-top: 4rem;
-    }
-
-    .social {
-      margin: 1rem 0;
+      color: var(--text-light);
+      border-top: 1px solid rgba(91,106,255,0.15);
     }
 
     .social a {
       color: var(--primary);
-      margin: 0 1rem;
-      font-size: 1.3rem;
+      font-size: 1.6rem;
+      margin: 0 1.2rem;
       text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 4.5rem; }
+      h2.section-title { font-size: 2.6rem; }
     }
   </style>
 </head>
 <body>
 
-  <header>
+  <header class="hero">
     <div class="container">
       <h1>RARE GRADE TECH</h1>
-      <p class="tagline">Home Vision Services Contact</p>
-      <p class="tagline">IMAGINATION → REALITY</p>
-      <p>Breaking limitations through cutting-edge technology</p>
-      <p><strong>Get in Touch</strong></p>
+      <p class="tagline">IMAGINATION → REALITY<br>Breaking limitations through cutting-edge AI & technology</p>
+      <a href="tel:0639576360" class="btn">Get in Touch →</a>
     </div>
   </header>
 
-  <section class="container purpose">
-    <h2>Our Purpose</h2>
-    
-    <h3>VISION</h3>
-    <p>To break limitations through tech, enabling our clients to realize their full potential for growth & success.</p>
-    
-    <h3>MISSION</h3>
-    <p>Design, develop & build innovative, well-grounded tech & software solutions to meet our clients’ needs with mind-blowing quality & ethics.</p>
+  <section>
+    <div class="container purpose">
+      <h2 class="section-title">Our Purpose</h2>
+      
+      <h3>VISION</h3>
+      <p>To break limitations through tech, enabling our clients to realize their full potential for growth & success.</p>
+      
+      <h3>MISSION</h3>
+      <p>Design, develop & build innovative, well-grounded tech & software solutions to meet our clients’ needs with mind-blowing quality & ethics.</p>
+    </div>
   </section>
 
-  <section class="services">
+  <section>
     <div class="container">
-      <h2>What We Do</h2>
+      <h2 class="section-title">What We Do</h2>
       
-      <div class="cards-grid">
-        <!-- Card 1 -->
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <h3>Custom Software Development</h3>
-              <p>Web • Mobile • Desktop • Cloud</p>
-            </div>
-            <div class="flip-card-back">
-              <h3>Custom Software Development</h3>
-              <p>Built from the ground up to solve real business problems — tailored exactly to your needs.</p>
-            </div>
-          </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <h3>Custom Software Development</h3>
+          <p>Web • Mobile • Desktop • Cloud solutions built from the ground up to solve real business problems with precision and scalability.</p>
         </div>
 
-        <!-- Card 2 -->
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <h3>AI & Emerging Tech</h3>
-              <p>Machine Learning • Computer Vision • VR/AR</p>
-            </div>
-            <div class="flip-card-back">
-              <h3>AI & Emerging Tech</h3>
-              <p>Integrating next-gen tools into practical business value that drives real results.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <h3>UI/UX & Product Design</h3>
-              <p>Intuitive & beautiful interfaces</p>
-            </div>
-            <div class="flip-card-back">
-              <h3>UI/UX & Product Design</h3>
-              <p>Backed by strong user research & testing — interfaces users genuinely love.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <h3>Consulting & Strategy</h3>
-              <p>Tech roadmaps & digital transformation</p>
-            </div>
-            <div class="flip-card-back">
-              <h3>Consulting & Strategy</h3>
-              <p>Architecture reviews, planning, and guidance to future-proof your business.</p>
-            </div>
-          </div>
+        <div class="service-card">
+          <h3>AI & Emerging Tech</h3>
+          <p>Integrating machine learning, computer vision, VR/AR and next-gen tools into practical, high-value business solutions.</p>
         </div>
       </div>
     </div>
@@ -272,13 +260,14 @@
     <div class="container">
       <h2>Let's Build Something Extraordinary</h2>
       <p class="phone">063 957 6360</p>
-      <p>Ready to turn your vision into reality?<br>Drop us a message — we're ready when you are.</p>
+      <p style="font-size: 1.4rem; max-width: 600px; margin: 0 auto;">Ready to turn your vision into reality? Drop us a message — we're ready when you are.</p>
+      <a href="tel:0639576360" class="btn" style="margin-top: 2rem;">Contact Us Now</a>
     </div>
   </section>
 
   <footer>
     <div class="container">
-      <div class="social">
+      <div class="social" style="margin-bottom: 1.5rem;">
         <a href="#">📸 Instagram</a> • <a href="#">Facebook</a>
       </div>
       <p>© 2026 Rare Grade Tech • Gqeberha, South Africa</p>
