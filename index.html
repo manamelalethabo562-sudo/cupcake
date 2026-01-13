@@ -4,389 +4,404 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Rare Grade Tech | Imagination → Reality</title>
-   
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
-   
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg-light: #f8f9ff;
-            --bg-accent: #f0f4ff;
-            --primary: #00b7eb;          /* Slightly adjusted cyan for better light-theme contrast */
-            --primary-dim: #0099cc;
-            --text-main: #1a1a2e;
-            --text-muted: #4b5e7a;
-            --glass-bg: rgba(255, 255, 255, 0.75);
-            --glass-border: rgba(0, 183, 235, 0.15);
-            --card-hover: rgba(0, 183, 235, 0.08);
-            --gradient-text: linear-gradient(135deg, #1a1a2e 0%, #00b7eb 100%);
-            --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
+            /* Light Theme Variables */
+            --bg-body: #f8fafc;
+            --bg-surface: #ffffff;
+            --primary: #2563eb;       /* Professional Royal Blue */
+            --primary-dark: #1e40af;
+            --accent: #3b82f6;
+            --text-main: #0f172a;     /* Deep Navy/Black for text */
+            --text-muted: #64748b;    /* Slate Gray */
+            
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            --hero-glow: 0 20px 60px rgba(37, 99, 235, 0.15);
         }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             scroll-behavior: smooth;
         }
+
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: var(--bg-light);
+            background-color: var(--bg-body);
             color: var(--text-main);
-            overflow-x: hidden;
             line-height: 1.6;
+            overflow-x: hidden;
         }
-        /* --- Animated Background (subtle now for light theme) --- */
-        .bg-glow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background:
-                radial-gradient(circle at 15% 50%, rgba(0, 183, 235, 0.06), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(0, 183, 235, 0.04), transparent 25%);
-            z-index: -1;
-            pointer-events: none;
-        }
-        /* --- Layout Utilities --- */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        section {
-            padding: 8rem 0;
-        }
-        h1, h2, h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 700;
-        }
+
         /* --- Animations --- */
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
+
         .fade-in.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        /* --- Header / Nav --- */
+
+        /* --- Navigation --- */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            padding: 1.5rem 0;
-            background: rgba(248, 249, 255, 0.92);
+            padding: 1.2rem 0;
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--glass-border);
-            box-shadow: var(--shadow-sm);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
             z-index: 1000;
         }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
         .nav-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
         .logo {
             font-family: 'Space Grotesk', sans-serif;
             font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: -0.02em;
             color: var(--text-main);
             text-decoration: none;
+            letter-spacing: -0.03em;
         }
+        
         .logo span { color: var(--primary); }
-        .cta-small {
+
+        .btn-nav {
             padding: 0.6rem 1.5rem;
-            border: 1px solid var(--primary-dim);
-            color: var(--primary);
+            background-color: var(--text-main);
+            color: white;
             text-decoration: none;
             border-radius: 50px;
             font-size: 0.9rem;
+            font-weight: 500;
             transition: 0.3s;
-            background: white;
         }
-        .cta-small:hover {
+
+        .btn-nav:hover {
+            background-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding: 160px 0 100px;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.05), transparent 40%);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-text h1 .highlight {
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 90%;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
             background: var(--primary);
             color: white;
-            box-shadow: 0 0 20px rgba(0, 183, 235, 0.3);
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s ease;
         }
-        /* --- Hero Section with Background Image --- */
-        .hero {
-            min-height: 100vh;
+
+        .hero-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4);
+        }
+
+        /* --- Hero Image Styling --- */
+        .hero-image-wrapper {
+            position: relative;
+        }
+
+        .hero-image-wrapper img {
+            width: 100%;
+            border-radius: 24px;
+            box-shadow: var(--hero-glow), var(--shadow-lg);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: transform 0.5s ease;
+        }
+
+        .hero-image-wrapper:hover img {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+
+        /* --- Sections --- */
+        section {
+            padding: 6rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- Cards --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--bg-surface);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: all 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .card p {
+            color: var(--text-muted);
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            background: #eff6ff;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            position: relative;
-            padding-top: 80px;
-            background: linear-gradient(rgba(248, 249, 255, 0.82), rgba(248, 249, 255, 0.90)),
-                        url('https://thumbs.dreamstime.com/b/glowing-tech-circuit-lines-dark-blue-background-digital-grid-futuristic-light-pulse-center-389376521.jpg') center/cover no-repeat fixed;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(0,183,235,0.08) 0%, rgba(255,255,255,0.15) 100%);
-            z-index: 0;
-        }
-        .hero > * {
-            position: relative;
-            z-index: 1;
-        }
-        .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
-            line-height: 1;
             margin-bottom: 1.5rem;
-            background: linear-gradient(to right, var(--text-main), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .hero .highlight {
-            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dim) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .hero p {
-            font-size: clamp(1.2rem, 3vw, 1.5rem);
-            color: var(--text-muted);
-            max-width: 700px;
-            margin: 0 auto 3rem;
-        }
-        .hero-btn {
-            display: inline-block;
-            padding: 1.2rem 3rem;
-            background: var(--primary);
-            color: white;
-            font-weight: 700;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 8px 25px rgba(0, 183, 235, 0.25);
-        }
-        .hero-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 183, 235, 0.35);
-        }
-        /* --- Section Titles --- */
-        .section-header {
-            text-align: center;
-            margin-bottom: 5rem;
-        }
-        .section-header h2 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        .section-header .line {
-            width: 60px;
-            height: 4px;
-            background: var(--primary);
-            margin: 0 auto;
-            border-radius: 2px;
-        }
-        /* --- Mission Grid --- */
-        .mission-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        .glass-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: 3rem;
-            border-radius: 24px;
-            transition: 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-        }
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at top right, var(--card-hover), transparent 40%);
-            opacity: 0;
-            transition: 0.4s;
-        }
-        .glass-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-md);
-            border-color: rgba(0, 183, 235, 0.25);
-        }
-        .glass-card:hover::before { opacity: 1; }
-        .glass-card h3 {
+            color: var(--primary);
             font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
         }
-        .glass-card p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
-        /* --- Services --- */
-        .service-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
-        }
-        .service-item {
-            background: white;
-            border: 1px solid var(--glass-border);
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: var(--shadow-sm);
-        }
-        .service-item h3 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            background: var(--gradient-text);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .service-item ul {
-            list-style: none;
-        }
-        .service-item li {
-            margin-bottom: 0.8rem;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-        }
-        .service-item li::before {
-            content: '→';
-            color: var(--primary);
-            margin-right: 10px;
-            font-weight: bold;
-        }
-        /* --- CTA Footer --- */
-        .footer-cta {
-            background: linear-gradient(135deg, #f0f4ff 0%, #e6ecff 100%);
-            border-top: 1px solid var(--glass-border);
+
+        /* --- CTA Section --- */
+        .cta-section {
+            background: var(--text-main);
+            color: white;
             text-align: center;
-            padding: 6rem 1rem;
+            padding: 5rem 1rem;
+            border-radius: 30px;
+            margin: 4rem 2rem;
         }
-        .phone-display {
+
+        .phone-number {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-size: clamp(2rem, 5vw, 3.5rem);
             font-weight: 700;
-            color: var(--primary);
-            margin: 2rem 0;
-            display: block;
+            color: white;
             text-decoration: none;
+            display: block;
+            margin: 1rem 0;
             transition: color 0.3s;
         }
-        .phone-display:hover {
-            color: var(--primary-dim);
+
+        .phone-number:hover {
+            color: var(--primary);
         }
+
+        /* --- Footer --- */
         footer {
-            text-align: center;
+            background: white;
+            border-top: 1px solid #e2e8f0;
             padding: 3rem 0;
+            text-align: center;
             color: var(--text-muted);
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(0,0,0,0.05);
         }
-        /* --- Mobile Tweaks --- */
-        @media (max-width: 768px) {
-            .section-header h2 { font-size: 2.2rem; }
-            .service-list { grid-template-columns: 1fr; }
-            section { padding: 4rem 0; }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 900px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 3rem;
+            }
+            
+            .hero-text p {
+                margin: 0 auto 2.5rem;
+            }
+
+            .hero-image-wrapper img {
+                transform: none;
+                max-width: 90%;
+            }
+            
+            .cta-section { margin: 4rem 1rem; border-radius: 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-glow"></div>
+
     <nav>
         <div class="container nav-content">
             <a href="#" class="logo">RARE GRADE <span>TECH</span></a>
-            <a href="tel:0639576360" class="cta-small">Contact Us</a>
+            <a href="tel:0639576360" class="btn-nav">Contact Us</a>
         </div>
     </nav>
+
     <header class="hero">
-        <div class="container fade-in">
-            <h1>IMAGINATION<br><span class="highlight">TO REALITY</span></h1>
-            <p>Breaking limitations through cutting-edge AI & software development.</p>
-            <a href="tel:0639576360" class="hero-btn">Start Your Project</a>
+        <div class="container hero-grid">
+            <div class="hero-text fade-in">
+                <h1>Imagination to <br><span class="highlight">Reality.</span></h1>
+                <p>We break limitations through cutting-edge software development & AI. Creating scalable solutions for the digital age.</p>
+                <a href="tel:0639576360" class="hero-btn">Start Your Project →</a>
+            </div>
+            
+            <div class="hero-image-wrapper fade-in" style="transition-delay: 0.2s;">
+                <img src="https://i.postimg.cc/g033DMhy/download.jpg" alt="Rare Grade Tech Innovation">
+            </div>
         </div>
     </header>
+
     <section id="purpose">
         <div class="container">
             <div class="section-header fade-in">
-                <h2>Our Purpose</h2>
-                <div class="line"></div>
+                <span class="subtitle">Our Why</span>
+                <h2>Purpose & Vision</h2>
             </div>
-           
-            <div class="mission-grid">
-                <div class="glass-card fade-in">
-                    <h3>Vision</h3>
-                    <p>To break limitations through technology, enabling our clients to realize their full potential for growth & success in a digital-first world.</p>
+            
+            <div class="card-grid">
+                <div class="card fade-in">
+                    <div class="icon-box">🚀</div>
+                    <h3>Our Vision</h3>
+                    <p>To break limitations through tech, enabling our clients to realize their full potential for growth & success in a competitive market.</p>
                 </div>
-                <div class="glass-card fade-in" style="transition-delay: 0.2s;">
-                    <h3>Mission</h3>
-                    <p>To design, develop & build innovative, well-grounded tech & software solutions to meet our clients’ needs with mind-blowing quality & ethics.</p>
+                <div class="card fade-in" style="transition-delay: 0.2s;">
+                    <div class="icon-box">🎯</div>
+                    <h3>Our Mission</h3>
+                    <p>Design, develop & build innovative, well-grounded tech & software solutions to meet our clients’ needs with ethics & excellence.</p>
                 </div>
             </div>
         </div>
     </section>
-    <section id="services">
+
+    <section id="services" style="background-color: white;">
         <div class="container">
             <div class="section-header fade-in">
-                <h2>What We Do</h2>
-                <div class="line"></div>
+                <span class="subtitle">Expertise</span>
+                <h2>What We Build</h2>
             </div>
-            <div class="service-list">
-                <div class="service-item fade-in">
-                    <h3>Software Engineering</h3>
-                    <p style="margin-bottom: 1.5rem; color: var(--text-main);">Scalable architectures built from the ground up.</p>
-                    <ul>
-                        <li>Web Applications (React/Vue/Angular)</li>
-                        <li>Mobile Development (iOS & Android)</li>
-                        <li>Desktop Solutions</li>
-                        <li>Cloud Infrastructure</li>
-                    </ul>
+
+            <div class="card-grid">
+                <div class="card fade-in">
+                    <div class="icon-box">💻</div>
+                    <h3>Custom Software</h3>
+                    <p>Tailor-made Web, Mobile, Desktop & Cloud solutions built from the ground up to solve complex business problems.</p>
                 </div>
-                <div class="service-item fade-in" style="transition-delay: 0.2s;">
+
+                <div class="card fade-in" style="transition-delay: 0.2s;">
+                    <div class="icon-box">🤖</div>
                     <h3>AI & Emerging Tech</h3>
-                    <p style="margin-bottom: 1.5rem; color: var(--text-main);">Turning science fiction into business assets.</p>
-                    <ul>
-                        <li>Machine Learning Integration</li>
-                        <li>Computer Vision Systems</li>
-                        <li>VR & AR Experiences</li>
-                        <li>Next-Gen Automation</li>
-                    </ul>
+                    <p>Integrating Machine Learning, Computer Vision, and VR/AR tools to give your business a futuristic edge.</p>
+                </div>
+                
+                <div class="card fade-in" style="transition-delay: 0.4s;">
+                    <div class="icon-box">☁️</div>
+                    <h3>Cloud Architecture</h3>
+                    <p>Scalable, secure, and robust infrastructure design ensuring your applications are always online and fast.</p>
                 </div>
             </div>
         </div>
     </section>
-    <section class="footer-cta">
-        <div class="container fade-in">
-            <h2 style="font-size: 2rem; color: var(--text-muted);">Ready to build something extraordinary?</h2>
-            <a href="tel:0639576360" class="phone-display">063 957 6360</a>
-            <p style="color: var(--primary);">Gqeberha, South Africa</p>
-        </div>
-    </section>
+
+    <div class="container fade-in">
+        <section class="cta-section">
+            <h2>Let's build something extraordinary.</h2>
+            <p style="opacity: 0.8; margin-top: 1rem;">Ready to turn your vision into reality? We are ready when you are.</p>
+            <a href="tel:0639576360" class="phone-number">063 957 6360</a>
+            <p style="font-size: 0.9rem; opacity: 0.6;">Gqeberha, South Africa</p>
+        </section>
+    </div>
+
     <footer>
         <div class="container">
-            <p>© 2026 Rare Grade Tech. All Rights Reserved.</p>
-            <p style="opacity: 0.7; margin-top: 0.5rem;">Ethics & Excellence</p>
+            <p>© 2026 Rare Grade Tech. Ethics & Excellence.</p>
         </div>
     </footer>
+
     <script>
-        // Simple Intersection Observer for scroll animations
-        const observerOptions = { threshold: 0.1 };
+        // Scroll Animation Logic
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    observer.unobserve(entry.target); // Only animate once
+                    observer.unobserve(entry.target); 
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
+
         document.querySelectorAll('.fade-in').forEach(el => {
             observer.observe(el);
         });
