@@ -1,279 +1,429 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Rare Grade Tech - Imagination → Reality</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #e6f0ff;              /* Soft light blue base */
-      --bg-gradient: linear-gradient(135deg, #e6f0ff 0%, #d6e6ff 100%);
-      --card-bg: rgba(255, 255, 255, 0.75);
-      --card-blur: blur(16px);
-      --primary: #5b6aff;         /* Soft indigo-blue AI accent */
-      --primary-dark: #3f51d1;
-      --text: #1e293b;
-      --text-light: #64748b;
-      --glow: 0 0 30px rgba(91, 106, 255, 0.4);
-      --shadow: 0 20px 40px rgba(0,0,0,0.08);
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Rare Grade Tech | Imagination → Reality</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #050511;
+            --bg-accent: #0f1129;
+            --primary: #00f2ff; /* Cyber Cyan */
+            --primary-dim: #008cff;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --card-hover: rgba(0, 242, 255, 0.05);
+            --gradient-text: linear-gradient(135deg, #fff 0%, #00f2ff 100%);
+        }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
 
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg-gradient);
-      color: var(--text);
-      line-height: 1.6;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-    }
+        /* --- Animated Background --- */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(0, 140, 255, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(0, 242, 255, 0.05), transparent 25%);
+            z-index: -1;
+            pointer-events: none;
+        }
 
-    header.hero {
-      min-height: 90vh;
-      display: flex;
-      align-items: center;
-      position: relative;
-      padding: 6rem 0 4rem;
-      text-align: center;
-    }
+        /* --- Layout Utilities --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
 
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 30% 20%, rgba(91,106,255,0.12) 0%, transparent 50%);
-      pointer-events: none;
-    }
+        section {
+            padding: 8rem 0;
+        }
 
-    .hero h1 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(3.5rem, 8vw, 7rem);
-      font-weight: 800;
-      background: linear-gradient(90deg, var(--primary), #a5b4fc);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-bottom: 1.2rem;
-      line-height: 0.95;
-    }
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+        }
 
-    .hero .tagline {
-      font-size: clamp(1.4rem, 4vw, 2.2rem);
-      color: var(--text-light);
-      max-width: 800px;
-      margin: 0 auto 2.5rem;
-    }
+        /* --- Animations --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
 
-    .btn {
-      display: inline-block;
-      padding: 1rem 2.2rem;
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: white;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      border-radius: 50px;
-      text-decoration: none;
-      box-shadow: var(--glow);
-      transition: all 0.4s ease;
-    }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-    .btn:hover {
-      transform: translateY(-4px) scale(1.05);
-      box-shadow: 0 0 50px rgba(91,106,255,0.6);
-    }
+        /* --- Header / Nav --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 0;
+            background: rgba(5, 5, 17, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+        }
 
-    section {
-      padding: 6rem 0;
-    }
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    h2.section-title {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 3.2rem;
-      text-align: center;
-      margin-bottom: 4rem;
-      background: linear-gradient(90deg, var(--primary), #c7d2fe);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .logo span { color: var(--primary); }
 
-    .purpose {
-      max-width: 900px;
-      margin: 0 auto;
-      background: var(--card-bg);
-      backdrop-filter: var(--card-blur);
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 24px;
-      padding: 3rem;
-      box-shadow: var(--shadow);
-    }
+        .cta-small {
+            padding: 0.6rem 1.5rem;
+            border: 1px solid var(--primary-dim);
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
 
-    .purpose h3 {
-      color: var(--primary);
-      font-size: 1.8rem;
-      margin: 2rem 0 1rem;
-    }
+        .cta-small:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+        }
 
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: 2.5rem;
-    }
+        /* --- Hero Section --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding-top: 80px;
+        }
 
-    .service-card {
-      background: var(--card-bg);
-      backdrop-filter: var(--card-blur);
-      border: 1px solid rgba(255,255,255,0.5);
-      border-radius: 24px;
-      padding: 2.5rem;
-      text-align: center;
-      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff, #b3b3b3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    .service-card::before {
-      content: '';
-      position: absolute;
-      inset: -50%;
-      background: radial-gradient(circle at 50% 50%, rgba(91,106,255,0.15), transparent 70%);
-      opacity: 0;
-      transition: opacity 0.6s;
-    }
+        .hero .highlight {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dim) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    .service-card:hover::before {
-      opacity: 1;
-    }
+        .hero p {
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+        }
 
-    .service-card:hover {
-      transform: translateY(-12px);
-      box-shadow: var(--glow), 0 30px 60px rgba(0,0,0,0.12);
-    }
+        .hero-btn {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: white;
+            color: var(--bg-dark);
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
 
-    .service-card h3 {
-      font-size: 1.9rem;
-      margin-bottom: 1rem;
-      color: var(--primary);
-    }
+        .hero-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+        }
 
-    .service-card p {
-      color: var(--text-light);
-      font-size: 1.1rem;
-    }
+        /* --- Section Titles --- */
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
 
-    .cta {
-      text-align: center;
-      padding: 8rem 0 6rem;
-      background: linear-gradient(135deg, rgba(230,240,255,0.8), rgba(214,230,255,0.6));
-    }
+        .section-header h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
 
-    .cta h2 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 3.5rem;
-      margin-bottom: 1.5rem;
-      color: var(--primary);
-    }
+        .section-header .line {
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
 
-    .phone {
-      font-size: 3rem;
-      font-weight: 800;
-      color: var(--primary-dark);
-      margin: 1.5rem 0;
-    }
+        /* --- Mission Grid --- */
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
 
-    footer {
-      padding: 4rem 0 2rem;
-      text-align: center;
-      color: var(--text-light);
-      border-top: 1px solid rgba(91,106,255,0.15);
-    }
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 3rem;
+            border-radius: 24px;
+            transition: 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .social a {
-      color: var(--primary);
-      font-size: 1.6rem;
-      margin: 0 1.2rem;
-      text-decoration: none;
-    }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at top right, var(--card-hover), transparent 40%);
+            opacity: 0;
+            transition: 0.4s;
+        }
 
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 4.5rem; }
-      h2.section-title { font-size: 2.6rem; }
-    }
-  </style>
+        .glass-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 242, 255, 0.3);
+        }
+
+        .glass-card:hover::before { opacity: 1; }
+
+        .glass-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .glass-card p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* --- Services --- */
+        .service-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-item {
+            background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid var(--glass-border);
+            padding: 3rem;
+            border-radius: 20px;
+        }
+
+        .service-item h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .service-item ul {
+            list-style: none;
+        }
+
+        .service-item li {
+            margin-bottom: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+        }
+
+        .service-item li::before {
+            content: '→';
+            color: var(--primary);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        /* --- CTA Footer --- */
+        .footer-cta {
+            background: linear-gradient(135deg, #0f1129 0%, #000 100%);
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+            padding: 6rem 1rem;
+        }
+
+        .phone-display {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            color: white;
+            margin: 2rem 0;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .phone-display:hover {
+            color: var(--primary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* --- Mobile Tweaks --- */
+        @media (max-width: 768px) {
+            .section-header h2 { font-size: 2.2rem; }
+            .service-list { grid-template-columns: 1fr; }
+            section { padding: 4rem 0; }
+        }
+    </style>
 </head>
 <body>
 
-  <header class="hero">
-    <div class="container">
-      <h1>RARE GRADE TECH</h1>
-      <p class="tagline">IMAGINATION → REALITY<br>Breaking limitations through cutting-edge AI & technology</p>
-      <a href="tel:0639576360" class="btn">Get in Touch →</a>
-    </div>
-  </header>
+    <div class="bg-glow"></div>
 
-  <section>
-    <div class="container purpose">
-      <h2 class="section-title">Our Purpose</h2>
-      
-      <h3>VISION</h3>
-      <p>To break limitations through tech, enabling our clients to realize their full potential for growth & success.</p>
-      
-      <h3>MISSION</h3>
-      <p>Design, develop & build innovative, well-grounded tech & software solutions to meet our clients’ needs with mind-blowing quality & ethics.</p>
-    </div>
-  </section>
-
-  <section>
-    <div class="container">
-      <h2 class="section-title">What We Do</h2>
-      
-      <div class="services-grid">
-        <div class="service-card">
-          <h3>Custom Software Development</h3>
-          <p>Web • Mobile • Desktop • Cloud solutions built from the ground up to solve real business problems with precision and scalability.</p>
+    <nav>
+        <div class="container nav-content">
+            <a href="#" class="logo">RARE GRADE <span>TECH</span></a>
+            <a href="tel:0639576360" class="cta-small">Contact Us</a>
         </div>
+    </nav>
 
-        <div class="service-card">
-          <h3>AI & Emerging Tech</h3>
-          <p>Integrating machine learning, computer vision, VR/AR and next-gen tools into practical, high-value business solutions.</p>
+    <header class="hero">
+        <div class="container fade-in">
+            <h1>IMAGINATION<br><span class="highlight">TO REALITY</span></h1>
+            <p>Breaking limitations through cutting-edge AI & software development.</p>
+            <a href="tel:0639576360" class="hero-btn">Start Your Project</a>
         </div>
-      </div>
-    </div>
-  </section>
+    </header>
 
-  <section class="cta">
-    <div class="container">
-      <h2>Let's Build Something Extraordinary</h2>
-      <p class="phone">063 957 6360</p>
-      <p style="font-size: 1.4rem; max-width: 600px; margin: 0 auto;">Ready to turn your vision into reality? Drop us a message — we're ready when you are.</p>
-      <a href="tel:0639576360" class="btn" style="margin-top: 2rem;">Contact Us Now</a>
-    </div>
-  </section>
+    <section id="purpose">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Our Purpose</h2>
+                <div class="line"></div>
+            </div>
+            
+            <div class="mission-grid">
+                <div class="glass-card fade-in">
+                    <h3>Vision</h3>
+                    <p>To break limitations through technology, enabling our clients to realize their full potential for growth & success in a digital-first world.</p>
+                </div>
+                <div class="glass-card fade-in" style="transition-delay: 0.2s;">
+                    <h3>Mission</h3>
+                    <p>To design, develop & build innovative, well-grounded tech & software solutions to meet our clients’ needs with mind-blowing quality & ethics.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <footer>
-    <div class="container">
-      <div class="social" style="margin-bottom: 1.5rem;">
-        <a href="#">📸 Instagram</a> • <a href="#">Facebook</a>
-      </div>
-      <p>© 2026 Rare Grade Tech • Gqeberha, South Africa</p>
-      <p>Imagination to Reality – with Ethics & Excellence</p>
-    </div>
-  </footer>
+    <section id="services">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>What We Do</h2>
+                <div class="line"></div>
+            </div>
 
+            <div class="service-list">
+                <div class="service-item fade-in">
+                    <h3>Software Engineering</h3>
+                    <p style="margin-bottom: 1.5rem; color: #fff;">Scalable architectures built from the ground up.</p>
+                    <ul>
+                        <li>Web Applications (React/Vue/Angular)</li>
+                        <li>Mobile Development (iOS & Android)</li>
+                        <li>Desktop Solutions</li>
+                        <li>Cloud Infrastructure</li>
+                    </ul>
+                </div>
+
+                <div class="service-item fade-in" style="transition-delay: 0.2s;">
+                    <h3>AI & Emerging Tech</h3>
+                    <p style="margin-bottom: 1.5rem; color: #fff;">Turning science fiction into business assets.</p>
+                    <ul>
+                        <li>Machine Learning Integration</li>
+                        <li>Computer Vision Systems</li>
+                        <li>VR & AR Experiences</li>
+                        <li>Next-Gen Automation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="footer-cta">
+        <div class="container fade-in">
+            <h2 style="font-size: 2rem; color: var(--text-muted);">Ready to build something extraordinary?</h2>
+            <a href="tel:0639576360" class="phone-display">063 957 6360</a>
+            <p style="color: var(--primary);">Gqeberha, South Africa</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Rare Grade Tech. All Rights Reserved.</p>
+            <p style="opacity: 0.6; margin-top: 0.5rem;">Ethics & Excellence</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Only animate once
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
 </body>
 </html>
