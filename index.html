@@ -7,14 +7,12 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@300;400;700&display=swap"/>
   <style>
     :root {
-      --bg-light: #f8f9ff;
-      --white: #ffffff;
-      --purple: #7c3aed;
-      --purple-dark: #5b21b6;
-      --cyan: #06b6d4;
-      --text-dark: #1e1b4b;
-      --text-muted: #4b5563;
-      --shadow: 0 10px 30px rgba(124, 58, 237, 0.12);
+      --bg-dark: #0a0a1f;
+      --purple: #6a1b9a;
+      --purple-light: #9c4dcc;
+      --accent: #00eaff;
+      --text: #f0f0ff;
+      --text-muted: #c0c0ff;
     }
 
     * {
@@ -24,8 +22,8 @@
     }
 
     body {
-      background: var(--bg-light);
-      color: var(--text-dark);
+      background: var(--bg-dark);
+      color: var(--text);
       font-family: 'Roboto', sans-serif;
       line-height: 1.6;
     }
@@ -35,23 +33,22 @@
       position: fixed;
       top: 0;
       width: 100%;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(124, 58, 237, 0.12);
+      background: rgba(10, 10, 31, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(106, 27, 154, 0.3);
       z-index: 1000;
       padding: 1rem 5%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
     }
 
     .logo {
       font-family: 'Orbitron', sans-serif;
-      font-size: 1.7rem;
+      font-size: 1.6rem;
       font-weight: 700;
       letter-spacing: 2px;
-      background: linear-gradient(90deg, var(--purple), var(--cyan));
+      background: linear-gradient(90deg, #fff, var(--accent), #fff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -64,21 +61,21 @@
     .nav-links a {
       color: var(--text-muted);
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 400;
       transition: all 0.3s;
     }
 
     .nav-links a:hover {
-      color: var(--purple);
-      text-shadow: 0 0 10px rgba(124,58,237,0.3);
+      color: var(--accent);
+      text-shadow: 0 0 12px var(--accent);
     }
 
     /* ── Hero ── */
     .hero {
       height: 100vh;
-      min-height: 720px;
-      background: linear-gradient(rgba(248,249,255,0.85), rgba(248,249,255,0.92)),
-                  url('https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80') center/cover no-repeat;
+      min-height: 700px;
+      background: linear-gradient(rgba(10,10,31,0.75), rgba(10,10,31,0.85)),
+                  url('https://thumbs.dreamstime.com/b/futuristic-cyberpunk-inspired-abstract-background-vibrant-neon-colors-circuitry-patterns-concept-technology-innovation-368786296.jpg') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -92,168 +89,126 @@
 
     .hero h1 {
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(3.2rem, 9vw, 7rem);
-      margin-bottom: 1.6rem;
-      background: linear-gradient(90deg, var(--purple), var(--cyan), var(--purple));
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      margin-bottom: 1.5rem;
+      background: linear-gradient(90deg, #fff, var(--accent), var(--purple-light), #fff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      letter-spacing: 3px;
+      letter-spacing: 4px;
     }
 
     .hero .tagline {
-      font-size: 1.6rem;
-      color: var(--purple);
-      margin-bottom: 2.8rem;
-      font-weight: 400;
+      font-size: 1.5rem;
+      color: var(--accent);
+      margin-bottom: 2.5rem;
+      font-weight: 300;
     }
 
     .cta-btn {
       display: inline-block;
-      padding: 1.1rem 3rem;
-      background: linear-gradient(45deg, var(--purple), var(--cyan));
+      padding: 1rem 2.5rem;
+      background: linear-gradient(45deg, var(--purple), var(--purple-light));
       color: white;
       text-decoration: none;
       font-weight: bold;
       border-radius: 50px;
       transition: all 0.4s;
-      box-shadow: var(--shadow);
+      box-shadow: 0 10px 30px rgba(106,27,154,0.4);
     }
 
     .cta-btn:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 50px rgba(124,58,237,0.3);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(106,27,154,0.6);
+      background: linear-gradient(45deg, var(--purple-light), var(--purple));
     }
 
     /* ── Sections ── */
     section {
-      padding: 12% 5%;
-      max-width: 1240px;
+      padding: 10% 5%;
+      max-width: 1200px;
       margin: 0 auto;
     }
 
     h2 {
       font-family: 'Orbitron', sans-serif;
-      color: var(--purple);
-      font-size: 3.2rem;
+      color: var(--purple-light);
+      font-size: 3rem;
       text-align: center;
-      margin-bottom: 1.8rem;
-      letter-spacing: 2px;
+      margin-bottom: 1.5rem;
+      letter-spacing: 3px;
     }
 
     .underline {
-      width: 140px;
-      height: 5px;
-      background: linear-gradient(90deg, var(--purple), var(--cyan));
-      margin: 1.2rem auto 3.5rem;
-      border-radius: 3px;
-      box-shadow: 0 0 20px rgba(124,58,237,0.25);
-    }
-
-    /* Flip Card Container */
-    .flip-card {
-      perspective: 1000px;
-      height: 320px;
-    }
-
-    .flip-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      transform-style: preserve-3d;
-      box-shadow: var(--shadow);
-      border-radius: 16px;
-      background: var(--white);
-    }
-
-    .flip-card:hover .flip-card-inner {
-      transform: rotateY(180deg);
-    }
-
-    .flip-card-front,
-    .flip-card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 16px;
-      padding: 2.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .flip-card-front {
-      background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
-      border: 1px solid rgba(124,58,237,0.15);
-    }
-
-    .flip-card-back {
-      background: linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%);
-      color: white;
-      transform: rotateY(180deg);
-    }
-
-    .flip-card h3 {
-      font-size: 1.9rem;
-      margin-bottom: 1.2rem;
-      color: var(--purple);
-    }
-
-    .flip-card-back h3 {
-      color: white;
-    }
-
-    .flip-card p {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      margin-bottom: 1.5rem;
-    }
-
-    .flip-card-back p {
-      color: rgba(255,255,255,0.9);
+      width: 120px;
+      height: 4px;
+      background: var(--accent);
+      margin: 1rem auto 3rem;
+      border-radius: 2px;
+      box-shadow: 0 0 20px var(--accent);
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2.5rem;
-      margin-top: 3rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-top: 4rem;
+    }
+
+    .card {
+      background: rgba(106,27,154,0.08);
+      border: 1px solid rgba(106,27,154,0.25);
+      border-radius: 16px;
+      padding: 2.5rem;
+      backdrop-filter: blur(8px);
+      transition: all 0.4s;
+    }
+
+    .card:hover {
+      transform: translateY(-15px);
+      box-shadow: 0 25px 50px rgba(106,27,154,0.25);
+      border-color: var(--accent);
+    }
+
+    .card h3 {
+      color: var(--accent);
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
     }
 
     /* ── Contact/Footer ── */
     footer {
-      background: linear-gradient(135deg, #f0efff 0%, #e0e7ff 100%);
-      padding: 8rem 5% 4rem;
+      background: linear-gradient(to top, #0a001a, #120624);
+      padding: 6rem 5% 3rem;
       text-align: center;
-      border-top: 1px solid rgba(124,58,237,0.15);
+    }
+
+    .contact-info {
+      margin: 3rem 0;
     }
 
     .phone {
-      font-size: 2.8rem;
-      color: var(--cyan);
+      font-size: 2.5rem;
+      color: var(--accent);
       font-weight: bold;
-      margin: 1.2rem 0;
+      margin: 1rem 0;
     }
 
     .social-links a {
-      font-size: 2.2rem;
+      font-size: 2rem;
       color: var(--text-muted);
-      margin: 0 1.4rem;
+      margin: 0 1.2rem;
       transition: all 0.3s;
     }
 
     .social-links a:hover {
-      color: var(--purple);
+      color: var(--accent);
       transform: scale(1.2);
     }
 
     @media (max-width: 768px) {
       .grid { grid-template-columns: 1fr; }
-      .hero h1 { font-size: 4rem; }
-      section { padding: 15% 6%; }
+      .nav-links { gap: 1.2rem; font-size: 0.95rem; }
+      .hero h1 { font-size: 3.8rem; }
     }
   </style>
 </head>
@@ -274,8 +229,8 @@
   <section id="home" class="hero">
     <div class="hero-content">
       <h1>IMAGINATION → REALITY</h1>
-      <div class="tagline">Turning bold ideas into powerful technology</div>
-      <a href="#contact" class="cta-btn">Let's Talk</a>
+      <div class="tagline">Breaking limitations through cutting-edge technology</div>
+      <a href="#contact" class="cta-btn">Get in Touch</a>
     </div>
   </section>
 
@@ -285,114 +240,72 @@
     <div class="underline"></div>
 
     <div class="grid">
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <h3>VISION</h3>
-            <p>To break limitations through technology, empowering our clients to reach their full potential for growth and lasting success.</p>
-          </div>
-          <div class="flip-card-back">
-            <h3>VISION</h3>
-            <p>We see a future where technology removes barriers and unlocks extraordinary possibilities for every business we serve.</p>
-          </div>
-        </div>
+      <div class="card">
+        <h3>VISION</h3>
+        <p>
+          To <strong>break limitations</strong> through tech,<br>
+          enabling our clients to realize their full potential for<br>
+          <strong>growth & success</strong>.
+        </p>
       </div>
 
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <h3>MISSION</h3>
-            <p>Design, develop and deliver innovative, reliable software solutions with exceptional quality and unwavering ethics.</p>
-          </div>
-          <div class="flip-card-back">
-            <h3>MISSION</h3>
-            <p>Every project is built with care, creativity, and a commitment to exceeding expectations — mind-blowing results, every time.</p>
-          </div>
-        </div>
+      <div class="card">
+        <h3>MISSION</h3>
+        <p>
+          Design, develop & build <strong>innovative</strong>,<br>
+          well-grounded tech & software solutions to meet our clients’<br>
+          needs with <strong>mind-blowing quality & ethics</strong>.
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- Services -->
+  <!-- Services (placeholder – customize later) -->
   <section id="services">
     <h2>What We Do</h2>
     <div class="underline"></div>
     <div class="grid">
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <h3>Custom Software Development</h3>
-            <p>Tailored web, mobile, desktop & cloud applications built to solve your unique challenges.</p>
-          </div>
-          <div class="flip-card-back">
-            <h3>Custom Software</h3>
-            <p>From MVP to enterprise-grade — scalable, secure, and ready to grow with you.</p>
-          </div>
-        </div>
+      <div class="card">
+        <h3>Custom Software Development</h3>
+        <p>Web • Mobile • Desktop • Cloud solutions built from the ground up to solve real business problems.</p>
       </div>
-
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <h3>AI & Emerging Tech</h3>
-            <p>Smart integrations: machine learning, computer vision, AR/VR and more.</p>
-          </div>
-          <div class="flip-card-back">
-            <h3>AI & Emerging Tech</h3>
-            <p>We turn cutting-edge tools into practical business advantages.</p>
-          </div>
-        </div>
+      <div class="card">
+        <h3>AI & Emerging Tech</h3>
+        <p>Integrating machine learning, computer vision, VR/AR and next-gen tools into practical business value.</p>
       </div>
-
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <h3>UI/UX & Product Design</h3>
-            <p>Beautiful, intuitive interfaces backed by real user research.</p>
-          </div>
-          <div class="flip-card-back">
-            <h3>UI/UX Design</h3>
-            <p>Delight users and drive results with thoughtful, tested design.</p>
-          </div>
-        </div>
+      <div class="card">
+        <h3>UI/UX & Product Design</h3>
+        <p>Intuitive, beautiful interfaces that users love — backed by strong user research & testing.</p>
       </div>
-
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <h3>Tech Consulting</h3>
-            <p>Roadmaps, architecture reviews, digital transformation strategy.</p>
-          </div>
-          <div class="flip-card-back">
-            <h3>Consulting</h3>
-            <p>Clear guidance to help you move faster and smarter in tech.</p>
-          </div>
-        </div>
+      <div class="card">
+        <h3>Consulting & Strategy</h3>
+        <p>Tech roadmap planning, digital transformation guidance, architecture reviews & more.</p>
       </div>
     </div>
   </section>
 
   <!-- Contact / Footer -->
   <footer id="contact">
-    <h2>Ready to Build Something Amazing?</h2>
+    <h2>Let's Build Something Extraordinary</h2>
     <div class="underline"></div>
 
-    <div style="margin: 3rem 0;">
+    <div class="contact-info">
       <div class="phone">063 957 6360</div>
-      <p style="font-size:1.4rem; margin:1.8rem 0; color:var(--text-muted);">
-        Let's turn your vision into reality.<br>
-        Reach out — we're excited to hear from you.
+      <p style="font-size:1.3rem; margin:1.5rem 0; opacity:0.9;">
+        Ready to turn your vision into reality?<br>
+        Drop us a message — we're ready when you are.
       </p>
 
       <div class="social-links">
-        <a href="https://instagram.com" target="_blank">📸 Instagram</a>
-        <a href="https://facebook.com" target="_blank">Facebook</a>
+        <a href="https://instagram.com/raregrades.tech" target="_blank">📸 Instagram</a>
+        <a href="https://facebook.com/raregrades.tech" target="_blank">Facebook</a>
+        <!-- Add WhatsApp / email / LinkedIn when available -->
       </div>
     </div>
 
-    <p style="margin-top:5rem; color:var(--text-muted); font-size:0.95rem;">
+    <p style="margin-top:4rem; opacity:0.6; font-size:0.95rem;">
       © 2026 Rare Grade Tech • Gqeberha, South Africa<br>
-      Imagination to Reality — Delivered with Excellence
+      Imagination to Reality – with Ethics & Excellence
     </p>
   </footer>
 
