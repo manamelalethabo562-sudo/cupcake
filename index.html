@@ -121,4 +121,280 @@
 
     .cta-btn:hover {
       transform: translateY(-6px);
-      box-shadow: 0
+      box-shadow: 0 20px 50px rgba(124,58,237,0.3);
+    }
+
+    /* ── Sections ── */
+    section {
+      padding: 12% 5%;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--purple);
+      font-size: 3.2rem;
+      text-align: center;
+      margin-bottom: 1.8rem;
+      letter-spacing: 2px;
+    }
+
+    .underline {
+      width: 140px;
+      height: 5px;
+      background: linear-gradient(90deg, var(--purple), var(--cyan));
+      margin: 1.2rem auto 3.5rem;
+      border-radius: 3px;
+      box-shadow: 0 0 20px rgba(124,58,237,0.25);
+    }
+
+    /* Flip Card Container */
+    .flip-card {
+      perspective: 1000px;
+      height: 320px;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      transform-style: preserve-3d;
+      box-shadow: var(--shadow);
+      border-radius: 16px;
+      background: var(--white);
+    }
+
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .flip-card-front {
+      background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
+      border: 1px solid rgba(124,58,237,0.15);
+    }
+
+    .flip-card-back {
+      background: linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%);
+      color: white;
+      transform: rotateY(180deg);
+    }
+
+    .flip-card h3 {
+      font-size: 1.9rem;
+      margin-bottom: 1.2rem;
+      color: var(--purple);
+    }
+
+    .flip-card-back h3 {
+      color: white;
+    }
+
+    .flip-card p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .flip-card-back p {
+      color: rgba(255,255,255,0.9);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2.5rem;
+      margin-top: 3rem;
+    }
+
+    /* ── Contact/Footer ── */
+    footer {
+      background: linear-gradient(135deg, #f0efff 0%, #e0e7ff 100%);
+      padding: 8rem 5% 4rem;
+      text-align: center;
+      border-top: 1px solid rgba(124,58,237,0.15);
+    }
+
+    .phone {
+      font-size: 2.8rem;
+      color: var(--cyan);
+      font-weight: bold;
+      margin: 1.2rem 0;
+    }
+
+    .social-links a {
+      font-size: 2.2rem;
+      color: var(--text-muted);
+      margin: 0 1.4rem;
+      transition: all 0.3s;
+    }
+
+    .social-links a:hover {
+      color: var(--purple);
+      transform: scale(1.2);
+    }
+
+    @media (max-width: 768px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 4rem; }
+      section { padding: 15% 6%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">RARE GRADE TECH</div>
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#vision">Vision</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>IMAGINATION → REALITY</h1>
+      <div class="tagline">Turning bold ideas into powerful technology</div>
+      <a href="#contact" class="cta-btn">Let's Talk</a>
+    </div>
+  </section>
+
+  <!-- Vision & Mission -->
+  <section id="vision">
+    <h2>Our Purpose</h2>
+    <div class="underline"></div>
+
+    <div class="grid">
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <h3>VISION</h3>
+            <p>To break limitations through technology, empowering our clients to reach their full potential for growth and lasting success.</p>
+          </div>
+          <div class="flip-card-back">
+            <h3>VISION</h3>
+            <p>We see a future where technology removes barriers and unlocks extraordinary possibilities for every business we serve.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <h3>MISSION</h3>
+            <p>Design, develop and deliver innovative, reliable software solutions with exceptional quality and unwavering ethics.</p>
+          </div>
+          <div class="flip-card-back">
+            <h3>MISSION</h3>
+            <p>Every project is built with care, creativity, and a commitment to exceeding expectations — mind-blowing results, every time.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services">
+    <h2>What We Do</h2>
+    <div class="underline"></div>
+    <div class="grid">
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <h3>Custom Software Development</h3>
+            <p>Tailored web, mobile, desktop & cloud applications built to solve your unique challenges.</p>
+          </div>
+          <div class="flip-card-back">
+            <h3>Custom Software</h3>
+            <p>From MVP to enterprise-grade — scalable, secure, and ready to grow with you.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <h3>AI & Emerging Tech</h3>
+            <p>Smart integrations: machine learning, computer vision, AR/VR and more.</p>
+          </div>
+          <div class="flip-card-back">
+            <h3>AI & Emerging Tech</h3>
+            <p>We turn cutting-edge tools into practical business advantages.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <h3>UI/UX & Product Design</h3>
+            <p>Beautiful, intuitive interfaces backed by real user research.</p>
+          </div>
+          <div class="flip-card-back">
+            <h3>UI/UX Design</h3>
+            <p>Delight users and drive results with thoughtful, tested design.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <h3>Tech Consulting</h3>
+            <p>Roadmaps, architecture reviews, digital transformation strategy.</p>
+          </div>
+          <div class="flip-card-back">
+            <h3>Consulting</h3>
+            <p>Clear guidance to help you move faster and smarter in tech.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact / Footer -->
+  <footer id="contact">
+    <h2>Ready to Build Something Amazing?</h2>
+    <div class="underline"></div>
+
+    <div style="margin: 3rem 0;">
+      <div class="phone">063 957 6360</div>
+      <p style="font-size:1.4rem; margin:1.8rem 0; color:var(--text-muted);">
+        Let's turn your vision into reality.<br>
+        Reach out — we're excited to hear from you.
+      </p>
+
+      <div class="social-links">
+        <a href="https://instagram.com" target="_blank">📸 Instagram</a>
+        <a href="https://facebook.com" target="_blank">Facebook</a>
+      </div>
+    </div>
+
+    <p style="margin-top:5rem; color:var(--text-muted); font-size:0.95rem;">
+      © 2026 Rare Grade Tech • Gqeberha, South Africa<br>
+      Imagination to Reality — Delivered with Excellence
+    </p>
+  </footer>
+
+</body>
+</html>
