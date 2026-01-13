@@ -3,16 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Rare Grade Tech | Imagination to Reality</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@300;400;700&display=swap"/>
+  <title>Rare Grade Tech - Imagination → Reality</title>
   <style>
     :root {
-      --bg-dark: #0a0a1f;
-      --purple: #6a1b9a;
-      --purple-light: #9c4dcc;
-      --accent: #00eaff;
-      --text: #f0f0ff;
-      --text-muted: #c0c0ff;
+      --primary: #4f46e5;       /* Indigo accent */
+      --primary-dark: #4338ca;
+      --text: #1f2937;
+      --light-bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
     }
 
     * {
@@ -22,292 +21,201 @@
     }
 
     body {
-      background: var(--bg-dark);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--light-bg);
       color: var(--text);
-      font-family: 'Roboto', sans-serif;
       line-height: 1.6;
+      min-height: 100vh;
     }
 
-    /* ── Navbar ── */
-    nav {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: rgba(10, 10, 31, 0.85);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(106, 27, 154, 0.3);
-      z-index: 1000;
-      padding: 1rem 5%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      background: linear-gradient(90deg, #fff, var(--accent), #fff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2.2rem;
-    }
-
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-weight: 400;
-      transition: all 0.3s;
-    }
-
-    .nav-links a:hover {
-      color: var(--accent);
-      text-shadow: 0 0 12px var(--accent);
-    }
-
-    /* ── Hero ── */
-    .hero {
-      height: 100vh;
-      min-height: 700px;
-      background: linear-gradient(rgba(10,10,31,0.75), rgba(10,10,31,0.85)),
-                  url('https://thumbs.dreamstime.com/b/futuristic-cyberpunk-inspired-abstract-background-vibrant-neon-colors-circuitry-patterns-concept-technology-innovation-368786296.jpg') center/cover no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 0 5%;
-    }
-
-    .hero-content {
-      max-width: 900px;
-    }
-
-    .hero h1 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(3rem, 8vw, 6.5rem);
-      margin-bottom: 1.5rem;
-      background: linear-gradient(90deg, #fff, var(--accent), var(--purple-light), #fff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: 4px;
-    }
-
-    .hero .tagline {
-      font-size: 1.5rem;
-      color: var(--accent);
-      margin-bottom: 2.5rem;
-      font-weight: 300;
-    }
-
-    .cta-btn {
-      display: inline-block;
-      padding: 1rem 2.5rem;
-      background: linear-gradient(45deg, var(--purple), var(--purple-light));
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 50px;
-      transition: all 0.4s;
-      box-shadow: 0 10px 30px rgba(106,27,154,0.4);
-    }
-
-    .cta-btn:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 40px rgba(106,27,154,0.6);
-      background: linear-gradient(45deg, var(--purple-light), var(--purple));
-    }
-
-    /* ── Sections ── */
-    section {
-      padding: 10% 5%;
+    .container {
       max-width: 1200px;
       margin: 0 auto;
-    }
-
-    h2 {
-      font-family: 'Orbitron', sans-serif;
-      color: var(--purple-light);
-      font-size: 3rem;
+      padding: 2rem 1rem;
       text-align: center;
-      margin-bottom: 1.5rem;
-      letter-spacing: 3px;
     }
 
-    .underline {
-      width: 120px;
-      height: 4px;
-      background: var(--accent);
-      margin: 1rem auto 3rem;
-      border-radius: 2px;
-      box-shadow: 0 0 20px var(--accent);
+    header {
+      padding: 4rem 1rem 2rem;
+      background: linear-gradient(135deg, #ffffff, #f1f5f9);
+      border-bottom: 1px solid var(--border);
     }
 
-    .grid {
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .tagline {
+      font-size: 1.5rem;
+      color: #64748b;
+      margin-bottom: 2rem;
+    }
+
+    .purpose {
+      max-width: 800px;
+      margin: 3rem auto;
+    }
+
+    .purpose h2 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .services {
+      padding: 3rem 1rem;
+    }
+
+    .services h2 {
+      font-size: 2.8rem;
+      margin-bottom: 3rem;
+      color: var(--primary);
+    }
+
+    .cards-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      margin-top: 4rem;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      justify-items: center;
     }
 
-    .card {
-      background: rgba(106,27,154,0.08);
-      border: 1px solid rgba(106,27,154,0.25);
-      border-radius: 16px;
-      padding: 2.5rem;
-      backdrop-filter: blur(8px);
-      transition: all 0.4s;
+    .flip-card {
+      background-color: transparent;
+      width: 320px;
+      height: 380px;
+      perspective: 1000px;
+      cursor: pointer;
     }
 
-    .card:hover {
-      transform: translateY(-15px);
-      box-shadow: 0 25px 50px rgba(106,27,154,0.25);
-      border-color: var(--accent);
-    }
-
-    .card h3 {
-      color: var(--accent);
-      font-size: 1.8rem;
-      margin-bottom: 1.2rem;
-    }
-
-    /* ── Contact/Footer ── */
-    footer {
-      background: linear-gradient(to top, #0a001a, #120624);
-      padding: 6rem 5% 3rem;
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
       text-align: center;
+      transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      transform-style: preserve-3d;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border-radius: 16px;
+      background: var(--card-bg);
     }
 
-    .contact-info {
-      margin: 3rem 0;
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .flip-card-front {
+      background: linear-gradient(135deg, #f8fafc, #ffffff);
+      border: 1px solid var(--border);
+    }
+
+    .flip-card-back {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      transform: rotateY(180deg);
+    }
+
+    .flip-card h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .flip-card p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .cta {
+      padding: 4rem 1rem;
+      background: white;
+      border-radius: 16px;
+      margin: 3rem auto;
+      max-width: 700px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    }
+
+    .cta h2 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
     }
 
     .phone {
-      font-size: 2.5rem;
-      color: var(--accent);
+      font-size: 2.2rem;
       font-weight: bold;
+      color: var(--primary-dark);
+      margin: 1.5rem 0;
+    }
+
+    footer {
+      padding: 2rem 1rem;
+      text-align: center;
+      color: #64748b;
+      font-size: 0.95rem;
+      border-top: 1px solid var(--border);
+      margin-top: 4rem;
+    }
+
+    .social {
       margin: 1rem 0;
     }
 
-    .social-links a {
-      font-size: 2rem;
-      color: var(--text-muted);
-      margin: 0 1.2rem;
-      transition: all 0.3s;
-    }
-
-    .social-links a:hover {
-      color: var(--accent);
-      transform: scale(1.2);
-    }
-
-    @media (max-width: 768px) {
-      .grid { grid-template-columns: 1fr; }
-      .nav-links { gap: 1.2rem; font-size: 0.95rem; }
-      .hero h1 { font-size: 3.8rem; }
+    .social a {
+      color: var(--primary);
+      margin: 0 1rem;
+      font-size: 1.3rem;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav>
-    <div class="logo">RARE GRADE TECH</div>
-    <div class="nav-links">
-      <a href="#home">Home</a>
-      <a href="#vision">Vision</a>
-      <a href="#services">Services</a>
-      <a href="#contact">Contact</a>
+  <header>
+    <div class="container">
+      <h1>RARE GRADE TECH</h1>
+      <p class="tagline">Home Vision Services Contact</p>
+      <p class="tagline">IMAGINATION → REALITY</p>
+      <p>Breaking limitations through cutting-edge technology</p>
+      <p><strong>Get in Touch</strong></p>
     </div>
-  </nav>
+  </header>
 
-  <!-- Hero -->
-  <section id="home" class="hero">
-    <div class="hero-content">
-      <h1>IMAGINATION → REALITY</h1>
-      <div class="tagline">Breaking limitations through cutting-edge technology</div>
-      <a href="#contact" class="cta-btn">Get in Touch</a>
-    </div>
-  </section>
-
-  <!-- Vision & Mission -->
-  <section id="vision">
+  <section class="container purpose">
     <h2>Our Purpose</h2>
-    <div class="underline"></div>
-
-    <div class="grid">
-      <div class="card">
-        <h3>VISION</h3>
-        <p>
-          To <strong>break limitations</strong> through tech,<br>
-          enabling our clients to realize their full potential for<br>
-          <strong>growth & success</strong>.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>MISSION</h3>
-        <p>
-          Design, develop & build <strong>innovative</strong>,<br>
-          well-grounded tech & software solutions to meet our clients’<br>
-          needs with <strong>mind-blowing quality & ethics</strong>.
-        </p>
-      </div>
-    </div>
+    
+    <h3>VISION</h3>
+    <p>To break limitations through tech, enabling our clients to realize their full potential for growth & success.</p>
+    
+    <h3>MISSION</h3>
+    <p>Design, develop & build innovative, well-grounded tech & software solutions to meet our clients’ needs with mind-blowing quality & ethics.</p>
   </section>
 
-  <!-- Services (placeholder – customize later) -->
-  <section id="services">
-    <h2>What We Do</h2>
-    <div class="underline"></div>
-    <div class="grid">
-      <div class="card">
-        <h3>Custom Software Development</h3>
-        <p>Web • Mobile • Desktop • Cloud solutions built from the ground up to solve real business problems.</p>
-      </div>
-      <div class="card">
-        <h3>AI & Emerging Tech</h3>
-        <p>Integrating machine learning, computer vision, VR/AR and next-gen tools into practical business value.</p>
-      </div>
-      <div class="card">
-        <h3>UI/UX & Product Design</h3>
-        <p>Intuitive, beautiful interfaces that users love — backed by strong user research & testing.</p>
-      </div>
-      <div class="card">
-        <h3>Consulting & Strategy</h3>
-        <p>Tech roadmap planning, digital transformation guidance, architecture reviews & more.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact / Footer -->
-  <footer id="contact">
-    <h2>Let's Build Something Extraordinary</h2>
-    <div class="underline"></div>
-
-    <div class="contact-info">
-      <div class="phone">063 957 6360</div>
-      <p style="font-size:1.3rem; margin:1.5rem 0; opacity:0.9;">
-        Ready to turn your vision into reality?<br>
-        Drop us a message — we're ready when you are.
-      </p>
-
-      <div class="social-links">
-        <a href="https://instagram.com/raregrades.tech" target="_blank">📸 Instagram</a>
-        <a href="https://facebook.com/raregrades.tech" target="_blank">Facebook</a>
-        <!-- Add WhatsApp / email / LinkedIn when available -->
-      </div>
-    </div>
-
-    <p style="margin-top:4rem; opacity:0.6; font-size:0.95rem;">
-      © 2026 Rare Grade Tech • Gqeberha, South Africa<br>
-      Imagination to Reality – with Ethics & Excellence
-    </p>
-  </footer>
-
-</body>
-</html>
+  <section class="services">
+    <div class="container">
+      <h2>What We Do</h2>
+      
+      <div class="cards-grid">
+        <!-- Card 1 -->
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>Custom Software Development</h3>
+              <p>Web • Mobile • Desktop • Cloud</p>
+            </div>
+            <div class="flip-card-back">
+              <h3>Custom Software Development</h3>
+              <p>Built from the ground up to solve real business problems — tailored exactly to your needs
