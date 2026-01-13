@@ -10,8 +10,8 @@
       --bg-dark: #0a0a1f;
       --purple: #6a1b9a;
       --purple-light: #9c4dcc;
-      --accent-glow: #00eaff;
-      --text-light: #f0f0ff;
+      --accent: #00eaff;
+      --text: #f0f0ff;
       --text-muted: #c0c0ff;
     }
 
@@ -22,227 +22,292 @@
     }
 
     body {
-      background: linear-gradient(135deg, #0a0a1f 0%, #120624 100%);
-      color: var(--text-light);
+      background: var(--bg-dark);
+      color: var(--text);
       font-family: 'Roboto', sans-serif;
-      min-height: 100vh;
-      background-attachment: fixed;
+      line-height: 1.6;
     }
 
-    .banner {
+    /* ── Navbar ── */
+    nav {
+      position: fixed;
+      top: 0;
       width: 100%;
-      max-width: 480px;           /* typical pull-up banner width */
-      margin: 40px auto;
-      aspect-ratio: 2 / 5;        /* ~ portrait banner ratio */
-      background: linear-gradient(180deg, #1a0033 0%, #0d001a 100%);
-      border: 12px solid var(--purple);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 
-        0 20px 60px rgba(106,27,154,0.4),
-        inset 0 0 80px rgba(106,27,154,0.15);
-      position: relative;
-    }
-
-    .content {
-      padding: 8% 10%;
-      height: 100%;
+      background: rgba(10, 10, 31, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(106, 27, 154, 0.3);
+      z-index: 1000;
+      padding: 1rem 5%;
       display: flex;
-      flex-direction: column;
-      text-align: center;
-      background: radial-gradient(circle at 50% 20%, rgba(106,27,154,0.18), transparent 60%);
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .logo-area {
-      margin: 10% 0 12% 0;
-    }
-
-    .logo-text {
+    .logo {
       font-family: 'Orbitron', sans-serif;
-      font-size: 2.8rem;
+      font-size: 1.6rem;
       font-weight: 700;
-      letter-spacing: 4px;
-      background: linear-gradient(90deg, #fff, var(--accent-glow), #fff);
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, #fff, var(--accent), #fff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px rgba(0,234,255,0.5);
     }
 
-    .tagline {
-      font-size: 1.1rem;
-      color: var(--accent-glow);
-      margin-top: 8px;
-      letter-spacing: 2px;
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 400;
+      transition: all 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+      text-shadow: 0 0 12px var(--accent);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      height: 100vh;
+      min-height: 700px;
+      background: linear-gradient(rgba(10,10,31,0.75), rgba(10,10,31,0.85)),
+                  url('https://thumbs.dreamstime.com/b/futuristic-cyberpunk-inspired-abstract-background-vibrant-neon-colors-circuitry-patterns-concept-technology-innovation-368786296.jpg') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 5%;
+    }
+
+    .hero-content {
+      max-width: 900px;
+    }
+
+    .hero h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      margin-bottom: 1.5rem;
+      background: linear-gradient(90deg, #fff, var(--accent), var(--purple-light), #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 4px;
+    }
+
+    .hero .tagline {
+      font-size: 1.5rem;
+      color: var(--accent);
+      margin-bottom: 2.5rem;
       font-weight: 300;
     }
 
-    .section {
-      margin: 14% 0;
+    .cta-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(45deg, var(--purple), var(--purple-light));
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 50px;
+      transition: all 0.4s;
+      box-shadow: 0 10px 30px rgba(106,27,154,0.4);
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(106,27,154,0.6);
+      background: linear-gradient(45deg, var(--purple-light), var(--purple));
+    }
+
+    /* ── Sections ── */
+    section {
+      padding: 10% 5%;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     h2 {
       font-family: 'Orbitron', sans-serif;
       color: var(--purple-light);
-      font-size: 2.1rem;
-      margin-bottom: 0.9em;
+      font-size: 3rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
       letter-spacing: 3px;
     }
 
     .underline {
-      height: 3px;
-      width: 80px;
-      background: var(--accent-glow);
-      margin: 0.5em auto 1.2em;
+      width: 120px;
+      height: 4px;
+      background: var(--accent);
+      margin: 1rem auto 3rem;
       border-radius: 2px;
-      box-shadow: 0 0 15px var(--accent-glow);
+      box-shadow: 0 0 20px var(--accent);
     }
 
-    p {
-      font-size: 1.05rem;
-      line-height: 1.6;
-      color: var(--text-muted);
-      max-width: 90%;
-      margin: 0 auto;
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-top: 4rem;
     }
 
-    .strong {
-      color: #ffffff;
-      font-weight: 500;
+    .card {
+      background: rgba(106,27,154,0.08);
+      border: 1px solid rgba(106,27,154,0.25);
+      border-radius: 16px;
+      padding: 2.5rem;
+      backdrop-filter: blur(8px);
+      transition: all 0.4s;
     }
 
-    .contact {
-      margin-top: auto;
-      padding-top: 12%;
-      padding-bottom: 10%;
+    .card:hover {
+      transform: translateY(-15px);
+      box-shadow: 0 25px 50px rgba(106,27,154,0.25);
+      border-color: var(--accent);
     }
 
-    .contact-title {
-      font-size: 1.5rem;
-      color: var(--purple-light);
+    .card h3 {
+      color: var(--accent);
+      font-size: 1.8rem;
       margin-bottom: 1.2rem;
     }
 
+    /* ── Contact/Footer ── */
+    footer {
+      background: linear-gradient(to top, #0a001a, #120624);
+      padding: 6rem 5% 3rem;
+      text-align: center;
+    }
+
+    .contact-info {
+      margin: 3rem 0;
+    }
+
     .phone {
-      font-size: 1.6rem;
+      font-size: 2.5rem;
+      color: var(--accent);
       font-weight: bold;
-      color: var(--accent-glow);
-      margin: 0.6em 0;
-      letter-spacing: 1px;
+      margin: 1rem 0;
     }
 
-    .social {
-      margin: 1.5rem 0;
-      font-size: 2.2rem;
-    }
-
-    .social a {
+    .social-links a {
+      font-size: 2rem;
       color: var(--text-muted);
-      margin: 0 14px;
+      margin: 0 1.2rem;
       transition: all 0.3s;
     }
 
-    .social a:hover {
-      color: var(--accent-glow);
-      transform: scale(1.15);
-      text-shadow: 0 0 12px var(--accent-glow);
+    .social-links a:hover {
+      color: var(--accent);
+      transform: scale(1.2);
     }
 
-    /* subtle floating particle effect (optional) */
-    .particles {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .particle {
-      position: absolute;
-      background: var(--accent-glow);
-      border-radius: 50%;
-      opacity: 0.15;
-      animation: float 18s infinite linear;
-    }
-
-    @keyframes float {
-      0%   { transform: translateY(100%) scale(0.4); opacity: 0; }
-      10%  { opacity: 0.6; }
-      90%  { opacity: 0.6; }
-      100% { transform: translateY(-150%) scale(0.7); opacity: 0; }
-    }
-
-    @media (max-width: 500px) {
-      .banner { margin: 20px auto; border-width: 8px; }
-      .logo-text { font-size: 2.4rem; }
-      h2 { font-size: 1.8rem; }
+    @media (max-width: 768px) {
+      .grid { grid-template-columns: 1fr; }
+      .nav-links { gap: 1.2rem; font-size: 0.95rem; }
+      .hero h1 { font-size: 3.8rem; }
     }
   </style>
 </head>
 <body>
 
-  <div class="banner">
-    <div class="particles" id="particles"></div>
-
-    <div class="content">
-
-      <div class="logo-area">
-        <div class="logo-text">RARE GRADE TECH</div>
-        <div class="tagline">IMAGINATION TO REALITY</div>
-      </div>
-
-      <div class="section">
-        <h2>VISION</h2>
-        <div class="underline"></div>
-        <p>
-          TO <span class="strong">BREAK LIMITATIONS</span> THROUGH TECH,<br>
-          ENABLING OUR CLIENTS TO REALIZE<br>
-          THEIR FULL POTENTIAL FOR<br>
-          <span class="strong">GROWTH & SUCCESS</span>.
-        </p>
-      </div>
-
-      <div class="section">
-        <h2>MISSION</h2>
-        <div class="underline"></div>
-        <p>
-          DESIGN, DEVELOP & BUILD <span class="strong">INNOVATIVE</span>,<br>
-          WELL-GROUNDED TECH / SOFTWARE<br>
-          SOLUTIONS TO MEET OUR CLIENTS'<br>
-          NEEDS WITH <span class="strong">MIND BLOWING</span><br>
-          QUALITY & ETHICS.
-        </p>
-      </div>
-
-      <div class="contact">
-        <div class="contact-title">GET IN TOUCH</div>
-        <div class="phone">063 957 6360</div>
-
-        <div class="social">
-          <a href="https://instagram.com" target="_blank">📸</a>
-          <a href="https://facebook.com" target="_blank">f</a>
-          <!-- add correct links later -->
-        </div>
-
-        <div style="margin-top:1rem; font-size:0.95rem; opacity:0.7;">
-          RARE GRADE TECH
-        </div>
-      </div>
-
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">RARE GRADE TECH</div>
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#vision">Vision</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
     </div>
-  </div>
+  </nav>
 
-  <script>
-    // Optional: very light floating particles
-    const particlesContainer = document.getElementById('particles');
-    for (let i = 0; i < 12; i++) {
-      const p = document.createElement('div');
-      p.className = 'particle';
-      p.style.width = p.style.height = Math.random() * 4 + 2 + 'px';
-      p.style.left = Math.random() * 100 + '%';
-      p.style.animationDelay = Math.random() * 12 + 's';
-      p.style.animationDuration = (Math.random() * 20 + 15) + 's';
-      particlesContainer.appendChild(p);
-    }
-  </script>
+  <!-- Hero -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>IMAGINATION → REALITY</h1>
+      <div class="tagline">Breaking limitations through cutting-edge technology</div>
+      <a href="#contact" class="cta-btn">Get in Touch</a>
+    </div>
+  </section>
+
+  <!-- Vision & Mission -->
+  <section id="vision">
+    <h2>Our Purpose</h2>
+    <div class="underline"></div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>VISION</h3>
+        <p>
+          To <strong>break limitations</strong> through tech,<br>
+          enabling our clients to realize their full potential for<br>
+          <strong>growth & success</strong>.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>MISSION</h3>
+        <p>
+          Design, develop & build <strong>innovative</strong>,<br>
+          well-grounded tech & software solutions to meet our clients’<br>
+          needs with <strong>mind-blowing quality & ethics</strong>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services (placeholder – customize later) -->
+  <section id="services">
+    <h2>What We Do</h2>
+    <div class="underline"></div>
+    <div class="grid">
+      <div class="card">
+        <h3>Custom Software Development</h3>
+        <p>Web • Mobile • Desktop • Cloud solutions built from the ground up to solve real business problems.</p>
+      </div>
+      <div class="card">
+        <h3>AI & Emerging Tech</h3>
+        <p>Integrating machine learning, computer vision, VR/AR and next-gen tools into practical business value.</p>
+      </div>
+      <div class="card">
+        <h3>UI/UX & Product Design</h3>
+        <p>Intuitive, beautiful interfaces that users love — backed by strong user research & testing.</p>
+      </div>
+      <div class="card">
+        <h3>Consulting & Strategy</h3>
+        <p>Tech roadmap planning, digital transformation guidance, architecture reviews & more.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact / Footer -->
+  <footer id="contact">
+    <h2>Let's Build Something Extraordinary</h2>
+    <div class="underline"></div>
+
+    <div class="contact-info">
+      <div class="phone">063 957 6360</div>
+      <p style="font-size:1.3rem; margin:1.5rem 0; opacity:0.9;">
+        Ready to turn your vision into reality?<br>
+        Drop us a message — we're ready when you are.
+      </p>
+
+      <div class="social-links">
+        <a href="https://instagram.com/raregrades.tech" target="_blank">📸 Instagram</a>
+        <a href="https://facebook.com/raregrades.tech" target="_blank">Facebook</a>
+        <!-- Add WhatsApp / email / LinkedIn when available -->
+      </div>
+    </div>
+
+    <p style="margin-top:4rem; opacity:0.6; font-size:0.95rem;">
+      © 2026 Rare Grade Tech • Gqeberha, South Africa<br>
+      Imagination to Reality – with Ethics & Excellence
+    </p>
+  </footer>
 
 </body>
 </html>
