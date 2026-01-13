@@ -6,12 +6,13 @@
   <title>Rare Grade Tech - Imagination → Reality</title>
   <style>
     :root {
-      --primary: #4f46e5;       /* Indigo accent */
+      --primary: #4f46e5;       /* Indigo */
       --primary-dark: #4338ca;
-      --text: #1f2937;
-      --light-bg: #f8fafc;
+      --text: #1e293b;
+      --light-bg: #f9fafb;
       --card-bg: #ffffff;
       --border: #e2e8f0;
+      --shadow: 0 10px 30px rgba(0,0,0,0.07);
     }
 
     * {
@@ -21,201 +22,65 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: system-ui, -apple-system, sans-serif;
       background-color: var(--light-bg);
       color: var(--text);
       line-height: 1.6;
-      min-height: 100vh;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 2rem 1rem;
+      padding: 2rem 1.5rem;
       text-align: center;
     }
 
     header {
-      padding: 4rem 1rem 2rem;
-      background: linear-gradient(135deg, #ffffff, #f1f5f9);
-      border-bottom: 1px solid var(--border);
+      padding: 5rem 1rem 3rem;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
     }
 
     h1 {
-      font-size: 3.5rem;
-      margin-bottom: 0.5rem;
+      font-size: 3.8rem;
+      font-weight: 800;
       color: var(--primary);
+      margin-bottom: 0.4rem;
     }
 
     .tagline {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       color: #64748b;
-      margin-bottom: 2rem;
+      margin: 0.8rem 0 2rem;
     }
 
     .purpose {
-      max-width: 800px;
-      margin: 3rem auto;
+      max-width: 760px;
+      margin: 4rem auto;
     }
 
     .purpose h2 {
       color: var(--primary);
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
     }
 
     .services {
-      padding: 3rem 1rem;
+      padding: 4rem 1rem;
     }
 
     .services h2 {
       font-size: 2.8rem;
-      margin-bottom: 3rem;
       color: var(--primary);
+      margin-bottom: 3.5rem;
     }
 
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2.5rem;
       justify-items: center;
     }
 
     .flip-card {
-      background-color: transparent;
-      width: 320px;
-      height: 380px;
-      perspective: 1000px;
-      cursor: pointer;
-    }
-
-    .flip-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      transform-style: preserve-3d;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      border-radius: 16px;
-      background: var(--card-bg);
-    }
-
-    .flip-card:hover .flip-card-inner {
-      transform: rotateY(180deg);
-    }
-
-    .flip-card-front,
-    .flip-card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 16px;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .flip-card-front {
-      background: linear-gradient(135deg, #f8fafc, #ffffff);
-      border: 1px solid var(--border);
-    }
-
-    .flip-card-back {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      transform: rotateY(180deg);
-    }
-
-    .flip-card h3 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-    }
-
-    .flip-card p {
-      font-size: 1.1rem;
-      opacity: 0.9;
-    }
-
-    .cta {
-      padding: 4rem 1rem;
-      background: white;
-      border-radius: 16px;
-      margin: 3rem auto;
-      max-width: 700px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.06);
-    }
-
-    .cta h2 {
-      font-size: 2.5rem;
-      color: var(--primary);
-      margin-bottom: 1.5rem;
-    }
-
-    .phone {
-      font-size: 2.2rem;
-      font-weight: bold;
-      color: var(--primary-dark);
-      margin: 1.5rem 0;
-    }
-
-    footer {
-      padding: 2rem 1rem;
-      text-align: center;
-      color: #64748b;
-      font-size: 0.95rem;
-      border-top: 1px solid var(--border);
-      margin-top: 4rem;
-    }
-
-    .social {
-      margin: 1rem 0;
-    }
-
-    .social a {
-      color: var(--primary);
-      margin: 0 1rem;
-      font-size: 1.3rem;
-      text-decoration: none;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <div class="container">
-      <h1>RARE GRADE TECH</h1>
-      <p class="tagline">Home Vision Services Contact</p>
-      <p class="tagline">IMAGINATION → REALITY</p>
-      <p>Breaking limitations through cutting-edge technology</p>
-      <p><strong>Get in Touch</strong></p>
-    </div>
-  </header>
-
-  <section class="container purpose">
-    <h2>Our Purpose</h2>
-    
-    <h3>VISION</h3>
-    <p>To break limitations through tech, enabling our clients to realize their full potential for growth & success.</p>
-    
-    <h3>MISSION</h3>
-    <p>Design, develop & build innovative, well-grounded tech & software solutions to meet our clients’ needs with mind-blowing quality & ethics.</p>
-  </section>
-
-  <section class="services">
-    <div class="container">
-      <h2>What We Do</h2>
-      
-      <div class="cards-grid">
-        <!-- Card 1 -->
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <h3>Custom Software Development</h3>
-              <p>Web • Mobile • Desktop • Cloud</p>
-            </div>
-            <div class="flip-card-back">
-              <h3>Custom Software Development</h3>
-              <p>Built from the ground up to solve real business problems — tailored exactly to your needs
+      width: 340px;
+      height: 400px;
+      perspective: 1100
