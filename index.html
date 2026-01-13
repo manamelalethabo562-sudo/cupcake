@@ -4,111 +4,101 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Rare Grade Tech | Imagination → Reality</title>
-    
+   
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
-    
+   
     <style>
         :root {
-            --bg-dark: #050511;
-            --bg-accent: #0f1129;
-            --primary: #00f2ff; /* Cyber Cyan */
-            --primary-dim: #008cff;
-            --text-main: #ffffff;
-            --text-muted: #94a3b8;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --card-hover: rgba(0, 242, 255, 0.05);
-            --gradient-text: linear-gradient(135deg, #fff 0%, #00f2ff 100%);
+            --bg-light: #f8f9ff;
+            --bg-accent: #f0f4ff;
+            --primary: #00b7eb;          /* Slightly adjusted cyan for better light-theme contrast */
+            --primary-dim: #0099cc;
+            --text-main: #1a1a2e;
+            --text-muted: #4b5e7a;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(0, 183, 235, 0.15);
+            --card-hover: rgba(0, 183, 235, 0.08);
+            --gradient-text: linear-gradient(135deg, #1a1a2e 0%, #00b7eb 100%);
+            --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             scroll-behavior: smooth;
         }
-
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: var(--bg-dark);
+            background-color: var(--bg-light);
             color: var(--text-main);
             overflow-x: hidden;
             line-height: 1.6;
         }
-
-        /* --- Animated Background --- */
+        /* --- Animated Background (subtle now for light theme) --- */
         .bg-glow {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: 
-                radial-gradient(circle at 15% 50%, rgba(0, 140, 255, 0.08), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(0, 242, 255, 0.05), transparent 25%);
+            background:
+                radial-gradient(circle at 15% 50%, rgba(0, 183, 235, 0.06), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(0, 183, 235, 0.04), transparent 25%);
             z-index: -1;
             pointer-events: none;
         }
-
         /* --- Layout Utilities --- */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 2rem;
         }
-
         section {
             padding: 8rem 0;
         }
-
         h1, h2, h3 {
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 700;
         }
-
         /* --- Animations --- */
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
-
         .fade-in.visible {
             opacity: 1;
             transform: translateY(0);
         }
-
         /* --- Header / Nav --- */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
             padding: 1.5rem 0;
-            background: rgba(5, 5, 17, 0.8);
+            background: rgba(248, 249, 255, 0.92);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-sm);
             z-index: 1000;
         }
-
         .nav-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
         .logo {
             font-family: 'Space Grotesk', sans-serif;
             font-size: 1.5rem;
             font-weight: 700;
             letter-spacing: -0.02em;
-            color: white;
+            color: var(--text-main);
             text-decoration: none;
         }
-        
         .logo span { color: var(--primary); }
-
         .cta-small {
             padding: 0.6rem 1.5rem;
             border: 1px solid var(--primary-dim);
@@ -117,15 +107,14 @@
             border-radius: 50px;
             font-size: 0.9rem;
             transition: 0.3s;
+            background: white;
         }
-
         .cta-small:hover {
             background: var(--primary);
-            color: var(--bg-dark);
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+            color: white;
+            box-shadow: 0 0 20px rgba(0, 183, 235, 0.3);
         }
-
-        /* --- Hero Section --- */
+        /* --- Hero Section with Background Image --- */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -134,58 +123,64 @@
             text-align: center;
             position: relative;
             padding-top: 80px;
+            background: linear-gradient(rgba(248, 249, 255, 0.82), rgba(248, 249, 255, 0.90)),
+                        url('https://thumbs.dreamstime.com/b/glowing-tech-circuit-lines-dark-blue-background-digital-grid-futuristic-light-pulse-center-389376521.jpg') center/cover no-repeat fixed;
         }
-
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,183,235,0.08) 0%, rgba(255,255,255,0.15) 100%);
+            z-index: 0;
+        }
+        .hero > * {
+            position: relative;
+            z-index: 1;
+        }
         .hero h1 {
             font-size: clamp(3rem, 8vw, 6rem);
             line-height: 1;
             margin-bottom: 1.5rem;
-            background: linear-gradient(to right, #fff, #b3b3b3);
+            background: linear-gradient(to right, var(--text-main), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
         .hero .highlight {
             background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dim) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
         .hero p {
             font-size: clamp(1.2rem, 3vw, 1.5rem);
             color: var(--text-muted);
             max-width: 700px;
             margin: 0 auto 3rem;
         }
-
         .hero-btn {
             display: inline-block;
             padding: 1.2rem 3rem;
-            background: white;
-            color: var(--bg-dark);
+            background: var(--primary);
+            color: white;
             font-weight: 700;
             text-decoration: none;
             border-radius: 50px;
             font-size: 1.1rem;
             transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 8px 25px rgba(0, 183, 235, 0.25);
         }
-
         .hero-btn:hover {
             transform: translateY(-5px);
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 183, 235, 0.35);
         }
-
         /* --- Section Titles --- */
         .section-header {
             text-align: center;
             margin-bottom: 5rem;
         }
-
         .section-header h2 {
             font-size: 3rem;
             margin-bottom: 1rem;
         }
-
         .section-header .line {
             width: 60px;
             height: 4px;
@@ -193,14 +188,12 @@
             margin: 0 auto;
             border-radius: 2px;
         }
-
         /* --- Mission Grid --- */
         .mission-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
-
         .glass-card {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
@@ -209,8 +202,8 @@
             transition: 0.4s ease;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow-sm);
         }
-
         .glass-card::before {
             content: '';
             position: absolute;
@@ -219,14 +212,12 @@
             opacity: 0;
             transition: 0.4s;
         }
-
         .glass-card:hover {
             transform: translateY(-10px);
-            border-color: rgba(0, 242, 255, 0.3);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(0, 183, 235, 0.25);
         }
-
         .glass-card:hover::before { opacity: 1; }
-
         .glass-card h3 {
             font-size: 1.5rem;
             color: var(--primary);
@@ -234,26 +225,23 @@
             text-transform: uppercase;
             letter-spacing: 2px;
         }
-
         .glass-card p {
             color: var(--text-muted);
             font-size: 1.1rem;
         }
-
         /* --- Services --- */
         .service-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 2rem;
         }
-
         .service-item {
-            background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            background: white;
             border: 1px solid var(--glass-border);
             padding: 3rem;
             border-radius: 20px;
+            box-shadow: var(--shadow-sm);
         }
-
         .service-item h3 {
             font-size: 2rem;
             margin-bottom: 1.5rem;
@@ -261,56 +249,48 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
         .service-item ul {
             list-style: none;
         }
-
         .service-item li {
             margin-bottom: 0.8rem;
             color: var(--text-muted);
             display: flex;
             align-items: center;
         }
-
         .service-item li::before {
             content: '→';
             color: var(--primary);
             margin-right: 10px;
             font-weight: bold;
         }
-
         /* --- CTA Footer --- */
         .footer-cta {
-            background: linear-gradient(135deg, #0f1129 0%, #000 100%);
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6ecff 100%);
             border-top: 1px solid var(--glass-border);
             text-align: center;
             padding: 6rem 1rem;
         }
-
         .phone-display {
             font-family: 'Space Grotesk', sans-serif;
             font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 700;
-            color: white;
+            color: var(--primary);
             margin: 2rem 0;
             display: block;
             text-decoration: none;
             transition: color 0.3s;
         }
-
         .phone-display:hover {
-            color: var(--primary);
+            color: var(--primary-dim);
         }
-
         footer {
             text-align: center;
             padding: 3rem 0;
             color: var(--text-muted);
             font-size: 0.9rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid rgba(0,0,0,0.05);
         }
-
         /* --- Mobile Tweaks --- */
         @media (max-width: 768px) {
             .section-header h2 { font-size: 2.2rem; }
@@ -320,16 +300,13 @@
     </style>
 </head>
 <body>
-
     <div class="bg-glow"></div>
-
     <nav>
         <div class="container nav-content">
             <a href="#" class="logo">RARE GRADE <span>TECH</span></a>
             <a href="tel:0639576360" class="cta-small">Contact Us</a>
         </div>
     </nav>
-
     <header class="hero">
         <div class="container fade-in">
             <h1>IMAGINATION<br><span class="highlight">TO REALITY</span></h1>
@@ -337,14 +314,13 @@
             <a href="tel:0639576360" class="hero-btn">Start Your Project</a>
         </div>
     </header>
-
     <section id="purpose">
         <div class="container">
             <div class="section-header fade-in">
                 <h2>Our Purpose</h2>
                 <div class="line"></div>
             </div>
-            
+           
             <div class="mission-grid">
                 <div class="glass-card fade-in">
                     <h3>Vision</h3>
@@ -357,18 +333,16 @@
             </div>
         </div>
     </section>
-
     <section id="services">
         <div class="container">
             <div class="section-header fade-in">
                 <h2>What We Do</h2>
                 <div class="line"></div>
             </div>
-
             <div class="service-list">
                 <div class="service-item fade-in">
                     <h3>Software Engineering</h3>
-                    <p style="margin-bottom: 1.5rem; color: #fff;">Scalable architectures built from the ground up.</p>
+                    <p style="margin-bottom: 1.5rem; color: var(--text-main);">Scalable architectures built from the ground up.</p>
                     <ul>
                         <li>Web Applications (React/Vue/Angular)</li>
                         <li>Mobile Development (iOS & Android)</li>
@@ -376,10 +350,9 @@
                         <li>Cloud Infrastructure</li>
                     </ul>
                 </div>
-
                 <div class="service-item fade-in" style="transition-delay: 0.2s;">
                     <h3>AI & Emerging Tech</h3>
-                    <p style="margin-bottom: 1.5rem; color: #fff;">Turning science fiction into business assets.</p>
+                    <p style="margin-bottom: 1.5rem; color: var(--text-main);">Turning science fiction into business assets.</p>
                     <ul>
                         <li>Machine Learning Integration</li>
                         <li>Computer Vision Systems</li>
@@ -390,7 +363,6 @@
             </div>
         </div>
     </section>
-
     <section class="footer-cta">
         <div class="container fade-in">
             <h2 style="font-size: 2rem; color: var(--text-muted);">Ready to build something extraordinary?</h2>
@@ -398,20 +370,15 @@
             <p style="color: var(--primary);">Gqeberha, South Africa</p>
         </div>
     </section>
-
     <footer>
         <div class="container">
             <p>© 2026 Rare Grade Tech. All Rights Reserved.</p>
-            <p style="opacity: 0.6; margin-top: 0.5rem;">Ethics & Excellence</p>
+            <p style="opacity: 0.7; margin-top: 0.5rem;">Ethics & Excellence</p>
         </div>
     </footer>
-
     <script>
         // Simple Intersection Observer for scroll animations
-        const observerOptions = {
-            threshold: 0.1
-        };
-
+        const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -420,7 +387,6 @@
                 }
             });
         }, observerOptions);
-
         document.querySelectorAll('.fade-in').forEach(el => {
             observer.observe(el);
         });
