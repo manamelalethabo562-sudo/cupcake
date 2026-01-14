@@ -13,30 +13,34 @@
             color: #333;
             line-height: 1.6;
         }
+
         header {
             background: linear-gradient(to right, #ff8c00, #e07b00);
-            padding: 30px 20px;
+            padding: 20px;
             text-align: center;
             color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 10;
         }
+
         header img {
-            max-width: 380px;
+            max-width: 280px;
             height: auto;
-            margin-bottom: 15px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
         }
+
         header h1 {
-            margin: 0;
-            font-size: 2.8rem;
-            font-weight: 700;
-            letter-spacing: 1px;
+            margin: 10px 0 5px;
+            font-size: 2.6rem;
         }
+
         header p {
-            margin: 8px 0 0;
-            font-size: 1.3rem;
+            margin: 0;
+            font-size: 1.2rem;
             opacity: 0.95;
         }
+
         nav {
             background-color: #222;
             padding: 15px;
@@ -46,22 +50,26 @@
             z-index: 100;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
+
         nav a {
             color: #fff;
-            margin: 0 20px;
+            margin: 0 18px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             transition: color 0.3s;
         }
+
         nav a:hover {
             color: #ff8c00;
         }
+
         section {
             padding: 60px 20px;
             max-width: 1200px;
             margin: 0 auto;
         }
+
         h2 {
             color: #ff8c00;
             text-align: center;
@@ -69,6 +77,7 @@
             font-size: 2.4rem;
             position: relative;
         }
+
         h2::after {
             content: '';
             width: 80px;
@@ -79,44 +88,68 @@
             left: 50%;
             transform: translateX(-50%);
         }
+
         #home {
-            background: #fff;
+            min-height: 80vh;
+            background-image: url('logo.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            color: white;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        #about, #contact {
-            background: #f8f9fa;
+
+        #home::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.55); /* dark overlay for readability */
+            z-index: 1;
         }
-        #services {
-            background: #fff;
+
+        #home > * {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
         }
-        .service-grid {
+
+        #home h2 {
+            color: white;
+            font-size: 3.2rem;
+            margin-bottom: 20px;
+        }
+
+        #home p {
+            font-size: 1.4rem;
+            margin: 0 10%;
+        }
+
+        .service-grid, .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
         }
+
         .service-card {
-            background: #fff;
+            background: white;
             border-radius: 12px;
             padding: 30px 20px;
             box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.3s;
         }
+
         .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+            transform: translateY(-8px);
         }
+
         .service-card h3 {
             color: #ff8c00;
-            margin-top: 0;
         }
-        #gallery {
-            text-align: center;
-        }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
+
         .gallery-placeholder {
             height: 220px;
             background: linear-gradient(135deg, #eee, #ddd);
@@ -125,13 +158,14 @@
             align-items: center;
             justify-content: center;
             font-style: italic;
-            color: #777;
+            color: #666;
         }
+
         form {
             max-width: 500px;
             margin: 30px auto;
-            text-align: left;
         }
+
         input, textarea {
             width: 100%;
             padding: 14px;
@@ -140,21 +174,23 @@
             border-radius: 6px;
             font-size: 1rem;
         }
+
         button {
             background: #ff8c00;
             color: white;
             border: none;
-            padding: 14px 30px;
+            padding: 14px 40px;
             font-size: 1.1rem;
             border-radius: 6px;
             cursor: pointer;
-            transition: background 0.3s;
             display: block;
             margin: 20px auto 0;
         }
+
         button:hover {
             background: #e07b00;
         }
+
         footer {
             background: #222;
             color: #aaa;
@@ -162,10 +198,11 @@
             padding: 25px;
             font-size: 0.95rem;
         }
+
         @media (max-width: 768px) {
-            header img { max-width: 280px; }
-            header h1 { font-size: 2.2rem; }
-            nav a { margin: 0 12px; font-size: 1rem; }
+            #home h2 { font-size: 2.4rem; }
+            #home p  { font-size: 1.2rem; margin: 0 5%; }
+            header img { max-width: 220px; }
         }
     </style>
 </head>
@@ -174,7 +211,7 @@
     <header>
         <img src="logo.png" alt="Dubes Catering Logo">
         <h1>Dubes Catering</h1>
-        <p>Elevating Parties, Weddings & Special Moments in the Eastern Cape</p>
+        <p>Elevating Parties, Weddings & Special Moments</p>
     </header>
 
     <nav>
@@ -187,10 +224,63 @@
 
     <section id="home">
         <h2>Welcome to Dubes Catering</h2>
-        <p>We bring flavor, style, and unforgettable experiences to every celebration. From vibrant birthday parties and dream weddings to corporate functions and cultural events — we handle the food, presentation, and service so you can focus on making memories.</p>
-        <p>Based proudly in Gqeberha, serving the Eastern Cape and beyond.</p>
+        <p>We bring flavor, passion, and unforgettable style to every celebration — birthdays, dream weddings, corporate events, and more. Based in Gqeberha, proudly serving the Eastern Cape.</p>
     </section>
 
     <section id="about">
         <h2>About Us</h2>
-        <p>At Dubes Catering, passion meets precision. We use fresh, local ingredients and creative menus tailored to
+        <p>At Dubes Catering, we turn occasions into memories with fresh local ingredients, creative menus, and flawless service. From casual braais to elegant receptions — we handle it all.</p>
+    </section>
+
+    <section id="services">
+        <h2>Our Signature Services</h2>
+        <div class="service-grid">
+            <div class="service-card">
+                <h3>Parties & Celebrations</h3>
+                <p>Birthdays, anniversaries, baby showers — buffets, finger foods, themed setups, braai packages.</p>
+            </div>
+            <div class="service-card">
+                <h3>Weddings</h3>
+                <p>Cocktail hours, multi-course meals, dessert tables, bar service, cake coordination — tailored to your dream day.</p>
+            </div>
+            <div class="service-card">
+                <h3>Special & Corporate Events</h3>
+                <p>Graduations, launches, team days, cultural functions — full setup, staffing, and professional execution.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery">
+        <h2>Gallery</h2>
+        <p>A glimpse of the moments we've helped create</p>
+        <div class="gallery-grid">
+            <div class="gallery-placeholder">Wedding Reception</div>
+            <div class="gallery-placeholder">Party Buffet</div>
+            <div class="gallery-placeholder">Corporate Setup</div>
+            <div class="gallery-placeholder">Dessert Table</div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Get In Touch</h2>
+        <p>Let's plan your perfect event!</p>
+        <p><strong>Email:</strong> info@dubescatering.co.za<br>
+           <strong>Phone:</strong> +27 41 123 4567<br>
+           <strong>Location:</strong> Gqeberha, Eastern Cape</p>
+
+        <form>
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <input type="text" placeholder="Event Type (e.g. Wedding)">
+            <input type="text" placeholder="Event Date">
+            <textarea placeholder="Tell us about your event..." rows="5" required></textarea>
+            <button type="submit">Request a Quote</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>© 2026 Dubes Catering – Gqeberha, Eastern Cape</p>
+    </footer>
+
+</body>
+</html>
