@@ -1,413 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Rare Grade Tech | Imagination → Reality</title>
-   
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-   
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dubes Catering - Weddings, Parties & Special Events</title>
     <style>
-        :root {
-            /* Light Theme Variables */
-            --bg-body: #f5f3ff;              /* Soft light purple – page background */
-            --bg-surface: #ffffff;
-            --primary: #2563eb;              /* Royal Blue */
-            --primary-dark: #1e40af;
-            --accent: #3b82f6;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            
-            --card-bg: #f0f7ff;              /* Light blue for cards */
-            --card-border: #bfdbfe;
-            --card-hover-bg: #e0f2fe;
-            --card-hover-border: #93c5fd;
-            
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-            --hero-glow: 0 20px 60px rgba(37, 99, 235, 0.12);
-        }
-
-        * {
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
+            background-color: #f8f8f8;
+            color: #333;
         }
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
+        header {
+            background-color: #ff8c00;
+            color: white;
+            padding: 20px;
+            text-align: center;
         }
-
-        /* --- Animations --- */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        header img {
+            max-width: 300px;
+            height: auto;
         }
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* --- Navigation --- */
         nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1.2rem 0;
-            background: rgba(245, 243, 255, 0.92);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0,0,0,0.04);
-            z-index: 1000;
+            background-color: #333;
+            padding: 10px;
+            text-align: center;
         }
-
-        .container {
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        section {
+            padding: 40px 20px;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 2rem;
         }
-
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        #about {
+            background-color: white;
+            text-align: center;
         }
-
-        .logo {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-main);
-            text-decoration: none;
-            letter-spacing: -0.03em;
+        #services {
+            background-color: #f0f0f0;
         }
-       
-        .logo span { color: var(--primary); }
-
-        .btn-nav {
-            padding: 0.6rem 1.5rem;
-            background-color: var(--text-main);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: 0.3s;
+        #services ul {
+            list-style-type: none;
+            padding: 0;
         }
-
-        .btn-nav:hover {
-            background-color: var(--primary);
-            transform: translateY(-2px);
+        #services li {
+            margin: 20px 0;
+            font-size: 18px;
         }
-
-        /* --- Hero Section --- */
-        .hero {
-            padding: 160px 0 100px;
-            min-height: 90vh;
-            display: flex;
-            align-items: center;
-            background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.04), transparent 50%);
+        #gallery {
+            text-align: center;
         }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .hero-text h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(3rem, 6vw, 4.5rem);
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.02em;
-        }
-
-        .hero-text h1 .highlight {
-            color: var(--primary);
-            position: relative;
-            display: inline-block;
-        }
-
-        .hero-text p {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            margin-bottom: 2.5rem;
-            max-width: 90%;
-        }
-
-        .hero-btn {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: var(--primary);
-            color: white;
-            font-weight: 600;
-            text-decoration: none;
+        #gallery img {
+            width: 30%;
+            margin: 10px;
             border-radius: 8px;
-            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
-            transition: all 0.3s ease;
         }
-
-        .hero-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-4px);
-            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4);
+        #contact {
+            background-color: white;
+            text-align: center;
         }
-
-        .hero-image-wrapper {
-            position: relative;
+        form {
+            max-width: 600px;
+            margin: 0 auto;
         }
-
-        .hero-image-wrapper img {
+        input, textarea {
             width: 100%;
-            border-radius: 24px;
-            box-shadow: var(--hero-glow), var(--shadow-lg);
-            transform: perspective(1000px) rotateY(-5deg);
-            transition: transform 0.5s ease;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-
-        .hero-image-wrapper:hover img {
-            transform: perspective(1000px) rotateY(0deg);
-        }
-
-        /* --- Sections --- */
-        section {
-            padding: 6rem 0;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-header h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
-            color: var(--text-main);
-            margin-bottom: 1rem;
-        }
-
-        .subtitle {
-            color: var(--primary);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.9rem;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
-        /* --- Cards – Light Blue Theme --- */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: 16px;
-            border: 1px solid var(--card-border);
-            box-shadow: var(--shadow-sm);
-            transition: all 0.4s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-lg);
-            background: var(--card-hover-bg);
-            border-color: var(--card-hover-border);
-        }
-
-        .card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        .card p {
-            color: var(--text-muted);
-        }
-
-        .icon-box {
-            width: 50px;
-            height: 50px;
-            background: #e0f2fe;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-            font-size: 1.5rem;
-        }
-
-        /* --- CTA Section --- */
-        .cta-section {
-            background: var(--text-main);
+        button {
+            background-color: #ff8c00;
             color: white;
-            text-align: center;
-            padding: 5rem 1rem;
-            border-radius: 30px;
-            margin: 4rem 2rem;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
         }
-
-        .phone-number {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 700;
-            color: white;
-            text-decoration: none;
-            display: block;
-            margin: 1rem 0;
-            transition: color 0.3s;
+        button:hover {
+            background-color: #e07b00;
         }
-
-        .phone-number:hover {
-            color: var(--primary);
-        }
-
-        /* --- Footer --- */
         footer {
-            background: white;
-            border-top: 1px solid #e2e8f0;
-            padding: 3rem 0;
+            background-color: #333;
+            color: white;
             text-align: center;
-            color: var(--text-muted);
-        }
-
-        /* --- Mobile Responsiveness --- */
-        @media (max-width: 900px) {
-            .hero-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-                gap: 3rem;
-            }
-           
-            .hero-text p {
-                margin: 0 auto 2.5rem;
-            }
-
-            .hero-image-wrapper img {
-                transform: none;
-                max-width: 90%;
-            }
-           
-            .cta-section {
-                margin: 4rem 1rem;
-                border-radius: 20px;
-            }
+            padding: 10px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <nav>
-        <div class="container nav-content">
-            <a href="#" class="logo">RARE GRADE <span>TECH</span></a>
-            <a href="tel:0639576360" class="btn-nav">Contact Us</a>
-        </div>
-    </nav>
 
-    <header class="hero">
-        <div class="container hero-grid">
-            <div class="hero-text fade-in">
-                <h1>Imagination to <br><span class="highlight">Reality.</span></h1>
-                <p>We break limitations through cutting-edge software development & AI. Creating scalable solutions for the digital age.</p>
-                <a href="tel:0639576360" class="hero-btn">Start Your Project →</a>
-            </div>
-           
-            <div class="hero-image-wrapper fade-in" style="transition-delay: 0.2s;">
-                <img src="https://i.postimg.cc/g033DMhy/download.jpg" alt="Rare Grade Tech Innovation">
-            </div>
-        </div>
+    <header>
+        <!-- Replace 'logo.png' with the path to your uploaded logo image -->
+        <img src="logo.png" alt="Dubes Catering Logo">
+        <h1>Dubes Catering</h1>
+        <p>Specializing in Weddings, Parties & Special Events in Gqeberha, Eastern Cape</p>
     </header>
 
-    <section id="purpose">
-        <div class="container">
-            <div class="section-header fade-in">
-                <span class="subtitle">Our Why</span>
-                <h2>Purpose & Vision</h2>
-            </div>
-           
-            <div class="card-grid">
-                <div class="card fade-in">
-                    <div class="icon-box">🚀</div>
-                    <h3>Our Vision</h3>
-                    <p>To break limitations through tech, enabling our clients to realize their full potential for growth & success in a competitive market.</p>
-                </div>
-                <div class="card fade-in" style="transition-delay: 0.2s;">
-                    <div class="icon-box">🎯</div>
-                    <h3>Our Mission</h3>
-                    <p>Design, develop & build innovative, well-grounded tech & software solutions to meet our clients’ needs with ethics & excellence.</p>
-                </div>
-            </div>
-        </div>
+    <nav>
+        <a href="#about">About Us</a>
+        <a href="#services">Services</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <section id="about">
+        <h2>About Dubes Catering</h2>
+        <p>Welcome to Dubes Catering, your premier choice for exquisite catering services in Gqeberha and the Eastern Cape. We specialize in creating unforgettable experiences for weddings, parties, and special events. With a passion for fresh, local ingredients and impeccable service, our team ensures every event is tailored to perfection.</p>
+        <p>Founded by Lethabo, Dubes Catering brings years of expertise to make your occasion truly special.</p>
     </section>
 
-    <section id="services" style="background-color: transparent;">
-        <div class="container">
-            <div class="section-header fade-in">
-                <span class="subtitle">Expertise</span>
-                <h2>What We Build</h2>
-            </div>
-            <div class="card-grid">
-                <div class="card fade-in">
-                    <div class="icon-box">💻</div>
-                    <h3>Custom Software</h3>
-                    <p>Tailor-made Web, Mobile, Desktop & Cloud solutions built from the ground up to solve complex business problems.</p>
-                </div>
-                <div class="card fade-in" style="transition-delay: 0.2s;">
-                    <div class="icon-box">🤖</div>
-                    <h3>AI & Emerging Tech</h3>
-                    <p>Integrating Machine Learning, Computer Vision, and VR/AR tools to give your business a futuristic edge.</p>
-                </div>
-                <div class="card fade-in" style="transition-delay: 0.4s;">
-                    <div class="icon-box">☁️</div>
-                    <h3>Cloud Architecture</h3>
-                    <p>Scalable, secure, and robust infrastructure design ensuring your applications are always online and fast.</p>
-                </div>
-            </div>
-        </div>
+    <section id="services">
+        <h2>Our Services</h2>
+        <ul>
+            <li><strong>Weddings:</strong> Customized menus for your big day, from elegant receptions to intimate ceremonies.</li>
+            <li><strong>Parties:</strong> Birthday bashes, corporate gatherings, or casual get-togethers with delicious finger foods and buffets.</li>
+            <li><strong>Special Events:</strong> Anniversaries, graduations, and more – we handle the food so you can enjoy the moment.</li>
+        </ul>
+        <p>All our services include setup, serving, and cleanup options. Contact us for a personalized quote.</p>
     </section>
 
-    <div class="container fade-in">
-        <section class="cta-section">
-            <h2>Let's build something extraordinary.</h2>
-            <p style="opacity: 0.8; margin-top: 1rem;">Ready to turn your vision into reality? We are ready when you are.</p>
-            <a href="tel:0639576360" class="phone-number">063 957 6360</a>
-            <p style="font-size: 0.9rem; opacity: 0.6;">Gqeberha, South Africa</p>
-        </section>
-    </div>
+    <section id="gallery">
+        <h2>Gallery</h2>
+        <p>Take a look at some of our past events:</p>
+        <!-- Add your own images here; these are placeholders -->
+        <img src="https://via.placeholder.com/400x300?text=Wedding+Setup" alt="Wedding Catering">
+        <img src="https://via.placeholder.com/400x300?text=Party+Buffet" alt="Party Catering">
+        <img src="https://via.placeholder.com/400x300?text=Special+Event" alt="Special Event Catering">
+    </section>
+
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <p>Get in touch for inquiries or bookings:</p>
+        <form action="#" method="post">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <input type="text" name="event" placeholder="Event Type (e.g., Wedding)">
+            <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+        <p>Email: info@dubescatering.co.za | Phone: +27 123 456 789 | Location: Gqeberha, Eastern Cape</p>
+    </section>
 
     <footer>
-        <div class="container">
-            <p>© 2026 Rare Grade Tech. Ethics & Excellence.</p>
-        </div>
+        <p>&copy; 2026 Dubes Catering. All rights reserved.</p>
     </footer>
 
-    <script>
-        // Scroll Animation Logic
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
-        });
-    </script>
 </body>
 </html>
