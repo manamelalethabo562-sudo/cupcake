@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dubes Catering - Weddings, Parties & Special Events</title>
+    <title>Dubes Catering - Parties, Weddings & Special Events</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,97 +13,73 @@
             color: #333;
         }
         header {
-            background-color: #ff8c00;
-            color: white;
-            padding: 30px 20px;
+            background-color: #ff8c00; /* Orange to match logo */
+            padding: 20px;
             text-align: center;
         }
-        header img.logo {
-            max-width: 450px;          /* Larger size for your prominent logo */
-            width: 80%;
+        header img {
+            max-width: 300px;
             height: auto;
-            margin-bottom: 15px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        header h1 {
-            margin: 10px 0;
-            font-size: 2.5em;
-        }
-        header p {
-            font-size: 1.2em;
-            margin: 0;
         }
         nav {
             background-color: #333;
-            padding: 15px;
+            padding: 10px;
             text-align: center;
         }
         nav a {
             color: white;
-            margin: 0 20px;
+            margin: 0 15px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.1em;
         }
         nav a:hover {
-            text-decoration: underline;
+            color: #ff8c00;
         }
         section {
-            padding: 50px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        #about {
-            background-color: white;
+            padding: 40px 20px;
             text-align: center;
+        }
+        #home {
+            background-color: #fff;
         }
         #services {
             background-color: #f0f0f0;
         }
-        #services ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        #services li {
-            margin: 25px 0;
-            font-size: 1.2em;
+        .service {
+            display: inline-block;
+            width: 30%;
+            margin: 10px;
+            vertical-align: top;
         }
         #gallery {
-            text-align: center;
+            background-color: #fff;
         }
-        #gallery img {
-            width: 30%;
-            max-width: 350px;
-            margin: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        .gallery-img {
+            width: 200px;
+            height: 150px;
+            margin: 10px;
+            background-color: #ddd; /* Placeholder for images */
         }
         #contact {
-            background-color: white;
-            text-align: center;
+            background-color: #f0f0f0;
         }
         form {
-            max-width: 600px;
+            max-width: 400px;
             margin: 0 auto;
+            text-align: left;
         }
         input, textarea {
             width: 100%;
-            padding: 12px;
-            margin: 12px 0;
+            padding: 10px;
+            margin: 10px 0;
             border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
         }
         button {
             background-color: #ff8c00;
             color: white;
-            padding: 12px 30px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
-            font-size: 1.1em;
         }
         button:hover {
             background-color: #e07b00;
@@ -112,72 +88,84 @@
             background-color: #333;
             color: white;
             text-align: center;
-            padding: 20px;
-            margin-top: 40px;
+            padding: 10px;
+        }
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .service {
+                width: 100%;
+            }
+            .gallery-img {
+                width: 100%;
+                height: auto;
+            }
         }
     </style>
 </head>
 <body>
-
     <header>
-        <img src="logo.png" alt="Dubes Catering Logo" class="logo">
+        <img src="logo.png" alt="Dubes Catering Logo">
         <h1>Dubes Catering</h1>
-        <p>Specializing in Weddings, Parties & Special Events in Gqeberha, Eastern Cape</p>
+        <p>Your Partner for Unforgettable Parties, Weddings, and Special Events</p>
     </header>
 
     <nav>
-        <a href="#about">About Us</a>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
         <a href="#services">Services</a>
         <a href="#gallery">Gallery</a>
         <a href="#contact">Contact</a>
     </nav>
 
+    <section id="home">
+        <h2>Welcome to Dubes Catering</h2>
+        <p>Based in Gqeberha, Eastern Cape, we specialize in creating memorable experiences through exquisite catering for parties, weddings, and special events. From intimate gatherings to grand celebrations, our team delivers top-quality food and service tailored to your needs.</p>
+    </section>
+
     <section id="about">
-        <h2>About Dubes Catering</h2>
-        <p>Welcome to Dubes Catering, your premier choice for exquisite catering services in Gqeberha and the Eastern Cape. We specialize in creating unforgettable experiences for weddings, parties, and special events. With a passion for fresh, local ingredients and impeccable service, our team ensures every event is tailored to perfection.</p>
-        <p>Founded with love and expertise, Dubes Catering brings years of culinary passion to make your occasion truly special.</p>
+        <h2>About Us</h2>
+        <p>Dubes Catering has been serving the Eastern Cape community since [Year Founded]. Our passion for food and events drives us to use fresh, local ingredients to craft menus that delight. Whether it's a birthday party, dream wedding, or corporate event, we handle every detail with care.</p>
     </section>
 
     <section id="services">
         <h2>Our Services</h2>
-        <ul>
-            <li><strong>Weddings:</strong> Customized menus for your big day, from elegant receptions to intimate ceremonies – plated dinners, buffets, or cocktail-style service.</li>
-            <li><strong>Parties:</strong> Birthday celebrations, corporate events, or casual gatherings with delicious finger foods, braai options, and vibrant buffets.</li>
-            <li><strong>Special Events:</strong> Anniversaries, baby showers, graduations, and corporate functions – we handle the details so you can enjoy the moment.</li>
-        </ul>
-        <p>All packages include professional setup, elegant serving, and full cleanup. Contact us for a no-obligation personalized quote.</p>
+        <div class="service">
+            <h3>Parties</h3>
+            <p>Custom menus for birthdays, anniversaries, and casual get-togethers. Options include finger foods, buffets, and themed setups.</p>
+        </div>
+        <div class="service">
+            <h3>Weddings</h3>
+            <p>Elegant catering for your big day, including multi-course meals, cake services, and bar options. We work with your theme and budget.</p>
+        </div>
+        <div class="service">
+            <h3>Special Events</h3>
+            <p>Corporate functions, graduations, or cultural celebrations—we provide full-service catering with setup, staffing, and cleanup.</p>
+        </div>
     </section>
 
     <section id="gallery">
         <h2>Gallery</h2>
-        <p>Take a look at some of our beautifully catered events:</p>
-        <!-- Replace these placeholders with your actual event photos -->
-        <img src="https://via.placeholder.com/500x350?text=Wedding+Reception" alt="Wedding Catering Setup">
-        <img src="https://via.placeholder.com/500x350?text=Party+Buffet+Spread" alt="Party Catering">
-        <img src="https://via.placeholder.com/500x350?text=Special+Event+Table" alt="Special Event Catering">
+        <p>Check out some of our past events!</p>
+        <!-- Replace these with actual <img> tags, e.g., <img src="event1.jpg" alt="Party Setup"> -->
+        <div class="gallery-img">Placeholder: Party Setup</div>
+        <div class="gallery-img">Placeholder: Wedding Feast</div>
+        <div class="gallery-img">Placeholder: Special Event Buffet</div>
     </section>
 
     <section id="contact">
-        <h2>Get in Touch</h2>
-        <p>Ready to make your event unforgettable? Send us a message or give us a call!</p>
-        <form action="#" method="post">
-            <input type="text" name="name" placeholder="Your Name" required>
-            <input type="email" name="email" placeholder="Your Email" required>
-            <input type="text" name="event" placeholder="Event Type (e.g., Wedding on 15 Feb)">
-            <input type="tel" name="phone" placeholder="Your Phone Number">
-            <textarea name="message" placeholder="Tell us about your event – date, guest count, preferences..." rows="6" required></textarea>
-            <button type="submit">Send Enquiry</button>
+        <h2>Contact Us</h2>
+        <p>Get in touch for a quote! Email: info@dubescatering.co.za | Phone: +27 41 123 4567 | Location: Gqeberha, Eastern Cape</p>
+        <form>
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <input type="text" placeholder="Event Type (e.g., Wedding)">
+            <textarea placeholder="Message" rows="5" required></textarea>
+            <button type="submit">Send Inquiry</button>
         </form>
-        <p style="margin-top: 30px;">
-            Email: info@dubescatering.co.za<br>
-            Phone: +27 123 456 789<br>
-            Location: Gqeberha, Eastern Cape
-        </p>
     </section>
 
     <footer>
-        <p>&copy; 2026 Dubes Catering. All rights reserved. Proudly serving the Eastern Cape.</p>
+        <p>&copy; 2026 Dubes Catering. All rights reserved.</p>
     </footer>
-
 </body>
 </html>
