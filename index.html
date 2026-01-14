@@ -3,217 +3,258 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dubeses Catering | Weddings • Parties • Special Events</title>
+  <title>Dube's Catering | Parties, Weddings & Special Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root {
+      --orange: #FF6B35;
+      --dark: #1a1a1a;
+      --light: #ffffff;
+      --gray: #f8f8f8;
     }
-
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: white;
-      min-height: 100vh;
-      background-color: #0a0a0a; /* dark elegant fallback */
+      font-family: 'Poppins', sans-serif;
+      color: var(--dark);
+      background: var(--light);
+      line-height: 1.6;
     }
-
-    /* Logo as repeating subtle background pattern */
-    .background {
-      position: fixed;
-      inset: 0;
-      background-image: 
-        url('https://cdn2.vectorstock.com/i/1000x1000/68/71/golden-catering-monogram-logo-with-chef-hat-icon-vector-44576871.jpg');
-        /* ↑ Replace this URL with YOUR actual logo file, ideally PNG with transparency:
-           e.g. url('dubeses-logo.png')   or   url('https://i.imgur.com/your-logo.png') */
-      background-size: 400px;               /* adjust this value: smaller = more repeats, larger = bigger logo */
-      background-repeat: repeat;
-      background-position: center;
-      opacity: 0.12;                        /* very subtle — try 0.08 to 0.20 */
-      filter: blur(1.5px) brightness(1.3);  /* soft + slightly brighter for elegance */
-      z-index: -2;
-    }
-
-    /* Dark overlay to ensure text readability */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.85) 100%);
-      z-index: -1;
-    }
-
     header {
-      padding: 2.5rem 5%;
-      text-align: center;
-      background: rgba(0, 0, 0, 0.55);
-      backdrop-filter: blur(10px);
-      position: sticky;
+      background: var(--orange);
+      color: var(--light);
+      padding: 1.5rem 5%;
+      position: fixed;
+      width: 100%;
       top: 0;
-      z-index: 10;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
     }
-
-    .logo-text {
-      font-size: 4.5rem;
-      font-weight: 900;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      margin-bottom: 0.4rem;
-      text-shadow: 0 5px 25px rgba(0,0,0,0.95);
-    }
-
-    .logo-text span {
-      color: #ff9800;
-    }
-
-    .tagline {
-      font-size: 1.6rem;
-      font-weight: 300;
-      opacity: 0.9;
-      letter-spacing: 2px;
-    }
-
-    main {
-      padding: 10rem 5% 6rem;
-      max-width: 1100px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 4.8rem;
-      margin-bottom: 1.8rem;
-      text-shadow: 0 5px 20px rgba(0,0,0,1);
-    }
-
-    p.intro {
-      font-size: 1.45rem;
-      line-height: 1.8;
-      max-width: 840px;
-      margin: 0 auto 3.5rem;
-      opacity: 0.94;
-    }
-
-    .specialties {
+    .logo {
+      font-size: 1.9rem;
+      font-weight: 700;
       display: flex;
-      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo::before {
+      content: "🔔"; /* placeholder cloche icon – replace with your orange/white SVG or image */
+      font-size: 2.2rem;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+    nav a:hover { color: #fff9; text-decoration: underline; }
+
+    .hero {
+      height: 100vh;
+      background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('https://images.unsplash.com/photo-1555244162-803834f70033?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 2.2rem;
-      margin: 3.5rem 0;
+      text-align: center;
+      color: white;
+      padding: 0 5%;
     }
-
-    .specialty-card {
-      background: rgba(255,255,255,0.07);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,152,0,0.3);
-      border-radius: 20px;
-      padding: 2rem 2.5rem;
-      min-width: 280px;
-      transition: all 0.4s;
-    }
-
-    .specialty-card:hover {
-      transform: translateY(-12px);
-      background: rgba(255,152,0,0.18);
-      border-color: #ff9800;
-      box-shadow: 0 15px 45px rgba(255,152,0,0.3);
-    }
-
-    .specialty-card h3 {
-      color: #ff9800;
-      font-size: 1.8rem;
+    .hero-content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
       margin-bottom: 1rem;
     }
-
+    .hero-content p {
+      font-size: 1.5rem;
+      max-width: 800px;
+      margin: 0 auto 2.5rem;
+    }
     .btn {
-      display: inline-block;
-      padding: 1.3rem 3rem;
-      background: #ff9800;
+      background: var(--orange);
       color: white;
-      font-size: 1.4rem;
-      font-weight: bold;
-      text-decoration: none;
+      padding: 1rem 2.5rem;
+      border: none;
       border-radius: 50px;
-      margin: 1.2rem 0.8rem;
-      transition: all 0.35s;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      transition: 0.3s;
+    }
+    .btn:hover { background: #e55a2d; transform: translateY(-3px); }
+
+    section {
+      padding: 8rem 5%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.2rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      color: var(--orange);
     }
 
-    .btn:hover {
-      background: #ffb733;
-      transform: translateY(-6px);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.7);
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2.5rem;
+    }
+    .card {
+      background: var(--gray);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      transition: 0.3s;
+    }
+    .card:hover { transform: translateY(-10px); }
+    .card img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+    }
+    .card-content {
+      padding: 2rem;
+      text-align: center;
     }
 
-    .btn-outline {
-      background: transparent;
-      border: 2.5px solid #ff9800;
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
     }
-
-    .btn-outline:hover {
-      background: rgba(255,152,0,0.2);
+    .gallery img {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     footer {
-      padding: 4rem 5% 2.5rem;
+      background: var(--dark);
+      color: white;
       text-align: center;
-      background: rgba(0,0,0,0.75);
-      font-size: 1.2rem;
+      padding: 4rem 5% 2rem;
     }
+    footer a { color: var(--orange); text-decoration: none; }
 
     @media (max-width: 768px) {
-      .logo-text { font-size: 3.4rem; }
-      h1 { font-size: 3.6rem; }
-      main { padding-top: 7rem; }
-      .specialties { flex-direction: column; align-items: center; }
+      .hero-content h1 { font-size: 3.5rem; }
+      nav ul { gap: 1.5rem; font-size: 0.95rem; }
     }
   </style>
 </head>
 <body>
 
-  <div class="background"></div>
-  <div class="overlay"></div>
-
   <header>
-    <div class="logo-text">
-      Dubes<span>es</span> Catering
-    </div>
-    <div class="tagline">Weddings • Parties • Special Events</div>
+    <nav>
+      <div class="logo">Dube's Catering</div>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
   </header>
 
-  <main>
-    <h1>Celebrations Made Unforgettable</h1>
-    
-    <p class="intro">
-      Specialising in <strong>weddings</strong>, <strong>parties</strong> and <strong>special events</strong> across Gqeberha and the Eastern Cape.  
-      Bold African-inspired flavours, elegant presentation, and that signature Dubeses vibe — we turn every occasion into something magical.
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h1>Dube's Catering</h1>
+      <p>Bringing bold flavors, elegant style, and joyful moments to your weddings, parties & special celebrations across the Eastern Cape and beyond.</p>
+      <a href="#contact" class="btn">Request a Quote</a>
+    </div>
+  </section>
+
+  <section id="services">
+    <h2>Our Signature Services</h2>
+    <div class="services-grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1519741497674-281450b9b157?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Wedding catering">
+        <div class="card-content">
+          <h3>Weddings</h3>
+          <p>Custom multi-course menus, plated dinners, lavish buffets, dessert stations & wedding cakes designed for your perfect day.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Party catering">
+        <div class="card-content">
+          <h3>Parties</h3>
+          <p>Grazing tables, themed food stations, cocktail bars, canapés & interactive setups for birthdays, anniversaries & every celebration.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1519167758481-83f269a90c33?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Special events">
+        <div class="card-content">
+          <h3>Special Events</h3>
+          <p>Corporate functions, family gatherings, cultural events, baby showers — tailored menus and impeccable service for any occasion.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery" style="background:#f9f5f2;">
+    <h2>Gallery</h2>
+    <div class="gallery">
+
+<grok-card data-id="7bb93f" data-type="image_card"  data-arg-size="LARGE" ></grok-card>
+
+
+
+<grok-card data-id="e4a54e" data-type="image_card"  data-arg-size="LARGE" ></grok-card>
+
+
+
+<grok-card data-id="2c9d56" data-type="image_card"  data-arg-size="LARGE" ></grok-card>
+
+
+
+<grok-card data-id="2c736c" data-type="image_card"  data-arg-size="LARGE" ></grok-card>
+
+
+
+<grok-card data-id="a20d6d" data-type="image_card"  data-arg-size="LARGE" ></grok-card>
+
+
+
+<grok-card data-id="12fe57" data-type="image_card"  data-arg-size="LARGE" ></grok-card>
+
+
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Get in Touch</h2>
+    <p style="text-align:center; font-size:1.3rem; max-width:700px; margin:0 auto 3rem;">
+      Let's make your next event extraordinary. Reach out for a custom quote, menu consultation, or tasting session.
     </p>
-
-    <div class="specialties">
-      <div class="specialty-card">
-        <h3>Weddings</h3>
-        <p>Multi-course plated meals • Romantic grazing tables • Custom wedding cakes • Midnight snacks & more</p>
-      </div>
-      <div class="specialty-card">
-        <h3>Parties</h3>
-        <p>Birthday celebrations • Braais & cocktail parties • Themed events • High-energy finger foods & platters</p>
-      </div>
-      <div class="specialty-card">
-        <h3>Special Events</h3>
-        <p>Corporate functions • Anniversaries • Baby showers • Product launches • Tailored menus for every milestone</p>
-      </div>
+    <div style="text-align:center;">
+      <p><strong>Email:</strong> info@dubescatering.co.za</p>
+      <p><strong>Phone:</strong> +27 82 123 4567</p>
+      <p><strong>Location:</strong> Based in Gqeberha, serving Eastern Cape & surrounds</p>
+      <br>
+      <a href="mailto:info@dubescatering.co.za" class="btn">Send Message</a>
     </div>
-
-    <div>
-      <a href="tel:+27821234567" class="btn">Book Your Date</a>
-      <a href="mailto:info@dubesescatering.co.za" class="btn btn-outline">Request Quote</a>
-    </div>
-  </main>
+  </section>
 
   <footer>
-    <p>© 2026 Dubeses Catering • Gqeberha, Eastern Cape<br>
-      <a href="mailto:info@dubesescatering.co.za" style="color:#ff9800; text-decoration:none;">info@dubesescatering.co.za</a> • 
-      <a href="tel:+27821234567" style="color:#ff9800; text-decoration:none;">+27 82 123 4567</a>
-    </p>
+    <p>© 2026 Dube's Catering. All rights reserved.<br>
+    Crafted with care in Gqeberha, Eastern Cape • <a href="#">Privacy Policy</a></p>
   </footer>
 
 </body>
