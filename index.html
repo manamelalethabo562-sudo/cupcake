@@ -3,169 +3,132 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dubes Catering | Premium Events & Celebrations</title>
+  <title>Dubes Catering | Weddings, Parties & Special Events</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Poppins', sans-serif;
       color: #fff;
-      background-color: #111;
-      line-height: 1.6;
+      background: #0f0f0f;
+      line-height: 1.7;
     }
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 20px 5%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s;
+    }
+    header.scrolled { padding: 15px 5%; background: rgba(0,0,0,0.9); }
+    .logo { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: #ff9500; text-decoration: none; }
+    nav a {
+      color: #ddd;
+      text-decoration: none;
+      margin-left: 30px;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    nav a:hover { color: #ff9500; }
+
     .hero {
-      position: relative;
       height: 100vh;
-      min-height: 700px;
-      background: url('YOUR_LOGO_IMAGE_URL_HERE.jpg') no-repeat center center;
-      background-size: contain;          /* keeps logo proportions — change to 'cover' if you prefer it to fill the screen */
-      background-attachment: fixed;
+      min-height: 800px;
+      background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)),
+                  url('https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&q=80') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.55);   /* dark overlay for text readability */
-      z-index: 1;
+      position: relative;
     }
     .hero-content {
-      position: relative;
-      z-index: 2;
       max-width: 900px;
-      padding: 30px;
+      padding: 0 20px;
     }
     .hero h1 {
-      font-size: 4.8rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 5.5rem;
       margin-bottom: 0.2em;
-      text-shadow: 0 4px 12px rgba(0,0,0,0.8);
-      color: #ff9500;                    /* warm orange to match your logo text */
+      color: #ffaa33;
+      text-shadow: 0 5px 20px rgba(0,0,0,0.8);
     }
-    .hero h1 span {
-      color: white;
-      display: block;
-      font-size: 2.6rem;
-      margin-top: -0.3em;
-      letter-spacing: 2px;
-    }
-    .hero .tagline {
-      font-size: 1.5rem;
-      margin: 1.5em 0 2em;
-      font-weight: 300;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.9);
-    }
+    .hero h1 span { display: block; font-size: 3rem; color: white; margin-top: -0.4em; }
+    .hero p { font-size: 1.6rem; margin: 1.5em 0 2.5em; font-weight: 300; }
     .btn {
-      display: inline-block;
       background: #ff9500;
       color: white;
-      padding: 14px 38px;
+      padding: 16px 45px;
       font-size: 1.3rem;
-      text-decoration: none;
+      border: none;
       border-radius: 50px;
-      transition: all 0.3s;
-      box-shadow: 0 6px 20px rgba(255, 149, 0, 0.4);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.4s;
+      box-shadow: 0 8px 25px rgba(255,149,0,0.35);
     }
     .btn:hover {
       background: #e67e00;
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(255, 149, 0, 0.5);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(255,149,0,0.5);
     }
-    section {
-      padding: 80px 20px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+
+    section { padding: 100px 5%; max-width: 1300px; margin: 0 auto; }
     h2 {
+      font-family: 'Playfair Display', serif;
       text-align: center;
-      font-size: 3rem;
-      margin-bottom: 1em;
-      color: #ff9500;
+      font-size: 4rem;
+      margin-bottom: 1.5em;
+      color: #ffaa33;
     }
+
     .services-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 40px;
     }
-    .card {
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 16px;
+    .flip-card {
+      perspective: 1200px;
+      height: 420px;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%; height: 100%;
+      transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      transform-style: preserve-3d;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    }
+    .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%; height: 100%;
+      backface-visibility: hidden;
+      display: flex; flex-direction: column;
+      justify-content: center;
+      align-items: center;
       padding: 40px 30px;
       text-align: center;
-      transition: transform 0.3s;
+      border-radius: 24px;
     }
-    .card:hover {
-      transform: translateY(-12px);
+    .flip-card-front {
+      background: linear-gradient(135deg, rgba(30,30,50,0.85), rgba(10,10,20,0.95));
+      border: 1px solid rgba(255,149,0,0.2);
     }
-    .card h3 {
-      font-size: 1.9rem;
-      margin-bottom: 1em;
-      color: #ffcc66;
+    .flip-card-back {
+      background: linear-gradient(135deg, #ff9500, #e67e00);
+      color: white;
+      transform: rotateY(180deg);
     }
-    footer {
-      background: #0a0a0a;
-      text-align: center;
-      padding: 40px 20px;
-      font-size: 1.1rem;
-    }
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 3.6rem; }
-      .hero h1 span { font-size: 2.1rem; }
-      .hero .tagline { font-size: 1.3rem; }
-    }
-  </style>
-</head>
-<body>
+    .flip-card h3 { font-size: 2.4rem; margin-bottom: 1em; }
+    .flip-card p { font-size: 1.2rem; opacity: 0.95; }
 
-  <div class="hero">
-    <div class="hero-content">
-      <h1>Dubes<span>Catering</span></h1>
-      <p class="tagline">Turning Moments into Memories – Specializing in Weddings, Parties & Unforgettable Events</p>
-      <a href="mailto:info@dubescatering.co.za?subject=Event%20Enquiry" class="btn">Get a Quote Today</a>
-    </div>
-  </div>
-
-  <section id="services">
-    <h2>Our Signature Services</h2>
-    <div class="services-grid">
-      <div class="card">
-        <h3>Weddings</h3>
-        <p>Elegant plated dinners, lavish buffets, cocktail receptions, cake tables and late-night snacks — tailored to your dream day.</p>
-      </div>
-      <div class="card">
-        <h3>Parties & Celebrations</h3>
-        <p>Birthdays, anniversaries, baby showers, kitchen teas — vibrant menus, themed setups and crowd-pleasing finger foods.</p>
-      </div>
-      <div class="card">
-        <h3>Special & Corporate Events</h3>
-        <p>Product launches, year-end functions, family gatherings, cultural celebrations — professional service with a personal touch.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact" style="background:#1a1a1a;">
-    <h2>Contact Us</h2>
-    <p style="text-align:center; font-size:1.4rem; max-width:700px; margin:0 auto 2em;">
-      Ready to make your next event extraordinary?<br>
-      Reach out for menus, tastings, and custom packages.
-    </p>
-    <div style="text-align:center;">
-      <p style="font-size:1.3rem; margin:0.6em 0;">📞 Phone: +27 (your number here)</p>
-      <p style="font-size:1.3rem; margin:0.6em 0;">✉️ Email: info@dubescatering.co.za</p>
-      <p style="font-size:1.3rem; margin:1.5em 0 0.5em;">Proudly serving Gqeberha, Eastern Cape & surrounds</p>
-    </div>
-  </section>
-
-  <footer>
-    <p>&copy; 2026 Dubes Catering. All rights reserved. Crafted with ❤️ for unforgettable events.</p>
-  </footer>
-
-</body>
-</html>
+    .about { background: #111; }
+    .contact { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1555939594-58056f625634?auto=format&
