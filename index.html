@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dubeses Catering | Premium Catering Services</title>
+  <title>Dubeses Catering | Weddings • Parties • Special Events</title>
   <style>
     * {
       margin: 0;
@@ -15,66 +15,206 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: white;
       min-height: 100vh;
-      background-color: #111; /* fallback color */
+      background-color: #0a0a0a; /* dark elegant fallback */
     }
 
-    /* Full-screen background image */
+    /* Logo as repeating subtle background pattern */
     .background {
       position: fixed;
       inset: 0;
-      background-image: url('YOUR-LOGO-IMAGE-HERE.jpg');  /* ← replace this line */
-      background-size: cover;
+      background-image: 
+        url('https://cdn2.vectorstock.com/i/1000x1000/68/71/golden-catering-monogram-logo-with-chef-hat-icon-vector-44576871.jpg');
+        /* ↑ Replace this URL with YOUR actual logo file, ideally PNG with transparency:
+           e.g. url('dubeses-logo.png')   or   url('https://i.imgur.com/your-logo.png') */
+      background-size: 400px;               /* adjust this value: smaller = more repeats, larger = bigger logo */
+      background-repeat: repeat;
       background-position: center;
-      background-repeat: no-repeat;
+      opacity: 0.12;                        /* very subtle — try 0.08 to 0.20 */
+      filter: blur(1.5px) brightness(1.3);  /* soft + slightly brighter for elegance */
       z-index: -2;
     }
 
-    /* Dark overlay so text stays readable */
+    /* Dark overlay to ensure text readability */
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.55);   /* adjust 0.55 = darkness (0.3–0.7 works well) */
+      background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.85) 100%);
       z-index: -1;
     }
 
     header {
       padding: 2.5rem 5%;
       text-align: center;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(6px);
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(10px);
       position: sticky;
       top: 0;
       z-index: 10;
     }
 
     .logo-text {
-      font-size: 3.8rem;
-      font-weight: 800;
-      letter-spacing: 2px;
+      font-size: 4.5rem;
+      font-weight: 900;
+      letter-spacing: 4px;
       text-transform: uppercase;
-      margin-bottom: 0.6rem;
-      text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+      margin-bottom: 0.4rem;
+      text-shadow: 0 5px 25px rgba(0,0,0,0.95);
     }
 
     .logo-text span {
-      color: #ff9800;           /* orange accent */
+      color: #ff9800;
     }
 
     .tagline {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       font-weight: 300;
       opacity: 0.9;
-      letter-spacing: 1.5px;
+      letter-spacing: 2px;
     }
 
     main {
-      padding: 8rem 5% 4rem;
+      padding: 10rem 5% 6rem;
       max-width: 1100px;
       margin: 0 auto;
       text-align: center;
     }
 
     h1 {
-      font-size: 4.2rem;
-      margin-bottom: 1.5rem;
-      text-shadow: 0 3px 15px rgba(
+      font-size: 4.8rem;
+      margin-bottom: 1.8rem;
+      text-shadow: 0 5px 20px rgba(0,0,0,1);
+    }
+
+    p.intro {
+      font-size: 1.45rem;
+      line-height: 1.8;
+      max-width: 840px;
+      margin: 0 auto 3.5rem;
+      opacity: 0.94;
+    }
+
+    .specialties {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2.2rem;
+      margin: 3.5rem 0;
+    }
+
+    .specialty-card {
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,152,0,0.3);
+      border-radius: 20px;
+      padding: 2rem 2.5rem;
+      min-width: 280px;
+      transition: all 0.4s;
+    }
+
+    .specialty-card:hover {
+      transform: translateY(-12px);
+      background: rgba(255,152,0,0.18);
+      border-color: #ff9800;
+      box-shadow: 0 15px 45px rgba(255,152,0,0.3);
+    }
+
+    .specialty-card h3 {
+      color: #ff9800;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 1.3rem 3rem;
+      background: #ff9800;
+      color: white;
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 50px;
+      margin: 1.2rem 0.8rem;
+      transition: all 0.35s;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    .btn:hover {
+      background: #ffb733;
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.7);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2.5px solid #ff9800;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255,152,0,0.2);
+    }
+
+    footer {
+      padding: 4rem 5% 2.5rem;
+      text-align: center;
+      background: rgba(0,0,0,0.75);
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: 768px) {
+      .logo-text { font-size: 3.4rem; }
+      h1 { font-size: 3.6rem; }
+      main { padding-top: 7rem; }
+      .specialties { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="background"></div>
+  <div class="overlay"></div>
+
+  <header>
+    <div class="logo-text">
+      Dubes<span>es</span> Catering
+    </div>
+    <div class="tagline">Weddings • Parties • Special Events</div>
+  </header>
+
+  <main>
+    <h1>Celebrations Made Unforgettable</h1>
+    
+    <p class="intro">
+      Specialising in <strong>weddings</strong>, <strong>parties</strong> and <strong>special events</strong> across Gqeberha and the Eastern Cape.  
+      Bold African-inspired flavours, elegant presentation, and that signature Dubeses vibe — we turn every occasion into something magical.
+    </p>
+
+    <div class="specialties">
+      <div class="specialty-card">
+        <h3>Weddings</h3>
+        <p>Multi-course plated meals • Romantic grazing tables • Custom wedding cakes • Midnight snacks & more</p>
+      </div>
+      <div class="specialty-card">
+        <h3>Parties</h3>
+        <p>Birthday celebrations • Braais & cocktail parties • Themed events • High-energy finger foods & platters</p>
+      </div>
+      <div class="specialty-card">
+        <h3>Special Events</h3>
+        <p>Corporate functions • Anniversaries • Baby showers • Product launches • Tailored menus for every milestone</p>
+      </div>
+    </div>
+
+    <div>
+      <a href="tel:+27821234567" class="btn">Book Your Date</a>
+      <a href="mailto:info@dubesescatering.co.za" class="btn btn-outline">Request Quote</a>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 Dubeses Catering • Gqeberha, Eastern Cape<br>
+      <a href="mailto:info@dubesescatering.co.za" style="color:#ff9800; text-decoration:none;">info@dubesescatering.co.za</a> • 
+      <a href="tel:+27821234567" style="color:#ff9800; text-decoration:none;">+27 82 123 4567</a>
+    </p>
+  </footer>
+
+</body>
+</html>
