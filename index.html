@@ -1,286 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dubes Catering – Parties, Weddings & Special Events</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #fafafa;
-            color: #333;
-            line-height: 1.6;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dubeses Catering | Premium Catering Services</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        header {
-            background: linear-gradient(to right, #ff8c00, #e07b00);
-            padding: 20px;
-            text-align: center;
-            color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 10;
-        }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      min-height: 100vh;
+      background-color: #111; /* fallback color */
+    }
 
-        header img {
-            max-width: 280px;
-            height: auto;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
-        }
+    /* Full-screen background image */
+    .background {
+      position: fixed;
+      inset: 0;
+      background-image: url('YOUR-LOGO-IMAGE-HERE.jpg');  /* ← replace this line */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: -2;
+    }
 
-        header h1 {
-            margin: 10px 0 5px;
-            font-size: 2.6rem;
-        }
+    /* Dark overlay so text stays readable */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);   /* adjust 0.55 = darkness (0.3–0.7 works well) */
+      z-index: -1;
+    }
 
-        header p {
-            margin: 0;
-            font-size: 1.2rem;
-            opacity: 0.95;
-        }
+    header {
+      padding: 2.5rem 5%;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(6px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
 
-        nav {
-            background-color: #222;
-            padding: 15px;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
+    .logo-text {
+      font-size: 3.8rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+    }
 
-        nav a {
-            color: #fff;
-            margin: 0 18px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.05rem;
-            transition: color 0.3s;
-        }
+    .logo-text span {
+      color: #ff9800;           /* orange accent */
+    }
 
-        nav a:hover {
-            color: #ff8c00;
-        }
+    .tagline {
+      font-size: 1.4rem;
+      font-weight: 300;
+      opacity: 0.9;
+      letter-spacing: 1.5px;
+    }
 
-        section {
-            padding: 60px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    main {
+      padding: 8rem 5% 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      text-align: center;
+    }
 
-        h2 {
-            color: #ff8c00;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.4rem;
-            position: relative;
-        }
-
-        h2::after {
-            content: '';
-            width: 80px;
-            height: 4px;
-            background: #ff8c00;
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        #home {
-            min-height: 80vh;
-            background-image: url('logo.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            position: relative;
-            color: white;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #home::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.55); /* dark overlay for readability */
-            z-index: 1;
-        }
-
-        #home > * {
-            position: relative;
-            z-index: 2;
-            max-width: 900px;
-        }
-
-        #home h2 {
-            color: white;
-            font-size: 3.2rem;
-            margin-bottom: 20px;
-        }
-
-        #home p {
-            font-size: 1.4rem;
-            margin: 0 10%;
-        }
-
-        .service-grid, .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .service-card {
-            background: white;
-            border-radius: 12px;
-            padding: 30px 20px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
-        }
-
-        .service-card:hover {
-            transform: translateY(-8px);
-        }
-
-        .service-card h3 {
-            color: #ff8c00;
-        }
-
-        .gallery-placeholder {
-            height: 220px;
-            background: linear-gradient(135deg, #eee, #ddd);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-style: italic;
-            color: #666;
-        }
-
-        form {
-            max-width: 500px;
-            margin: 30px auto;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 14px;
-            margin: 12px 0;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-
-        button {
-            background: #ff8c00;
-            color: white;
-            border: none;
-            padding: 14px 40px;
-            font-size: 1.1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            display: block;
-            margin: 20px auto 0;
-        }
-
-        button:hover {
-            background: #e07b00;
-        }
-
-        footer {
-            background: #222;
-            color: #aaa;
-            text-align: center;
-            padding: 25px;
-            font-size: 0.95rem;
-        }
-
-        @media (max-width: 768px) {
-            #home h2 { font-size: 2.4rem; }
-            #home p  { font-size: 1.2rem; margin: 0 5%; }
-            header img { max-width: 220px; }
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <img src="logo.png" alt="Dubes Catering Logo">
-        <h1>Dubes Catering</h1>
-        <p>Elevating Parties, Weddings & Special Moments</p>
-    </header>
-
-    <nav>
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#services">Services</a>
-        <a href="#gallery">Gallery</a>
-        <a href="#contact">Contact</a>
-    </nav>
-
-    <section id="home">
-        <h2>Welcome to Dubes Catering</h2>
-        <p>We bring flavor, passion, and unforgettable style to every celebration — birthdays, dream weddings, corporate events, and more. Based in Gqeberha, proudly serving the Eastern Cape.</p>
-    </section>
-
-    <section id="about">
-        <h2>About Us</h2>
-        <p>At Dubes Catering, we turn occasions into memories with fresh local ingredients, creative menus, and flawless service. From casual braais to elegant receptions — we handle it all.</p>
-    </section>
-
-    <section id="services">
-        <h2>Our Signature Services</h2>
-        <div class="service-grid">
-            <div class="service-card">
-                <h3>Parties & Celebrations</h3>
-                <p>Birthdays, anniversaries, baby showers — buffets, finger foods, themed setups, braai packages.</p>
-            </div>
-            <div class="service-card">
-                <h3>Weddings</h3>
-                <p>Cocktail hours, multi-course meals, dessert tables, bar service, cake coordination — tailored to your dream day.</p>
-            </div>
-            <div class="service-card">
-                <h3>Special & Corporate Events</h3>
-                <p>Graduations, launches, team days, cultural functions — full setup, staffing, and professional execution.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="gallery">
-        <h2>Gallery</h2>
-        <p>A glimpse of the moments we've helped create</p>
-        <div class="gallery-grid">
-            <div class="gallery-placeholder">Wedding Reception</div>
-            <div class="gallery-placeholder">Party Buffet</div>
-            <div class="gallery-placeholder">Corporate Setup</div>
-            <div class="gallery-placeholder">Dessert Table</div>
-        </div>
-    </section>
-
-    <section id="contact">
-        <h2>Get In Touch</h2>
-        <p>Let's plan your perfect event!</p>
-        <p><strong>Email:</strong> info@dubescatering.co.za<br>
-           <strong>Phone:</strong> +27 41 123 4567<br>
-           <strong>Location:</strong> Gqeberha, Eastern Cape</p>
-
-        <form>
-            <input type="text" placeholder="Your Name" required>
-            <input type="email" placeholder="Your Email" required>
-            <input type="text" placeholder="Event Type (e.g. Wedding)">
-            <input type="text" placeholder="Event Date">
-            <textarea placeholder="Tell us about your event..." rows="5" required></textarea>
-            <button type="submit">Request a Quote</button>
-        </form>
-    </section>
-
-    <footer>
-        <p>© 2026 Dubes Catering – Gqeberha, Eastern Cape</p>
-    </footer>
-
-</body>
-</html>
+    h1 {
+      font-size: 4.2rem;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 3px 15px rgba(
