@@ -8,197 +8,233 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; }
     
     body {
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
-      color: #2d1b12;
       background: #fff8f5;
+      color: #2d1b12;
       overflow-x: hidden;
     }
     
-    /* Full-screen background with overlay */
-    .bg-container {
+    .bg {
       position: fixed;
       inset: 0;
-      background: url('https://thumbs.dreamstime.com/b/elegant-cupcakes-floral-decorations-pastel-backdrop-three-white-frosting-pink-beautifully-arranged-against-soft-312130736.jpg')
+      background: url('https://images.unsplash.com/photo-1550617931-eb3a88e84519?auto=format&fit=crop&q=80&w=2000') 
                   center/cover no-repeat;
       z-index: -2;
     }
     
-    .bg-overlay {
+    .overlay {
       position: fixed;
       inset: 0;
-      background: linear-gradient( 
-        to bottom, 
-        rgba(255, 245, 240, 0.88) 0%, 
-        rgba(255, 230, 235, 0.92) 100%
-      );
+      background: linear-gradient(to bottom, rgba(255,245,240,0.9), rgba(255,230,235,0.92));
       z-index: -1;
     }
     
-    /* Mobile bottom sheet */
+    .hero {
+      position: relative;
+      z-index: 5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    h1 {
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: #c44569;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .subtitle {
+      font-size: 1.3rem;
+      color: #5c4033;
+      max-width: 500px;
+      margin-bottom: 2.5rem;
+      line-height: 1.5;
+    }
+    
+    .start-btn {
+      padding: 16px 40px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: white;
+      background: #e84a5f;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(232,74,95,0.35);
+      transition: all 0.3s ease;
+    }
+    
+    .start-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 35px rgba(232,74,95,0.45);
+    }
+    
+    /* Mobile Bottom Sheet */
     .bottom-sheet {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       background: white;
       border-top-left-radius: 28px;
       border-top-right-radius: 28px;
-      box-shadow: 0 -12px 40px rgba(0,0,0,0.18);
-      padding: 2.2rem 1.8rem 3rem;
+      box-shadow: 0 -14px 50px rgba(0,0,0,0.25);
+      padding: 2.5rem 1.8rem 3.2rem;
       transform: translateY(100%);
-      transition: transform 0.45s cubic-bezier(0.32, 0.72, 0, 1);
-      z-index: 20;
+      transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+      z-index: 100;
     }
     
-    .bottom-sheet.visible {
+    .bottom-sheet.open {
       transform: translateY(0);
     }
     
-    /* Desktop modal */
-    .modal-overlay {
+    /* Desktop Modal */
+    .modal {
       position: fixed;
       inset: 0;
+      background: rgba(0,0,0,0.5);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 2rem;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
-      z-index: 20;
+      transition: all 0.4s ease;
+      z-index: 100;
     }
     
-    .modal-overlay.visible {
+    .modal.open {
       opacity: 1;
       visibility: visible;
     }
     
-    .modal-content {
+    .modal-box {
       background: white;
       border-radius: 24px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.22);
       padding: 2.8rem 2.2rem;
       width: 100%;
-      max-width: 440px;
+      max-width: 460px;
       text-align: center;
-      transform: scale(0.94);
+      box-shadow: 0 25px 70px rgba(0,0,0,0.3);
+      transform: scale(0.9);
       transition: transform 0.4s ease;
     }
     
-    .modal-overlay.visible .modal-content {
+    .modal.open .modal-box {
       transform: scale(1);
     }
     
-    h1 {
-      font-size: 2.4rem;
-      font-weight: 700;
-      color: #c44569; /* soft cupcake pink-red */
-      margin-bottom: 0.6rem;
+    .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      font-size: 2rem;
+      color: #777;
+      cursor: pointer;
+      background: none;
+      border: none;
     }
     
-    .tagline {
-      color: #5c4033;
-      font-size: 1.1rem;
-      margin-bottom: 2.2rem;
-      line-height: 1.4;
-    }
-    
-    .google-button {
+    .google-btn {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 14px;
       width: 100%;
-      padding: 15px 20px;
-      background: #ffffff;
-      border: 1px solid #d8d8d8;
-      border-radius: 14px;
-      font-size: 1.08rem;
+      padding: 15px;
+      margin: 1.5rem 0 1rem;
+      background: #fff;
+      border: 1px solid #d0d0d0;
+      border-radius: 12px;
+      font-size: 1.1rem;
       font-weight: 500;
-      color: #222;
+      color: #333;
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition: all 0.25s;
     }
     
-    .google-button:hover {
-      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    .google-btn:hover {
+      box-shadow: 0 5px 18px rgba(0,0,0,0.1);
       transform: translateY(-2px);
-      border-color: #bbb;
     }
     
-    .google-button img {
-      width: 26px;
-      height: 26px;
+    .google-btn img {
+      width: 28px;
+      height: 28px;
     }
     
-    .error-message {
+    .error {
       color: #c62828;
-      margin-top: 1.3rem;
+      margin-top: 1rem;
       font-size: 0.98rem;
-      min-height: 1.4em;
+      min-height: 1.5em;
     }
     
     @media (min-width: 768px) {
       .bottom-sheet { display: none; }
-      .modal-overlay { display: flex; }
     }
     
     @media (max-width: 767px) {
-      .modal-overlay { display: none; }
-      .bottom-sheet { display: block; }
+      .modal { display: none; }
+      h1 { font-size: 2.6rem; }
+      .subtitle { font-size: 1.15rem; }
     }
   </style>
 </head>
 <body>
 
-  <div class="bg-container"></div>
-  <div class="bg-overlay"></div>
+  <div class="bg"></div>
+  <div class="overlay"></div>
+
+  <div class="hero">
+    <h1>Cupcake</h1>
+    <p class="subtitle">Delicious moments await – sign in to start exploring</p>
+    <button id="startBtn" class="start-btn">Get Started</button>
+  </div>
 
   <!-- Mobile Bottom Sheet -->
-  <div class="bottom-sheet" id="bottomSheet">
-    <h1>Cupcake</h1>
-    <p class="tagline">Sweet moments begin here 🍰✨</p>
+  <div class="bottom-sheet" id="sheet">
+    <button class="close-btn" id="closeSheet">&times;</button>
+    <h2 style="font-size:2rem; color:#c44569; margin-bottom:1rem;">Welcome</h2>
+    <p style="color:#555; margin-bottom:2rem;">Sign in to continue</p>
     
-    <button id="googleBtnMobile" class="google-button">
+    <button id="googleMobile" class="google-btn">
       <img src="https://www.google.com/favicon.ico" alt="Google">
-      Continue with Google
+      Sign in with Google
     </button>
     
-    <p id="errorMobile" class="error-message"></p>
+    <p id="errMobile" class="error"></p>
   </div>
 
   <!-- Desktop Modal -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal-content">
-      <h1>Cupcake</h1>
-      <p class="tagline">Sign in to discover your next favorite treat</p>
+  <div class="modal" id="modal">
+    <div class="modal-box">
+      <button class="close-btn" id="closeModal">&times;</button>
+      <h2 style="font-size:2.2rem; color:#c44569; margin-bottom:0.8rem;">Sign In</h2>
+      <p style="color:#555; margin-bottom:2rem;">Use your Google account to continue</p>
       
-      <button id="googleBtnDesktop" class="google-button">
+      <button id="googleDesktop" class="google-btn">
         <img src="https://www.google.com/favicon.ico" alt="Google">
         Sign in with Google
       </button>
       
-      <p id="errorDesktop" class="error-message"></p>
+      <p id="errDesktop" class="error"></p>
     </div>
   </div>
 
-  <!-- Firebase v10 (modular) -->
+  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { 
-      getAuth, 
-      GoogleAuthProvider, 
-      signInWithPopup,
-      onAuthStateChanged 
-    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCPTCZqUPrHgfwqVmNe4aLtVLEXqAdLpmA",
@@ -214,51 +250,60 @@
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    const sheet   = document.getElementById('bottomSheet');
-    const modal   = document.getElementById('modalOverlay');
-    const btnM    = document.getElementById('googleBtnMobile');
-    const btnD    = document.getElementById('googleBtnDesktop');
-    const errM    = document.getElementById('errorMobile');
-    const errD    = document.getElementById('errorDesktop');
+    const startBtn    = document.getElementById('startBtn');
+    const sheet       = document.getElementById('sheet');
+    const modal       = document.getElementById('modal');
+    const closeSheet  = document.getElementById('closeSheet');
+    const closeModal  = document.getElementById('closeModal');
+    const googleM     = document.getElementById('googleMobile');
+    const googleD     = document.getElementById('googleDesktop');
+    const errM        = document.getElementById('errMobile');
+    const errD        = document.getElementById('errDesktop');
 
-    // Show UI after tiny delay (feels smoother)
-    setTimeout(() => {
+    // Open login UI when clicking "Get Started"
+    startBtn.addEventListener('click', () => {
       if (window.innerWidth < 768) {
-        sheet.classList.add('visible');
+        sheet.classList.add('open');
       } else {
-        modal.classList.add('visible');
+        modal.classList.add('open');
       }
-    }, 400);
+    });
 
-    async function signInWithGoogle(btn, errElement) {
+    // Close handlers
+    closeSheet?.addEventListener('click', () => sheet.classList.remove('open'));
+    closeModal?.addEventListener('click', () => modal.classList.remove('open'));
+
+    // Close modal/sheet when clicking outside content (optional nice touch)
+    modal?.addEventListener('click', e => {
+      if (e.target === modal) modal.classList.remove('open');
+    });
+
+    async function login(btn, err) {
       btn.disabled = true;
-      btn.style.opacity = '0.75';
-      errElement.textContent = '';
+      btn.style.opacity = '0.7';
+      err.textContent = '';
 
       try {
         await signInWithPopup(auth, provider);
-        // Success → redirect (change path to your real home/dashboard)
-        window.location.href = '#';   // ← adjust this
+        window.location.href = '/index.html';  // ← change to your main page
       } catch (error) {
         console.error(error);
-        let msg = 'Login failed. Please try again.';
-        if (error.code === 'auth/popup-blocked')    msg = 'Popup blocked — please allow popups.';
-        if (error.code === 'auth/popup-closed-by-user') msg = 'Sign-in cancelled.';
-        errElement.textContent = msg;
+        let msg = 'Something went wrong. Try again.';
+        if (error.code === 'auth/popup-blocked') msg = 'Popup blocked – allow popups for this site.';
+        if (error.code === 'auth/popup-closed-by-user') msg = 'Sign in was cancelled.';
+        err.textContent = msg;
       } finally {
         btn.disabled = false;
         btn.style.opacity = '1';
       }
     }
 
-    if (btnM) btnM.onclick = () => signInWithGoogle(btnM, errM);
-    if (btnD) btnD.onclick = () => signInWithGoogle(btnD, errD);
+    googleM?.addEventListener('click', () => login(googleM, errM));
+    googleD?.addEventListener('click', () => login(googleD, errD));
 
-    // If already signed in → skip login
+    // Auto-redirect if already logged in
     onAuthStateChanged(auth, user => {
-      if (user) {
-        window.location.href = '#';   // ← your main page
-      }
+      if (user) window.location.href = '/index.html';  // ← your dashboard/home
     });
   </script>
 
