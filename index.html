@@ -238,7 +238,7 @@
       try {
         await signInWithPopup(auth, provider);
         // Success → redirect (change path to your real home/dashboard)
-        window.location.href = '/index.html';   // ← adjust this
+        window.location.href = '#';   // ← adjust this
       } catch (error) {
         console.error(error);
         let msg = 'Login failed. Please try again.';
@@ -257,7 +257,7 @@
     // If already signed in → skip login
     onAuthStateChanged(auth, user => {
       if (user) {
-        window.location.href = '/index.html';   // ← your main page
+        window.location.href = '#';   // ← your main page
       }
     });
   </script>
