@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cupcake - Login</title>
+  <title>Cupcake – Sweet Moments</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   
@@ -17,24 +17,28 @@
     body {
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
-      background: #fffaf5;
-      color: #333;
+      color: #2d1b12;
+      background: #fff8f5;
       overflow-x: hidden;
     }
     
-    /* Background cover image */
-    .background {
+    /* Full-screen background with overlay */
+    .bg-container {
       position: fixed;
       inset: 0;
-      background: url('https://images.unsplash.com/photo-1519869325930-281384150729?auto=format&fit=crop&q=80&w=2000') 
+      background: url('https://thumbs.dreamstime.com/b/elegant-cupcakes-floral-decorations-pastel-backdrop-three-white-frosting-pink-beautifully-arranged-against-soft-312130736.jpg')
                   center/cover no-repeat;
       z-index: -2;
     }
     
-    .background-overlay {
+    .bg-overlay {
       position: fixed;
       inset: 0;
-      background: linear-gradient(to bottom, rgba(255, 245, 240, 0.75), rgba(255, 230, 235, 0.85));
+      background: linear-gradient( 
+        to bottom, 
+        rgba(255, 245, 240, 0.88) 0%, 
+        rgba(255, 230, 235, 0.92) 100%
+      );
       z-index: -1;
     }
     
@@ -45,152 +49,148 @@
       left: 0;
       right: 0;
       background: white;
-      border-top-left-radius: 24px;
-      border-top-right-radius: 24px;
-      box-shadow: 0 -10px 30px rgba(0,0,0,0.15);
-      padding: 2rem 1.5rem 2.5rem;
+      border-top-left-radius: 28px;
+      border-top-right-radius: 28px;
+      box-shadow: 0 -12px 40px rgba(0,0,0,0.18);
+      padding: 2.2rem 1.8rem 3rem;
       transform: translateY(100%);
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 10;
+      transition: transform 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+      z-index: 20;
     }
     
-    .bottom-sheet.show {
+    .bottom-sheet.visible {
       transform: translateY(0);
     }
     
     /* Desktop modal */
-    .modal {
+    .modal-overlay {
       position: fixed;
       inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1.5rem;
+      padding: 2rem;
       opacity: 0;
       visibility: hidden;
-      transition: all 0.4s ease;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+      z-index: 20;
     }
     
-    .modal.show {
+    .modal-overlay.visible {
       opacity: 1;
       visibility: visible;
     }
     
-    .login-card {
+    .modal-content {
       background: white;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.18);
-      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.22);
+      padding: 2.8rem 2.2rem;
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       text-align: center;
-      transform: scale(0.92);
+      transform: scale(0.94);
       transition: transform 0.4s ease;
     }
     
-    .modal.show .login-card {
+    .modal-overlay.visible .modal-content {
       transform: scale(1);
     }
     
     h1 {
-      font-size: 2rem;
+      font-size: 2.4rem;
       font-weight: 700;
-      color: #e84a5f; /* nice cupcake pink */
-      margin-bottom: 0.5rem;
+      color: #c44569; /* soft cupcake pink-red */
+      margin-bottom: 0.6rem;
     }
     
-    .subtitle {
-      color: #666;
-      margin-bottom: 2rem;
-      font-size: 1.05rem;
+    .tagline {
+      color: #5c4033;
+      font-size: 1.1rem;
+      margin-bottom: 2.2rem;
+      line-height: 1.4;
     }
     
-    .google-btn {
+    .google-button {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 14px;
       width: 100%;
-      padding: 14px;
+      padding: 15px 20px;
       background: #ffffff;
-      border: 1px solid #dadce0;
-      border-radius: 12px;
-      font-size: 1.05rem;
+      border: 1px solid #d8d8d8;
+      border-radius: 14px;
+      font-size: 1.08rem;
       font-weight: 500;
-      color: #333;
+      color: #222;
       cursor: pointer;
-      transition: all 0.25s;
+      transition: all 0.25s ease;
     }
     
-    .google-btn:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    .google-button:hover {
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
       transform: translateY(-2px);
+      border-color: #bbb;
     }
     
-    .google-btn img {
-      width: 24px;
-      height: 24px;
+    .google-button img {
+      width: 26px;
+      height: 26px;
     }
     
-    .error {
-      color: #d32f2f;
-      margin-top: 1.2rem;
-      font-size: 0.95rem;
+    .error-message {
+      color: #c62828;
+      margin-top: 1.3rem;
+      font-size: 0.98rem;
+      min-height: 1.4em;
     }
     
     @media (min-width: 768px) {
-      .bottom-sheet {
-        display: none;
-      }
-      .modal {
-        display: flex;
-      }
+      .bottom-sheet { display: none; }
+      .modal-overlay { display: flex; }
     }
     
     @media (max-width: 767px) {
-      .modal {
-        display: none;
-      }
-      .bottom-sheet {
-        display: block;
-      }
+      .modal-overlay { display: none; }
+      .bottom-sheet { display: block; }
     }
   </style>
 </head>
 <body>
 
-  <div class="background"></div>
-  <div class="background-overlay"></div>
+  <div class="bg-container"></div>
+  <div class="bg-overlay"></div>
 
-  <!-- Mobile: Bottom Sheet -->
+  <!-- Mobile Bottom Sheet -->
   <div class="bottom-sheet" id="bottomSheet">
     <h1>Cupcake</h1>
-    <p class="subtitle">Sweet moments start here 🍰</p>
+    <p class="tagline">Sweet moments begin here 🍰✨</p>
     
-    <button id="googleSignInBtnMobile" class="google-btn">
+    <button id="googleBtnMobile" class="google-button">
       <img src="https://www.google.com/favicon.ico" alt="Google">
       Continue with Google
     </button>
     
-    <p id="errorMsgMobile" class="error"></p>
+    <p id="errorMobile" class="error-message"></p>
   </div>
 
-  <!-- Desktop: Modal -->
-  <div class="modal" id="modal">
-    <div class="login-card">
+  <!-- Desktop Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
       <h1>Cupcake</h1>
-      <p class="subtitle">Sign in to explore sweet treats</p>
+      <p class="tagline">Sign in to discover your next favorite treat</p>
       
-      <button id="googleSignInBtnDesktop" class="google-btn">
+      <button id="googleBtnDesktop" class="google-button">
         <img src="https://www.google.com/favicon.ico" alt="Google">
         Sign in with Google
       </button>
       
-      <p id="errorMsgDesktop" class="error"></p>
+      <p id="errorDesktop" class="error-message"></p>
     </div>
   </div>
 
-  <!-- Firebase SDK v9+ -->
+  <!-- Firebase v10 (modular) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
     import { 
@@ -214,51 +214,50 @@
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    const btnMobile = document.getElementById('googleSignInBtnMobile');
-    const btnDesktop = document.getElementById('googleSignInBtnDesktop');
-    const errMobile = document.getElementById('errorMsgMobile');
-    const errDesktop = document.getElementById('errorMsgDesktop');
-    const bottomSheet = document.getElementById('bottomSheet');
-    const modal = document.getElementById('modal');
+    const sheet   = document.getElementById('bottomSheet');
+    const modal   = document.getElementById('modalOverlay');
+    const btnM    = document.getElementById('googleBtnMobile');
+    const btnD    = document.getElementById('googleBtnDesktop');
+    const errM    = document.getElementById('errorMobile');
+    const errD    = document.getElementById('errorDesktop');
 
-    // Show bottom sheet on mobile after short delay (feels natural)
+    // Show UI after tiny delay (feels smoother)
     setTimeout(() => {
       if (window.innerWidth < 768) {
-        bottomSheet.classList.add('show');
+        sheet.classList.add('visible');
       } else {
-        modal.classList.add('show');
+        modal.classList.add('visible');
       }
-    }, 300);
+    }, 400);
 
-    async function handleSignIn(btn, errEl) {
+    async function signInWithGoogle(btn, errElement) {
       btn.disabled = true;
-      btn.style.opacity = '0.7';
-      errEl.textContent = '';
+      btn.style.opacity = '0.75';
+      errElement.textContent = '';
 
       try {
-        const result = await signInWithPopup(auth, provider);
-        console.log("Signed in:", result.user.displayName);
-        // Redirect to your main page
-        window.location.href = "/index.html";  // ← change to your actual dashboard/home
+        await signInWithPopup(auth, provider);
+        // Success → redirect (change path to your real home/dashboard)
+        window.location.href = '/index.html';   // ← adjust this
       } catch (error) {
         console.error(error);
-        let msg = "Login failed. Please try again.";
-        if (error.code === 'auth/popup-blocked') msg = "Popup blocked — allow popups for this site.";
-        if (error.code === 'auth/popup-closed-by-user') msg = "Login cancelled.";
-        errEl.textContent = msg;
+        let msg = 'Login failed. Please try again.';
+        if (error.code === 'auth/popup-blocked')    msg = 'Popup blocked — please allow popups.';
+        if (error.code === 'auth/popup-closed-by-user') msg = 'Sign-in cancelled.';
+        errElement.textContent = msg;
       } finally {
         btn.disabled = false;
         btn.style.opacity = '1';
       }
     }
 
-    if (btnMobile) btnMobile.addEventListener('click', () => handleSignIn(btnMobile, errMobile));
-    if (btnDesktop) btnDesktop.addEventListener('click', () => handleSignIn(btnDesktop, errDesktop));
+    if (btnM) btnM.onclick = () => signInWithGoogle(btnM, errM);
+    if (btnD) btnD.onclick = () => signInWithGoogle(btnD, errD);
 
-    // Optional: auto-redirect if already logged in
-    onAuthStateChanged(auth, (user) => {
+    // If already signed in → skip login
+    onAuthStateChanged(auth, user => {
       if (user) {
-        window.location.href = "/index.html";  // ← your protected page
+        window.location.href = '/index.html';   // ← your main page
       }
     });
   </script>
