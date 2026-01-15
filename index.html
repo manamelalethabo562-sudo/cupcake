@@ -21,12 +21,7 @@
     .bg { position: fixed; inset: 0; background: url('https://images.unsplash.com/photo-1550617931-eb3a88e84519?auto=format&fit=crop&q=80&w=2000') center/cover no-repeat; z-index: -2; }
     .overlay { position: fixed; inset: 0; background: linear-gradient(to bottom, rgba(255,245,240,0.9), rgba(255,230,235,0.92)); z-index: -1; }
    
-    .hero {
-      position: relative; z-index: 5; min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      text-align: center; padding: 2rem;
-    }
-   
+    .hero { position: relative; z-index: 5; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
     h1 { font-size: 3.2rem; font-weight: 700; color: #c44569; margin-bottom: 1rem; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
     .subtitle { font-size: 1.3rem; color: #5c4033; max-width: 500px; margin-bottom: 2.5rem; line-height: 1.5; }
    
@@ -37,32 +32,56 @@
     }
     .start-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 35px rgba(232,74,95,0.45); }
    
-    /* Shared modal/sheet styles */
+    /* ─── Spinner Overlay ───────────────────────────────────── */
+    .spinner-overlay {
+      position: fixed; inset: 0;
+      background: rgba(255, 255, 255, 0.92);
+      display: none; align-items: center; justify-content: center;
+      z-index: 200; backdrop-filter: blur(4px);
+    }
+    .spinner-overlay.active { display: flex; }
+    .spinner {
+      width: 60px; height: 60px;
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #e84a5f;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+   
+    /* ─── Custom Alert ──────────────────────────────────────── */
+    .custom-alert {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+      max-width: 420px; width: 90%; padding: 1.2rem 1.5rem;
+      border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+      color: white; font-weight: 500; text-align: center;
+      opacity: 0; visibility: hidden; transition: all 0.4s ease;
+      z-index: 300;
+    }
+    .custom-alert.show {
+      opacity: 1; visibility: visible; transform: translateX(-50%) translateY(10px);
+    }
+    .custom-alert.success { background: #4caf50; }
+    .custom-alert.error   { background: #e53935; }
+    .custom-alert .close-alert {
+      position: absolute; right: 14px; top: 12px;
+      background: none; border: none; color: white; font-size: 1.4rem;
+      cursor: pointer; opacity: 0.9;
+    }
+   
+    /* Bottom Sheet & Modal shared */
     .bottom-sheet, .modal-box {
       background: white; border-radius: 24px; padding: 2.5rem 1.8rem 3.2rem;
-      box-shadow: 0 -14px 50px rgba(0,0,0,0.25); text-align: center;
+      box-shadow: 0 -14px 50px rgba(0,0,0,0.25); text-align: center; position: relative;
     }
-   
-    .bottom-sheet {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
-      z-index: 100;
-    }
+    .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.32,0.72,0,1); z-index: 100; }
     .bottom-sheet.open { transform: translateY(0); }
-   
-    .modal {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-      display: flex; align-items: center; justify-content: center; padding: 2rem;
-      opacity: 0; visibility: hidden; transition: all 0.4s ease; z-index: 100;
-    }
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; padding: 2rem; opacity: 0; visibility: hidden; transition: all 0.4s ease; z-index: 100; }
     .modal.open { opacity: 1; visibility: visible; }
     .modal-box { width: 100%; max-width: 460px; transform: scale(0.9); transition: transform 0.4s ease; }
     .modal.open .modal-box { transform: scale(1); }
    
-    .close-btn {
-      position: absolute; top: 1rem; right: 1.5rem;
-      font-size: 2rem; color: #777; cursor: pointer; background: none; border: none;
-    }
+    .close-btn { position: absolute; top: 1rem; right: 1.5rem; font-size: 2rem; color: #777; cursor: pointer; background: none; border: none; }
    
     /* Tabs */
     .tabs { display: flex; margin-bottom: 1.8rem; border-bottom: 2px solid #eee; }
@@ -70,24 +89,11 @@
     .tab.active { color: #c44569; border-bottom: 3px solid #c44569; }
    
     /* Form */
-    .form-group {
-      margin-bottom: 1.4rem; text-align: left; position: relative;
-    }
+    .form-group { margin-bottom: 1.4rem; text-align: left; position: relative; }
     label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #444; }
-   
-    .password-wrapper {
-      position: relative;
-    }
-    input {
-      width: 100%; padding: 14px 16px; padding-right: 48px;
-      border: 1px solid #d0d0d0; border-radius: 12px; font-size: 1rem;
-    }
-   
-    .toggle-password {
-      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
-      background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #777;
-      user-select: none; padding: 0; line-height: 1;
-    }
+    .password-wrapper { position: relative; }
+    input { width: 100%; padding: 14px 16px; padding-right: 48px; border: 1px solid #d0d0d0; border-radius: 12px; font-size: 1rem; }
+    .toggle-password { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #777; }
     .toggle-password:hover { color: #c44569; }
    
     .submit-btn {
@@ -97,8 +103,6 @@
     }
     .submit-btn:hover { background: #d43c4f; }
     .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-   
-    .error { color: #c62828; margin-top: 0.8rem; font-size: 0.95rem; min-height: 1.4em; }
    
     .google-btn {
       display: flex; align-items: center; justify-content: center; gap: 14px;
@@ -114,8 +118,21 @@
   </style>
 </head>
 <body>
+
   <div class="bg"></div>
   <div class="overlay"></div>
+
+  <!-- Spinner Overlay -->
+  <div class="spinner-overlay" id="spinner">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Custom Alert -->
+  <div class="custom-alert" id="alertBox">
+    <button class="close-alert" id="closeAlert">&times;</button>
+    <span id="alertMessage"></span>
+  </div>
+
   <div class="hero">
     <h1>Cupcake</h1>
     <p class="subtitle">Delicious moments await – sign in to start exploring</p>
@@ -153,8 +170,6 @@
       </div>
       <button type="submit" id="submitMobile" class="submit-btn">Sign In</button>
     </form>
-   
-    <p class="error" id="errMobile"></p>
    
     <div style="margin-top:1.5rem;">
       <button id="googleMobile" class="google-btn">
@@ -197,8 +212,6 @@
         <button type="submit" id="submitDesktop" class="submit-btn">Sign In</button>
       </form>
      
-      <p class="error" id="errDesktop"></p>
-     
       <div style="margin-top:1.5rem;">
         <button id="googleDesktop" class="google-btn">
           <img src="https://www.google.com/favicon.ico" alt="Google">
@@ -232,6 +245,11 @@
     const provider = new GoogleAuthProvider();
 
     // DOM elements
+    const spinner      = document.getElementById('spinner');
+    const alertBox     = document.getElementById('alertBox');
+    const alertMsg     = document.getElementById('alertMessage');
+    const closeAlert   = document.getElementById('closeAlert');
+
     const startBtn      = document.getElementById('startBtn');
     const sheet         = document.getElementById('sheet');
     const modal         = document.getElementById('modal');
@@ -239,126 +257,145 @@
     const closeModal    = document.getElementById('closeModal');
     const googleMobile  = document.getElementById('googleMobile');
     const googleDesktop = document.getElementById('googleDesktop');
-    const errMobile     = document.getElementById('errMobile');
-    const errDesktop    = document.getElementById('errDesktop');
 
-    // Password toggle functionality
+    // Alert functions
+    function showAlert(message, type = 'error') {
+      alertMsg.textContent = message;
+      alertBox.className = `custom-alert ${type} show`;
+      setTimeout(() => {
+        alertBox.classList.remove('show');
+      }, 5500); // auto-hide after 5.5s
+    }
+
+    closeAlert.addEventListener('click', () => {
+      alertBox.classList.remove('show');
+    });
+
+    // Show / hide spinner
+    function showLoading()   { spinner.classList.add('active'); }
+    function hideLoading()   { spinner.classList.remove('active'); }
+
+    // Password toggle
     function initPasswordToggles(container) {
-      const toggles = container.querySelectorAll('.toggle-password');
-      toggles.forEach(toggle => {
+      container.querySelectorAll('.toggle-password').forEach(toggle => {
         toggle.addEventListener('click', () => {
           const input = toggle.previousElementSibling;
-          const type = input.type === 'password' ? 'text' : 'password';
-          input.type = type;
-          
-          // Optional: change icon (using emoji here – you can use SVG/font-awesome later)
-          toggle.textContent = type === 'text' ? '🙈' : '👁️';
+          input.type = input.type === 'password' ? 'text' : 'password';
+          toggle.textContent = input.type === 'text' ? '🙈' : '👁️';
         });
       });
     }
+    initPasswordToggles(sheet);
+    initPasswordToggles(modal);
 
-    // Initialize toggles for both views
-    initPasswordToggles(document.getElementById('sheet'));
-    initPasswordToggles(document.getElementById('modal'));
-
-    // Tab switching
     let currentTab = 'signin';
-    function initTabs(containerId, formId, errId, submitId) {
+    function initTabs(containerId, formId, submitId) {
       const tabs = document.querySelectorAll(`#${containerId} .tab`);
       tabs.forEach(tab => {
         tab.addEventListener('click', () => {
           tabs.forEach(t => t.classList.remove('active'));
           tab.classList.add('active');
           currentTab = tab.dataset.tab;
-
           const confirmGroup = document.getElementById(
             formId === 'mobileForm' ? 'confirmPasswordGroupMobile' : 'confirmPasswordGroupDesktop'
           );
-          
           document.getElementById(submitId).textContent = currentTab === 'signup' ? 'Sign Up' : 'Sign In';
           confirmGroup.style.display = currentTab === 'signup' ? 'block' : 'none';
         });
       });
     }
-
-    initTabs('mobileTabs', 'mobileForm', 'errMobile', 'submitMobile');
-    initTabs('desktopTabs', 'desktopForm', 'errDesktop', 'submitDesktop');
+    initTabs('mobileTabs', 'mobileForm', 'submitMobile');
+    initTabs('desktopTabs', 'desktopForm', 'submitDesktop');
 
     // Form submit handler
-    async function handleSubmit(e, formId, errEl) {
+    async function handleSubmit(e, formId) {
       e.preventDefault();
       const form = document.getElementById(formId);
       const email    = form.querySelector('input[type="email"]').value.trim();
       const password = form.querySelector('input[type="password"]:not([id*="confirm"])').value;
       let confirmPw = currentTab === 'signup' ? form.querySelector('input[id*="confirmPassword"]').value : '';
 
-      errEl.textContent = '';
       const submitBtn = form.querySelector('button[type="submit"]');
       submitBtn.disabled = true;
-      submitBtn.style.opacity = '0.7';
+      showLoading();
 
       if (currentTab === 'signup') {
-        if (password !== confirmPw) { errEl.textContent = 'Passwords do not match'; reset(); return; }
-        if (password.length < 6)     { errEl.textContent = 'Password should be at least 6 characters'; reset(); return; }
+        if (password !== confirmPw) {
+          showAlert('Passwords do not match', 'error');
+          hideLoading(); submitBtn.disabled = false; return;
+        }
+        if (password.length < 6) {
+          showAlert('Password should be at least 6 characters', 'error');
+          hideLoading(); submitBtn.disabled = false; return;
+        }
       }
 
       try {
         if (currentTab === 'signup') {
           await createUserWithEmailAndPassword(auth, email, password);
+          showAlert('Account created successfully! Redirecting...', 'success');
         } else {
           await signInWithEmailAndPassword(auth, email, password);
+          showAlert('Welcome back! Redirecting...', 'success');
         }
-        window.location.href = 'profile.html';
+        setTimeout(() => {
+          window.location.href = 'profile.html';
+        }, 1200);
       } catch (error) {
         let msg = 'Something went wrong. Please try again.';
-        if (error.code === 'auth/email-already-in-use') msg = 'This email is already registered.';
-        if (error.code === 'auth/invalid-email')      msg = 'Invalid email format.';
-        if (error.code === 'auth/weak-password')      msg = 'Password is too weak.';
+        if (error.code === 'auth/email-already-in-use')    msg = 'This email is already registered.';
+        if (error.code === 'auth/invalid-email')           msg = 'Invalid email format.';
+        if (error.code === 'auth/weak-password')           msg = 'Password is too weak (min 6 chars).';
         if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
           msg = 'Invalid email or password.';
         }
-        errEl.textContent = msg;
+        showAlert(msg, 'error');
       } finally {
+        hideLoading();
         submitBtn.disabled = false;
-        submitBtn.style.opacity = '1';
       }
     }
 
-    document.getElementById('mobileForm').addEventListener('submit', e => handleSubmit(e, 'mobileForm', errMobile));
-    document.getElementById('desktopForm').addEventListener('submit', e => handleSubmit(e, 'desktopForm', errDesktop));
+    document.getElementById('mobileForm').addEventListener('submit', e => handleSubmit(e, 'mobileForm'));
+    document.getElementById('desktopForm').addEventListener('submit', e => handleSubmit(e, 'desktopForm'));
 
-    // Google sign-in
-    async function googleLogin(btn, err) {
-      btn.disabled = true; btn.style.opacity = '0.7'; err.textContent = '';
+    // Google login
+    async function googleLogin(btn) {
+      btn.disabled = true;
+      showLoading();
       try {
         await signInWithPopup(auth, provider);
-        window.location.href = 'profile.html';
+        showAlert('Signed in with Google! Redirecting...', 'success');
+        setTimeout(() => window.location.href = 'profile.html', 1200);
       } catch (error) {
-        let msg = 'Something went wrong. Try again.';
-        if (error.code === 'auth/popup-blocked') msg = 'Popup blocked – please allow popups.';
-        if (error.code === 'auth/popup-closed-by-user') msg = 'Sign in cancelled.';
-        err.textContent = msg;
+        let msg = 'Something went wrong.';
+        if (error.code === 'auth/popup-blocked') msg = 'Popup blocked – please allow popups for this site.';
+        if (error.code === 'auth/popup-closed-by-user') msg = 'Sign in was cancelled.';
+        showAlert(msg, 'error');
       } finally {
-        btn.disabled = false; btn.style.opacity = '1';
+        hideLoading();
+        btn.disabled = false;
       }
     }
 
-    googleMobile?.addEventListener('click', () => googleLogin(googleMobile, errMobile));
-    googleDesktop?.addEventListener('click', () => googleLogin(googleDesktop, errDesktop));
+    googleMobile?.addEventListener('click', () => googleLogin(googleMobile));
+    googleDesktop?.addEventListener('click', () => googleLogin(googleDesktop));
 
-    // Open / close
+    // Open / close UI
     startBtn.addEventListener('click', () => {
       if (window.innerWidth < 768) sheet.classList.add('open');
       else modal.classList.add('open');
     });
-
     closeSheet?.addEventListener('click', () => sheet.classList.remove('open'));
     closeModal?.addEventListener('click', () => modal.classList.remove('open'));
     modal?.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
 
-    // Auto-redirect if logged in
+    // Auto redirect if already signed in
     onAuthStateChanged(auth, user => {
-      if (user) window.location.href = 'profile.html';
+      if (user) {
+        showAlert('Already signed in – redirecting...', 'success');
+        setTimeout(() => window.location.href = 'profile.html', 1200);
+      }
     });
   </script>
 </body>
