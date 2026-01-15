@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cupcake – Your Profile</title>
+  <title>Cupcake – Sweet Moments</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   
@@ -15,179 +15,78 @@
       min-height: 100vh;
       background: #fff8f5;
       color: #2d1b12;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
+      overflow-x: hidden;
     }
     
-    .bg {
-      position: fixed;
-      inset: 0;
-      background: url('https://images.unsplash.com/photo-1550617931-eb3a88e84519?auto=format&fit=crop&q=80') center/cover no-repeat;
-      z-index: -2;
-    }
+    .bg { position:fixed; inset:0; background:url('https://images.unsplash.com/photo-1550617931-eb3a88e84519?auto=format&fit=crop&q=80') center/cover no-repeat; z-index:-2; }
+    .overlay { position:fixed; inset:0; background:linear-gradient(to bottom, rgba(255,245,240,0.92), rgba(255,230,235,0.94)); z-index:-1; }
     
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(255,245,240,0.92), rgba(255,230,235,0.94));
-      z-index: -1;
-    }
-    
-    .card {
-      background: white;
-      border-radius: 24px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
-      padding: 3rem 2.5rem;
-      width: 100%;
-      max-width: 520px;
-      text-align: center;
-    }
-    
-    .avatar-wrap {
-      width: 140px;
-      height: 140px;
-      margin: 0 auto 1.8rem;
+    .hero {
       position: relative;
-    }
-    
-    .avatar {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 6px solid #ffebee;
-      box-shadow: 0 10px 30px rgba(196,69,105,0.25);
-    }
-    
-    .avatar-placeholder {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #ffebee, #ffcdd2);
+      z-index: 5;
+      min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 5.5rem;
-      color: #c44569;
-      border: 6px solid #ffebee;
-      box-shadow: 0 10px 30px rgba(196,69,105,0.25);
+      text-align: center;
+      padding: 2rem;
     }
     
-    h1 {
-      font-size: 2.8rem;
-      color: #c44569;
-      margin-bottom: 0.5rem;
+    h1 { font-size: 3.2rem; font-weight:700; color:#c44569; margin-bottom:1rem; text-shadow:0 2px 10px rgba(0,0,0,0.1); }
+    .subtitle { font-size:1.3rem; color:#5c4033; max-width:500px; margin-bottom:2.5rem; line-height:1.5; }
+    
+    .start-btn {
+      padding:16px 40px; font-size:1.2rem; font-weight:600; color:white; background:#e84a5f; border:none;
+      border-radius:50px; cursor:pointer; box-shadow:0 8px 25px rgba(232,74,95,0.35); transition:all 0.3s;
+    }
+    .start-btn:hover { transform:translateY(-4px); box-shadow:0 12px 35px rgba(232,74,95,0.45); }
+    
+    /* Mobile Bottom Sheet */
+    .bottom-sheet {
+      position:fixed; bottom:0; left:0; right:0; background:white; border-top-left-radius:28px; border-top-right-radius:28px;
+      box-shadow:0 -14px 50px rgba(0,0,0,0.25); padding:2.5rem 1.8rem 3.2rem; transform:translateY(100%);
+      transition:transform 0.5s cubic-bezier(0.32,0.72,0,1); z-index:100;
+    }
+    .bottom-sheet.open { transform:translateY(0); }
+    
+    /* Desktop Modal */
+    .modal {
+      position:fixed; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center;
+      padding:2rem; opacity:0; visibility:hidden; transition:all 0.4s ease; z-index:100;
+    }
+    .modal.open { opacity:1; visibility:visible; }
+    
+    .modal-box {
+      background:white; border-radius:24px; padding:2.8rem 2.2rem; width:100%; max-width:460px;
+      text-align:center; box-shadow:0 25px 70px rgba(0,0,0,0.3); transform:scale(0.9); transition:transform 0.4s ease;
+    }
+    .modal.open .modal-box { transform:scale(1); }
+    
+    .close-btn { position:absolute; top:1rem; right:1.5rem; font-size:2rem; color:#777; cursor:pointer; background:none; border:none; }
+    
+    .google-btn, .email-btn {
+      display:flex; align-items:center; justify-content:center; gap:14px; width:100%; padding:15px;
+      background:#fff; border:1px solid #d0d0d0; border-radius:12px; font-size:1.1rem; font-weight:500;
+      color:#333; cursor:pointer; transition:all 0.25s; margin:1rem 0;
+    }
+    .google-btn:hover, .email-btn:hover { box-shadow:0 5px 18px rgba(0,0,0,0.1); transform:translateY(-2px); }
+    .google-btn img { width:28px; height:28px; }
+    
+    .form-group { margin:1.2rem 0; text-align:left; }
+    .form-group label { display:block; margin-bottom:0.5rem; font-weight:500; color:#444; }
+    .form-group input {
+      width:100%; padding:14px; border:1px solid #d0d0d0; border-radius:12px; font-size:1rem;
+      background:#fafafa;
     }
     
-    .email {
-      font-size: 1.25rem;
-      color: #555;
-      margin-bottom: 1.5rem;
-    }
+    .link { color:#c44569; text-decoration:none; font-weight:500; cursor:pointer; }
+    .link:hover { text-decoration:underline; }
     
-    .info-box {
-      background: #fff5f5;
-      border-radius: 16px;
-      padding: 1.8rem;
-      margin: 1.5rem 0 2rem;
-      text-align: left;
-    }
+    .error { color:#c62828; margin-top:1rem; font-size:0.98rem; min-height:1.5em; }
     
-    .info-box p {
-      margin: 1rem 0;
-      font-size: 1.08rem;
-    }
-    
-    .info-box strong {
-      color: #c44569;
-    }
-    
-    .username-section {
-      margin: 2rem 0;
-      text-align: left;
-    }
-    
-    .username-section label {
-      display: block;
-      margin-bottom: 0.6rem;
-      font-weight: 500;
-      color: #444;
-    }
-    
-    .username-input {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #d0d0d0;
-      border-radius: 12px;
-      font-size: 1.05rem;
-      background: #fafafa;
-    }
-    
-    .save-btn {
-      padding: 12px 40px;
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: white;
-      background: #e84a5f;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      margin-top: 1rem;
-      box-shadow: 0 6px 20px rgba(232,74,95,0.35);
-      transition: all 0.3s;
-    }
-    
-    .save-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(232,74,95,0.5);
-    }
-    
-    .save-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    
-    .status {
-      font-size: 0.95rem;
-      margin-top: 0.8rem;
-      min-height: 1.4em;
-    }
-    
-    .success { color: #2e7d32; }
-    .error   { color: #c62828; }
-    
-    .signout-btn {
-      padding: 14px 48px;
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: white;
-      background: #e84a5f;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      margin-top: 2.5rem;
-      box-shadow: 0 8px 25px rgba(232,74,95,0.4);
-      transition: all 0.3s;
-    }
-    
-    .signout-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 40px rgba(232,74,95,0.55);
-    }
-    
-    .loading {
-      font-size: 1.4rem;
-      color: #777;
-      margin: 4rem 0;
-    }
-    
-    .no-user {
-      font-size: 1.3rem;
-      color: #c62828;
-      margin: 3rem 0;
-    }
+    @media (min-width:768px) { .bottom-sheet { display:none; } }
+    @media (max-width:767px) { .modal { display:none; } h1 { font-size:2.6rem; } .subtitle { font-size:1.15rem; } }
   </style>
 </head>
 <body>
@@ -195,55 +94,85 @@
   <div class="bg"></div>
   <div class="overlay"></div>
 
-  <div class="card">
-    <div id="loading" class="loading">Loading your profile...</div>
+  <div class="hero">
+    <h1>Cupcake</h1>
+    <p class="subtitle">Delicious moments await – sign in to start exploring</p>
+    <button id="startBtn" class="start-btn">Get Started</button>
+  </div>
+
+  <!-- Mobile Bottom Sheet -->
+  <div class="bottom-sheet" id="sheet">
+    <button class="close-btn" id="closeSheet">×</button>
+    <h2 style="font-size:2rem; color:#c44569; margin-bottom:1rem;">Welcome</h2>
+    <p style="color:#555; margin-bottom:1.5rem;">Sign in to continue</p>
     
-    <div id="noUser" class="no-user" style="display:none;">
-      Not signed in.<br>Redirecting back...
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="emailMobile" placeholder="your@email.com" />
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="passwordMobile" placeholder="••••••••" />
     </div>
     
-    <div id="userProfile" style="display:none;">
-      <div class="avatar-wrap">
-        <img id="photo" class="avatar" alt="Profile picture" style="display:none;">
-        <div id="avatarPlaceholder" class="avatar-placeholder">🧁</div>
+    <button id="emailSignInMobile" class="email-btn">Sign In with Email</button>
+    
+    <p style="margin:1.5rem 0; color:#777;">or</p>
+    
+    <button id="googleMobile" class="google-btn">
+      <img src="https://www.google.com/favicon.ico" alt="Google">
+      Sign in with Google
+    </button>
+    
+    <p id="errMobile" class="error"></p>
+    <p style="margin-top:1.5rem; font-size:0.95rem;">
+      Don't have an account? <span class="link" id="signupMobile">Sign up</span>
+    </p>
+  </div>
+
+  <!-- Desktop Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-box">
+      <button class="close-btn" id="closeModal">×</button>
+      <h2 style="font-size:2.2rem; color:#c44569; margin-bottom:0.8rem;">Sign In</h2>
+      <p style="color:#555; margin-bottom:1.5rem;">Use your email or Google account</p>
+      
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="emailDesktop" placeholder="your@email.com" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="passwordDesktop" placeholder="••••••••" />
       </div>
       
-      <h1 id="name">Hello!</h1>
-      <p class="email" id="email"></p>
+      <button id="emailSignInDesktop" class="email-btn">Sign In with Email</button>
       
-      <div class="info-box">
-        <p><strong>User ID:</strong> <span id="uid"></span></p>
-        <p><strong>Created:</strong> <span id="created"></span></p>
-        <p><strong>Last sign-in:</strong> <span id="lastSignIn"></span></p>
-      </div>
+      <p style="margin:1.5rem 0; color:#777;">or</p>
       
-      <div class="username-section">
-        <label for="usernameInput">Your username</label>
-        <input type="text" id="usernameInput" class="username-input" placeholder="Enter your username..." />
-        <button id="saveBtn" class="save-btn" disabled>Saving...</button>
-        <div id="status" class="status"></div>
-      </div>
+      <button id="googleDesktop" class="google-btn">
+        <img src="https://www.google.com/favicon.ico" alt="Google">
+        Sign in with Google
+      </button>
       
-      <button id="signOutBtn" class="signout-btn">Sign Out</button>
+      <p id="errDesktop" class="error"></p>
+      
+      <p style="margin-top:1.5rem; font-size:0.95rem;">
+        Don't have an account? <span class="link" id="signupDesktop">Sign up</span>
+      </p>
     </div>
   </div>
 
-  <!-- Firebase SDK – Auth + Realtime Database -->
+  <!-- Firebase SDK -->
   <script type="module">
-    // https://firebase.google.com/docs/web/setup#available-libraries
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
     import { 
       getAuth, 
-      onAuthStateChanged, 
-      signOut 
+      GoogleAuthProvider, 
+      signInWithPopup,
+      signInWithEmailAndPassword,
+      onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-    
-    import { 
-      getDatabase, 
-      ref, 
-      onValue, 
-      set 
-    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCPTCZqUPrHgfwqVmNe4aLtVLEXqAdLpmA",
@@ -252,135 +181,108 @@
       storageBucket: "cupcake-202c4.firebasestorage.app",
       messagingSenderId: "549565498078",
       appId: "1:549565498078:web:4efd4d7c7fd4561882784f",
-      measurementId: "G-9PK7NV0K5N",
-      databaseURL: "https://cupcake-202c4-default-rtdb.firebaseio.com/"
-      // ↑ IMPORTANT: replace with your actual database URL from Firebase Console
+      measurementId: "G-9PK7NV0K5N"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getDatabase(app);
+    const provider = new GoogleAuthProvider();
 
-    // DOM elements
-    const loading         = document.getElementById('loading');
-    const noUser          = document.getElementById('noUser');
-    const profile         = document.getElementById('userProfile');
-    const photo           = document.getElementById('photo');
-    const placeholder     = document.getElementById('avatarPlaceholder');
-    const nameEl          = document.getElementById('name');
-    const emailEl         = document.getElementById('email');
-    const uidEl           = document.getElementById('uid');
-    const createdEl       = document.getElementById('created');
-    const lastEl          = document.getElementById('lastSignIn');
-    const signOutBtn      = document.getElementById('signOutBtn');
+    // DOM elements (shared + separate for mobile/desktop)
+    const startBtn       = document.getElementById('startBtn');
+    const sheet          = document.getElementById('sheet');
+    const modal          = document.getElementById('modal');
+    const closeSheet     = document.getElementById('closeSheet');
+    const closeModal     = document.getElementById('closeModal');
     
-    const usernameInput   = document.getElementById('usernameInput');
-    const saveBtn         = document.getElementById('saveBtn');
-    const statusEl        = document.getElementById('status');
+    const googleM        = document.getElementById('googleMobile');
+    const googleD        = document.getElementById('googleDesktop');
+    const emailSignInM   = document.getElementById('emailSignInMobile');
+    const emailSignInD   = document.getElementById('emailSignInDesktop');
+    const emailM         = document.getElementById('emailMobile');
+    const passM          = document.getElementById('passwordMobile');
+    const emailD         = document.getElementById('emailDesktop');
+    const passD          = document.getElementById('passwordDesktop');
+    
+    const errM           = document.getElementById('errMobile');
+    const errD           = document.getElementById('errDesktop');
+    const signupM        = document.getElementById('signupMobile');
+    const signupD        = document.getElementById('signupDesktop');
 
-    let currentUser = null;
-    let usernameRef = null;
-
-    onAuthStateChanged(auth, (user) => {
-      loading.style.display = 'none';
-
-      if (user) {
-        currentUser = user;
-        profile.style.display = 'block';
-
-        // Show Google profile picture if available
-        if (user.photoURL) {
-          photo.src = user.photoURL;
-          photo.style.display = 'block';
-          placeholder.style.display = 'none';
-        } else {
-          photo.style.display = 'none';
-          placeholder.style.display = 'flex';
-        }
-
-        nameEl.textContent   = user.displayName || 'Cupcake User';
-        emailEl.textContent  = user.email || '—';
-        uidEl.textContent    = user.uid;
-
-        const meta = user.metadata;
-        createdEl.textContent = meta.creationTime 
-          ? new Date(meta.creationTime).toLocaleString('en-ZA', { dateStyle: 'medium', timeStyle: 'short' }) 
-          : '—';
-        lastEl.textContent = meta.lastSignInTime 
-          ? new Date(meta.lastSignInTime).toLocaleString('en-ZA', { dateStyle: 'medium', timeStyle: 'short' }) 
-          : '—';
-
-        // ────────────────────────────────────────────────
-        // Realtime Database – username
-        // ────────────────────────────────────────────────
-        usernameRef = ref(db, `users/${user.uid}/username`);
-
-        // Listen for value changes (real-time)
-        onValue(usernameRef, (snapshot) => {
-          const savedUsername = snapshot.val();
-          const displayValue = savedUsername || user.displayName || 'Cupcake User';
-          usernameInput.value = displayValue;
-          
-          // Reset save button state after data loads
-          saveBtn.disabled = true;
-          saveBtn.textContent = 'Save';
-          statusEl.textContent = '';
-        });
-
-        // Enable save button only when there's a meaningful change
-        usernameInput.addEventListener('input', () => {
-          const currentVal = usernameInput.value.trim();
-          saveBtn.disabled = !currentVal || currentVal === (currentUser.displayName || '');
-        });
-
-      } else {
-        noUser.style.display = 'block';
-        setTimeout(() => {
-          window.location.href = 'index.html'; // or your login page
-        }, 2200);
-      }
+    // Open login UI
+    startBtn.addEventListener('click', () => {
+      if (window.innerWidth < 768) sheet.classList.add('open');
+      else modal.classList.add('open');
     });
 
-    // Save username to Realtime Database
-    saveBtn.addEventListener('click', async () => {
-      const newUsername = usernameInput.value.trim();
+    closeSheet?.addEventListener('click', () => sheet.classList.remove('open'));
+    closeModal?.addEventListener('click', () => modal.classList.remove('open'));
+    modal?.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+
+    // Google sign-in (same as before)
+    async function googleLogin(btn, errEl) {
+      btn.disabled = true; btn.style.opacity = '0.7'; errEl.textContent = '';
+      try {
+        await signInWithPopup(auth, provider);
+        window.location.href = 'profile.html'; // ← your success page
+      } catch (error) {
+        let msg = 'Something went wrong.';
+        if (error.code === 'auth/popup-blocked') msg = 'Popup blocked – allow popups.';
+        if (error.code === 'auth/popup-closed-by-user') msg = 'Cancelled.';
+        errEl.textContent = msg;
+      } finally {
+        btn.disabled = false; btn.style.opacity = '1';
+      }
+    }
+
+    googleM?.addEventListener('click', () => googleLogin(googleM, errM));
+    googleD?.addEventListener('click', () => googleLogin(googleD, errD));
+
+    // Email/Password sign-in
+    async function emailLogin(emailEl, passEl, errEl) {
+      const email = emailEl.value.trim();
+      const password = passEl.value.trim();
       
-      if (!newUsername) {
-        statusEl.textContent = 'Username cannot be empty';
-        statusEl.className = 'status error';
+      if (!email || !password) {
+        errEl.textContent = 'Please fill in email and password';
         return;
       }
-
-      saveBtn.disabled = true;
-      saveBtn.textContent = 'Saving...';
-      statusEl.textContent = '';
+      
+      errEl.textContent = ''; 
+      const btn = emailEl.closest('.modal-box, .bottom-sheet').querySelector('.email-btn');
+      btn.disabled = true; btn.style.opacity = '0.7';
 
       try {
-        await set(usernameRef, newUsername);
-        statusEl.textContent = 'Username saved successfully!';
-        statusEl.className = 'status success';
-        
-        // Optional: also update Firebase Auth displayName
-        // await updateProfile(auth.currentUser, { displayName: newUsername });
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = 'profile.html'; // ← your success page
       } catch (error) {
-        console.error('Save failed:', error);
-        statusEl.textContent = 'Failed to save username. Try again.';
-        statusEl.className = 'status error';
+        let msg = 'Login failed.';
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          msg = 'Incorrect email or password.';
+        } else if (error.code === 'auth/invalid-email') {
+          msg = 'Invalid email format.';
+        } else if (error.code === 'auth/too-many-requests') {
+          msg = 'Too many attempts – try again later.';
+        }
+        errEl.textContent = msg;
       } finally {
-        saveBtn.textContent = 'Save';
-        saveBtn.disabled = false;
+        btn.disabled = false; btn.style.opacity = '1';
       }
-    });
+    }
 
-    // Sign out
-    signOutBtn.addEventListener('click', async () => {
-      try {
-        await signOut(auth);
-        window.location.href = 'index.html';
-      } catch (err) {
-        console.error('Sign out error:', err);
-        alert('Sign out failed. Please try again.');
-      }
+    emailSignInM?.addEventListener('click', () => emailLogin(emailM, passM, errM));
+    emailSignInD?.addEventListener('click', () => emailLogin(emailD, passD, errD));
+
+    // Optional: Sign up link (placeholder – you can expand later)
+    const signupHandler = () => {
+      alert("Sign up feature coming soon! For now, please use Google or contact support.");
+    };
+    signupM?.addEventListener('click', signupHandler);
+    signupD?.addEventListener('click', signupHandler);
+
+    // Auto-redirect if already signed in
+    onAuthStateChanged(auth, user => {
+      if (user) window.location.href = 'profile.html'; // ← your dashboard/profile
     });
   </script>
 
