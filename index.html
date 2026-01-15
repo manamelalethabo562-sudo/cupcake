@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cupcake – Sweet Moments</title>
-  
+ 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  
+ 
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    
+   
     body {
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
@@ -17,184 +17,105 @@
       color: #2d1b12;
       overflow-x: hidden;
     }
-    
-    .bg {
-      position: fixed;
-      inset: 0;
-      background: url('https://images.unsplash.com/photo-1550617931-eb3a88e84519?auto=format&fit=crop&q=80&w=2000') 
-                  center/cover no-repeat;
-      z-index: -2;
-    }
-    
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(255,245,240,0.9), rgba(255,230,235,0.92));
-      z-index: -1;
-    }
-    
+   
+    .bg { position: fixed; inset: 0; background: url('https://images.unsplash.com/photo-1550617931-eb3a88e84519?auto=format&fit=crop&q=80&w=2000') center/cover no-repeat; z-index: -2; }
+    .overlay { position: fixed; inset: 0; background: linear-gradient(to bottom, rgba(255,245,240,0.9), rgba(255,230,235,0.92)); z-index: -1; }
+   
     .hero {
-      position: relative;
-      z-index: 5;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 2rem;
+      position: relative; z-index: 5; min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 2rem;
     }
-    
-    h1 {
-      font-size: 3.2rem;
-      font-weight: 700;
-      color: #c44569;
-      margin-bottom: 1rem;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    
-    .subtitle {
-      font-size: 1.3rem;
-      color: #5c4033;
-      max-width: 500px;
-      margin-bottom: 2.5rem;
-      line-height: 1.5;
-    }
-    
+   
+    h1 { font-size: 3.2rem; font-weight: 700; color: #c44569; margin-bottom: 1rem; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .subtitle { font-size: 1.3rem; color: #5c4033; max-width: 500px; margin-bottom: 2.5rem; line-height: 1.5; }
+   
     .start-btn {
-      padding: 16px 40px;
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: white;
-      background: #e84a5f;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(232,74,95,0.35);
-      transition: all 0.3s ease;
+      padding: 16px 40px; font-size: 1.2rem; font-weight: 600;
+      color: white; background: #e84a5f; border: none; border-radius: 50px; cursor: pointer;
+      box-shadow: 0 8px 25px rgba(232,74,95,0.35); transition: all 0.3s ease;
     }
-    
-    .start-btn:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 35px rgba(232,74,95,0.45);
+    .start-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 35px rgba(232,74,95,0.45); }
+   
+    /* Shared modal/sheet styles */
+    .bottom-sheet, .modal-box {
+      background: white; border-radius: 24px; padding: 2.5rem 1.8rem 3.2rem;
+      box-shadow: 0 -14px 50px rgba(0,0,0,0.25); text-align: center;
     }
-    
-    /* Mobile Bottom Sheet */
+   
     .bottom-sheet {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: white;
-      border-top-left-radius: 28px;
-      border-top-right-radius: 28px;
-      box-shadow: 0 -14px 50px rgba(0,0,0,0.25);
-      padding: 2.5rem 1.8rem 3.2rem;
-      transform: translateY(100%);
-      transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+      position: fixed; bottom: 0; left: 0; right: 0;
+      transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
       z-index: 100;
     }
-    
-    .bottom-sheet.open {
-      transform: translateY(0);
-    }
-    
-    /* Desktop Modal */
+    .bottom-sheet.open { transform: translateY(0); }
+   
     .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.4s ease;
-      z-index: 100;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      display: flex; align-items: center; justify-content: center; padding: 2rem;
+      opacity: 0; visibility: hidden; transition: all 0.4s ease; z-index: 100;
     }
-    
-    .modal.open {
-      opacity: 1;
-      visibility: visible;
-    }
-    
-    .modal-box {
-      background: white;
-      border-radius: 24px;
-      padding: 2.8rem 2.2rem;
-      width: 100%;
-      max-width: 460px;
-      text-align: center;
-      box-shadow: 0 25px 70px rgba(0,0,0,0.3);
-      transform: scale(0.9);
-      transition: transform 0.4s ease;
-    }
-    
-    .modal.open .modal-box {
-      transform: scale(1);
-    }
-    
+    .modal.open { opacity: 1; visibility: visible; }
+    .modal-box { width: 100%; max-width: 460px; transform: scale(0.9); transition: transform 0.4s ease; }
+    .modal.open .modal-box { transform: scale(1); }
+   
     .close-btn {
-      position: absolute;
-      top: 1rem;
-      right: 1.5rem;
-      font-size: 2rem;
-      color: #777;
-      cursor: pointer;
-      background: none;
-      border: none;
+      position: absolute; top: 1rem; right: 1.5rem;
+      font-size: 2rem; color: #777; cursor: pointer; background: none; border: none;
     }
-    
+   
+    /* Tabs */
+    .tabs { display: flex; margin-bottom: 1.8rem; border-bottom: 2px solid #eee; }
+    .tab { flex: 1; padding: 1rem; font-weight: 600; color: #777; cursor: pointer; transition: all 0.25s; }
+    .tab.active { color: #c44569; border-bottom: 3px solid #c44569; }
+   
+    /* Form */
+    .form-group {
+      margin-bottom: 1.4rem; text-align: left; position: relative;
+    }
+    label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #444; }
+   
+    .password-wrapper {
+      position: relative;
+    }
+    input {
+      width: 100%; padding: 14px 16px; padding-right: 48px;
+      border: 1px solid #d0d0d0; border-radius: 12px; font-size: 1rem;
+    }
+   
+    .toggle-password {
+      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #777;
+      user-select: none; padding: 0; line-height: 1;
+    }
+    .toggle-password:hover { color: #c44569; }
+   
+    .submit-btn {
+      width: 100%; padding: 15px; margin: 1.2rem 0;
+      background: #e84a5f; color: white; border: none; border-radius: 12px;
+      font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.25s;
+    }
+    .submit-btn:hover { background: #d43c4f; }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+   
+    .error { color: #c62828; margin-top: 0.8rem; font-size: 0.95rem; min-height: 1.4em; }
+   
     .google-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      width: 100%;
-      padding: 15px;
-      margin: 1.5rem 0 1rem;
-      background: #fff;
-      border: 1px solid #d0d0d0;
-      border-radius: 12px;
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: #333;
-      cursor: pointer;
-      transition: all 0.25s;
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      width: 100%; padding: 15px; background: #fff; border: 1px solid #d0d0d0;
+      border-radius: 12px; font-size: 1.05rem; font-weight: 500; color: #333;
+      cursor: pointer; transition: all 0.25s;
     }
-    
-    .google-btn:hover {
-      box-shadow: 0 5px 18px rgba(0,0,0,0.1);
-      transform: translateY(-2px);
-    }
-    
-    .google-btn img {
-      width: 28px;
-      height: 28px;
-    }
-    
-    .error {
-      color: #c62828;
-      margin-top: 1rem;
-      font-size: 0.98rem;
-      min-height: 1.5em;
-    }
-    
-    @media (min-width: 768px) {
-      .bottom-sheet { display: none; }
-    }
-    
-    @media (max-width: 767px) {
-      .modal { display: none; }
-      h1 { font-size: 2.6rem; }
-      .subtitle { font-size: 1.15rem; }
-    }
+    .google-btn:hover { box-shadow: 0 5px 18px rgba(0,0,0,0.1); transform: translateY(-2px); }
+    .google-btn img { width: 28px; height: 28px; }
+   
+    @media (min-width: 768px) { .bottom-sheet { display: none; } }
+    @media (max-width: 767px) { .modal { display: none; } h1 { font-size: 2.6rem; } .subtitle { font-size: 1.15rem; } }
   </style>
 </head>
 <body>
-
   <div class="bg"></div>
   <div class="overlay"></div>
-
   <div class="hero">
     <h1>Cupcake</h1>
     <p class="subtitle">Delicious moments await – sign in to start exploring</p>
@@ -203,38 +124,98 @@
 
   <!-- Mobile Bottom Sheet -->
   <div class="bottom-sheet" id="sheet">
-    <button class="close-btn" id="closeSheet">&times;</button>
+    <button class="close-btn" id="closeSheet">×</button>
     <h2 style="font-size:2rem; color:#c44569; margin-bottom:1rem;">Welcome</h2>
-    <p style="color:#555; margin-bottom:2rem;">Sign in to continue</p>
-    
-    <button id="googleMobile" class="google-btn">
-      <img src="https://www.google.com/favicon.ico" alt="Google">
-      Sign in with Google
-    </button>
-    
-    <p id="errMobile" class="profile.html"></p>
+   
+    <div id="mobileTabs" class="tabs">
+      <div class="tab active" data-tab="signin">Sign In</div>
+      <div class="tab" data-tab="signup">Sign Up</div>
+    </div>
+   
+    <form id="mobileForm">
+      <div class="form-group">
+        <label for="emailMobile">Email</label>
+        <input type="email" id="emailMobile" required autocomplete="email"/>
+      </div>
+      <div class="form-group">
+        <label for="passwordMobile">Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="passwordMobile" required autocomplete="current-password"/>
+          <button type="button" class="toggle-password" tabindex="-1">👁️</button>
+        </div>
+      </div>
+      <div class="form-group" id="confirmPasswordGroupMobile" style="display:none;">
+        <label for="confirmPasswordMobile">Confirm Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="confirmPasswordMobile" autocomplete="new-password"/>
+          <button type="button" class="toggle-password" tabindex="-1">👁️</button>
+        </div>
+      </div>
+      <button type="submit" id="submitMobile" class="submit-btn">Sign In</button>
+    </form>
+   
+    <p class="error" id="errMobile"></p>
+   
+    <div style="margin-top:1.5rem;">
+      <button id="googleMobile" class="google-btn">
+        <img src="https://www.google.com/favicon.ico" alt="Google">
+        Continue with Google
+      </button>
+    </div>
   </div>
 
   <!-- Desktop Modal -->
   <div class="modal" id="modal">
     <div class="modal-box">
-      <button class="close-btn" id="closeModal">&times;</button>
-      <h2 style="font-size:2.2rem; color:#c44569; margin-bottom:0.8rem;">Sign In</h2>
-      <p style="color:#555; margin-bottom:2rem;">Use your Google account to continue</p>
-      
-      <button id="googleDesktop" class="google-btn">
-        <img src="https://www.google.com/favicon.ico" alt="Google">
-        Sign in with Google
-      </button>
-      
-      <p id="errDesktop" class="profile.html"></p>
+      <button class="close-btn" id="closeModal">×</button>
+      <h2 style="font-size:2.2rem; color:#c44569; margin-bottom:0.8rem;">Welcome</h2>
+     
+      <div id="desktopTabs" class="tabs">
+        <div class="tab active" data-tab="signin">Sign In</div>
+        <div class="tab" data-tab="signup">Sign Up</div>
+      </div>
+     
+      <form id="desktopForm">
+        <div class="form-group">
+          <label for="emailDesktop">Email</label>
+          <input type="email" id="emailDesktop" required autocomplete="email"/>
+        </div>
+        <div class="form-group">
+          <label for="passwordDesktop">Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="passwordDesktop" required autocomplete="current-password"/>
+            <button type="button" class="toggle-password" tabindex="-1">👁️</button>
+          </div>
+        </div>
+        <div class="form-group" id="confirmPasswordGroupDesktop" style="display:none;">
+          <label for="confirmPasswordDesktop">Confirm Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="confirmPasswordDesktop" autocomplete="new-password"/>
+            <button type="button" class="toggle-password" tabindex="-1">👁️</button>
+          </div>
+        </div>
+        <button type="submit" id="submitDesktop" class="submit-btn">Sign In</button>
+      </form>
+     
+      <p class="error" id="errDesktop"></p>
+     
+      <div style="margin-top:1.5rem;">
+        <button id="googleDesktop" class="google-btn">
+          <img src="https://www.google.com/favicon.ico" alt="Google">
+          Continue with Google
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- Firebase -->
+  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import { 
+      getAuth, GoogleAuthProvider, signInWithPopup,
+      signInWithEmailAndPassword, createUserWithEmailAndPassword,
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCPTCZqUPrHgfwqVmNe4aLtVLEXqAdLpmA",
@@ -250,62 +231,135 @@
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    const startBtn    = document.getElementById('startBtn');
-    const sheet       = document.getElementById('sheet');
-    const modal       = document.getElementById('modal');
-    const closeSheet  = document.getElementById('closeSheet');
-    const closeModal  = document.getElementById('closeModal');
-    const googleM     = document.getElementById('googleMobile');
-    const googleD     = document.getElementById('googleDesktop');
-    const errM        = document.getElementById('errMobile');
-    const errD        = document.getElementById('errDesktop');
+    // DOM elements
+    const startBtn      = document.getElementById('startBtn');
+    const sheet         = document.getElementById('sheet');
+    const modal         = document.getElementById('modal');
+    const closeSheet    = document.getElementById('closeSheet');
+    const closeModal    = document.getElementById('closeModal');
+    const googleMobile  = document.getElementById('googleMobile');
+    const googleDesktop = document.getElementById('googleDesktop');
+    const errMobile     = document.getElementById('errMobile');
+    const errDesktop    = document.getElementById('errDesktop');
 
-    // Open login UI when clicking "Get Started"
-    startBtn.addEventListener('click', () => {
-      if (window.innerWidth < 768) {
-        sheet.classList.add('open');
-      } else {
-        modal.classList.add('open');
+    // Password toggle functionality
+    function initPasswordToggles(container) {
+      const toggles = container.querySelectorAll('.toggle-password');
+      toggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+          const input = toggle.previousElementSibling;
+          const type = input.type === 'password' ? 'text' : 'password';
+          input.type = type;
+          
+          // Optional: change icon (using emoji here – you can use SVG/font-awesome later)
+          toggle.textContent = type === 'text' ? '🙈' : '👁️';
+        });
+      });
+    }
+
+    // Initialize toggles for both views
+    initPasswordToggles(document.getElementById('sheet'));
+    initPasswordToggles(document.getElementById('modal'));
+
+    // Tab switching
+    let currentTab = 'signin';
+    function initTabs(containerId, formId, errId, submitId) {
+      const tabs = document.querySelectorAll(`#${containerId} .tab`);
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentTab = tab.dataset.tab;
+
+          const confirmGroup = document.getElementById(
+            formId === 'mobileForm' ? 'confirmPasswordGroupMobile' : 'confirmPasswordGroupDesktop'
+          );
+          
+          document.getElementById(submitId).textContent = currentTab === 'signup' ? 'Sign Up' : 'Sign In';
+          confirmGroup.style.display = currentTab === 'signup' ? 'block' : 'none';
+        });
+      });
+    }
+
+    initTabs('mobileTabs', 'mobileForm', 'errMobile', 'submitMobile');
+    initTabs('desktopTabs', 'desktopForm', 'errDesktop', 'submitDesktop');
+
+    // Form submit handler
+    async function handleSubmit(e, formId, errEl) {
+      e.preventDefault();
+      const form = document.getElementById(formId);
+      const email    = form.querySelector('input[type="email"]').value.trim();
+      const password = form.querySelector('input[type="password"]:not([id*="confirm"])').value;
+      let confirmPw = currentTab === 'signup' ? form.querySelector('input[id*="confirmPassword"]').value : '';
+
+      errEl.textContent = '';
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.7';
+
+      if (currentTab === 'signup') {
+        if (password !== confirmPw) { errEl.textContent = 'Passwords do not match'; reset(); return; }
+        if (password.length < 6)     { errEl.textContent = 'Password should be at least 6 characters'; reset(); return; }
       }
-    });
-
-    // Close handlers
-    closeSheet?.addEventListener('click', () => sheet.classList.remove('open'));
-    closeModal?.addEventListener('click', () => modal.classList.remove('open'));
-
-    // Close modal/sheet when clicking outside content (optional nice touch)
-    modal?.addEventListener('click', e => {
-      if (e.target === modal) modal.classList.remove('open');
-    });
-
-    async function login(btn, err) {
-      btn.disabled = true;
-      btn.style.opacity = '0.7';
-      err.textContent = '';
 
       try {
-        await signInWithPopup(auth, provider);
-        window.location.href = 'profile.html';  // ← change to your main page
+        if (currentTab === 'signup') {
+          await createUserWithEmailAndPassword(auth, email, password);
+        } else {
+          await signInWithEmailAndPassword(auth, email, password);
+        }
+        window.location.href = 'profile.html';
       } catch (error) {
-        console.error(error);
-        let msg = 'Something went wrong. Try again.';
-        if (error.code === 'auth/popup-blocked') msg = 'Popup blocked – allow popups for this site.';
-        if (error.code === 'auth/popup-closed-by-user') msg = 'Sign in was cancelled.';
-        err.textContent = msg;
+        let msg = 'Something went wrong. Please try again.';
+        if (error.code === 'auth/email-already-in-use') msg = 'This email is already registered.';
+        if (error.code === 'auth/invalid-email')      msg = 'Invalid email format.';
+        if (error.code === 'auth/weak-password')      msg = 'Password is too weak.';
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          msg = 'Invalid email or password.';
+        }
+        errEl.textContent = msg;
       } finally {
-        btn.disabled = false;
-        btn.style.opacity = '1';
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
       }
     }
 
-    googleM?.addEventListener('click', () => login(googleM, errM));
-    googleD?.addEventListener('click', () => login(googleD, errD));
+    document.getElementById('mobileForm').addEventListener('submit', e => handleSubmit(e, 'mobileForm', errMobile));
+    document.getElementById('desktopForm').addEventListener('submit', e => handleSubmit(e, 'desktopForm', errDesktop));
 
-    // Auto-redirect if already logged in
+    // Google sign-in
+    async function googleLogin(btn, err) {
+      btn.disabled = true; btn.style.opacity = '0.7'; err.textContent = '';
+      try {
+        await signInWithPopup(auth, provider);
+        window.location.href = 'profile.html';
+      } catch (error) {
+        let msg = 'Something went wrong. Try again.';
+        if (error.code === 'auth/popup-blocked') msg = 'Popup blocked – please allow popups.';
+        if (error.code === 'auth/popup-closed-by-user') msg = 'Sign in cancelled.';
+        err.textContent = msg;
+      } finally {
+        btn.disabled = false; btn.style.opacity = '1';
+      }
+    }
+
+    googleMobile?.addEventListener('click', () => googleLogin(googleMobile, errMobile));
+    googleDesktop?.addEventListener('click', () => googleLogin(googleDesktop, errDesktop));
+
+    // Open / close
+    startBtn.addEventListener('click', () => {
+      if (window.innerWidth < 768) sheet.classList.add('open');
+      else modal.classList.add('open');
+    });
+
+    closeSheet?.addEventListener('click', () => sheet.classList.remove('open'));
+    closeModal?.addEventListener('click', () => modal.classList.remove('open'));
+    modal?.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+
+    // Auto-redirect if logged in
     onAuthStateChanged(auth, user => {
-      if (user) window.location.href = 'profile.html';  // ← your dashboard/home
+      if (user) window.location.href = 'profile.html';
     });
   </script>
-
 </body>
 </html>
