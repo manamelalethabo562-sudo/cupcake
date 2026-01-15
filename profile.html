@@ -8,11 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; }
     
     body {
       font-family: 'Poppins', sans-serif;
@@ -39,7 +35,7 @@
       z-index: -1;
     }
     
-    .profile-container {
+    .card {
       background: white;
       border-radius: 24px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.18);
@@ -49,11 +45,11 @@
       text-align: center;
     }
     
-    .avatar-container {
-      position: relative;
+    .avatar-wrap {
       width: 140px;
       height: 140px;
       margin: 0 auto 1.8rem;
+      position: relative;
     }
     
     .avatar {
@@ -62,7 +58,7 @@
       border-radius: 50%;
       object-fit: cover;
       border: 6px solid #ffebee;
-      box-shadow: 0 10px 30px rgba(200,69,105,0.2);
+      box-shadow: 0 10px 30px rgba(196,69,105,0.25);
     }
     
     .avatar-placeholder {
@@ -73,44 +69,97 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 5rem;
+      font-size: 5.5rem;
       color: #c44569;
       border: 6px solid #ffebee;
-      box-shadow: 0 10px 30px rgba(200,69,105,0.2);
+      box-shadow: 0 10px 30px rgba(196,69,105,0.25);
     }
     
     h1 {
-      font-size: 2.6rem;
+      font-size: 2.8rem;
       color: #c44569;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.5rem;
     }
     
     .email {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       color: #555;
-      margin-bottom: 2.2rem;
+      margin-bottom: 1.5rem;
     }
     
-    .details {
+    .info-box {
       background: #fff5f5;
       border-radius: 16px;
       padding: 1.8rem;
-      margin: 1.5rem 0 2.5rem;
+      margin: 1.5rem 0 2rem;
       text-align: left;
     }
     
-    .details p {
+    .info-box p {
       margin: 1rem 0;
-      font-size: 1.05rem;
+      font-size: 1.08rem;
     }
     
-    .details strong {
+    .info-box strong {
       color: #c44569;
-      font-weight: 600;
     }
     
-    .signout {
-      padding: 14px 50px;
+    .username-section {
+      margin: 2rem 0;
+      text-align: left;
+    }
+    
+    .username-section label {
+      display: block;
+      margin-bottom: 0.6rem;
+      font-weight: 500;
+      color: #444;
+    }
+    
+    .username-input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d0d0d0;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      background: #fafafa;
+    }
+    
+    .save-btn {
+      padding: 12px 40px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: white;
+      background: #e84a5f;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 1rem;
+      box-shadow: 0 6px 20px rgba(232,74,95,0.35);
+      transition: all 0.3s;
+    }
+    
+    .save-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(232,74,95,0.5);
+    }
+    
+    .save-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .status {
+      font-size: 0.95rem;
+      margin-top: 0.8rem;
+      min-height: 1.4em;
+    }
+    
+    .success { color: #2e7d32; }
+    .error   { color: #c62828; }
+    
+    .signout-btn {
+      padding: 14px 48px;
       font-size: 1.15rem;
       font-weight: 600;
       color: white;
@@ -118,25 +167,26 @@
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 8px 25px rgba(232,74,95,0.35);
-      transition: all 0.3s ease;
+      margin-top: 2.5rem;
+      box-shadow: 0 8px 25px rgba(232,74,95,0.4);
+      transition: all 0.3s;
     }
     
-    .signout:hover {
+    .signout-btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 14px 40px rgba(232,74,95,0.5);
+      box-shadow: 0 14px 40px rgba(232,74,95,0.55);
     }
     
-    .loading, .no-user {
+    .loading {
       font-size: 1.4rem;
       color: #777;
-      margin: 3rem 0;
+      margin: 4rem 0;
     }
     
-    .redirect {
+    .no-user {
+      font-size: 1.3rem;
       color: #c62828;
-      font-size: 1.2rem;
-      margin-top: 2rem;
+      margin: 3rem 0;
     }
   </style>
 </head>
@@ -145,37 +195,55 @@
   <div class="bg"></div>
   <div class="overlay"></div>
 
-  <div class="profile-container">
-    <div id="loading" class="loading">Loading your sweet profile...</div>
+  <div class="card">
+    <div id="loading" class="loading">Loading your profile...</div>
     
     <div id="noUser" class="no-user" style="display:none;">
-      No one is signed in.<br>
-      <span class="redirect">Redirecting to home...</span>
+      Not signed in.<br>Redirecting back...
     </div>
     
-    <div id="profile" style="display:none;">
-      <div class="avatar-container">
-        <img id="userPhoto" class="avatar" alt="Your profile photo" style="display:none;">
-        <div id="placeholder" class="avatar-placeholder">🧁</div>
+    <div id="userProfile" style="display:none;">
+      <div class="avatar-wrap">
+        <img id="photo" class="avatar" alt="Profile picture" style="display:none;">
+        <div id="avatarPlaceholder" class="avatar-placeholder">🧁</div>
       </div>
       
-      <h1 id="displayName">Hello!</h1>
-      <p class="email" id="userEmail"></p>
+      <h1 id="name">Hello!</h1>
+      <p class="email" id="email"></p>
       
-      <div class="details">
+      <div class="info-box">
         <p><strong>User ID:</strong> <span id="uid"></span></p>
-        <p><strong>Account created:</strong> <span id="creationTime"></span></p>
-        <p><strong>Last signed in:</strong> <span id="lastSignIn"></span></p>
+        <p><strong>Created:</strong> <span id="created"></span></p>
+        <p><strong>Last sign-in:</strong> <span id="lastSignIn"></span></p>
       </div>
       
-      <button id="signOut" class="signout">Sign Out</button>
+      <div class="username-section">
+        <label for="usernameInput">Your username</label>
+        <input type="text" id="usernameInput" class="username-input" placeholder="Enter your username..." />
+        <button id="saveBtn" class="save-btn" disabled>Saving...</button>
+        <div id="status" class="status"></div>
+      </div>
+      
+      <button id="signOutBtn" class="signout-btn">Sign Out</button>
     </div>
   </div>
 
-  <!-- Firebase SDK (modular v10+) -->
+  <!-- Firebase SDK – Auth + Realtime Database -->
   <script type="module">
+    // https://firebase.google.com/docs/web/setup#available-libraries
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import { 
+      getAuth, 
+      onAuthStateChanged, 
+      signOut 
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    
+    import { 
+      getDatabase, 
+      ref, 
+      onValue, 
+      set 
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCPTCZqUPrHgfwqVmNe4aLtVLEXqAdLpmA",
@@ -184,60 +252,123 @@
       storageBucket: "cupcake-202c4.firebasestorage.app",
       messagingSenderId: "549565498078",
       appId: "1:549565498078:web:4efd4d7c7fd4561882784f",
-      measurementId: "G-9PK7NV0K5N"
+      measurementId: "G-9PK7NV0K5N",
+      databaseURL: "https://cupcake-202c4-default-rtdb.firebaseio.com/"
+      // ↑ IMPORTANT: replace with your actual database URL from Firebase Console
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getDatabase(app);
 
     // DOM elements
-    const loadingDiv   = document.getElementById('loading');
-    const noUserDiv    = document.getElementById('noUser');
-    const profileDiv   = document.getElementById('profile');
-    const photoImg     = document.getElementById('userPhoto');
-    const placeholder  = document.getElementById('placeholder');
-    const nameEl       = document.getElementById('displayName');
-    const emailEl      = document.getElementById('userEmail');
-    const uidEl        = document.getElementById('uid');
-    const createdEl    = document.getElementById('creationTime');
-    const lastInEl     = document.getElementById('lastSignIn');
-    const signOutBtn   = document.getElementById('signOut');
+    const loading         = document.getElementById('loading');
+    const noUser          = document.getElementById('noUser');
+    const profile         = document.getElementById('userProfile');
+    const photo           = document.getElementById('photo');
+    const placeholder     = document.getElementById('avatarPlaceholder');
+    const nameEl          = document.getElementById('name');
+    const emailEl         = document.getElementById('email');
+    const uidEl           = document.getElementById('uid');
+    const createdEl       = document.getElementById('created');
+    const lastEl          = document.getElementById('lastSignIn');
+    const signOutBtn      = document.getElementById('signOutBtn');
+    
+    const usernameInput   = document.getElementById('usernameInput');
+    const saveBtn         = document.getElementById('saveBtn');
+    const statusEl        = document.getElementById('status');
+
+    let currentUser = null;
+    let usernameRef = null;
 
     onAuthStateChanged(auth, (user) => {
-      loadingDiv.style.display = 'none';
+      loading.style.display = 'none';
 
       if (user) {
-        profileDiv.style.display = 'block';
-        noUserDiv.style.display = 'none';
+        currentUser = user;
+        profile.style.display = 'block';
 
-        // Profile photo
+        // Show Google profile picture if available
         if (user.photoURL) {
-          photoImg.src = user.photoURL;
-          photoImg.style.display = 'block';
+          photo.src = user.photoURL;
+          photo.style.display = 'block';
           placeholder.style.display = 'none';
         } else {
-          photoImg.style.display = 'none';
+          photo.style.display = 'none';
           placeholder.style.display = 'flex';
         }
 
-        nameEl.textContent = user.displayName || "Cupcake Friend";
-        emailEl.textContent = user.email || "No email available";
-        uidEl.textContent = user.uid;
+        nameEl.textContent   = user.displayName || 'Cupcake User';
+        emailEl.textContent  = user.email || '—';
+        uidEl.textContent    = user.uid;
 
-        // Format dates nicely
-        const metadata = user.metadata;
-        createdEl.textContent = metadata.creationTime 
-          ? new Date(metadata.creationTime).toLocaleString('en-ZA', { dateStyle: 'medium', timeStyle: 'short' })
+        const meta = user.metadata;
+        createdEl.textContent = meta.creationTime 
+          ? new Date(meta.creationTime).toLocaleString('en-ZA', { dateStyle: 'medium', timeStyle: 'short' }) 
           : '—';
-        
-        lastInEl.textContent = metadata.lastSignInTime 
-          ? new Date(metadata.lastSignInTime).toLocaleString('en-ZA', { dateStyle: 'medium', timeStyle: 'short' })
+        lastEl.textContent = meta.lastSignInTime 
+          ? new Date(meta.lastSignInTime).toLocaleString('en-ZA', { dateStyle: 'medium', timeStyle: 'short' }) 
           : '—';
+
+        // ────────────────────────────────────────────────
+        // Realtime Database – username
+        // ────────────────────────────────────────────────
+        usernameRef = ref(db, `users/${user.uid}/username`);
+
+        // Listen for value changes (real-time)
+        onValue(usernameRef, (snapshot) => {
+          const savedUsername = snapshot.val();
+          const displayValue = savedUsername || user.displayName || 'Cupcake User';
+          usernameInput.value = displayValue;
+          
+          // Reset save button state after data loads
+          saveBtn.disabled = true;
+          saveBtn.textContent = 'Save';
+          statusEl.textContent = '';
+        });
+
+        // Enable save button only when there's a meaningful change
+        usernameInput.addEventListener('input', () => {
+          const currentVal = usernameInput.value.trim();
+          saveBtn.disabled = !currentVal || currentVal === (currentUser.displayName || '');
+        });
+
       } else {
-        noUserDiv.style.display = 'block';
+        noUser.style.display = 'block';
         setTimeout(() => {
-          window.location.href = 'index.html';  // ← back to your landing / login page
-        }, 2500);
+          window.location.href = 'index.html'; // or your login page
+        }, 2200);
+      }
+    });
+
+    // Save username to Realtime Database
+    saveBtn.addEventListener('click', async () => {
+      const newUsername = usernameInput.value.trim();
+      
+      if (!newUsername) {
+        statusEl.textContent = 'Username cannot be empty';
+        statusEl.className = 'status error';
+        return;
+      }
+
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving...';
+      statusEl.textContent = '';
+
+      try {
+        await set(usernameRef, newUsername);
+        statusEl.textContent = 'Username saved successfully!';
+        statusEl.className = 'status success';
+        
+        // Optional: also update Firebase Auth displayName
+        // await updateProfile(auth.currentUser, { displayName: newUsername });
+      } catch (error) {
+        console.error('Save failed:', error);
+        statusEl.textContent = 'Failed to save username. Try again.';
+        statusEl.className = 'status error';
+      } finally {
+        saveBtn.textContent = 'Save';
+        saveBtn.disabled = false;
       }
     });
 
@@ -247,8 +378,8 @@
         await signOut(auth);
         window.location.href = 'index.html';
       } catch (err) {
-        console.error("Sign out failed:", err);
-        alert("Couldn't sign out – please try again.");
+        console.error('Sign out error:', err);
+        alert('Sign out failed. Please try again.');
       }
     });
   </script>
