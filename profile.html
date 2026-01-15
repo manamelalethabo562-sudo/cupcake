@@ -1,1 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cupcake – Your Profile</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      background: #fff8f5;
+      color: #2d1b12;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    
+    .bg {
+      position: fixed;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1550617931-eb3a88e84519?auto=format&fit=crop&q=80') center/cover no-repeat;
+      z-index: -2;
+    }
+    
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(255,245,240,0.92), rgba(255,230,235,0.94));
+      z-index: -1;
+    }
+    
+    .profile-container {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 520px;
+      text-align: center;
+    }
+    
+    .avatar-container {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 1.8rem;
+    }
+    
+    .avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 6px solid #ffebee;
+      box-shadow: 0 10px 30px rgba(200,69,105,0.2);
+    }
+    
+    .avatar-placeholder {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffebee, #ffcdd2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      color: #c44569;
+      border: 6px solid #ffebee;
+      box-shadow: 0 10px 30px rgba(200,69,105,0.2);
+    }
+    
+    h1 {
+      font-size: 2.6rem;
+      color: #c44569;
+      margin-bottom: 0.6rem;
+    }
+    
+    .email {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 2.2rem;
+    }
+    
+    .details {
+      background: #fff5f5;
+      border-radius: 16px;
+      padding: 1.8rem;
+      margin: 1.5rem 0 2.5rem;
+      text-align: left;
+    }
+    
+    .details p {
+      margin: 1rem 0;
+      font-size: 1.05rem;
+    }
+    
+    .details strong {
+      color: #c44569;
+      font-weight: 600;
+    }
+    
+    .signout {
+      padding: 14px 50px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: white;
+      background: #e84a5f;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(232,74,95,0.35);
+      transition: all 0.3s ease;
+    }
+    
+    .signout:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 40px rgba(232,74,95,0.5);
+    }
+    
+    .loading, .no-user {
+      font-size: 1.4rem;
+      color: #777;
+      margin: 3rem 0;
+    }
+    
+    .redirect {
+      color: #c62828;
+      font-size: 1.2rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
 
+  <div class="bg"></div>
+  <div class="overlay"></div>
+
+  <div class="profile-container">
+    <div id="loading" class="loading">Loading your sweet profile...</div>
+    
+    <div id="noUser" class="no-user" style="display:none;">
+      No one is signed in.<br>
+      <span class="redirect">Redirecting to home...</span>
+    </div>
+    
+    <div id="profile" style="display:none;">
+      <div class="avatar-container">
+        <img id="userPhoto" class="avatar" alt="Your profile photo" style="display:none;">
+        <div id="placeholder" class="avatar-placeholder">🧁</div>
+      </div>
+      
+      <h1 id="displayName">Hello!</h1>
+      <p class="email" id="userEmail"></p>
+      
+      <div class="details">
+        <p><strong>User ID:</strong> <span id="uid"></span></p>
+        <p><strong>Account created:</strong> <span id="creationTime"></span></p>
+        <p><strong>Last signed in:</strong> <span id="lastSignIn"></span></p>
+      </div>
+      
+      <button id="signOut" class="signout">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- Firebase SDK (modular v10+) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCPTCZqUPrHgfwqVmNe4aLtVLEXqAdLpmA",
+      authDomain: "cupcake-202c4.firebaseapp.com",
+      projectId: "cupcake-202c4",
+      storageBucket: "cupcake-202c4.firebasestorage.app",
+      messagingSenderId: "549565498078",
+      appId: "1:549565498078:web:4efd4d7c7fd4561882784f",
+      measurementId: "G-9PK7NV0K5N"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // DOM elements
+    const loadingDiv   = document.getElementById('loading');
+    const noUserDiv    = document.getElementById('noUser');
+    const profileDiv   = document.getElementById('profile');
+    const photoImg     = document.getElementById('userPhoto');
+    const placeholder  = document.getElementById('placeholder');
+    const nameEl       = document.getElementById('displayName');
+    const emailEl      = document.getElementById('userEmail');
+    const uidEl        = document.getElementById('uid');
+    const createdEl    = document.getElementById('creationTime');
+    const lastInEl     = document.getElementById('lastSignIn');
+    const signOutBtn   = document.getElementById('signOut');
+
+    onAuthStateChanged(auth, (user) => {
+      loadingDiv.style.display = 'none';
+
+      if (user) {
+        profileDiv.style.display = 'block';
+        noUserDiv.style.display = 'none';
+
+        // Profile photo
+        if (user.photoURL) {
+          photoImg.src = user.photoURL;
+          photoImg.style.display = 'block';
+          placeholder.style.display = 'none';
+        } else {
+          photoImg.style.display = 'none';
+          placeholder.style.display = 'flex';
+        }
+
+        nameEl.textContent = user.displayName || "Cupcake Friend";
+        emailEl.textContent = user.email || "No email available";
+        uidEl.textContent = user.uid;
+
+        // Format dates nicely
+        const metadata = user.metadata;
+        createdEl.textContent = metadata.creationTime 
+          ? new Date(metadata.creationTime).toLocaleString('en-ZA', { dateStyle: 'medium', timeStyle: 'short' })
+          : '—';
+        
+        lastInEl.textContent = metadata.lastSignInTime 
+          ? new Date(metadata.lastSignInTime).toLocaleString('en-ZA', { dateStyle: 'medium', timeStyle: 'short' })
+          : '—';
+      } else {
+        noUserDiv.style.display = 'block';
+        setTimeout(() => {
+          window.location.href = 'index.html';  // ← back to your landing / login page
+        }, 2500);
+      }
+    });
+
+    // Sign out
+    signOutBtn.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        window.location.href = 'index.html';
+      } catch (err) {
+        console.error("Sign out failed:", err);
+        alert("Couldn't sign out – please try again.");
+      }
+    });
+  </script>
+
+</body>
+</html>
