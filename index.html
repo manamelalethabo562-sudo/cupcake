@@ -122,12 +122,10 @@
   <div class="bg"></div>
   <div class="overlay"></div>
 
-  <!-- Spinner Overlay -->
   <div class="spinner-overlay" id="spinner">
     <div class="spinner"></div>
   </div>
 
-  <!-- Custom Alert -->
   <div class="custom-alert" id="alertBox">
     <button class="close-alert" id="closeAlert">&times;</button>
     <span id="alertMessage"></span>
@@ -139,7 +137,6 @@
     <button id="startBtn" class="start-btn">Get Started</button>
   </div>
 
-  <!-- Mobile Bottom Sheet -->
   <div class="bottom-sheet" id="sheet">
     <button class="close-btn" id="closeSheet">×</button>
     <h2 style="font-size:2rem; color:#c44569; margin-bottom:1rem;">Welcome</h2>
@@ -179,7 +176,6 @@
     </div>
   </div>
 
-  <!-- Desktop Modal -->
   <div class="modal" id="modal">
     <div class="modal-box">
       <button class="close-btn" id="closeModal">×</button>
@@ -221,7 +217,6 @@
     </div>
   </div>
 
-  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
     import { 
@@ -311,9 +306,18 @@
     async function handleSubmit(e, formId) {
       e.preventDefault();
       const form = document.getElementById(formId);
-      const email    = form.querySelector('input[type="email"]').value.trim();
-      const password = form.querySelector('input[type="password"]:not([id*="confirm"])').value;
-      let confirmPw = currentTab === 'signup' ? form.querySelector('input[id*="confirmPassword"]').value : '';
+      
+      const email = form.querySelector('input[type="email"]').value.trim();
+
+      // --- FIXED SELECTION LOGIC ---
+      // We now select by ID starting with "password" instead of type="password"
+      // This ensures it works even if the user toggled visibility to "text"
+      const password = form.querySelector('input[id^="password"]').value;
+      
+      let confirmPw = '';
+      if (currentTab === 'signup') {
+         confirmPw = form.querySelector('input[id*="confirmPassword"]').value;
+      }
 
       const submitBtn = form.querySelector('button[type="submit"]');
       submitBtn.disabled = true;
@@ -346,9 +350,10 @@
         if (error.code === 'auth/email-already-in-use')    msg = 'This email is already registered.';
         if (error.code === 'auth/invalid-email')           msg = 'Invalid email format.';
         if (error.code === 'auth/weak-password')           msg = 'Password is too weak (min 6 chars).';
-        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
           msg = 'Invalid email or password.';
         }
+        console.error(error); // Log error for debugging
         showAlert(msg, 'error');
       } finally {
         hideLoading();
