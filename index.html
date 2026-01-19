@@ -8,9 +8,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
+  
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  
+  <!-- Stripe.js -->
+  <script src="https://js.stripe.com/v3/"></script>
+
   <style>
     :root {
       --bg-body: #F0F4F9;
@@ -176,8 +182,8 @@
     }
     .pricing-card:hover { 
       border-color: var(--accent-color); 
-      transform: translateY(-5px); 
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+      transform: translateY(-8px); 
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12); 
     }
     .pricing-card.featured { 
       background: #041E49; 
@@ -232,28 +238,6 @@
       .footer-grid { grid-template-columns: 1fr; gap: 32px; }
       .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
     }
-    /* ─── New pricing card interactivity styles ─── */
-    .pricing-card {
-      perspective: 1200px;
-      cursor: pointer;
-    }
-    .pricing-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-    }
-    .pricing-card:active {
-      transform: translateY(-2px);
-    }
-    .pricing-card .action-btn {
-      transition: all 0.2s ease;
-    }
-    .pricing-card:hover .action-btn {
-      transform: scale(1.04);
-    }
-    .pricing-card.featured:hover {
-      box-shadow: 0 20px 40px rgba(4,30,73,0.25);
-    }
-    /* Image upload preview */
     #imagePreview img {
       width: 100%;
       height: auto;
@@ -296,6 +280,7 @@
       </div>
     </div>
   </aside>
+
   <main class="main">
     <div class="top-bar">
       <div style="display:flex; align-items:center; gap:12px;">
@@ -306,6 +291,7 @@
         <div class="user-avatar" id="userAvatar" style="background-image: url('https://ui-avatars.com/api/?name=Guest')"></div>
       </div>
     </div>
+
     <div class="content-scroll">
       <div class="hero-section">
         <h1 class="hero-title" id="pageTitle">Find Local Businesses</h1>
@@ -315,6 +301,7 @@
           <input type="text" class="search-input" id="searchInput" placeholder="Search by name, address or rating..." autocomplete="off">
         </div>
       </div>
+
       <div class="filter-bar" id="categoryContainer">
         <div class="category-pill active" onclick="filterCategory('All', this)">All</div>
         <div class="category-pill" onclick="filterCategory('Restaurant', this)">Restaurant</div>
@@ -322,6 +309,7 @@
         <div class="category-pill" onclick="filterCategory('Service', this)">Service</div>
         <div class="category-pill" onclick="filterCategory('Tech', this)">Tech</div>
       </div>
+
       <div class="business-grid" id="businessGrid"></div>
 
       <section class="pricing-section">
@@ -339,6 +327,7 @@
                   </ul>
                   <button class="action-btn" onclick="handlePricingClick('basic'); event.stopPropagation();">Get Started</button>
               </div>
+
               <div class="pricing-card featured" onclick="handlePricingClick('professional')">
                   <span class="featured-label">RECOMMENDED</span>
                   <h3>Professional</h3>
@@ -350,6 +339,7 @@
                   </ul>
                   <button class="action-btn" onclick="handlePricingClick('professional'); event.stopPropagation();">Go Pro</button>
               </div>
+
               <div class="pricing-card" onclick="handlePricingClick('premium')">
                   <h3>Premium</h3>
                   <div class="price-amount">R800<span>/month</span></div>
@@ -407,10 +397,7 @@
             <button onclick="closeOverlays()" style="background:none; border:none; cursor:pointer;"><span class="material-symbols-rounded">close</span></button>
         </div>
         <form id="listingForm" onsubmit="registerBusiness(event)">
-            <div class="form-group">
-              <label class="form-label">Name</label>
-              <input type="text" id="bizName" class="form-input" required>
-            </div>
+            <div class="form-group"><label class="form-label">Name</label><input type="text" id="bizName" class="form-input" required></div>
             <div class="form-group">
                 <label class="form-label">Category</label>
                 <select id="bizCat" class="form-input">
@@ -420,14 +407,8 @@
                     <option value="Tech">Tech</option>
                 </select>
             </div>
-            <div class="form-group">
-              <label class="form-label">Address</label>
-              <input type="text" id="bizAddress" class="form-input" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Phone</label>
-              <input type="tel" id="bizPhone" class="form-input" placeholder="e.g. +27123456789" required>
-            </div>
+            <div class="form-group"><label class="form-label">Address</label><input type="text" id="bizAddress" class="form-input" required></div>
+            <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="bizPhone" class="form-input" placeholder="e.g. +27123456789" required></div>
             <div class="form-group">
               <label class="form-label">Business Image</label>
               <input type="file" id="bizImg" class="form-input" accept="image/*" required>
@@ -476,7 +457,7 @@
 
   <script>
     // ────────────────────────────────────────────────
-    //  CONFIG
+    // CONFIG - REPLACE THESE VALUES
     // ────────────────────────────────────────────────
     const firebaseConfig = {
       apiKey: "AIzaSyAojYRIH8FJL5B8yg1b3qxsc29vB3vLC-8",
@@ -491,10 +472,19 @@
     const CLOUDINARY_CLOUD_NAME = 'dxp01qjvb';
     const CLOUDINARY_UPLOAD_PRESET = 'allbusiness';
 
+    // ── Stripe ── REPLACE WITH YOUR REAL VALUES ──
+    const STRIPE_PUBLISHABLE_KEY   = 'pk_test_YourPublishableKeyHere';           // ← from Stripe dashboard
+    const PROFESSIONAL_PRICE_ID    = 'price_YourProfessionalMonthlyPriceIdHere'; // ← R350/month
+    const PREMIUM_PRICE_ID         = 'price_YourPremiumMonthlyPriceIdHere';      // ← R800/month
+
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
     const provider = new firebase.auth.GoogleAuthProvider();
+
+    // Initialize Stripe
+    const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
 
     let allBusinesses = [];
     let savedIds = [];
@@ -757,37 +747,71 @@
     }
 
     // ────────────────────────────────────────────────
-    //  NEW: Pricing Plans Interaction
+    // STRIPE PAYMENT HANDLING
     // ────────────────────────────────────────────────
-    function handlePricingClick(plan) {
-      // You can later replace these alerts with:
-      // - Open payment gateway
-      // - Redirect to checkout page
-      // - Open WhatsApp/chat support
-      // - Show custom modal with form
+    async function handlePricingClick(plan) {
+      if (!auth.currentUser) {
+        alert("Please sign in first to upgrade or list your business.");
+        return;
+      }
 
-      let message = "";
-      switch(plan) {
+      switch (plan) {
         case 'basic':
-          message = "The Basic plan is completely free!\n\nYou can start listing your business right now.";
-          if (confirm(message + "\n\nWould you like to list your business now?")) {
+          if (confirm("The Basic plan is free!\n\nWould you like to list your business now?")) {
             openListModal();
           }
           break;
 
         case 'professional':
-          message = "Professional Plan – R350/month\n\nIncludes:\n• Verified Badge\n• Priority in search results\n• Up to 10 photos\n\nReady to upgrade and get more visibility?";
-          alert(message);
-          // Example next step: window.open('https://wa.me/27123456789?text=I want the Professional plan', '_blank');
+          if (confirm("Upgrade to Professional – R350/month?\n\nIncludes Verified Badge, priority placement, and 10-photo gallery.")) {
+            await createCheckoutSession(PROFESSIONAL_PRICE_ID, 'professional');
+          }
           break;
 
         case 'premium':
-          message = "Premium Plan – R800/month\n\nIncludes:\n• Homepage featured spot\n• Professional video upload\n• 24/7 priority support\n\nThis is our top tier — let's discuss your needs!";
-          alert(message);
-          // Example next step: window.open('mailto:support@allbusiness.com?subject=Premium Plan Inquiry');
+          if (confirm("Upgrade to Premium – R800/month?\n\nIncludes homepage feature, professional video, and 24/7 priority support.")) {
+            await createCheckoutSession(PREMIUM_PRICE_ID, 'premium');
+          }
           break;
       }
     }
+
+    async function createCheckoutSession(priceId, plan) {
+      try {
+        const { error } = await stripe.redirectToCheckout({
+          lineItems: [{ price: priceId, quantity: 1 }],
+          mode: 'subscription',
+          successUrl: window.location.origin + '/?success=true&plan=' + plan + '&session_id={CHECKOUT_SESSION_ID}',
+          cancelUrl: window.location.origin + '/?canceled=true',
+          customerEmail: auth.currentUser.email || undefined,
+          metadata: {
+            firebaseUid: auth.currentUser.uid,
+            plan: plan
+          }
+        });
+
+        if (error) {
+          alert("Could not start payment process: " + (error.message || "Unknown error"));
+          console.error(error);
+        }
+      } catch (err) {
+        alert("Something went wrong while preparing the payment page.");
+        console.error(err);
+      }
+    }
+
+    // Check for success / cancel after redirect
+    window.addEventListener('load', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('success')) {
+        alert("Thank you! Your subscription is being processed.\n\nYour upgraded features should activate shortly.");
+        // Optional: clean URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } else if (urlParams.has('canceled')) {
+        alert("Payment was canceled. No charges were made.");
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    });
 
     function closeOverlays() {
         currentActiveBizId = null;
