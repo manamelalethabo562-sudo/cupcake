@@ -8,15 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
-  
-  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-  
-  <!-- Stripe.js -->
-  <script src="https://js.stripe.com/v3/"></script>
-
   <style>
     :root {
       --bg-body: #F0F4F9;
@@ -31,6 +25,18 @@
       --sidebar-collapsed: 72px;
       --header-height: 70px;
     }
+
+    [data-theme="dark"] {
+      --bg-body: #0f1117;
+      --bg-sidebar: #11151c;
+      --bg-surface: #1a1f2e;
+      --primary-gradient: linear-gradient(135deg, #5c9eff, #ff7a9f);
+      --text-main: #e0e0e0;
+      --text-secondary: #b0b7c3;
+      --text-muted: #7a828f;
+      --accent-color: #5c9eff;
+    }
+
     * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
     body {
       background: var(--bg-body);
@@ -39,6 +45,7 @@
       height: 100vh;
       display: flex;
       overflow: hidden;
+      transition: background 0.3s, color 0.3s;
     }
     .sidebar {
       background: var(--bg-sidebar);
@@ -47,7 +54,7 @@
       flex-direction: column;
       padding: 12px;
       z-index: 50;
-      transition: width 0.3s cubic-bezier(0.2, 0, 0, 1);
+      transition: width 0.3s cubic-bezier(0.2, 0, 0, 1), background 0.3s;
     }
     @media(min-width: 769px) {
       .sidebar:hover { width: var(--sidebar-width); }
@@ -57,9 +64,9 @@
     @media(max-width: 768px) {
       .sidebar {
         position: fixed; left: 0; top: 0; bottom: 0;
-        width: 280px; background: #fff;
+        width: 280px; background: var(--bg-surface);
         transform: translateX(-100%);
-        box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+        box-shadow: 4px 0 24px rgba(0,0,0,0.4);
       }
       .sidebar.open { transform: translateX(0); }
     }
@@ -67,25 +74,28 @@
     .nav-item {
       display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-radius: 24px;
       color: var(--text-secondary); cursor: pointer; text-decoration: none; white-space: nowrap;
-      transition: background 0.2s;
+      transition: background 0.2s, color 0.2s;
     }
-    .nav-item:hover { background: rgba(0,0,0,0.05); color: var(--text-main); }
-    .nav-item.active { background: #D3E3FD; color: #041E49; font-weight: 500; }
+    .nav-item:hover { background: rgba(255,255,255,0.08); color: var(--text-main); }
+    .nav-item.active { background: rgba(92,158,255,0.18); color: var(--accent-color); font-weight: 500; }
     .nav-icon { font-size: 24px; }
     .main {
       flex: 1; display: flex; flex-direction: column; position: relative;
-      background: #FFFFFF; border-radius: 24px; margin: 16px 16px 16px 0;
-      box-shadow: 0 0 0 1px rgba(0,0,0,0.02); overflow: hidden;
+      background: var(--bg-surface); border-radius: 24px; margin: 16px 16px 16px 0;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.08); overflow: hidden;
+      transition: background 0.3s, box-shadow 0.3s;
     }
     @media(max-width: 768px) { .main { margin: 0; border-radius: 0; } }
     .top-bar {
       height: var(--header-height); display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px; border-bottom: 1px solid #f0f0f0; z-index: 10; background: rgba(255,255,255,0.9);
+      padding: 0 24px; border-bottom: 1px solid rgba(255,255,255,0.08); z-index: 10;
+      background: rgba(var(--bg-surface), 0.92);
       backdrop-filter: blur(10px); position: absolute; top: 0; width: 100%;
+      transition: background 0.3s, border-color 0.3s;
     }
     .user-pill {
       display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 12px;
-      background: #F0F4F9; border-radius: 32px; cursor: pointer; transition: background 0.2s;
+      background: rgba(255,255,255,0.08); border-radius: 32px; cursor: pointer; transition: background 0.2s;
     }
     .user-avatar { width: 32px; height: 32px; border-radius: 50%; background-size: cover; background-position: center; }
     .content-scroll { flex: 1; overflow-y: auto; padding-top: var(--header-height); scroll-behavior: smooth; }
@@ -96,9 +106,12 @@
     }
     .search-wrapper { max-width: 600px; margin: 24px auto 0; position: relative; }
     .search-input {
-      width: 100%; padding: 16px 24px 16px 50px; border-radius: 30px; border: 1px solid #e0e0e0;
-      font-size: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); outline: none;
+      width: 100%; padding: 16px 24px 16px 50px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.12);
+      font-size: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); outline: none;
+      background: rgba(255,255,255,0.05); color: var(--text-main);
+      transition: border-color 0.2s, background 0.2s;
     }
+    .search-input::placeholder { color: var(--text-muted); }
     .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
     .filter-bar {
       display: flex; gap: 10px; overflow-x: auto; padding: 0 24px 20px;
@@ -106,10 +119,11 @@
     }
     .filter-bar::-webkit-scrollbar { display: none; }
     .category-pill {
-      padding: 8px 16px; border-radius: 20px; border: 1px solid #e0e0e0;
+      padding: 8px 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.12);
       font-size: 0.9rem; font-weight: 500; cursor: pointer; white-space: nowrap; transition: 0.2s;
+      background: rgba(255,255,255,0.05); color: var(--text-secondary);
     }
-    .category-pill.active { background: var(--text-main); color: white; }
+    .category-pill.active { background: var(--accent-color); color: white; border-color: var(--accent-color); }
     .business-grid {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 24px; padding: 24px; max-width: 1200px; margin: 0 auto;
@@ -117,84 +131,75 @@
     }
     .category-header {
       grid-column: 1 / -1; font-size: 1.25rem; font-weight: 700;
-      padding: 20px 0 10px; border-bottom: 2px solid #f0f4f9; margin-bottom: 10px;
+      padding: 20px 0 10px; border-bottom: 2px solid rgba(255,255,255,0.08); margin-bottom: 10px;
       color: var(--text-main); display: flex; align-items: center; gap: 10px;
     }
     .cat-badge {
-      font-size: 0.75rem; background: #e8f0fe; color: #1967d2;
+      font-size: 0.75rem; background: rgba(92,158,255,0.15); color: var(--accent-color);
       padding: 2px 8px; border-radius: 12px; font-weight: 600;
     }
     .business-card {
-      background: white; border: 1px solid #f0f0f0; border-radius: 16px;
+      background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;
       overflow: hidden; transition: 0.2s; cursor: pointer; display: flex; flex-direction: column;
       position: relative;
     }
-    .business-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
-    .card-img { height: 140px; background-color: #f0f0f0; position: relative; background-size: cover; background-position: center; }
+    .business-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.25); }
+    .card-img { height: 140px; background-color: rgba(0,0,0,0.2); position: relative; background-size: cover; background-position: center; }
     .card-category {
-      position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.9);
-      padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;
+      position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,0.6);
+      padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; color: white;
     }
     .card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
     .biz-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
     .biz-rating { display: flex; align-items: center; gap: 4px; font-size: 0.9rem; color: #F4B400; margin-bottom: 12px; }
     .biz-info { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 6px; }
     .rating-container { display: flex; gap: 4px; margin-bottom: 16px; cursor: pointer; }
-    .rating-container span { font-size: 32px; color: #e0e0e0; transition: color 0.2s; }
+    .rating-container span { font-size: 32px; color: rgba(255,255,255,0.2); transition: color 0.2s; }
     .rating-container span.active { color: #F4B400; }
     .action-btn {
-      flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #e0e0e0;
+      flex: 1; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);
       background: transparent; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.2s;
       display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; color: inherit;
     }
-    .action-btn.primary { background: var(--text-main); color: white; border: none; }
+    .action-btn.primary { background: var(--accent-color); color: white; border: none; }
     .action-btn.whatsapp { background: #25D366; color: white; border: none; }
-    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 40; opacity: 0; pointer-events: none; transition: 0.3s; }
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 40; opacity: 0; pointer-events: none; transition: 0.3s; }
     .overlay.active { opacity: 1; pointer-events: auto; }
     .modal-sheet {
       position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95);
-      background: white; width: 90%; max-width: 500px; border-radius: 24px;
+      background: var(--bg-surface); width: 90%; max-width: 500px; border-radius: 24px;
       z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2); overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5); overflow: hidden;
     }
     .modal-sheet.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
-    .modal-img-header { height: 180px; background-size: cover; position: relative; background-color: #f0f4f9; }
+    .modal-img-header { height: 180px; background-size: cover; position: relative; background-color: rgba(0,0,0,0.3); }
     .modal-close {
-      position: absolute; top: 16px; right: 16px; background: white; border: none;
+      position: absolute; top: 16px; right: 16px; background: rgba(0,0,0,0.5); border: none;
       width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: white;
     }
-    .modal-content { padding: 24px; max-height: 80vh; overflow-y: auto; }
+    .modal-content { padding: 24px; max-height: 80vh; overflow-y: auto; color: var(--text-main); }
     .form-group { margin-bottom: 16px; }
     .form-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
     .form-input {
-      width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid #e0e0e0;
+      width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);
       font-family: inherit; font-size: 0.95rem; outline: none; transition: 0.2s;
+      background: rgba(255,255,255,0.05); color: var(--text-main);
     }
-    .pricing-section { padding: 60px 24px; background: #fff; text-align: center; }
+    .form-input::placeholder { color: var(--text-muted); }
+    .pricing-section { padding: 60px 24px; background: var(--bg-surface); text-align: center; transition: background 0.3s; }
     .pricing-grid {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 24px; max-width: 1100px; margin: 40px auto 0;
     }
     .pricing-card {
-      padding: 32px; border-radius: 20px; border: 1px solid #eee;
+      padding: 32px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08);
       display: flex; flex-direction: column; transition: 0.3s;
-      cursor: pointer;
+      background: var(--bg-surface);
     }
-    .pricing-card:hover { 
-      border-color: var(--accent-color); 
-      transform: translateY(-8px); 
-      box-shadow: 0 20px 40px rgba(0,0,0,0.12); 
-    }
-    .pricing-card.featured { 
-      background: #041E49; 
-      color: white; 
-      border: none; 
-      position: relative; 
-    }
-    .pricing-card.featured .action-btn { 
-      background: white; 
-      color: #041E49; 
-    }
+    .pricing-card:hover { border-color: var(--accent-color); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .pricing-card.featured { background: linear-gradient(135deg, #0d1e3a, #1a2f5a); color: white; border: none; position: relative; }
+    .pricing-card.featured .action-btn { background: white; color: #0d1e3a; }
     .price-amount { font-size: 2.5rem; font-weight: 700; margin: 20px 0; }
     .price-amount span { font-size: 1rem; font-weight: 400; opacity: 0.7; }
     .pricing-features { list-style: none; margin-bottom: 30px; text-align: left; }
@@ -204,10 +209,11 @@
         font-size: 0.7rem; padding: 4px 10px; border-radius: 10px; font-weight: 600;
     }
     .footer {
-      background: #f8f9fa;
+      background: rgba(0,0,0,0.2);
       padding: 60px 24px 40px;
-      border-top: 1px solid #eee;
+      border-top: 1px solid rgba(255,255,255,0.08);
       margin-top: 0;
+      transition: background 0.3s, border-color 0.3s;
     }
     .footer-grid {
       display: grid;
@@ -227,7 +233,7 @@
       max-width: 1200px;
       margin: 40px auto 0;
       padding-top: 24px;
-      border-top: 1px solid #eee;
+      border-top: 1px solid rgba(255,255,255,0.08);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -238,13 +244,43 @@
       .footer-grid { grid-template-columns: 1fr; gap: 32px; }
       .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
     }
+    .pricing-card {
+      perspective: 1200px;
+    }
+    .pricing-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.2,0,0,1);
+    }
+    .pricing-card:hover .pricing-inner {
+      transform: rotateY(180deg);
+    }
+    .pricing-front,
+    .pricing-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .pricing-back {
+      transform: rotateY(180deg);
+      align-items: center;
+      text-align: center;
+      padding: 32px;
+    }
+    /* Image upload preview */
     #imagePreview img {
       width: 100%;
       height: auto;
       max-height: 160px;
       object-fit: cover;
       border-radius: 12px;
-      border: 1px solid #e0e0e0;
+      border: 1px solid rgba(255,255,255,0.12);
     }
     .form-group small {
       display: block;
@@ -255,6 +291,64 @@
     .loading {
       opacity: 0.6;
       pointer-events: none;
+    }
+    /* Dark mode toggle switch */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+    .theme-toggle:hover {
+      background: rgba(255,255,255,0.12);
+    }
+    .theme-toggle .material-symbols-rounded {
+      font-size: 20px;
+      color: var(--text-secondary);
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #555;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: var(--accent-color);
+    }
+    input:checked + .slider:before {
+      transform: translateX(20px);
     }
   </style>
 </head>
@@ -273,7 +367,14 @@
       <div class="nav-item" id="nav-fav" onclick="switchView('saved')"><span class="material-symbols-rounded nav-icon">favorite</span><span class="nav-label">Saved</span></div>
       <div class="nav-item" onclick="openListModal()"><span class="material-symbols-rounded nav-icon">add_business</span><span class="nav-label">List Business</span></div>
     </div>
-    <div style="margin-top: auto;">
+    <div style="margin-top: auto; padding: 12px 0;">
+      <div class="theme-toggle" onclick="toggleTheme()">
+        <span class="material-symbols-rounded">dark_mode</span>
+        <label class="switch">
+          <input type="checkbox" id="themeSwitch">
+          <span class="slider"></span>
+        </label>
+      </div>
       <div class="nav-item" id="authBtnSidebar" onclick="handleAuth()">
         <span class="material-symbols-rounded nav-icon">login</span>
         <span class="nav-label">Sign In</span>
@@ -317,7 +418,7 @@
           <p style="color: var(--text-secondary); margin-top: 8px;">Reach more customers with All Business Marketing Tools.</p>
          
           <div class="pricing-grid">
-              <div class="pricing-card" onclick="handlePricingClick('basic')">
+              <div class="pricing-card">
                   <h3>Basic</h3>
                   <div class="price-amount">R0<span>/month</span></div>
                   <ul class="pricing-features">
@@ -325,10 +426,9 @@
                       <li><span class="material-symbols-rounded" style="color:#4285F4; font-size:18px;">check_circle</span> Contact Details</li>
                       <li><span class="material-symbols-rounded" style="color:#ccc; font-size:18px;">cancel</span> No Verified Badge</li>
                   </ul>
-                  <button class="action-btn" onclick="handlePricingClick('basic'); event.stopPropagation();">Get Started</button>
+                  <button class="action-btn" onclick="openListModal()">Get Started</button>
               </div>
-
-              <div class="pricing-card featured" onclick="handlePricingClick('professional')">
+              <div class="pricing-card featured">
                   <span class="featured-label">RECOMMENDED</span>
                   <h3>Professional</h3>
                   <div class="price-amount">R350<span>/month</span></div>
@@ -337,10 +437,9 @@
                       <li><span class="material-symbols-rounded" style="color:#fff; font-size:18px;">check_circle</span> Priority Search Result</li>
                       <li><span class="material-symbols-rounded" style="color:#fff; font-size:18px;">check_circle</span> 10 Photos Gallery</li>
                   </ul>
-                  <button class="action-btn" onclick="handlePricingClick('professional'); event.stopPropagation();">Get Started</button>
+                  <button class="action-btn">Go Pro</button>
               </div>
-
-              <div class="pricing-card" onclick="handlePricingClick('premium')">
+              <div class="pricing-card">
                   <h3>Premium</h3>
                   <div class="price-amount">R800<span>/month</span></div>
                   <ul class="pricing-features">
@@ -348,7 +447,7 @@
                       <li><span class="material-symbols-rounded" style="color:#4285F4; font-size:18px;">check_circle</span> Professional Video</li>
                       <li><span class="material-symbols-rounded" style="color:#4285F4; font-size:18px;">check_circle</span> 24/7 Priority Support</li>
                   </ul>
-                  <button class="action-btn" onclick="handlePricingClick('premium'); event.stopPropagation();">Get Started</button>
+                  <button class="action-btn">Contact Us</button>
               </div>
           </div>
       </section>
@@ -397,7 +496,10 @@
             <button onclick="closeOverlays()" style="background:none; border:none; cursor:pointer;"><span class="material-symbols-rounded">close</span></button>
         </div>
         <form id="listingForm" onsubmit="registerBusiness(event)">
-            <div class="form-group"><label class="form-label">Name</label><input type="text" id="bizName" class="form-input" required></div>
+            <div class="form-group">
+              <label class="form-label">Name</label>
+              <input type="text" id="bizName" class="form-input" required>
+            </div>
             <div class="form-group">
                 <label class="form-label">Category</label>
                 <select id="bizCat" class="form-input">
@@ -407,8 +509,14 @@
                     <option value="Tech">Tech</option>
                 </select>
             </div>
-            <div class="form-group"><label class="form-label">Address</label><input type="text" id="bizAddress" class="form-input" required></div>
-            <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="bizPhone" class="form-input" placeholder="e.g. +27123456789" required></div>
+            <div class="form-group">
+              <label class="form-label">Address</label>
+              <input type="text" id="bizAddress" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone</label>
+              <input type="tel" id="bizPhone" class="form-input" placeholder="e.g. +27123456789" required>
+            </div>
             <div class="form-group">
               <label class="form-label">Business Image</label>
               <input type="file" id="bizImg" class="form-input" accept="image/*" required>
@@ -457,7 +565,7 @@
 
   <script>
     // ────────────────────────────────────────────────
-    // CONFIG - REPLACE THESE VALUES
+    //  CONFIG - REPLACE THESE VALUES
     // ────────────────────────────────────────────────
     const firebaseConfig = {
       apiKey: "AIzaSyAojYRIH8FJL5B8yg1b3qxsc29vB3vLC-8",
@@ -468,23 +576,13 @@
       appId: "1:665302840524:web:e9c1078e14bc0de6a87e69",
       measurementId: "G-EMZFX7CE8V"
     };
-
     const CLOUDINARY_CLOUD_NAME = 'dxp01qjvb';
     const CLOUDINARY_UPLOAD_PRESET = 'allbusiness';
 
-    // ── Stripe ── REPLACE WITH YOUR REAL VALUES ──
-    const STRIPE_PUBLISHABLE_KEY   = 'pk_test_YourPublishableKeyHere';           // ← from Stripe dashboard
-    const PROFESSIONAL_PRICE_ID    = 'price_YourProfessionalMonthlyPriceIdHere'; // ← R350/month
-    const PREMIUM_PRICE_ID         = 'price_YourPremiumMonthlyPriceIdHere';      // ← R800/month
-
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
     const provider = new firebase.auth.GoogleAuthProvider();
-
-    // Initialize Stripe
-    const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
 
     let allBusinesses = [];
     let savedIds = [];
@@ -505,6 +603,35 @@
       submitBtn: document.getElementById('submitBtn')
     };
 
+    // Dark mode handling
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      const switchInput = document.getElementById('themeSwitch');
+      if (switchInput) switchInput.checked = (theme === 'dark');
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = current === 'dark' ? 'light' : 'dark';
+      setTheme(newTheme);
+    }
+
+    // Load saved theme or system preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setTheme(savedTheme);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark');
+    }
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      if (!localStorage.getItem('theme')) {
+        setTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+
     function initDatabaseListener() {
         db.ref('business_ratings').on('value', (snapshot) => {
             globalRatings = snapshot.val() || {};
@@ -515,6 +642,7 @@
                 document.getElementById('modalReviewCount').innerText = `(${liveData.count} reviews)`;
             }
         });
+
         db.ref('businesses').on('value', (snapshot) => {
             const data = snapshot.val();
             allBusinesses = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
@@ -693,33 +821,41 @@
 
     async function registerBusiness(e) {
       e.preventDefault();
+
       const fileInput = document.getElementById('bizImg');
       const file = fileInput.files[0];
+
       if (!file) {
         alert("Please select an image for your business.");
         return;
       }
+
       if (file.size > 5 * 1024 * 1024) {
         alert("Image is too large. Maximum allowed size is 5MB.");
         return;
       }
+
       const submitBtn = els.submitBtn;
       const originalText = submitBtn.innerText;
       submitBtn.innerText = "Uploading...";
       submitBtn.classList.add('loading');
       submitBtn.disabled = true;
+
       try {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
         const cloudinaryRes = await fetch(
           `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
           { method: 'POST', body: formData }
         );
+
         if (!cloudinaryRes.ok) {
           const err = await cloudinaryRes.json();
           throw new Error(err.error?.message || "Image upload failed");
         }
+
         const cloudinaryData = await cloudinaryRes.json();
         const imageUrl = cloudinaryData.secure_url;
 
@@ -731,11 +867,14 @@
           img: imageUrl,
           createdAt: firebase.database.ServerValue.TIMESTAMP
         };
+
         await db.ref('businesses').push(newBiz);
+
         alert("Business registered successfully!");
         document.getElementById('listingForm').reset();
         document.getElementById('imagePreview').style.display = 'none';
         closeOverlays();
+
       } catch (error) {
         console.error("Registration error:", error);
         alert("Failed to register: " + (error.message || "Unknown error"));
@@ -746,73 +885,6 @@
       }
     }
 
-    // ────────────────────────────────────────────────
-    // STRIPE PAYMENT HANDLING
-    // ────────────────────────────────────────────────
-    async function handlePricingClick(plan) {
-      if (!auth.currentUser) {
-        alert("Please sign in first to upgrade or list your business.");
-        return;
-      }
-
-      switch (plan) {
-        case 'basic':
-          if (confirm("The Basic plan is free!\n\nWould you like to list your business now?")) {
-            openListModal();
-          }
-          break;
-
-        case 'professional':
-          if (confirm("Upgrade to Professional – R350/month?\n\nIncludes Verified Badge, priority placement, and 10-photo gallery.")) {
-            await createCheckoutSession(PROFESSIONAL_PRICE_ID, 'professional');
-          }
-          break;
-
-        case 'premium':
-          if (confirm("Upgrade to Premium – R800/month?\n\nIncludes homepage feature, professional video, and 24/7 priority support.")) {
-            await createCheckoutSession(PREMIUM_PRICE_ID, 'premium');
-          }
-          break;
-      }
-    }
-
-    async function createCheckoutSession(priceId, plan) {
-      try {
-        const { error } = await stripe.redirectToCheckout({
-          lineItems: [{ price: priceId, quantity: 1 }],
-          mode: 'subscription',
-          successUrl: window.location.origin + '/?success=true&plan=' + plan + '&session_id={CHECKOUT_SESSION_ID}',
-          cancelUrl: window.location.origin + '/?canceled=true',
-          customerEmail: auth.currentUser.email || undefined,
-          metadata: {
-            firebaseUid: auth.currentUser.uid,
-            plan: plan
-          }
-        });
-
-        if (error) {
-          alert("Could not start payment process: " + (error.message || "Unknown error"));
-          console.error(error);
-        }
-      } catch (err) {
-        alert("Something went wrong while preparing the payment page.");
-        console.error(err);
-      }
-    }
-
-    // Check for success / cancel after redirect
-    window.addEventListener('load', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.has('success')) {
-        alert("Thank you! Your subscription is being processed.\n\nYour upgraded features should activate shortly.");
-        // Optional: clean URL
-        window.history.replaceState({}, document.title, window.location.pathname);
-      } else if (urlParams.has('canceled')) {
-        alert("Payment was canceled. No charges were made.");
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
-    });
-
     function closeOverlays() {
         currentActiveBizId = null;
         els.sidebar.classList.remove('open');
@@ -821,14 +893,14 @@
         els.overlay.classList.remove('active');
     }
 
-    function openListModal() {
-      els.listModal.classList.add('active');
-      els.overlay.classList.add('active');
+    function openListModal() { 
+      els.listModal.classList.add('active'); 
+      els.overlay.classList.add('active'); 
     }
 
-    function toggleSidebar() {
-      els.sidebar.classList.add('open');
-      els.overlay.classList.add('active');
+    function toggleSidebar() { 
+      els.sidebar.classList.add('open'); 
+      els.overlay.classList.add('active'); 
     }
 
     function filterCategory(cat, btn) {
@@ -842,6 +914,7 @@
     document.getElementById('bizImg').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
+
       const reader = new FileReader();
       reader.onload = function(ev) {
         const preview = document.getElementById('previewImg');
