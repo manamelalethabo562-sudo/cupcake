@@ -443,8 +443,7 @@
             </div>
             <div class="form-group"><label class="form-label">Address</label><input type="text" id="bizAddress" class="form-input" required></div>
             <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="bizPhone" class="form-input" placeholder="e.g. +1234567890" required></div>
-            <div class="form-group"><label class="form-label">Image URL</label><input type="file" id="bizImgFile" class="form-input" accept="image/*" required>
-
+            <div class="form-group"><label class="form-label">Image URL</label><input type="url" id="bizImg" class="form-input" required></div>
             <button type="submit" class="action-btn primary" style="width:100%;">Register Business</button>
         </form>
     </div>
@@ -504,24 +503,6 @@
     let currentCategory = 'All';
     let currentView = 'all'; 
     let currentActiveBizId = null;
-
-    // Cloudinary unsigned upload (NO widget)
-const CLOUD_NAME = "YOUR_CLOUD_NAME";
-const UPLOAD_PRESET = "YOUR_UNSIGNED_PRESET";
-
-async function uploadToCloudinary(file) {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", UPLOAD_PRESET);
-
-  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-    method: "POST",
-    body: formData
-  });
-  const data = await res.json();
-  return data.secure_url;
-}
-
 
     const els = {
       grid: document.getElementById('businessGrid'),
@@ -705,17 +686,12 @@ async function uploadToCloudinary(file) {
 
     function registerBusiness(e) {
         e.preventDefault();
-         const file = document.getElementById('bizImgFile').files[0];
-const imageUrl = await uploadToCloudinary(file);
-
-const newBiz = {
-  name: document.getElementById('bizName').value,
-  cat: document.getElementById('bizCat').value,
-  address: document.getElementById('bizAddress').value,
-  phone: document.getElementById('bizPhone').value,
-  img: imageUrl
-};
-
+        const newBiz = {
+            name: document.getElementById('bizName').value,
+            cat: document.getElementById('bizCat').value,
+            address: document.getElementById('bizAddress').value,
+            phone: document.getElementById('bizPhone').value,
+            img: document.getElementById('bizImg').value
         };
         db.ref('businesses').push(newBiz).then(() => {
             document.getElementById('listingForm').reset();
@@ -742,7 +718,6 @@ const newBiz = {
     }
     els.search.addEventListener('input', filterBusinesses);
     initDatabaseListener();
-    
   </script>
 </body>
 </html>
