@@ -129,12 +129,6 @@
       gap: 24px; padding: 24px; max-width: 1200px; margin: 0 auto;
     }
 
-    .category-header {
-      grid-column: 1 / -1; font-size: 1.25rem; font-weight: 700; 
-      padding: 20px 0 10px; border-bottom: 2px solid #f0f4f9; margin-bottom: 10px;
-      color: var(--text-main); display: flex; align-items: center; gap: 10px;
-    }
-
     .business-card {
       background: white; border: 1px solid #f0f0f0; border-radius: 16px;
       overflow: hidden; transition: 0.2s; cursor: pointer; display: flex; flex-direction: column;
@@ -154,13 +148,14 @@
     .biz-info { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 6px; }
 
     .action-btn {
-      flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #e0e0e0;
-      background: transparent; font-weight: 500; font-size: 0.85rem; cursor: pointer;
+      flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #e0e0e0;
+      background: transparent; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.2s;
     }
     .action-btn.primary { background: var(--text-main); color: white; border: none; }
 
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 40; opacity: 0; pointer-events: none; transition: 0.3s; }
     .overlay.active { opacity: 1; pointer-events: auto; }
+    
     .modal-sheet {
       position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95);
       background: white; width: 90%; max-width: 500px; border-radius: 24px;
@@ -261,7 +256,7 @@
             <div class="form-group"><label class="form-label">Address</label><input type="text" id="bizAddress" class="form-input" required></div>
             <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="bizPhone" class="form-input" required></div>
             <div class="form-group"><label class="form-label">Image URL</label><input type="url" id="bizImg" class="form-input" required></div>
-            <button type="submit" class="action-btn primary" style="width:100%; padding:14px;">Register Business</button>
+            <button type="submit" class="action-btn primary" style="width:100%;">Register Business</button>
         </form>
     </div>
   </div>
@@ -275,18 +270,21 @@
         <h2 id="modalTitle" style="font-weight:700; margin-bottom:8px;">Business Name</h2>
         <div class="biz-rating" style="margin-bottom:20px;">
             <span class="material-symbols-rounded" style="font-size:20px;">star</span>
-            <strong id="modalRating" style="color:#1f1f1f;">5.0</strong> <span id="modalReviews">(0 reviews)</span>
+            <strong id="modalRating" style="color:#1f1f1f;">5.0</strong>
         </div>
         <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
             <div class="biz-info"><span class="material-symbols-rounded">location_on</span> <span id="modalAddress">Address</span></div>
             <div class="biz-info"><span class="material-symbols-rounded">call</span> <span id="modalPhone">Phone</span></div>
         </div>
-        <button id="saveBizBtn" class="action-btn" style="width:100%; padding:14px; margin-bottom:12px; border:2px solid #eee;">Save to Favorites</button>
-        <button class="action-btn primary" style="width:100%; padding:14px;">Contact Now</button>
+        <div style="display:flex; gap:10px;">
+            <button id="saveBizBtn" class="action-btn">Save to Favorites</button>
+            <button class="action-btn primary">Contact</button>
+        </div>
     </div>
   </div>
 
   <script>
+    // Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyAojYRIH8FJL5B8yg1b3qxsc29vB3vLC-8",
       authDomain: "allbusiness-596cc.firebaseapp.com",
@@ -318,8 +316,7 @@
       avatar: document.getElementById('userAvatar')
     };
 
-    // ─── Listeners ──────────────────────────────────────────────────
-    
+    // ─── Listeners ───
     function initDatabaseListener() {
         db.ref('businesses').on('value', (snapshot) => {
             const data = snapshot.val();
@@ -332,44 +329,29 @@
         db.ref(`users_saved/${uid}`).on('value', (snapshot) => {
             const data = snapshot.val();
             savedIds = data ? Object.keys(data) : [];
-            console.log("Updated Saved IDs:", savedIds);
-            filterBusinesses(); // Refresh grid to reflect new favorites
+            filterBusinesses();
         });
     }
 
-    // ─── Core Logic ─────────────────────────────────────────────────
-
+    // ─── Core Logic ───
     function switchView(view) {
         currentView = view;
-        document.getElementById('nav-dir').classList.remove('active');
-        document.getElementById('nav-fav').classList.remove('active');
-        document.getElementById('nav-cat').classList.remove('active');
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
         
         if(view === 'all') {
             document.getElementById('nav-dir').classList.add('active');
             document.getElementById('pageTitle').innerText = "Find Local Businesses";
-            document.getElementById('categoryContainer').style.display = "flex";
-        } else if(view === 'categories') {
-            document.getElementById('nav-cat').classList.add('active');
-            document.getElementById('pageTitle').innerText = "Browse by Category";
-            document.getElementById('categoryContainer').style.display = "none";
         } else if(view === 'saved') {
             document.getElementById('nav-fav').classList.add('active');
-            document.getElementById('pageTitle').innerText = "Saved Favorites";
-            document.getElementById('categoryContainer').style.display = "flex";
+            document.getElementById('pageTitle').innerText = "Your Favorites";
         }
+        
         filterBusinesses();
         closeOverlays();
     }
 
     function filterBusinesses() {
         const query = els.search.value.toLowerCase();
-        
-        if (currentView === 'categories') {
-            renderByCategory(query);
-            return;
-        }
-
         const filtered = allBusinesses.filter(biz => {
             const matchesSearch = biz.name.toLowerCase().includes(query);
             const matchesCat = currentCategory === 'All' || biz.cat === currentCategory;
@@ -377,32 +359,6 @@
             return matchesSearch && matchesCat && matchesView;
         });
         renderCards(filtered);
-    }
-
-    function renderByCategory(query) {
-        els.grid.innerHTML = '';
-        const categories = ["Restaurant", "Retail", "Service", "Tech"];
-        
-        categories.forEach(category => {
-            const filtered = allBusinesses.filter(biz => 
-                biz.cat === category && biz.name.toLowerCase().includes(query)
-            );
-
-            if (filtered.length > 0) {
-                const header = document.createElement('div');
-                header.className = 'category-header';
-                header.innerHTML = `<span class="material-symbols-rounded">label</span> ${category}`;
-                els.grid.appendChild(header);
-
-                filtered.forEach(biz => {
-                    els.grid.appendChild(createCard(biz));
-                });
-            }
-        });
-
-        if (els.grid.innerHTML === '') {
-            els.grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding: 40px; color: #888;">No results found.</p>';
-        }
     }
 
     function createCard(biz) {
@@ -413,11 +369,11 @@
         card.innerHTML = `
             <div class="card-img" style="background-image: url('${biz.img}')">
                 <span class="card-category">${biz.cat}</span>
-                ${isFav ? '<span class="material-symbols-rounded" style="position:absolute; top:12px; right:12px; color:#D96570; background:white; border-radius:50%; padding:4px; font-size:18px;">favorite</span>' : ''}
+                ${isFav ? '<span class="material-symbols-rounded" style="position:absolute; top:12px; right:12px; color:#D96570; background:white; border-radius:50%; padding:4px; font-size:18px; box-shadow:0 2px 8px rgba(0,0,0,0.1)">favorite</span>' : ''}
             </div>
             <div class="card-body">
                 <div class="biz-name">${biz.name}</div>
-                <div class="biz-rating"><span class="material-symbols-rounded" style="font-size:16px;">star</span>${biz.rating}</div>
+                <div class="biz-rating"><span class="material-symbols-rounded" style="font-size:16px;">star</span> 5.0</div>
                 <div class="biz-info"><span class="material-symbols-rounded" style="font-size:16px">location_on</span>${biz.address}</div>
             </div>`;
         return card;
@@ -425,9 +381,7 @@
 
     function renderCards(data) {
         els.grid.innerHTML = data.length === 0 ? '<p style="grid-column: 1/-1; text-align:center; padding: 40px; color: #888;">No results found.</p>' : '';
-        data.forEach(biz => {
-            els.grid.appendChild(createCard(biz));
-        });
+        data.forEach(biz => els.grid.appendChild(createCard(biz)));
     }
 
     function openDetailModal(biz) {
@@ -440,32 +394,47 @@
         const saveBtn = document.getElementById('saveBizBtn');
         const isAlreadySaved = savedIds.includes(biz.id);
 
-        // Update button appearance based on current saved status
-        saveBtn.innerText = isAlreadySaved ? "Remove from Favorites" : "Save to Favorites";
-        saveBtn.style.background = isAlreadySaved ? "#FEE7E9" : "transparent";
+        // Update Appearance
+        saveBtn.innerText = isAlreadySaved ? "Remove Favorite" : "Save Favorite";
         saveBtn.style.color = isAlreadySaved ? "#D96570" : "inherit";
-        saveBtn.style.borderColor = isAlreadySaved ? "#D96570" : "#eee";
+        saveBtn.style.borderColor = isAlreadySaved ? "#D96570" : "#e0e0e0";
 
-        saveBtn.onclick = () => {
-            if(!auth.currentUser) return alert("Please sign in to save!");
-            
+        // FIX: Remove old event listeners by cloning
+        const newSaveBtn = saveBtn.cloneNode(true);
+        saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+
+        newSaveBtn.onclick = () => {
+            if(!auth.currentUser) return alert("Please Sign In first!");
             const uid = auth.currentUser.uid;
             const favRef = db.ref(`users_saved/${uid}/${biz.id}`);
             
             if(isAlreadySaved) {
-                favRef.remove().then(() => {
-                    closeOverlays();
-                });
+                favRef.remove().then(closeOverlays);
             } else {
-                favRef.set(true).then(() => {
-                    closeOverlays();
-                });
+                favRef.set(true).then(closeOverlays);
             }
         };
 
         els.detailModal.classList.add('active');
         els.overlay.classList.add('active');
     }
+
+    function handleAuth() {
+        if(auth.currentUser) auth.signOut().then(() => location.reload());
+        else auth.signInWithPopup(provider).catch(e => console.error(e));
+    }
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            els.greeting.innerText = `Hello, ${user.displayName.split(' ')[0]}`;
+            els.avatar.style.backgroundImage = `url(${user.photoURL})`;
+            document.getElementById('authBtnSidebar').querySelector('.nav-label').innerText = "Sign Out";
+            initSavedListener(user.uid);
+        } else {
+            savedIds = [];
+            filterBusinesses();
+        }
+    });
 
     function registerBusiness(e) {
         e.preventDefault();
@@ -474,8 +443,7 @@
             cat: document.getElementById('bizCat').value,
             address: document.getElementById('bizAddress').value,
             phone: document.getElementById('bizPhone').value,
-            img: document.getElementById('bizImg').value,
-            rating: 5.0, reviews: 0
+            img: document.getElementById('bizImg').value
         };
         db.ref('businesses').push(newBiz).then(() => {
             document.getElementById('listingForm').reset();
@@ -492,37 +460,15 @@
 
     function openListModal() { els.listModal.classList.add('active'); els.overlay.classList.add('active'); }
     function toggleSidebar() { els.sidebar.classList.add('open'); els.overlay.classList.add('active'); }
-
+    
     function filterCategory(cat, btn) {
         currentCategory = cat;
         document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('active'));
         btn.classList.add('active');
-        if (currentView === 'categories') switchView('all');
-        else filterBusinesses();
+        filterBusinesses();
     }
 
     els.search.addEventListener('input', filterBusinesses);
-
-    function handleAuth() {
-        if(auth.currentUser) auth.signOut().then(() => location.reload());
-        else auth.signInWithPopup(provider).catch(e => alert(e.message));
-    }
-
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            els.greeting.innerText = `Hello, ${user.displayName.split(' ')[0]}`;
-            els.avatar.style.backgroundImage = `url(${user.photoURL})`;
-            document.getElementById('authBtnSidebar').querySelector('.nav-label').innerText = "Sign Out";
-            initSavedListener(user.uid);
-        } else {
-            els.greeting.innerText = "Hello, Guest";
-            els.avatar.style.backgroundImage = `url('https://ui-avatars.com/api/?name=Guest')`;
-            document.getElementById('authBtnSidebar').querySelector('.nav-label').innerText = "Sign In";
-            savedIds = [];
-            filterBusinesses();
-        }
-    });
-
     initDatabaseListener();
   </script>
 </body>
