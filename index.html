@@ -1,407 +1,611 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cupcake – Sweet Moments</title>
- 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
- 
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-   
-    body {
-      font-family: 'Poppins', sans-serif;
-      min-height: 100vh;
-      background: #fff8f5;
-      color: #2d1b12;
-      overflow-x: hidden;
-    }
-   
-    .bg { position: fixed; inset: 0; background: url('https://images.unsplash.com/photo-1550617931-eb3a88e84519?auto=format&fit=crop&q=80&w=2000') center/cover no-repeat; z-index: -2; }
-    .overlay { position: fixed; inset: 0; background: linear-gradient(to bottom, rgba(255,245,240,0.9), rgba(255,230,235,0.92)); z-index: -1; }
-   
-    .hero { position: relative; z-index: 5; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
-    h1 { font-size: 3.2rem; font-weight: 700; color: #c44569; margin-bottom: 1rem; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    .subtitle { font-size: 1.3rem; color: #5c4033; max-width: 500px; margin-bottom: 2.5rem; line-height: 1.5; }
-   
-    .start-btn {
-      padding: 16px 40px; font-size: 1.2rem; font-weight: 600;
-      color: white; background: #e84a5f; border: none; border-radius: 50px; cursor: pointer;
-      box-shadow: 0 8px 25px rgba(232,74,95,0.35); transition: all 0.3s ease;
-    }
-    .start-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 35px rgba(232,74,95,0.45); }
-   
-    /* ─── Spinner Overlay ───────────────────────────────────── */
-    .spinner-overlay {
-      position: fixed; inset: 0;
-      background: rgba(255, 255, 255, 0.92);
-      display: none; align-items: center; justify-content: center;
-      z-index: 200; backdrop-filter: blur(4px);
-    }
-    .spinner-overlay.active { display: flex; }
-    .spinner {
-      width: 60px; height: 60px;
-      border: 6px solid #f3f3f3;
-      border-top: 6px solid #e84a5f;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-   
-    /* ─── Custom Alert ──────────────────────────────────────── */
-    .custom-alert {
-      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-      max-width: 420px; width: 90%; padding: 1.2rem 1.5rem;
-      border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.25);
-      color: white; font-weight: 500; text-align: center;
-      opacity: 0; visibility: hidden; transition: all 0.4s ease;
-      z-index: 300;
-    }
-    .custom-alert.show {
-      opacity: 1; visibility: visible; transform: translateX(-50%) translateY(10px);
-    }
-    .custom-alert.success { background: #4caf50; }
-    .custom-alert.error   { background: #e53935; }
-    .custom-alert .close-alert {
-      position: absolute; right: 14px; top: 12px;
-      background: none; border: none; color: white; font-size: 1.4rem;
-      cursor: pointer; opacity: 0.9;
-    }
-   
-    /* Bottom Sheet & Modal shared */
-    .bottom-sheet, .modal-box {
-      background: white; border-radius: 24px; padding: 2.5rem 1.8rem 3.2rem;
-      box-shadow: 0 -14px 50px rgba(0,0,0,0.25); text-align: center; position: relative;
-    }
-    .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.32,0.72,0,1); z-index: 100; }
-    .bottom-sheet.open { transform: translateY(0); }
-    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; padding: 2rem; opacity: 0; visibility: hidden; transition: all 0.4s ease; z-index: 100; }
-    .modal.open { opacity: 1; visibility: visible; }
-    .modal-box { width: 100%; max-width: 460px; transform: scale(0.9); transition: transform 0.4s ease; }
-    .modal.open .modal-box { transform: scale(1); }
-   
-    .close-btn { position: absolute; top: 1rem; right: 1.5rem; font-size: 2rem; color: #777; cursor: pointer; background: none; border: none; }
-   
-    /* Tabs */
-    .tabs { display: flex; margin-bottom: 1.8rem; border-bottom: 2px solid #eee; }
-    .tab { flex: 1; padding: 1rem; font-weight: 600; color: #777; cursor: pointer; transition: all 0.25s; }
-    .tab.active { color: #c44569; border-bottom: 3px solid #c44569; }
-   
-    /* Form */
-    .form-group { margin-bottom: 1.4rem; text-align: left; position: relative; }
-    label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #444; }
-    .password-wrapper { position: relative; }
-    input { width: 100%; padding: 14px 16px; padding-right: 48px; border: 1px solid #d0d0d0; border-radius: 12px; font-size: 1rem; }
-    .toggle-password { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #777; }
-    .toggle-password:hover { color: #c44569; }
-   
-    .submit-btn {
-      width: 100%; padding: 15px; margin: 1.2rem 0;
-      background: #e84a5f; color: white; border: none; border-radius: 12px;
-      font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.25s;
-    }
-    .submit-btn:hover { background: #d43c4f; }
-    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-   
-    .google-btn {
-      display: flex; align-items: center; justify-content: center; gap: 14px;
-      width: 100%; padding: 15px; background: #fff; border: 1px solid #d0d0d0;
-      border-radius: 12px; font-size: 1.05rem; font-weight: 500; color: #333;
-      cursor: pointer; transition: all 0.25s;
-    }
-    .google-btn:hover { box-shadow: 0 5px 18px rgba(0,0,0,0.1); transform: translateY(-2px); }
-    .google-btn img { width: 28px; height: 28px; }
-   
-    @media (min-width: 768px) { .bottom-sheet { display: none; } }
-    @media (max-width: 767px) { .modal { display: none; } h1 { font-size: 2.6rem; } .subtitle { font-size: 1.15rem; } }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AllBusiness - Advertising Platform</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Futuristic light theme */
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #50e3c2;
+            --accent-color: #f5a623;
+            --bg-gradient: linear-gradient(135deg, #ffffff, #e0eaff);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --neon-glow: 0 0 10px var(--primary-color);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: var(--neon-glow); }
+            50% { box-shadow: 0 0 20px var(--primary-color); }
+            100% { box-shadow: var(--neon-glow); }
+        }
+
+        .animate-fade { animation: fadeIn 1s ease-out; }
+        .animate-pulse { animation: pulse 2s infinite; }
+        .animate-glow { animation: glow 2s infinite; }
+
+        /* Hero Section */
+        #hero {
+            height: 100vh;
+            background: var(--bg-gradient);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(74,144,226,0.2) 0%, transparent 70%);
+            animation: pulse 10s infinite;
+        }
+
+        #hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            text-shadow: var(--neon-glow);
+        }
+
+        #hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            width: 60%;
+            max-width: 600px;
+            display: flex;
+            background: white;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 1rem 2rem;
+            border: none;
+            font-size: 1.1rem;
+        }
+
+        .search-bar button {
+            padding: 1rem 2.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-bar button:hover {
+            background: #357abd;
+        }
+
+        #searchResults {
+            margin-top: 3rem;
+            width: 80%;
+            max-width: 900px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .business-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .business-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--neon-glow);
+        }
+
+        .business-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .business-card p {
+            color: #555;
+        }
+
+        #loading, #noResults {
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        /* About Section */
+        #about {
+            padding: 5rem 2rem;
+            background: white;
+            text-align: center;
+        }
+
+        #about h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+        }
+
+        #about p {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            font-size: 1.2rem;
+        }
+
+        /* Pricing Section */
+        #pricing {
+            padding: 5rem 2rem;
+            background: var(--bg-gradient);
+            text-align: center;
+        }
+
+        #pricing h2 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+
+        .pricing-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            width: 300px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--neon-glow);
+        }
+
+        .pricing-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .pricing-card .price {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-card li {
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-card button {
+            padding: 1rem 2rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .pricing-card button:hover {
+            background: #357abd;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            background: #333;
+            color: white;
+            text-align: center;
+        }
+
+        footer .footer-content {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        footer .footer-section {
+            margin: 1rem;
+        }
+
+        footer h4 {
+            margin-bottom: 1rem;
+        }
+
+        footer ul {
+            list-style: none;
+        }
+
+        footer li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        footer .copyright {
+            font-size: 0.9rem;
+        }
+
+        /* Registration Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: var(--shadow);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .modal-content button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .close {
+            float: right;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        /* Scroll reveal */
+        section {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease-out;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+    <!-- Firebase v9 modular SDK (recommended in 2025+) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAojYRIH8FJL5B8yg1b3qxsc29vB3vLC-8",
+            authDomain: "allbusiness-596cc.firebaseapp.com",
+            projectId: "allbusiness-596cc",
+            storageBucket: "allbusiness-596cc.firebasestorage.app",
+            messagingSenderId: "665302840524",
+            appId: "1:665302840524:web:e9c1078e14bc0de6a87e69",
+            measurementId: "G-EMZFX7CE8V"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.auth = auth;
+        window.db = db;
+        window.collection = collection;
+        window.addDoc = addDoc;
+        window.query = query;
+        window.where = where;
+        window.getDocs = getDocs;
+        window.serverTimestamp = serverTimestamp;
+    </script>
 </head>
 <body>
 
-  <div class="bg"></div>
-  <div class="overlay"></div>
+    <!-- Hero Section -->
+    <section id="hero" class="animate-fade animate-pulse">
+        <h1>Welcome to AllBusiness</h1>
+        <p>Your Ultimate Advertising Platform for Businesses</p>
+        
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search by business category (e.g., restaurant, gym, salon)...">
+            <button onclick="searchBusinesses()">Search</button>
+        </div>
 
-  <div class="spinner-overlay" id="spinner">
-    <div class="spinner"></div>
-  </div>
+        <div id="searchResults"></div>
+        <div id="loading" style="display:none;">Loading businesses...</div>
+        <div id="noResults" style="display:none;">No businesses found in this category.</div>
 
-  <div class="custom-alert" id="alertBox">
-    <button class="close-alert" id="closeAlert">&times;</button>
-    <span id="alertMessage"></span>
-  </div>
+        <button id="registerBtn" style="margin-top: 3rem; padding: 1rem 2.5rem; background: var(--secondary-color); color: white; border: none; border-radius: 50px; cursor: pointer; font-size: 1.2rem;">Register Your Business</button>
+    </section>
 
-  <div class="hero">
-    <h1>Cupcake</h1>
-    <p class="subtitle">Delicious moments await – sign in to start exploring</p>
-    <button id="startBtn" class="start-btn">Get Started</button>
-  </div>
+    <!-- About Section -->
+    <section id="about" class="animate-fade">
+        <h2>About AllBusiness</h2>
+        <p>AllBusiness is a cutting-edge advertising platform designed to connect businesses with potential customers in a seamless and innovative way.</p>
+        <p>Companies register here, choose a category, and become discoverable through smart category-based searches — helping local customers find exactly what they need.</p>
+        <p>Built with a futuristic interface and real-time capabilities — perfect for the modern business landscape.</p>
+    </section>
 
-  <div class="bottom-sheet" id="sheet">
-    <button class="close-btn" id="closeSheet">×</button>
-    <h2 style="font-size:2rem; color:#c44569; margin-bottom:1rem;">Welcome</h2>
-   
-    <div id="mobileTabs" class="tabs">
-      <div class="tab active" data-tab="signin">Sign In</div>
-      <div class="tab" data-tab="signup">Sign Up</div>
+    <!-- Pricing Section -->
+    <section id="pricing" class="animate-fade">
+        <h2>Pricing Plans</h2>
+        <div class="pricing-tabs">
+            <div class="pricing-card animate-glow">
+                <h3>Basic</h3>
+                <div class="price">$9.99/mo</div>
+                <ul>
+                    <li>Business Listing</li>
+                    <li>Basic Search Visibility</li>
+                    <li>Email Support</li>
+                </ul>
+                <button onclick="selectPlan('Basic')">Choose Plan</button>
+            </div>
+            <div class="pricing-card animate-glow">
+                <h3>Pro</h3>
+                <div class="price">$19.99/mo</div>
+                <ul>
+                    <li>All Basic Features</li>
+                    <li>Advanced Analytics</li>
+                    <li>Priority Listing</li>
+                    <li>Chat Support</li>
+                </ul>
+                <button onclick="selectPlan('Pro')">Choose Plan</button>
+            </div>
+            <div class="pricing-card animate-glow">
+                <h3>Enterprise</h3>
+                <div class="price">$49.99/mo</div>
+                <ul>
+                    <li>All Pro Features</li>
+                    <li>Custom Advertising</li>
+                    <li>Dedicated Account Manager</li>
+                    <li>API Access</li>
+                </ul>
+                <button onclick="selectPlan('Enterprise')">Choose Plan</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About Us</h4>
+                <p>AllBusiness connects customers with great local businesses.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#hero">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>Email: support@allbusiness.com</p>
+                <p>Phone: +27 11 123 4567</p>
+                <p>Johannesburg, South Africa</p>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">© 2026 AllBusiness. All rights reserved.</div>
+    </footer>
+
+    <!-- Registration Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content animate-fade">
+            <span class="close" onclick="closeModal()">×</span>
+            <h2>Register Your Business</h2>
+            <input type="text" id="businessName" placeholder="Business Name *" required>
+            <input type="email" id="email" placeholder="Email *" required>
+            <input type="password" id="password" placeholder="Password *" required>
+            <input type="text" id="category" placeholder="Main Category (e.g., restaurant, gym, plumbing)" required>
+            <button onclick="registerBusiness()">Register Business</button>
+            <p id="authMessage" style="margin-top:1rem; color:#e74c3c;"></p>
+        </div>
     </div>
-   
-    <form id="mobileForm">
-      <div class="form-group">
-        <label for="emailMobile">Email</label>
-        <input type="email" id="emailMobile" required autocomplete="email"/>
-      </div>
-      <div class="form-group">
-        <label for="passwordMobile">Password</label>
-        <div class="password-wrapper">
-          <input type="password" id="passwordMobile" required autocomplete="current-password"/>
-          <button type="button" class="toggle-password" tabindex="-1">👁️</button>
-        </div>
-      </div>
-      <div class="form-group" id="confirmPasswordGroupMobile" style="display:none;">
-        <label for="confirmPasswordMobile">Confirm Password</label>
-        <div class="password-wrapper">
-          <input type="password" id="confirmPasswordMobile" autocomplete="new-password"/>
-          <button type="button" class="toggle-password" tabindex="-1">👁️</button>
-        </div>
-      </div>
-      <button type="submit" id="submitMobile" class="submit-btn">Sign In</button>
-    </form>
-   
-    <div style="margin-top:1.5rem;">
-      <button id="googleMobile" class="google-btn">
-        <img src="https://www.google.com/favicon.ico" alt="Google">
-        Continue with Google
-      </button>
-    </div>
-  </div>
 
-  <div class="modal" id="modal">
-    <div class="modal-box">
-      <button class="close-btn" id="closeModal">×</button>
-      <h2 style="font-size:2.2rem; color:#c44569; margin-bottom:0.8rem;">Welcome</h2>
-     
-      <div id="desktopTabs" class="tabs">
-        <div class="tab active" data-tab="signin">Sign In</div>
-        <div class="tab" data-tab="signup">Sign Up</div>
-      </div>
-     
-      <form id="desktopForm">
-        <div class="form-group">
-          <label for="emailDesktop">Email</label>
-          <input type="email" id="emailDesktop" required autocomplete="email"/>
-        </div>
-        <div class="form-group">
-          <label for="passwordDesktop">Password</label>
-          <div class="password-wrapper">
-            <input type="password" id="passwordDesktop" required autocomplete="current-password"/>
-            <button type="button" class="toggle-password" tabindex="-1">👁️</button>
-          </div>
-        </div>
-        <div class="form-group" id="confirmPasswordGroupDesktop" style="display:none;">
-          <label for="confirmPasswordDesktop">Confirm Password</label>
-          <div class="password-wrapper">
-            <input type="password" id="confirmPasswordDesktop" autocomplete="new-password"/>
-            <button type="button" class="toggle-password" tabindex="-1">👁️</button>
-          </div>
-        </div>
-        <button type="submit" id="submitDesktop" class="submit-btn">Sign In</button>
-      </form>
-     
-      <div style="margin-top:1.5rem;">
-        <button id="googleDesktop" class="google-btn">
-          <img src="https://www.google.com/favicon.ico" alt="Google">
-          Continue with Google
-        </button>
-      </div>
-    </div>
-  </div>
+    <script type="module">
+        // Make sure Firebase is loaded
+        const { auth, db, collection, addDoc, query, where, getDocs, serverTimestamp } = window;
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { 
-      getAuth, GoogleAuthProvider, signInWithPopup,
-      signInWithEmailAndPassword, createUserWithEmailAndPassword,
-      onAuthStateChanged 
-    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+        const modal = document.getElementById('registerModal');
+        const registerBtn = document.getElementById('registerBtn');
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCPTCZqUPrHgfwqVmNe4aLtVLEXqAdLpmA",
-      authDomain: "cupcake-202c4.firebaseapp.com",
-      projectId: "cupcake-202c4",
-      storageBucket: "cupcake-202c4.firebasestorage.app",
-      messagingSenderId: "549565498078",
-      appId: "1:549565498078:web:4efd4d7c7fd4561882784f",
-      measurementId: "G-9PK7NV0K5N"
-    };
+        registerBtn.onclick = () => modal.style.display = 'flex';
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
+        window.closeModal = () => modal.style.display = 'none';
 
-    // DOM elements
-    const spinner      = document.getElementById('spinner');
-    const alertBox     = document.getElementById('alertBox');
-    const alertMsg     = document.getElementById('alertMessage');
-    const closeAlert   = document.getElementById('closeAlert');
+        // Register Business
+        window.registerBusiness = async () => {
+            const name = document.getElementById('businessName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            let category = document.getElementById('category').value.trim();
 
-    const startBtn      = document.getElementById('startBtn');
-    const sheet         = document.getElementById('sheet');
-    const modal         = document.getElementById('modal');
-    const closeSheet    = document.getElementById('closeSheet');
-    const closeModal    = document.getElementById('closeModal');
-    const googleMobile  = document.getElementById('googleMobile');
-    const googleDesktop = document.getElementById('googleDesktop');
+            if (!name || !email || !password || !category) {
+                document.getElementById('authMessage').textContent = "Please fill in all fields.";
+                return;
+            }
 
-    // Alert functions
-    function showAlert(message, type = 'error') {
-      alertMsg.textContent = message;
-      alertBox.className = `custom-alert ${type} show`;
-      setTimeout(() => {
-        alertBox.classList.remove('show');
-      }, 5500); // auto-hide after 5.5s
-    }
+            // Normalize category for consistent search
+            category = category.toLowerCase();
 
-    closeAlert.addEventListener('click', () => {
-      alertBox.classList.remove('show');
-    });
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
 
-    // Show / hide spinner
-    function showLoading()   { spinner.classList.add('active'); }
-    function hideLoading()   { spinner.classList.remove('active'); }
+                await addDoc(collection(db, "businesses"), {
+                    name,
+                    category,
+                    email,
+                    uid: user.uid,
+                    createdAt: serverTimestamp()
+                });
 
-    // Password toggle
-    function initPasswordToggles(container) {
-      container.querySelectorAll('.toggle-password').forEach(toggle => {
-        toggle.addEventListener('click', () => {
-          const input = toggle.previousElementSibling;
-          input.type = input.type === 'password' ? 'text' : 'password';
-          toggle.textContent = input.type === 'text' ? '🙈' : '👁️';
-        });
-      });
-    }
-    initPasswordToggles(sheet);
-    initPasswordToggles(modal);
+                document.getElementById('authMessage').style.color = "green";
+                document.getElementById('authMessage').textContent = "Success! Your business is now listed.";
+                setTimeout(closeModal, 2500);
+            } catch (error) {
+                document.getElementById('authMessage').textContent = error.message;
+            }
+        };
 
-    let currentTab = 'signin';
-    function initTabs(containerId, formId, submitId) {
-      const tabs = document.querySelectorAll(`#${containerId} .tab`);
-      tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          tabs.forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
-          currentTab = tab.dataset.tab;
-          const confirmGroup = document.getElementById(
-            formId === 'mobileForm' ? 'confirmPasswordGroupMobile' : 'confirmPasswordGroupDesktop'
-          );
-          document.getElementById(submitId).textContent = currentTab === 'signup' ? 'Sign Up' : 'Sign In';
-          confirmGroup.style.display = currentTab === 'signup' ? 'block' : 'none';
-        });
-      });
-    }
-    initTabs('mobileTabs', 'mobileForm', 'submitMobile');
-    initTabs('desktopTabs', 'desktopForm', 'submitDesktop');
+        // Search Businesses by Category (exact match, case-insensitive)
+        window.searchBusinesses = async () => {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            if (!searchTerm) return;
 
-    // Form submit handler
-    async function handleSubmit(e, formId) {
-      e.preventDefault();
-      const form = document.getElementById(formId);
-      
-      const email = form.querySelector('input[type="email"]').value.trim();
+            const resultsContainer = document.getElementById('searchResults');
+            const loading = document.getElementById('loading');
+            const noResults = document.getElementById('noResults');
 
-      // --- FIXED SELECTION LOGIC ---
-      // We now select by ID starting with "password" instead of type="password"
-      // This ensures it works even if the user toggled visibility to "text"
-      const password = form.querySelector('input[id^="password"]').value;
-      
-      let confirmPw = '';
-      if (currentTab === 'signup') {
-         confirmPw = form.querySelector('input[id*="confirmPassword"]').value;
-      }
+            resultsContainer.innerHTML = '';
+            loading.style.display = 'block';
+            noResults.style.display = 'none';
 
-      const submitBtn = form.querySelector('button[type="submit"]');
-      submitBtn.disabled = true;
-      showLoading();
+            try {
+                const q = query(
+                    collection(db, "businesses"),
+                    where("category", "==", searchTerm.toLowerCase())
+                );
 
-      if (currentTab === 'signup') {
-        if (password !== confirmPw) {
-          showAlert('Passwords do not match', 'error');
-          hideLoading(); submitBtn.disabled = false; return;
-        }
-        if (password.length < 6) {
-          showAlert('Password should be at least 6 characters', 'error');
-          hideLoading(); submitBtn.disabled = false; return;
-        }
-      }
+                const querySnapshot = await getDocs(q);
 
-      try {
-        if (currentTab === 'signup') {
-          await createUserWithEmailAndPassword(auth, email, password);
-          showAlert('Account created successfully! Redirecting...', 'success');
-        } else {
-          await signInWithEmailAndPassword(auth, email, password);
-          showAlert('Welcome back! Redirecting...', 'success');
-        }
-        setTimeout(() => {
-          window.location.href = 'profile.html';
-        }, 1200);
-      } catch (error) {
-        let msg = 'Something went wrong. Please try again.';
-        if (error.code === 'auth/email-already-in-use')    msg = 'This email is already registered.';
-        if (error.code === 'auth/invalid-email')           msg = 'Invalid email format.';
-        if (error.code === 'auth/weak-password')           msg = 'Password is too weak (min 6 chars).';
-        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-          msg = 'Invalid email or password.';
-        }
-        console.error(error); // Log error for debugging
-        showAlert(msg, 'error');
-      } finally {
-        hideLoading();
-        submitBtn.disabled = false;
-      }
-    }
+                loading.style.display = 'none';
 
-    document.getElementById('mobileForm').addEventListener('submit', e => handleSubmit(e, 'mobileForm'));
-    document.getElementById('desktopForm').addEventListener('submit', e => handleSubmit(e, 'desktopForm'));
+                if (querySnapshot.empty) {
+                    noResults.style.display = 'block';
+                    return;
+                }
 
-    // Google login
-    async function googleLogin(btn) {
-      btn.disabled = true;
-      showLoading();
-      try {
-        await signInWithPopup(auth, provider);
-        showAlert('Signed in with Google! Redirecting...', 'success');
-        setTimeout(() => window.location.href = 'profile.html', 1200);
-      } catch (error) {
-        let msg = 'Something went wrong.';
-        if (error.code === 'auth/popup-blocked') msg = 'Popup blocked – please allow popups for this site.';
-        if (error.code === 'auth/popup-closed-by-user') msg = 'Sign in was cancelled.';
-        showAlert(msg, 'error');
-      } finally {
-        hideLoading();
-        btn.disabled = false;
-      }
-    }
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const card = document.createElement('div');
+                    card.className = 'business-card';
+                    card.innerHTML = `
+                        <h3>${data.name}</h3>
+                        <p><strong>Category:</strong> ${data.category}</p>
+                        <p><strong>Contact:</strong> ${data.email}</p>
+                    `;
+                    resultsContainer.appendChild(card);
+                });
+            } catch (error) {
+                loading.style.display = 'none';
+                resultsContainer.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+            }
+        };
 
-    googleMobile?.addEventListener('click', () => googleLogin(googleMobile));
-    googleDesktop?.addEventListener('click', () => googleLogin(googleDesktop));
+        // Mock plan selection
+        window.selectPlan = (plan) => {
+            alert(`Selected ${plan} plan — you'll be redirected to payment in production.`);
+        };
 
-    // Open / close UI
-    startBtn.addEventListener('click', () => {
-      if (window.innerWidth < 768) sheet.classList.add('open');
-      else modal.classList.add('open');
-    });
-    closeSheet?.addEventListener('click', () => sheet.classList.remove('open'));
-    closeModal?.addEventListener('click', () => modal.classList.remove('open'));
-    modal?.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+        // Scroll animations
+        const sections = document.querySelectorAll('section');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
 
-    // Auto redirect if already signed in
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        showAlert('Already signed in – redirecting...', 'success');
-        setTimeout(() => window.location.href = 'profile.html', 1200);
-      }
-    });
-  </script>
+        sections.forEach(section => observer.observe(section));
+    </script>
 </body>
 </html>
