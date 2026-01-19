@@ -138,6 +138,7 @@
     .business-card {
       background: white; border: 1px solid #f0f0f0; border-radius: 16px;
       overflow: hidden; transition: 0.2s; cursor: pointer; display: flex; flex-direction: column;
+      position: relative;
     }
     .business-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
 
@@ -331,7 +332,8 @@
         db.ref(`users_saved/${uid}`).on('value', (snapshot) => {
             const data = snapshot.val();
             savedIds = data ? Object.keys(data) : [];
-            filterBusinesses();
+            console.log("Updated Saved IDs:", savedIds);
+            filterBusinesses(); // Refresh grid to reflect new favorites
         });
     }
 
@@ -351,7 +353,7 @@
             document.getElementById('nav-cat').classList.add('active');
             document.getElementById('pageTitle').innerText = "Browse by Category";
             document.getElementById('categoryContainer').style.display = "none";
-        } else {
+        } else if(view === 'saved') {
             document.getElementById('nav-fav').classList.add('active');
             document.getElementById('pageTitle').innerText = "Saved Favorites";
             document.getElementById('categoryContainer').style.display = "flex";
@@ -377,7 +379,6 @@
         renderCards(filtered);
     }
 
-    // NEW FUNCTION: Renders businesses grouped by category
     function renderByCategory(query) {
         els.grid.innerHTML = '';
         const categories = ["Restaurant", "Retail", "Service", "Tech"];
@@ -388,13 +389,11 @@
             );
 
             if (filtered.length > 0) {
-                // Add category header
                 const header = document.createElement('div');
                 header.className = 'category-header';
                 header.innerHTML = `<span class="material-symbols-rounded">label</span> ${category}`;
                 els.grid.appendChild(header);
 
-                // Add business cards for this category
                 filtered.forEach(biz => {
                     els.grid.appendChild(createCard(biz));
                 });
@@ -407,12 +406,14 @@
     }
 
     function createCard(biz) {
+        const isFav = savedIds.includes(biz.id);
         const card = document.createElement('div');
         card.className = 'business-card';
         card.onclick = () => openDetailModal(biz);
         card.innerHTML = `
             <div class="card-img" style="background-image: url('${biz.img}')">
                 <span class="card-category">${biz.cat}</span>
+                ${isFav ? '<span class="material-symbols-rounded" style="position:absolute; top:12px; right:12px; color:#D96570; background:white; border-radius:50%; padding:4px; font-size:18px;">favorite</span>' : ''}
             </div>
             <div class="card-body">
                 <div class="biz-name">${biz.name}</div>
@@ -439,16 +440,27 @@
         const saveBtn = document.getElementById('saveBizBtn');
         const isAlreadySaved = savedIds.includes(biz.id);
 
+        // Update button appearance based on current saved status
         saveBtn.innerText = isAlreadySaved ? "Remove from Favorites" : "Save to Favorites";
         saveBtn.style.background = isAlreadySaved ? "#FEE7E9" : "transparent";
         saveBtn.style.color = isAlreadySaved ? "#D96570" : "inherit";
+        saveBtn.style.borderColor = isAlreadySaved ? "#D96570" : "#eee";
 
         saveBtn.onclick = () => {
             if(!auth.currentUser) return alert("Please sign in to save!");
-            const favRef = db.ref(`users_saved/${auth.currentUser.uid}/${biz.id}`);
-            if(isAlreadySaved) favRef.remove();
-            else favRef.set(true);
-            closeOverlays();
+            
+            const uid = auth.currentUser.uid;
+            const favRef = db.ref(`users_saved/${uid}/${biz.id}`);
+            
+            if(isAlreadySaved) {
+                favRef.remove().then(() => {
+                    closeOverlays();
+                });
+            } else {
+                favRef.set(true).then(() => {
+                    closeOverlays();
+                });
+            }
         };
 
         els.detailModal.classList.add('active');
@@ -485,7 +497,6 @@
         currentCategory = cat;
         document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('active'));
         btn.classList.add('active');
-        // If they click a pill while in category view, switch back to directory for better UX
         if (currentView === 'categories') switchView('all');
         else filterBusinesses();
     }
@@ -504,6 +515,9 @@
             document.getElementById('authBtnSidebar').querySelector('.nav-label').innerText = "Sign Out";
             initSavedListener(user.uid);
         } else {
+            els.greeting.innerText = "Hello, Guest";
+            els.avatar.style.backgroundImage = `url('https://ui-avatars.com/api/?name=Guest')`;
+            document.getElementById('authBtnSidebar').querySelector('.nav-label').innerText = "Sign In";
             savedIds = [];
             filterBusinesses();
         }
