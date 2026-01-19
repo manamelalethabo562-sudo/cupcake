@@ -129,6 +129,17 @@
       gap: 24px; padding: 24px; max-width: 1200px; margin: 0 auto;
     }
 
+    .category-header {
+      grid-column: 1 / -1; font-size: 1.25rem; font-weight: 700; 
+      padding: 20px 0 10px; border-bottom: 2px solid #f0f4f9; margin-bottom: 10px;
+      color: var(--text-main); display: flex; align-items: center; gap: 10px;
+    }
+
+    .cat-badge {
+      font-size: 0.75rem; background: #e8f0fe; color: #1967d2;
+      padding: 2px 8px; border-radius: 12px; font-weight: 600;
+    }
+
     .business-card {
       background: white; border: 1px solid #f0f0f0; border-radius: 16px;
       overflow: hidden; transition: 0.2s; cursor: pointer; display: flex; flex-direction: column;
@@ -146,6 +157,11 @@
     .biz-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
     .biz-rating { display: flex; align-items: center; gap: 4px; font-size: 0.9rem; color: #F4B400; margin-bottom: 12px; }
     .biz-info { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 6px; }
+
+    /* Rating System Styles */
+    .rating-container { display: flex; gap: 4px; margin-bottom: 16px; cursor: pointer; }
+    .rating-container span { font-size: 32px; color: #e0e0e0; transition: color 0.2s; }
+    .rating-container span.active { color: #F4B400; }
 
     .action-btn {
       flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #e0e0e0;
@@ -220,7 +236,7 @@
         <p style="color:var(--text-secondary);" id="pageSubtitle">Live data powered by Vynix Cloud.</p>
         <div class="search-wrapper">
           <span class="material-symbols-rounded search-icon">search</span>
-          <input type="text" class="search-input" id="searchInput" placeholder="Search businesses..." autocomplete="off">
+          <input type="text" class="search-input" id="searchInput" placeholder="Search by name, address or rating..." autocomplete="off">
         </div>
       </div>
 
@@ -268,23 +284,34 @@
     </div>
     <div class="modal-content">
         <h2 id="modalTitle" style="font-weight:700; margin-bottom:8px;">Business Name</h2>
-        <div class="biz-rating" style="margin-bottom:20px;">
+        
+        <div class="biz-rating" style="margin-bottom:8px;">
             <span class="material-symbols-rounded" style="font-size:20px;">star</span>
-            <strong id="modalRating" style="color:#1f1f1f;">5.0</strong>
+            <strong id="modalRatingText" style="color:#1f1f1f;">0.0</strong>
+            <span id="modalReviewCount" style="color:var(--text-muted); font-size:0.85rem;">(0 reviews)</span>
         </div>
+
+        <p class="form-label">Tap to rate:</p>
+        <div class="rating-container" id="starInput">
+            <span class="material-symbols-rounded" data-value="1">star</span>
+            <span class="material-symbols-rounded" data-value="2">star</span>
+            <span class="material-symbols-rounded" data-value="3">star</span>
+            <span class="material-symbols-rounded" data-value="4">star</span>
+            <span class="material-symbols-rounded" data-value="5">star</span>
+        </div>
+
         <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
             <div class="biz-info"><span class="material-symbols-rounded">location_on</span> <span id="modalAddress">Address</span></div>
             <div class="biz-info"><span class="material-symbols-rounded">call</span> <span id="modalPhone">Phone</span></div>
         </div>
         <div style="display:flex; gap:10px;">
-            <button id="saveBizBtn" class="action-btn">Save to Favorites</button>
+            <button id="saveBizBtn" class="action-btn">Save Favorite</button>
             <button class="action-btn primary">Contact</button>
         </div>
     </div>
   </div>
 
   <script>
-    // Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyAojYRIH8FJL5B8yg1b3qxsc29vB3vLC-8",
       authDomain: "allbusiness-596cc.firebaseapp.com",
@@ -302,6 +329,7 @@
 
     let allBusinesses = [];
     let savedIds = []; 
+    let globalRatings = {};
     let currentCategory = 'All';
     let currentView = 'all'; 
 
@@ -316,8 +344,18 @@
       avatar: document.getElementById('userAvatar')
     };
 
-    // ─── Listeners ───
     function initDatabaseListener() {
+        // Listen for ratings first, then businesses
+        db.ref('business_ratings').on('value', (snapshot) => {
+            globalRatings = snapshot.val() || {};
+            db.ref('businesses').once('value', (snap) => {
+                const data = snap.val();
+                allBusinesses = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+                filterBusinesses();
+            });
+        });
+
+        // Re-sync businesses when they change
         db.ref('businesses').on('value', (snapshot) => {
             const data = snapshot.val();
             allBusinesses = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
@@ -333,7 +371,6 @@
         });
     }
 
-    // ─── Core Logic ───
     function switchView(view) {
         currentView = view;
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -341,9 +378,15 @@
         if(view === 'all') {
             document.getElementById('nav-dir').classList.add('active');
             document.getElementById('pageTitle').innerText = "Find Local Businesses";
+            document.getElementById('categoryContainer').style.display = "flex";
+        } else if(view === 'categories') {
+            document.getElementById('nav-cat').classList.add('active');
+            document.getElementById('pageTitle').innerText = "Browse Categories";
+            document.getElementById('categoryContainer').style.display = "none";
         } else if(view === 'saved') {
             document.getElementById('nav-fav').classList.add('active');
             document.getElementById('pageTitle').innerText = "Your Favorites";
+            document.getElementById('categoryContainer').style.display = "flex";
         }
         
         filterBusinesses();
@@ -352,8 +395,19 @@
 
     function filterBusinesses() {
         const query = els.search.value.toLowerCase();
+        
+        if (currentView === 'categories') {
+            renderByCategory(query);
+            return;
+        }
+
         const filtered = allBusinesses.filter(biz => {
-            const matchesSearch = biz.name.toLowerCase().includes(query);
+            const bizRating = getAverageRating(biz.id).avg.toString();
+            const matchesSearch = 
+                biz.name.toLowerCase().includes(query) || 
+                biz.address.toLowerCase().includes(query) ||
+                bizRating.includes(query);
+            
             const matchesCat = currentCategory === 'All' || biz.cat === currentCategory;
             const matchesView = currentView === 'all' || savedIds.includes(biz.id);
             return matchesSearch && matchesCat && matchesView;
@@ -361,19 +415,47 @@
         renderCards(filtered);
     }
 
+    function getAverageRating(bizId) {
+        const ratings = globalRatings[bizId];
+        if (!ratings) return { avg: "0.0", count: 0 };
+        const values = Object.values(ratings);
+        const sum = values.reduce((a, b) => a + b, 0);
+        return { avg: (sum / values.length).toFixed(1), count: values.length };
+    }
+
+    function renderByCategory(query) {
+        els.grid.innerHTML = '';
+        const uniqueCategories = [...new Set(allBusinesses.map(biz => biz.cat))].sort();
+        
+        uniqueCategories.forEach(category => {
+            const filtered = allBusinesses.filter(biz => 
+                biz.cat === category && (biz.name.toLowerCase().includes(query) || biz.address.toLowerCase().includes(query))
+            );
+
+            if (filtered.length > 0) {
+                const header = document.createElement('div');
+                header.className = 'category-header';
+                header.innerHTML = `<span class="material-symbols-rounded">label</span> ${category} <span class="cat-badge">${filtered.length}</span>`;
+                els.grid.appendChild(header);
+                filtered.forEach(biz => els.grid.appendChild(createCard(biz)));
+            }
+        });
+    }
+
     function createCard(biz) {
         const isFav = savedIds.includes(biz.id);
+        const ratingData = getAverageRating(biz.id);
         const card = document.createElement('div');
         card.className = 'business-card';
         card.onclick = () => openDetailModal(biz);
         card.innerHTML = `
             <div class="card-img" style="background-image: url('${biz.img}')">
                 <span class="card-category">${biz.cat}</span>
-                ${isFav ? '<span class="material-symbols-rounded" style="position:absolute; top:12px; right:12px; color:#D96570; background:white; border-radius:50%; padding:4px; font-size:18px; box-shadow:0 2px 8px rgba(0,0,0,0.1)">favorite</span>' : ''}
+                ${isFav ? '<span class="material-symbols-rounded" style="position:absolute; top:12px; right:12px; color:#D96570; background:white; border-radius:50%; padding:4px; font-size:18px;">favorite</span>' : ''}
             </div>
             <div class="card-body">
                 <div class="biz-name">${biz.name}</div>
-                <div class="biz-rating"><span class="material-symbols-rounded" style="font-size:16px;">star</span> 5.0</div>
+                <div class="biz-rating"><span class="material-symbols-rounded" style="font-size:16px;">star</span> ${ratingData.avg} (${ratingData.count})</div>
                 <div class="biz-info"><span class="material-symbols-rounded" style="font-size:16px">location_on</span>${biz.address}</div>
             </div>`;
         return card;
@@ -385,35 +467,48 @@
     }
 
     function openDetailModal(biz) {
+        const ratingData = getAverageRating(biz.id);
         document.getElementById('modalTitle').innerText = biz.name;
         document.getElementById('modalCat').innerText = biz.cat;
         document.getElementById('modalAddress').innerText = biz.address;
         document.getElementById('modalPhone').innerText = biz.phone;
         document.getElementById('modalImg').style.backgroundImage = `url('${biz.img}')`;
+        document.getElementById('modalRatingText').innerText = ratingData.avg;
+        document.getElementById('modalReviewCount').innerText = `(${ratingData.count} reviews)`;
         
         const saveBtn = document.getElementById('saveBizBtn');
         const isAlreadySaved = savedIds.includes(biz.id);
-
-        // Update Appearance
         saveBtn.innerText = isAlreadySaved ? "Remove Favorite" : "Save Favorite";
         saveBtn.style.color = isAlreadySaved ? "#D96570" : "inherit";
-        saveBtn.style.borderColor = isAlreadySaved ? "#D96570" : "#e0e0e0";
 
-        // FIX: Remove old event listeners by cloning
+        // Refresh save button listener
         const newSaveBtn = saveBtn.cloneNode(true);
         saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
-
         newSaveBtn.onclick = () => {
             if(!auth.currentUser) return alert("Please Sign In first!");
-            const uid = auth.currentUser.uid;
-            const favRef = db.ref(`users_saved/${uid}/${biz.id}`);
-            
-            if(isAlreadySaved) {
-                favRef.remove().then(closeOverlays);
-            } else {
-                favRef.set(true).then(closeOverlays);
-            }
+            const favRef = db.ref(`users_saved/${auth.currentUser.uid}/${biz.id}`);
+            isAlreadySaved ? favRef.remove().then(closeOverlays) : favRef.set(true).then(closeOverlays);
         };
+
+        // Rating Logic
+        const starContainer = document.getElementById('starInput');
+        const stars = starContainer.querySelectorAll('span');
+        const userRating = (globalRatings[biz.id] && auth.currentUser) ? globalRatings[biz.id][auth.currentUser.uid] : 0;
+
+        const updateStars = (val) => {
+            stars.forEach(s => s.classList.toggle('active', s.dataset.value <= val));
+        };
+        updateStars(userRating);
+
+        stars.forEach(star => {
+            star.onclick = () => {
+                if(!auth.currentUser) return alert("Please Sign In to rate!");
+                const val = parseInt(star.dataset.value);
+                db.ref(`business_ratings/${biz.id}/${auth.currentUser.uid}`).set(val).then(() => {
+                    updateStars(val);
+                });
+            };
+        });
 
         els.detailModal.classList.add('active');
         els.overlay.classList.add('active');
@@ -465,7 +560,8 @@
         currentCategory = cat;
         document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('active'));
         btn.classList.add('active');
-        filterBusinesses();
+        if (currentView === 'categories') switchView('all');
+        else filterBusinesses();
     }
 
     els.search.addEventListener('input', filterBusinesses);
