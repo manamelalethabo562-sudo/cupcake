@@ -1,310 +1,624 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<title>Vynix Biz • Live Directory</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Vynix Biz • Live Directory</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
-<style>
-:root{
---bg:#F0F4F9;
---text:#1f1f1f;
---muted:#6b6b6b;
---primary:#4285F4;
-}
+  <style>
+    :root {
+      --bg-body: #F0F4F9;
+      --bg-sidebar: #F0F4F9;
+      --bg-surface: #FFFFFF;
+      --primary-gradient: linear-gradient(135deg, #4285F4, #D96570);
+      --text-main: #1F1F1F;
+      --text-secondary: #444746;
+      --text-muted: #8E918F;
+      --accent-color: #4285F4;
+      --sidebar-width: 260px;
+      --sidebar-collapsed: 72px;
+      --header-height: 70px;
+    }
 
-*{box-sizing:border-box;margin:0;padding:0}
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
 
-body{
-font-family:Outfit,sans-serif;
-background:var(--bg);
-color:var(--text);
-display:flex;
-height:100vh;
-overflow:hidden;
-}
+    body {
+      background: var(--bg-body);
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
 
-.main{
-flex:1;
-background:#fff;
-margin:16px;
-border-radius:24px;
-overflow-y:auto;
-}
+    /* ─── Sidebar ────────────────────────────────────────── */
+    .sidebar {
+      background: var(--bg-sidebar);
+      width: var(--sidebar-collapsed);
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+      z-index: 50;
+      transition: width 0.3s cubic-bezier(0.2, 0, 0, 1);
+    }
 
-/* HERO */
-.hero{
-padding:70px 24px;
-text-align:center;
-}
-.hero h1{
-font-size:2.6rem;
-background:linear-gradient(135deg,#4285F4,#D96570);
--webkit-background-clip:text;
-color:transparent;
-}
-.hero p{color:var(--muted);margin-top:10px}
+    @media(min-width: 769px) {
+      .sidebar:hover { width: var(--sidebar-width); }
+      .sidebar:not(:hover) .nav-label, .sidebar:not(:hover) .brand-text { opacity: 0; display: none; }
+      .mobile-menu-trigger { display: none !important; }
+    }
 
-/* SEARCH */
-.search-box{
-max-width:500px;
-margin:30px auto;
-position:relative;
-}
-.search-box input{
-width:100%;
-padding:16px 20px;
-border-radius:30px;
-border:1px solid #ddd;
-font-size:1rem;
-}
+    @media(max-width: 768px) {
+      .sidebar {
+        position: fixed; left: 0; top: 0; bottom: 0;
+        width: 280px; background: #fff;
+        transform: translateX(-100%);
+        box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+      }
+      .sidebar.open { transform: translateX(0); }
+    }
 
-/* GRID */
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-gap:24px;
-padding:24px;
-max-width:1200px;
-margin:auto;
-}
-.card{
-border:1px solid #eee;
-border-radius:18px;
-overflow:hidden;
-cursor:pointer;
-transition:.3s;
-}
-.card:hover{
-transform:translateY(-6px);
-box-shadow:0 20px 40px rgba(0,0,0,.12);
-}
-.card-img{
-height:140px;
-background:#eee center/cover;
-}
-.card-body{
-padding:16px;
-}
-.card h3{font-size:1.1rem;margin-bottom:6px}
-.card small{color:var(--muted)}
+    .nav-list { flex: 1; display: flex; flex-direction: column; gap: 4px; margin-top: 20px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-radius: 24px;
+      color: var(--text-secondary); cursor: pointer; text-decoration: none; white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .nav-item:hover { background: rgba(0,0,0,0.05); color: var(--text-main); }
+    .nav-item.active { background: #D3E3FD; color: #041E49; font-weight: 500; }
+    .nav-icon { font-size: 24px; }
 
-/* ─── PRICING ───────────────────────── */
-.pricing{
-background:#f8f9fa;
-padding:90px 24px;
-}
-.pricing h2{text-align:center;font-size:2.2rem;margin-bottom:12px}
-.pricing p{text-align:center;color:var(--muted);margin-bottom:50px}
+    /* ─── Main Content ───────────────────────────────────── */
+    .main {
+      flex: 1; display: flex; flex-direction: column; position: relative;
+      background: #FFFFFF; border-radius: 24px; margin: 16px 16px 16px 0;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.02); overflow: hidden;
+    }
+    @media(max-width: 768px) { .main { margin: 0; border-radius: 0; } }
 
-.price-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:30px;
-max-width:1100px;
-margin:auto;
-}
+    .top-bar {
+      height: var(--header-height); display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; border-bottom: 1px solid #f0f0f0; z-index: 10; background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(10px); position: absolute; top: 0; width: 100%;
+    }
 
-.price-card{
-background:#fff;
-border-radius:22px;
-padding:32px;
-border:1px solid #eee;
-text-align:center;
-transition:.35s;
-opacity:0;
-transform:translateY(40px);
-cursor:pointer;
-}
-.price-card.visible{
-opacity:1;
-transform:translateY(0);
-}
-.price-card:hover{
-transform:translateY(-10px) scale(1.03);
-box-shadow:0 24px 48px rgba(0,0,0,.15);
-}
+    .user-pill {
+      display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 12px;
+      background: #F0F4F9; border-radius: 32px; cursor: pointer; transition: background 0.2s;
+    }
+    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background-size: cover; background-position: center; }
 
-.price-card.popular{
-border:2px solid var(--primary);
-}
-.badge{
-background:var(--primary);
-color:#fff;
-padding:6px 16px;
-border-radius:20px;
-font-size:.75rem;
-display:inline-block;
-margin-bottom:10px;
-}
+    .content-scroll { flex: 1; overflow-y: auto; padding-top: var(--header-height); scroll-behavior: smooth; }
 
-.price{
-font-size:2.4rem;
-font-weight:800;
-margin:20px 0;
-}
-.price span{font-size:1rem;color:var(--muted)}
+    .hero-section { padding: 60px 24px 40px; text-align: center; }
+    .hero-title {
+      font-size: 2.5rem; font-weight: 700; margin-bottom: 12px;
+      background: var(--primary-gradient); -webkit-background-clip: text; color: transparent;
+    }
 
-.features{
-list-style:none;
-margin:24px 0;
-display:flex;
-flex-direction:column;
-gap:12px;
-color:#444;
-font-size:.95rem;
-}
+    .search-wrapper { max-width: 600px; margin: 24px auto 0; position: relative; }
+    .search-input {
+      width: 100%; padding: 16px 24px 16px 50px; border-radius: 30px; border: 1px solid #e0e0e0;
+      font-size: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); outline: none;
+    }
+    .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
-.btn{
-padding:14px;
-border-radius:14px;
-border:none;
-font-weight:700;
-cursor:pointer;
-transition:.2s;
-}
-.btn.primary{background:#1f1f1f;color:#fff}
-.btn.outline{background:transparent;border:1px solid #ddd}
-.btn:hover{transform:scale(1.05)}
+    .filter-bar {
+      display: flex; gap: 10px; overflow-x: auto; padding: 0 24px 20px;
+      justify-content: center; scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .category-pill {
+      padding: 8px 16px; border-radius: 20px; border: 1px solid #e0e0e0;
+      font-size: 0.9rem; font-weight: 500; cursor: pointer; white-space: nowrap; transition: 0.2s;
+    }
+    .category-pill.active { background: var(--text-main); color: white; }
 
-/* FOOTER */
-footer{
-padding:60px 24px;
-border-top:1px solid #eee;
-background:#fff;
-margin-top:40px;
-}
-.footer-inner{
-max-width:1100px;
-margin:auto;
-display:grid;
-grid-template-columns:2fr 1fr 1fr;
-gap:40px;
-}
-footer h4{margin-bottom:16px}
-footer a{
-text-decoration:none;
-color:var(--muted);
-display:block;
-margin-bottom:10px;
-}
-footer a:hover{color:var(--primary)}
+    /* Directory Grid */
+    .business-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px; padding: 24px; max-width: 1200px; margin: 0 auto;
+      min-height: 400px;
+    }
 
-@media(max-width:768px){
-.footer-inner{grid-template-columns:1fr}
-}
-</style>
+    .category-header {
+      grid-column: 1 / -1; font-size: 1.25rem; font-weight: 700; 
+      padding: 20px 0 10px; border-bottom: 2px solid #f0f4f9; margin-bottom: 10px;
+      color: var(--text-main); display: flex; align-items: center; gap: 10px;
+    }
+
+    .cat-badge {
+      font-size: 0.75rem; background: #e8f0fe; color: #1967d2;
+      padding: 2px 8px; border-radius: 12px; font-weight: 600;
+    }
+
+    .business-card {
+      background: white; border: 1px solid #f0f0f0; border-radius: 16px;
+      overflow: hidden; transition: 0.2s; cursor: pointer; display: flex; flex-direction: column;
+      position: relative;
+    }
+    .business-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
+
+    .card-img { height: 140px; background-color: #f0f0f0; position: relative; background-size: cover; background-position: center; }
+    .card-category {
+      position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.9);
+      padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;
+    }
+
+    .card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+    .biz-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+    .biz-rating { display: flex; align-items: center; gap: 4px; font-size: 0.9rem; color: #F4B400; margin-bottom: 12px; }
+    .biz-info { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 6px; }
+
+    .rating-container { display: flex; gap: 4px; margin-bottom: 16px; cursor: pointer; }
+    .rating-container span { font-size: 32px; color: #e0e0e0; transition: color 0.2s; }
+    .rating-container span.active { color: #F4B400; }
+
+    .action-btn {
+      flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #e0e0e0;
+      background: transparent; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; color: inherit;
+    }
+    .action-btn.primary { background: var(--text-main); color: white; border: none; }
+    .action-btn.whatsapp { background: #25D366; color: white; border: none; }
+
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 40; opacity: 0; pointer-events: none; transition: 0.3s; }
+    .overlay.active { opacity: 1; pointer-events: auto; }
+    
+    .modal-sheet {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95);
+      background: white; width: 90%; max-width: 500px; border-radius: 24px;
+      z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2); overflow: hidden;
+    }
+    .modal-sheet.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+    .modal-img-header { height: 180px; background-size: cover; position: relative; background-color: #f0f4f9; }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px; background: white; border: none;
+      width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .modal-content { padding: 24px; max-height: 80vh; overflow-y: auto; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
+    .form-input {
+      width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid #e0e0e0;
+      font-family: inherit; font-size: 0.95rem; outline: none; transition: 0.2s;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────── */
+    .footer {
+      background: #f8f9fa;
+      padding: 60px 24px 40px;
+      border-top: 1px solid #eee;
+      margin-top: 40px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-brand h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .footer-brand p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; max-width: 400px; }
+    .footer-col h4 { font-size: 1rem; font-weight: 600; margin-bottom: 20px; color: var(--text-main); }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 12px; }
+    .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: 0.2s; }
+    .footer-links a:hover { color: var(--accent-color); }
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 40px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    @media(max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="main">
+  <div class="overlay" id="overlay" onclick="closeOverlays()"></div>
 
-<!-- HERO -->
-<section class="hero">
-<h1>Find Local Businesses</h1>
-<p>Live directory powered by Vynix Cloud</p>
+  <aside class="sidebar" id="sidebar">
+    <div style="padding: 10px 10px 20px;">
+        <h2 style="font-size: 1.2rem; font-weight: 700; display:flex; align-items:center; gap:10px;">
+           <span class="material-symbols-rounded" style="color: #4285F4;">business_center</span>
+           <span class="brand-text">Vynix Biz</span>
+        </h2>
+    </div>
+    <div class="nav-list">
+      <div class="nav-item active" id="nav-dir" onclick="switchView('all')"><span class="material-symbols-rounded nav-icon">storefront</span><span class="nav-label">Directory</span></div>
+      <div class="nav-item" id="nav-cat" onclick="switchView('categories')"><span class="material-symbols-rounded nav-icon">category</span><span class="nav-label">Categories</span></div>
+      <div class="nav-item" id="nav-fav" onclick="switchView('saved')"><span class="material-symbols-rounded nav-icon">favorite</span><span class="nav-label">Saved</span></div>
+      <div class="nav-item" onclick="openListModal()"><span class="material-symbols-rounded nav-icon">add_business</span><span class="nav-label">List Business</span></div>
+    </div>
+    <div style="margin-top: auto;">
+      <div class="nav-item" id="authBtnSidebar" onclick="handleAuth()">
+        <span class="material-symbols-rounded nav-icon">login</span>
+        <span class="nav-label">Sign In</span>
+      </div>
+    </div>
+  </aside>
 
-<div class="search-box">
-<input type="text" placeholder="Search businesses...">
-</div>
-</section>
+  <main class="main">
+    <div class="top-bar">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <button class="mobile-menu-trigger" onclick="toggleSidebar()" style="background:none; border:none; padding:8px;"><span class="material-symbols-rounded">menu</span></button>
+        <span id="greetingName" style="font-weight:600; color:var(--text-secondary)">Hello, Guest</span>
+      </div>
+      <div class="user-pill" onclick="handleAuth()">
+        <div class="user-avatar" id="userAvatar" style="background-image: url('https://ui-avatars.com/api/?name=Guest')"></div>
+      </div>
+    </div>
 
-<!-- DIRECTORY -->
-<section class="grid">
-<div class="card">
-<div class="card-img" style="background-image:url('https://picsum.photos/400/300')"></div>
-<div class="card-body">
-<h3>Sample Business</h3>
-<small>📍 Main Street</small>
-</div>
-</div>
-</section>
+    <div class="content-scroll">
+      <div class="hero-section">
+        <h1 class="hero-title" id="pageTitle">Find Local Businesses</h1>
+        <p style="color:var(--text-secondary);" id="pageSubtitle">Live data powered by Vynix Cloud.</p>
+        <div class="search-wrapper">
+          <span class="material-symbols-rounded search-icon">search</span>
+          <input type="text" class="search-input" id="searchInput" placeholder="Search by name, address or rating..." autocomplete="off">
+        </div>
+      </div>
 
-<!-- PRICING -->
-<section class="pricing">
-<h2>Simple Pricing</h2>
-<p>Choose the right plan for your growth</p>
+      <div class="filter-bar" id="categoryContainer">
+        <div class="category-pill active" onclick="filterCategory('All', this)">All</div>
+        <div class="category-pill" onclick="filterCategory('Restaurant', this)">Restaurant</div>
+        <div class="category-pill" onclick="filterCategory('Retail', this)">Retail</div>
+        <div class="category-pill" onclick="filterCategory('Service', this)">Service</div>
+        <div class="category-pill" onclick="filterCategory('Tech', this)">Tech</div>
+      </div>
 
-<div class="price-grid">
-<div class="price-card">
-<h3>Starter</h3>
-<div class="price">$0 <span>/mo</span></div>
-<ul class="features">
-<li>✔ Basic listing</li>
-<li>✔ Ratings</li>
-<li>✔ Search visibility</li>
-</ul>
-<button class="btn outline">Get Started</button>
-</div>
+      <div class="business-grid" id="businessGrid"></div>
 
-<div class="price-card popular">
-<div class="badge">Most Popular</div>
-<h3>Pro</h3>
-<div class="price">$19 <span>/mo</span></div>
-<ul class="features">
-<li>✔ Featured listing</li>
-<li>✔ WhatsApp contact</li>
-<li>✔ Analytics</li>
-<li>✔ Priority support</li>
-</ul>
-<button class="btn primary">Upgrade</button>
-</div>
+      <footer class="footer">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <h3><span class="material-symbols-rounded" style="color: #4285F4;">business_center</span> Vynix Biz</h3>
+            <p>Empowering local commerce through real-time discovery. Connect with your community's best restaurants, retailers, and service providers effortlessly.</p>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul class="footer-links">
+              <li><a href="#" onclick="switchView('all')">Directory</a></li>
+              <li><a href="#" onclick="switchView('categories')">Browse Categories</a></li>
+              <li><a href="#" onclick="openListModal()">List Your Business</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Contact Support</h4>
+            <ul class="footer-links">
+              <li><a href="mailto:support@vynixbiz.com">support@vynixbiz.com</a></li>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Report a Listing</a></li>
+              <li><a href="#">API Documentation</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 Vynix Cloud Solutions. All rights reserved.</p>
+          <div style="display:flex; gap:20px;">
+            <a href="#" class="footer-links" style="font-size: 0.85rem;">Terms</a>
+            <a href="#" class="footer-links" style="font-size: 0.85rem;">Cookies</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </main>
 
-<div class="price-card">
-<h3>Enterprise</h3>
-<div class="price">$49 <span>/mo</span></div>
-<ul class="features">
-<li>✔ Unlimited businesses</li>
-<li>✔ API access</li>
-<li>✔ Custom branding</li>
-<li>✔ Dedicated manager</li>
-</ul>
-<button class="btn outline">Contact Sales</button>
-</div>
-</div>
-</section>
+  <div class="modal-sheet" id="listModal">
+    <div class="modal-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2 style="font-weight:700;">List Your Business</h2>
+            <button onclick="closeOverlays()" style="background:none; border:none; cursor:pointer;"><span class="material-symbols-rounded">close</span></button>
+        </div>
+        <form id="listingForm" onsubmit="registerBusiness(event)">
+            <div class="form-group"><label class="form-label">Name</label><input type="text" id="bizName" class="form-input" required></div>
+            <div class="form-group">
+                <label class="form-label">Category</label>
+                <select id="bizCat" class="form-input">
+                    <option value="Restaurant">Restaurant</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Service">Service</option>
+                    <option value="Tech">Tech</option>
+                </select>
+            </div>
+            <div class="form-group"><label class="form-label">Address</label><input type="text" id="bizAddress" class="form-input" required></div>
+            <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="bizPhone" class="form-input" placeholder="e.g. +1234567890" required></div>
+            <div class="form-group"><label class="form-label">Image URL</label><input type="url" id="bizImg" class="form-input" required></div>
+            <button type="submit" class="action-btn primary" style="width:100%;">Register Business</button>
+        </form>
+    </div>
+  </div>
 
-<!-- FOOTER -->
-<footer>
-<div class="footer-inner">
-<div>
-<h4>Vynix Biz</h4>
-<p style="color:var(--muted)">Empowering local businesses with real-time discovery.</p>
-</div>
-<div>
-<h4>Links</h4>
-<a href="#">Directory</a>
-<a href="#">Pricing</a>
-<a href="#">List Business</a>
-</div>
-<div>
-<h4>Support</h4>
-<a href="#">Help Center</a>
-<a href="#">Privacy</a>
-<a href="#">Terms</a>
-</div>
-</div>
-</footer>
+  <div class="modal-sheet" id="detailModal">
+    <div class="modal-img-header" id="modalImg">
+        <button class="modal-close" onclick="closeOverlays()"><span class="material-symbols-rounded">close</span></button>
+        <span class="card-category" id="modalCat" style="top:auto; bottom:12px; left:12px;">Category</span>
+    </div>
+    <div class="modal-content">
+        <h2 id="modalTitle" style="font-weight:700; margin-bottom:8px;">Business Name</h2>
+        <div class="biz-rating" style="margin-bottom:8px;">
+            <span class="material-symbols-rounded" style="font-size:20px;">star</span>
+            <strong id="modalRatingText" style="color:#1f1f1f;">0.0</strong>
+            <span id="modalReviewCount" style="color:var(--text-muted); font-size:0.85rem;">(0 reviews)</span>
+        </div>
+        <p class="form-label">Tap to rate:</p>
+        <div class="rating-container" id="starInput">
+            <span class="material-symbols-rounded" data-value="1">star</span>
+            <span class="material-symbols-rounded" data-value="2">star</span>
+            <span class="material-symbols-rounded" data-value="3">star</span>
+            <span class="material-symbols-rounded" data-value="4">star</span>
+            <span class="material-symbols-rounded" data-value="5">star</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
+            <div class="biz-info"><span class="material-symbols-rounded">location_on</span> <span id="modalAddress">Address</span></div>
+            <div class="biz-info"><span class="material-symbols-rounded">call</span> <span id="modalPhone">Phone</span></div>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+            <button id="saveBizBtn" class="action-btn">Save</button>
+            <a id="modalCallBtn" href="#" class="action-btn primary"><span class="material-symbols-rounded" style="font-size:18px">call</span> Call</a>
+        </div>
+        <a id="modalWhatsappBtn" href="#" target="_blank" class="action-btn whatsapp" style="width:100%"><span class="material-symbols-rounded" style="font-size:18px">chat</span> WhatsApp</a>
+    </div>
+  </div>
 
-</div>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAojYRIH8FJL5B8yg1b3qxsc29vB3vLC-8",
+      authDomain: "allbusiness-596cc.firebaseapp.com",
+      projectId: "allbusiness-596cc",
+      storageBucket: "allbusiness-596cc.firebasestorage.app",
+      messagingSenderId: "665302840524",
+      appId: "1:665302840524:web:e9c1078e14bc0de6a87e69",
+      measurementId: "G-EMZFX7CE8V"
+    };
 
-<script>
-const cards=document.querySelectorAll('.price-card');
-const obs=new IntersectionObserver(e=>{
-e.forEach(i=>i.isIntersecting&&i.target.classList.add('visible'))
-},{threshold:.2});
-cards.forEach(c=>obs.observe(c));
-</script>
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+    const provider = new firebase.auth.GoogleAuthProvider();
 
+    let allBusinesses = [];
+    let savedIds = []; 
+    let globalRatings = {};
+    let currentCategory = 'All';
+    let currentView = 'all'; 
+    let currentActiveBizId = null;
+
+    const els = {
+      grid: document.getElementById('businessGrid'),
+      search: document.getElementById('searchInput'),
+      sidebar: document.getElementById('sidebar'),
+      overlay: document.getElementById('overlay'),
+      detailModal: document.getElementById('detailModal'),
+      listModal: document.getElementById('listModal'),
+      greeting: document.getElementById('greetingName'),
+      avatar: document.getElementById('userAvatar')
+    };
+
+    function initDatabaseListener() {
+        db.ref('business_ratings').on('value', (snapshot) => {
+            globalRatings = snapshot.val() || {};
+            filterBusinesses();
+            if (currentActiveBizId && globalRatings[currentActiveBizId]) {
+                const liveData = getAverageRating(currentActiveBizId);
+                document.getElementById('modalRatingText').innerText = liveData.avg;
+                document.getElementById('modalReviewCount').innerText = `(${liveData.count} reviews)`;
+            }
+        });
+
+        db.ref('businesses').on('value', (snapshot) => {
+            const data = snapshot.val();
+            allBusinesses = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+            filterBusinesses();
+        });
+    }
+
+    function initSavedListener(uid) {
+        db.ref(`users_saved/${uid}`).on('value', (snapshot) => {
+            const data = snapshot.val();
+            savedIds = data ? Object.keys(data) : [];
+            filterBusinesses();
+        });
+    }
+
+    function switchView(view) {
+        currentView = view;
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        if(view === 'all') {
+            document.getElementById('nav-dir').classList.add('active');
+            document.getElementById('pageTitle').innerText = "Find Local Businesses";
+            document.getElementById('categoryContainer').style.display = "flex";
+        } else if(view === 'categories') {
+            document.getElementById('nav-cat').classList.add('active');
+            document.getElementById('pageTitle').innerText = "Browse Categories";
+            document.getElementById('categoryContainer').style.display = "none";
+        } else if(view === 'saved') {
+            document.getElementById('nav-fav').classList.add('active');
+            document.getElementById('pageTitle').innerText = "Your Favorites";
+            document.getElementById('categoryContainer').style.display = "flex";
+        }
+        filterBusinesses();
+        closeOverlays();
+    }
+
+    function filterBusinesses() {
+        const query = els.search.value.toLowerCase();
+        if (currentView === 'categories') {
+            renderByCategory(query);
+            return;
+        }
+        const filtered = allBusinesses.filter(biz => {
+            const bizRating = getAverageRating(biz.id).avg.toString();
+            const matchesSearch = biz.name.toLowerCase().includes(query) || biz.address.toLowerCase().includes(query) || bizRating.includes(query);
+            const matchesCat = currentCategory === 'All' || biz.cat === currentCategory;
+            const matchesView = currentView === 'all' || savedIds.includes(biz.id);
+            return matchesSearch && matchesCat && matchesView;
+        });
+        renderCards(filtered);
+    }
+
+    function getAverageRating(bizId) {
+        const ratings = globalRatings[bizId];
+        if (!ratings) return { avg: "0.0", count: 0 };
+        const values = Object.values(ratings);
+        const sum = values.reduce((a, b) => a + b, 0);
+        return { avg: (sum / values.length).toFixed(1), count: values.length };
+    }
+
+    function renderByCategory(query) {
+        els.grid.innerHTML = '';
+        const uniqueCategories = [...new Set(allBusinesses.map(biz => biz.cat))].sort();
+        uniqueCategories.forEach(category => {
+            const filtered = allBusinesses.filter(biz => biz.cat === category && (biz.name.toLowerCase().includes(query) || biz.address.toLowerCase().includes(query)));
+            if (filtered.length > 0) {
+                const header = document.createElement('div');
+                header.className = 'category-header';
+                header.innerHTML = `<span class="material-symbols-rounded">label</span> ${category} <span class="cat-badge">${filtered.length}</span>`;
+                els.grid.appendChild(header);
+                filtered.forEach(biz => els.grid.appendChild(createCard(biz)));
+            }
+        });
+    }
+
+    function createCard(biz) {
+        const isFav = savedIds.includes(biz.id);
+        const ratingData = getAverageRating(biz.id);
+        const card = document.createElement('div');
+        card.className = 'business-card';
+        card.onclick = () => openDetailModal(biz);
+        card.innerHTML = `
+            <div class="card-img" style="background-image: url('${biz.img}')">
+                <span class="card-category">${biz.cat}</span>
+                ${isFav ? '<span class="material-symbols-rounded" style="position:absolute; top:12px; right:12px; color:#D96570; background:white; border-radius:50%; padding:4px; font-size:18px;">favorite</span>' : ''}
+            </div>
+            <div class="card-body">
+                <div class="biz-name">${biz.name}</div>
+                <div class="biz-rating"><span class="material-symbols-rounded" style="font-size:16px;">star</span> ${ratingData.avg} (${ratingData.count})</div>
+                <div class="biz-info"><span class="material-symbols-rounded" style="font-size:16px">location_on</span>${biz.address}</div>
+            </div>`;
+        return card;
+    }
+
+    function renderCards(data) {
+        els.grid.innerHTML = data.length === 0 ? '<p style="grid-column: 1/-1; text-align:center; padding: 40px; color: #888;">No results found.</p>' : '';
+        data.forEach(biz => els.grid.appendChild(createCard(biz)));
+    }
+
+    function openDetailModal(biz) {
+        currentActiveBizId = biz.id;
+        const ratingData = getAverageRating(biz.id);
+        document.getElementById('modalTitle').innerText = biz.name;
+        document.getElementById('modalCat').innerText = biz.cat;
+        document.getElementById('modalAddress').innerText = biz.address;
+        document.getElementById('modalPhone').innerText = biz.phone;
+        document.getElementById('modalImg').style.backgroundImage = `url('${biz.img}')`;
+        document.getElementById('modalRatingText').innerText = ratingData.avg;
+        document.getElementById('modalReviewCount').innerText = `(${ratingData.count} reviews)`;
+        const phoneClean = biz.phone.replace(/\s+/g, '');
+        document.getElementById('modalCallBtn').href = `tel:${phoneClean}`;
+        const waMsg = encodeURIComponent(`Hello ${biz.name}, I found you on Vynix Biz and would like to inquire about your services.`);
+        document.getElementById('modalWhatsappBtn').href = `https://wa.me/${phoneClean.replace('+', '')}?text=${waMsg}`;
+        const saveBtn = document.getElementById('saveBizBtn');
+        const isAlreadySaved = savedIds.includes(biz.id);
+        saveBtn.innerText = isAlreadySaved ? "Remove" : "Save";
+        saveBtn.style.color = isAlreadySaved ? "#D96570" : "inherit";
+        const newSaveBtn = saveBtn.cloneNode(true);
+        saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+        newSaveBtn.onclick = () => {
+            if(!auth.currentUser) return alert("Please Sign In first!");
+            const favRef = db.ref(`users_saved/${auth.currentUser.uid}/${biz.id}`);
+            isAlreadySaved ? favRef.remove().then(closeOverlays) : favRef.set(true).then(closeOverlays);
+        };
+        const starContainer = document.getElementById('starInput');
+        const stars = starContainer.querySelectorAll('span');
+        const updateStarsUI = (val) => { 
+            stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= val)); 
+        };
+        const userRating = (globalRatings[biz.id] && auth.currentUser) ? globalRatings[biz.id][auth.currentUser.uid] : 0;
+        updateStarsUI(userRating);
+        stars.forEach(star => {
+            star.onclick = () => {
+                if(!auth.currentUser) return alert("Please Sign In to rate!");
+                const val = parseInt(star.dataset.value);
+                db.ref(`business_ratings/${biz.id}/${auth.currentUser.uid}`).set(val).then(() => { updateStarsUI(val); });
+            };
+        });
+        els.detailModal.classList.add('active');
+        els.overlay.classList.add('active');
+    }
+
+    function handleAuth() {
+        if(auth.currentUser) auth.signOut().then(() => location.reload());
+        else auth.signInWithPopup(provider).catch(e => console.error(e));
+    }
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            els.greeting.innerText = `Hello, ${user.displayName.split(' ')[0]}`;
+            els.avatar.style.backgroundImage = `url(${user.photoURL})`;
+            document.getElementById('authBtnSidebar').querySelector('.nav-label').innerText = "Sign Out";
+            initSavedListener(user.uid);
+        } else {
+            savedIds = [];
+            filterBusinesses();
+        }
+    });
+
+    function registerBusiness(e) {
+        e.preventDefault();
+        const newBiz = {
+            name: document.getElementById('bizName').value,
+            cat: document.getElementById('bizCat').value,
+            address: document.getElementById('bizAddress').value,
+            phone: document.getElementById('bizPhone').value,
+            img: document.getElementById('bizImg').value
+        };
+        db.ref('businesses').push(newBiz).then(() => {
+            document.getElementById('listingForm').reset();
+            closeOverlays();
+        });
+    }
+
+    function closeOverlays() {
+        currentActiveBizId = null;
+        els.sidebar.classList.remove('open');
+        els.detailModal.classList.remove('active');
+        els.listModal.classList.remove('active');
+        els.overlay.classList.remove('active');
+    }
+
+    function openListModal() { els.listModal.classList.add('active'); els.overlay.classList.add('active'); }
+    function toggleSidebar() { els.sidebar.classList.add('open'); els.overlay.classList.add('active'); }
+    function filterCategory(cat, btn) {
+        currentCategory = cat;
+        document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+        if (currentView === 'categories') switchView('all');
+        else filterBusinesses();
+    }
+    els.search.addEventListener('input', filterBusinesses);
+    initDatabaseListener();
+  </script>
 </body>
 </html>
