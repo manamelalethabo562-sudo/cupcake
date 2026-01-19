@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AllBusiness – Grow Your Local Business Online</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
   <style>
+    /* --- RESET & VARIABLES --- */
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'Segoe UI', system-ui, sans-serif;
@@ -27,6 +29,7 @@
       --shadow-md: 0 10px 30px rgba(0,0,0,0.12);
     }
 
+    /* --- HEADER --- */
     header {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -57,6 +60,7 @@
       font-weight: 800;
       color: var(--primary);
       letter-spacing: -0.5px;
+      cursor: pointer;
     }
 
     .nav-links {
@@ -86,6 +90,7 @@
       background: transparent;
       border: 2px solid var(--primary);
       color: var(--primary);
+      margin-right: 0.5rem;
     }
 
     #loginBtn:hover {
@@ -104,6 +109,7 @@
       transform: translateY(-1px);
     }
 
+    /* --- SEARCH BAR --- */
     .search-container {
       flex: 1;
       max-width: 520px;
@@ -137,41 +143,11 @@
       cursor: pointer;
     }
 
-    .autocomplete-dropdown {
-      position: absolute;
-      top: 100%;
-      left: 0; right: 0;
-      background: white;
-      border-radius: 12px;
-      margin-top: 8px;
-      box-shadow: var(--shadow-md);
-      max-height: 340px;
-      overflow-y: auto;
-      z-index: 9999;
-      border: 1px solid #e5e7eb;
-      display: none;
-    }
+    .hamburger { display: none; font-size: 1.5rem; cursor: pointer; }
 
-    .autocomplete-item {
-      padding: 0.9rem 1.5rem;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .autocomplete-item:hover,
-    .autocomplete-item.highlight {
-      background: #eff6ff;
-      color: var(--primary);
-    }
-
-    .autocomplete-item em {
-      font-style: normal;
-      color: var(--primary);
-      font-weight: 600;
-    }
-
+    /* --- HERO --- */
     .hero {
-      min-height: 95vh;
+      min-height: 85vh;
       background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
       display: flex;
       flex-direction: column;
@@ -196,82 +172,14 @@
       margin-bottom: 3rem;
     }
 
-    .hero .cta {
-      padding: 1.1rem 2.5rem;
-      background: var(--primary);
-      color: white;
-      font-size: 1.2rem;
-      font-weight: 600;
-      border: none;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .hero .cta:hover {
-      background: var(--primary-dark);
-      transform: translateY(-3px);
-      box-shadow: var(--glow);
-    }
-
-    #searchResults {
-      max-width: 1200px;
-      margin: 0 auto 5rem;
-      padding: 0 2rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 2rem;
-    }
-
-    .business-card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: var(--shadow-md);
-      transition: all 0.35s ease;
-    }
-
-    .business-card:hover {
-      transform: translateY(-10px);
-      box-shadow: var(--glow);
-    }
-
-    .business-card h3 {
-      padding: 1.6rem 1.8rem 0.6rem;
-      color: var(--primary);
-      font-size: 1.35rem;
-    }
-
-    .business-card p {
-      padding: 0 1.8rem 1.6rem;
-      color: #4b5563;
-    }
-
+    /* --- CONTENT SECTIONS --- */
     section { padding: 7rem 2rem; }
 
-    #about {
-      background: white;
-      text-align: center;
-    }
-
-    #about h2 {
-      font-size: 3.2rem;
-      margin-bottom: 2rem;
-      color: #1e40af;
-    }
-
-    #about .content {
-      max-width: 880px;
-      margin: 0 auto;
-      font-size: 1.18rem;
-      color: #4b5563;
-    }
-
-    #about .content p {
-      margin-bottom: 1.6rem;
-    }
-
-    #about .features {
+    #about { background: white; text-align: center; }
+    #about h2 { font-size: 3.2rem; margin-bottom: 2rem; color: #1e40af; }
+    #about .content { max-width: 880px; margin: 0 auto; font-size: 1.18rem; color: #4b5563; }
+    
+    .features {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 2rem;
@@ -290,39 +198,12 @@
       transform: translateY(-8px);
       box-shadow: var(--glow);
     }
+    .feature-card i { color: var(--primary); margin-bottom: 1.2rem; }
 
-    .feature-card i {
-      font-size: 2.8rem;
-      color: var(--primary);
-      margin-bottom: 1.2rem;
-    }
-
-    .feature-card h4 {
-      font-size: 1.4rem;
-      margin-bottom: 0.8rem;
-      color: #1f2937;
-    }
-
-    #pricing {
-      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    }
-
-    #pricing h2 {
-      text-align: center;
-      font-size: 3.2rem;
-      margin-bottom: 1rem;
-      color: #1e40af;
-    }
-
-    #pricing p.subtitle {
-      text-align: center;
-      font-size: 1.25rem;
-      color: #4b5563;
-      margin-bottom: 4rem;
-      max-width: 680px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+    /* --- PRICING --- */
+    #pricing { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); }
+    #pricing h2 { text-align: center; font-size: 3.2rem; margin-bottom: 1rem; color: #1e40af; }
+    #pricing p.subtitle { text-align: center; font-size: 1.25rem; color: #4b5563; margin-bottom: 4rem; }
 
     .pricing-tabs {
       display: flex;
@@ -340,7 +221,6 @@
       overflow: hidden;
       box-shadow: var(--shadow-md);
       transition: all 0.4s ease;
-      position: relative;
       border: 1px solid #e5e7eb;
     }
 
@@ -350,165 +230,267 @@
       z-index: 2;
     }
 
-    .pricing-card.popular::before {
-      content: "Most Popular";
-      position: absolute;
-      top: 18px;
-      right: -38px;
-      background: var(--primary);
-      color: white;
-      padding: 0.35rem 3.2rem;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transform: rotate(45deg);
-      z-index: 10;
-    }
-
-    .pricing-card:hover {
-      transform: translateY(-14px);
-      box-shadow: var(--glow);
-    }
-
-    .pricing-header {
-      background: #f8fafc;
-      padding: 2.2rem 1.8rem;
-      text-align: center;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .pricing-header h3 {
-      font-size: 1.85rem;
-      margin-bottom: 0.8rem;
-      color: #1f2937;
-    }
-
-    .price {
-      font-size: 3.2rem;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .price small {
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: var(--gray);
-    }
-
-    .features-list {
-      padding: 2rem 1.8rem;
-      min-height: 280px;
-    }
-
-    .features-list ul {
-      list-style: none;
-    }
-
-    .features-list li {
-      margin-bottom: 1.1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.9rem;
-      font-size: 1.05rem;
-      color: #374151;
-    }
-
-    .features-list i {
-      color: var(--secondary);
-      font-size: 1.3rem;
-    }
-
-    .pricing-footer {
-      padding: 0 1.8rem 2.2rem;
-      text-align: center;
-    }
-
+    .pricing-header { background: #f8fafc; padding: 2.2rem 1.8rem; text-align: center; border-bottom: 1px solid #e5e7eb; }
+    .price { font-size: 3.2rem; font-weight: 800; color: var(--primary); }
+    .features-list { padding: 2rem 1.8rem; min-height: 280px; }
+    .features-list ul { list-style: none; }
+    .features-list li { margin-bottom: 1.1rem; display: flex; align-items: center; gap: 0.9rem; color: #374151; }
+    .pricing-footer { padding: 0 1.8rem 2.2rem; text-align: center; }
     .pricing-footer button {
-      width: 100%;
-      padding: 1.15rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 999px;
-      font-size: 1.15rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
+      width: 100%; padding: 1.15rem; background: var(--primary); color: white; border: none; border-radius: 999px; font-size: 1.15rem; font-weight: 600; cursor: pointer; transition: all 0.3s;
     }
 
-    .pricing-footer button:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-    }
+    /* --- FOOTER --- */
+    footer { background: var(--dark); color: #d1d5db; padding: 4rem 2rem 2rem; text-align: center; }
+    .footer-content { display: flex; justify-content: space-around; flex-wrap: wrap; max-width: 1200px; margin: 0 auto 3rem; gap: 3rem; }
+    footer a { color: #93c5fd; text-decoration: none; }
 
-    footer {
-      background: var(--dark);
-      color: #d1d5db;
-      padding: 4rem 2rem 2rem;
-      text-align: center;
-    }
+    /* =========================================
+       MODERN MODAL & AUTH STYLES
+       ========================================= */
 
-    .footer-content {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      max-width: 1200px;
-      margin: 0 auto 3rem;
-      gap: 3rem;
-    }
-
-    footer a {
-      color: #93c5fd;
-      text-decoration: none;
-    }
-
-    footer a:hover { color: white; }
-
-    /* Modal styles */
     .modal {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.65);
+      background: rgba(17, 24, 39, 0.7); /* Darker backdrop */
+      backdrop-filter: blur(8px); /* Blur effect */
       justify-content: center;
       align-items: center;
       z-index: 2000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal.active {
+      opacity: 1;
     }
 
     .modal-content {
       background: white;
-      padding: 2.5rem;
-      border-radius: 16px;
+      border-radius: 24px;
       width: 90%;
-      max-width: 460px;
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+      max-width: 480px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    .close { float: right; font-size: 2.4rem; cursor: pointer; color: #9ca3af; }
-    #googleBtn {
-      background: #4285F4;
-      color: white;
+    .modal.active .modal-content {
+      transform: translateY(0);
+    }
+
+    /* Close Button */
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 1.8rem;
+      color: #9ca3af;
+      cursor: pointer;
+      z-index: 10;
+      transition: color 0.2s;
+    }
+    .close-modal:hover { color: var(--dark); }
+
+    /* Auth Header (Tabs) */
+    .auth-tabs {
+      display: flex;
+      background: #f9fafb;
+      padding: 0.5rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      background: transparent;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #6b7280;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -0.5rem;
+      left: 0; right: 0;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 3px 3px 0 0;
+    }
+
+    /* Auth Body */
+    .auth-body {
+      padding: 2.5rem 2rem;
+    }
+
+    .auth-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #111827;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-subtitle {
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Modern Google Button */
+    .google-btn {
+      width: 100%;
+      background: white;
+      border: 1px solid #d1d5db;
+      color: #374151;
+      padding: 0.8rem;
+      border-radius: 12px;
+      font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      font-weight: 600;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
     }
-    #googleBtn img { height: 24px; }
 
-    .divider {
+    .google-btn:hover {
+      background: #f9fafb;
+      border-color: #9ca3af;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .google-btn img { width: 20px; height: 20px; }
+
+    /* Divider */
+    .auth-divider {
       display: flex;
       align-items: center;
-      margin: 1.8rem 0;
+      margin: 1.5rem 0;
       color: #9ca3af;
+      font-size: 0.9rem;
     }
-    .divider::before, .divider::after {
+    .auth-divider::before, .auth-divider::after {
       content: '';
       flex: 1;
-      border-bottom: 1px solid #d1d5db;
+      border-bottom: 1px solid #e5e7eb;
     }
-    .divider span { padding: 0 1.4rem; }
+    .auth-divider span { padding: 0 1rem; }
 
-    #authMessage { margin-top: 1.2rem; text-align: center; font-weight: 500; }
+    /* Input Groups with Icons */
+    .input-group {
+      position: relative;
+      margin-bottom: 1.2rem;
+    }
+
+    .input-group i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9ca3af;
+      font-size: 1.1rem;
+      transition: color 0.3s;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 0.9rem 1rem 0.9rem 3rem; /* Left padding for icon */
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.3s;
+      background: #f9fafb;
+    }
+
+    .input-group input:focus {
+      background: white;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+
+    .input-group input:focus + i {
+      color: var(--primary);
+    }
+
+    /* Action Button */
+    .submit-btn {
+      width: 100%;
+      padding: 1rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .submit-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    /* Toggle Views */
+    .form-view { display: none; animation: fadeIn 0.3s ease; }
+    .form-view.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .switch-text {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #6b7280;
+      font-size: 0.95rem;
+    }
+
+    .switch-text a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .switch-text a:hover { text-decoration: underline; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: block; }
+      .nav-links.active {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        background: white;
+        padding: 2rem;
+        box-shadow: var(--shadow-md);
+      }
+      .hero h1 { font-size: 2.8rem; }
+      .search-container { margin: 1rem 0; width: 100%; }
+    }
   </style>
 </head>
 <body>
@@ -522,7 +504,6 @@
         <input type="text" id="searchInput" placeholder="Search business category (restaurant, gym, plumber...)">
         <button onclick="searchBusinesses()">Search</button>
       </div>
-      <div class="autocomplete-dropdown" id="suggestionsDropdown"></div>
     </div>
 
     <div class="nav-links" id="navLinks">
@@ -544,37 +525,30 @@
   <p>Start typing a category to see suggestions — or register your business today!</p>
 </section>
 
-<div id="searchResults"></div>
-<div id="loading" style="display:none;">Searching businesses...</div>
-<div id="noResults" style="display:none;">No businesses found.</div>
-
 <section id="about">
   <h2>About AllBusiness</h2>
   <div class="content">
-    <p><strong>AllBusiness</strong> is a modern, fast-growing platform that connects local customers with trusted businesses across Johannesburg and Gauteng.</p>
-    <p>We help small and medium businesses get discovered online — whether you're a restaurant, plumber, hair salon, gym, mechanic, tutor, or any other local service provider.</p>
-    <p>Our mission is simple: make it easy for people to find exactly what they need nearby, while giving business owners powerful, affordable tools to attract more customers.</p>
-
+    <p>We connect local customers with trusted businesses across Johannesburg and Gauteng. Whether you're a restaurant, plumber, or mechanic, we help you get discovered.</p>
     <div class="features">
       <div class="feature-card">
         <i class="fas fa-search-location fa-2x"></i>
-        <h4>Smart Category Search</h4>
-        <p>Customers find you instantly by typing what they need — no complicated filters.</p>
+        <h4>Smart Search</h4>
+        <p>Customers find you instantly by typing what they need.</p>
       </div>
       <div class="feature-card">
         <i class="fas fa-rocket fa-2x"></i>
-        <h4>Fast & Affordable Visibility</h4>
-        <p>Get listed today — from free basic visibility to premium featured placements.</p>
+        <h4>Fast Visibility</h4>
+        <p>Get listed today and start attracting customers.</p>
       </div>
       <div class="feature-card">
         <i class="fas fa-mobile-alt fa-2x"></i>
-        <h4>Mobile-First Experience</h4>
-        <p>Beautiful on phones — most customers search while on the go.</p>
+        <h4>Mobile First</h4>
+        <p>Optimized for customers searching on the go.</p>
       </div>
       <div class="feature-card">
         <i class="fas fa-shield-alt fa-2x"></i>
-        <h4>Verified & Trusted</h4>
-        <p>Businesses are verified — customers feel safe choosing you.</p>
+        <h4>Verified Trust</h4>
+        <p>Verified businesses build more customer confidence.</p>
       </div>
     </div>
   </div>
@@ -582,68 +556,54 @@
 
 <section id="pricing">
   <h2>Choose Your Plan</h2>
-  <p class="subtitle">Start free — upgrade anytime. All plans include listing, search visibility & basic analytics.</p>
+  <p class="subtitle">Start free — upgrade anytime.</p>
 
   <div class="pricing-tabs">
     <div class="pricing-card">
       <div class="pricing-header">
         <h3>Starter</h3>
-        <div class="price">R 0 <small>/month</small></div>
+        <div class="price">R 0 <small>/mo</small></div>
       </div>
       <div class="features-list">
         <ul>
-          <li><i class="fas fa-check"></i> Business profile & photo</li>
-          <li><i class="fas fa-check"></i> Category listing</li>
+          <li><i class="fas fa-check"></i> Business profile</li>
           <li><i class="fas fa-check"></i> Basic search visibility</li>
-          <li><i class="fas fa-check"></i> Contact details shown</li>
-          <li><i class="fas fa-check"></i> Email notifications</li>
+          <li><i class="fas fa-check"></i> Contact details</li>
         </ul>
       </div>
-      <div class="pricing-footer">
-        <button>Get Started Free</button>
-      </div>
+      <div class="pricing-footer"><button>Get Started Free</button></div>
     </div>
 
     <div class="pricing-card popular">
       <div class="pricing-header">
         <h3>Pro</h3>
-        <div class="price">R 199 <small>/month</small></div>
+        <div class="price">R 199 <small>/mo</small></div>
       </div>
       <div class="features-list">
         <ul>
-          <li><i class="fas fa-check"></i> Everything in Starter</li>
-          <li><i class="fas fa-check"></i> Priority ranking in search</li>
+          <li><i class="fas fa-check"></i> Priority ranking</li>
           <li><i class="fas fa-check"></i> Featured badge</li>
-          <li><i class="fas fa-check"></i> Up to 10 photos & gallery</li>
-          <li><i class="fas fa-check"></i> Customer reviews & ratings</li>
-          <li><i class="fas fa-check"></i> Basic analytics dashboard</li>
-          <li><i class="fas fa-check"></i> WhatsApp & call button</li>
+          <li><i class="fas fa-check"></i> Photo gallery</li>
+          <li><i class="fas fa-check"></i> Reviews & ratings</li>
         </ul>
       </div>
-      <div class="pricing-footer">
-        <button style="background:var(--secondary);">Start 14-day Trial</button>
-      </div>
+      <div class="pricing-footer"><button style="background:var(--secondary);">Start Trial</button></div>
     </div>
 
     <div class="pricing-card">
       <div class="pricing-header">
         <h3>Premium</h3>
-        <div class="price">R 499 <small>/month</small></div>
+        <div class="price">R 499 <small>/mo</small></div>
       </div>
       <div class="features-list">
         <ul>
-          <li><i class="fas fa-check"></i> Everything in Pro</li>
-          <li><i class="fas fa-check"></i> Top placement (top 3 results)</li>
-          <li><i class="fas fa-check"></i> Homepage featured carousel</li>
-          <li><i class="fas fa-check"></i> Custom business page design</li>
-          <li><i class="fas fa-check"></i> Advanced analytics & insights</li>
-          <li><i class="fas fa-check"></i> Lead capture forms</li>
-          <li><i class="fas fa-check"></i> Priority support (chat & phone)</li>
+          <li><i class="fas fa-check"></i> Top placement</li>
+          <li><i class="fas fa-check"></i> Homepage featured</li>
+          <li><i class="fas fa-check"></i> Advanced analytics</li>
+          <li><i class="fas fa-check"></i> Priority support</li>
         </ul>
       </div>
-      <div class="pricing-footer">
-        <button>Contact Sales</button>
-      </div>
+      <div class="pricing-footer"><button>Contact Sales</button></div>
     </div>
   </div>
 </section>
@@ -652,76 +612,179 @@
   <div class="footer-content">
     <div>
       <h4>AllBusiness</h4>
-      <p>Connecting people with great local businesses in Gauteng.</p>
-    </div>
-    <div>
-      <h4>Quick Links</h4>
-      <ul style="list-style:none; line-height:2;">
-        <li><a href="#hero">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#pricing">Pricing</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
+      <p>Connecting people with great local businesses.</p>
     </div>
     <div>
       <h4>Contact</h4>
       <p>support@allbusiness.co.za</p>
-      <p>+27 11 123 4567</p>
       <p>Johannesburg, South Africa</p>
     </div>
   </div>
   <p style="margin-top:3rem; opacity:0.7;">© 2026 AllBusiness. All rights reserved.</p>
 </footer>
 
-<!-- Auth Modal -->
 <div id="registerModal" class="modal">
   <div class="modal-content">
-    <span class="close" onclick="closeModal()">×</span>
-    <h2>Sign Up or Log In</h2>
-
-    <button id="googleBtn">
-      <img src="https://www.google.com/favicon.ico" alt="Google" />
-      Continue with Google
-    </button>
-
-    <div class="divider"><span>or</span></div>
-
-    <div id="emailSection">
-      <input type="text" id="businessName" placeholder="Business Name *" required />
-      <input type="email" id="email" placeholder="Email *" required />
-      <input type="password" id="password" placeholder="Password *" required />
-      <input type="text" id="category" placeholder="Category (e.g. restaurant, plumbing)" required />
-      <button onclick="registerWithEmail()">Register with Email</button>
+    <div class="close-modal" onclick="closeModal()">×</div>
+    
+    <div class="auth-tabs">
+      <button class="tab-btn active" onclick="switchTab('login')">Log In</button>
+      <button class="tab-btn" onclick="switchTab('register')">Sign Up</button>
     </div>
 
-    <p id="authMessage"></p>
+    <div class="auth-body">
+      
+      <div id="loginView" class="form-view active">
+        <h3 class="auth-title">Welcome Back</h3>
+        <p class="auth-subtitle">Manage your business listing seamlessly.</p>
+
+        <button class="google-btn" onclick="authGoogle()">
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
+          Continue with Google
+        </button>
+
+        <div class="auth-divider"><span>or with email</span></div>
+
+        <form onsubmit="handleLogin(event)">
+          <div class="input-group">
+            <input type="email" placeholder="Email Address" required>
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div class="input-group">
+            <input type="password" placeholder="Password" required>
+            <i class="fas fa-lock"></i>
+          </div>
+          <button type="submit" class="submit-btn">Log In</button>
+        </form>
+
+        <p class="switch-text">
+          New to AllBusiness? <a onclick="switchTab('register')">Create an account</a>
+        </p>
+      </div>
+
+      <div id="registerView" class="form-view">
+        <h3 class="auth-title">Grow Your Business</h3>
+        <p class="auth-subtitle">List your services and get discovered today.</p>
+
+        <button class="google-btn" onclick="authGoogle()">
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
+          Sign up with Google
+        </button>
+
+        <div class="auth-divider"><span>or with email</span></div>
+
+        <form onsubmit="handleRegister(event)">
+          <div class="input-group">
+            <input type="text" placeholder="Business Name" required>
+            <i class="fas fa-store"></i>
+          </div>
+          
+          <div class="input-group">
+            <input type="email" placeholder="Email Address" required>
+            <i class="fas fa-envelope"></i>
+          </div>
+
+          <div class="input-group">
+            <input type="text" placeholder="Category (e.g. Plumber)" required>
+            <i class="fas fa-search"></i>
+          </div>
+
+          <div class="input-group">
+            <input type="password" placeholder="Create Password" required>
+            <i class="fas fa-lock"></i>
+          </div>
+          
+          <button type="submit" class="submit-btn">Create Account</button>
+        </form>
+
+        <p class="switch-text">
+          Already listed? <a onclick="switchTab('login')">Log in here</a>
+        </p>
+      </div>
+
+    </div>
   </div>
 </div>
 
-<script type="module">
-  // Your existing Firebase imports + logic here...
-  // (copy from your previous working version – Google + Email registration)
-
+<script>
   // Mobile menu toggle
   document.getElementById('hamburger').onclick = () => {
     document.getElementById('navLinks').classList.toggle('active');
   };
 
-  const modal = document.getElementById('registerModal');
-  document.getElementById('registerBtnHeader').onclick = () => modal.style.display = 'flex';
-  document.getElementById('loginBtn').onclick = () => modal.style.display = 'flex';
-
-  window.closeModal = () => modal.style.display = 'none';
-
-  // Add subtle scroll effect to header
+  // Sticky Header Effect
   window.addEventListener('scroll', () => {
     document.querySelector('header').classList.toggle('scrolled', window.scrollY > 50);
   });
 
-  // Placeholder for search & autocomplete – expand as needed
+  // Placeholder Search
   window.searchBusinesses = () => {
-    alert("Search triggered – implement full listing here");
+    alert("Search triggered – backend integration required.");
   };
+
+  // --- AUTH MODAL LOGIC ---
+  const modal = document.getElementById('registerModal');
+  
+  // Open Modal function
+  const openModal = () => {
+    modal.style.display = 'flex';
+    // Small timeout to allow display:flex to apply before adding opacity class
+    setTimeout(() => {
+      modal.classList.add('active');
+    }, 10);
+  };
+
+  // Event Listeners for Buttons
+  document.getElementById('registerBtnHeader').onclick = () => {
+    switchTab('register'); // Open directly to register tab
+    openModal();
+  };
+  
+  document.getElementById('loginBtn').onclick = () => {
+    switchTab('login'); // Open directly to login tab
+    openModal();
+  };
+
+  // Close Modal function
+  window.closeModal = () => {
+    modal.classList.remove('active');
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 300); // Wait for transition to finish
+  };
+
+  // Close if clicking outside content
+  window.onclick = (event) => {
+    if (event.target == modal) {
+      window.closeModal();
+    }
+  };
+
+  // Tab Switching Logic
+  window.switchTab = (tabName) => {
+    const loginView = document.getElementById('loginView');
+    const registerView = document.getElementById('registerView');
+    const tabs = document.querySelectorAll('.tab-btn');
+
+    // Reset tabs styles
+    tabs.forEach(t => t.classList.remove('active'));
+
+    if (tabName === 'login') {
+      loginView.classList.add('active');
+      registerView.classList.remove('active');
+      tabs[0].classList.add('active');
+    } else {
+      registerView.classList.add('active');
+      loginView.classList.remove('active');
+      tabs[1].classList.add('active');
+    }
+  };
+
+  // Placeholder Handlers
+  window.authGoogle = () => alert('Trigger Google Auth Provider');
+  window.handleLogin = (e) => { e.preventDefault(); alert('Proceeding with Login...'); };
+  window.handleRegister = (e) => { e.preventDefault(); alert('Proceeding with Registration...'); };
+
 </script>
 </body>
 </html>
