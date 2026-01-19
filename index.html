@@ -195,12 +195,34 @@
       font-family: inherit; font-size: 0.95rem; outline: none; transition: 0.2s;
     }
 
+    /* ─── Pricing Section ────────────────────────────────── */
+    .pricing-section { padding: 60px 24px; background: #fff; text-align: center; }
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px; max-width: 1100px; margin: 40px auto 0;
+    }
+    .pricing-card {
+      padding: 32px; border-radius: 20px; border: 1px solid #eee;
+      display: flex; flex-direction: column; transition: 0.3s;
+    }
+    .pricing-card:hover { border-color: var(--accent-color); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    .pricing-card.featured { background: #041E49; color: white; border: none; position: relative; }
+    .pricing-card.featured .action-btn { background: white; color: #041E49; }
+    .price-amount { font-size: 2.5rem; font-weight: 700; margin: 20px 0; }
+    .price-amount span { font-size: 1rem; font-weight: 400; opacity: 0.7; }
+    .pricing-features { list-style: none; margin-bottom: 30px; text-align: left; }
+    .pricing-features li { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 0.9rem; }
+    .featured-label {
+        position: absolute; top: 15px; right: 20px; background: var(--accent-color);
+        font-size: 0.7rem; padding: 4px 10px; border-radius: 10px; font-weight: 600;
+    }
+
     /* ─── Footer ─────────────────────────────────────────── */
     .footer {
       background: #f8f9fa;
       padding: 60px 24px 40px;
       border-top: 1px solid #eee;
-      margin-top: 40px;
+      margin-top: 0;
     }
     .footer-grid {
       display: grid;
@@ -288,6 +310,47 @@
       </div>
 
       <div class="business-grid" id="businessGrid"></div>
+
+      <section class="pricing-section">
+          <h2 style="font-size: 1.8rem; font-weight: 700;">Promote Your Business</h2>
+          <p style="color: var(--text-secondary); margin-top: 8px;">Reach more customers with Vynix Biz Marketing Tools.</p>
+          
+          <div class="pricing-grid">
+              <div class="pricing-card">
+                  <h3>Basic</h3>
+                  <div class="price-amount">$0<span>/month</span></div>
+                  <ul class="pricing-features">
+                      <li><span class="material-symbols-rounded" style="color:#4285F4; font-size:18px;">check_circle</span> Standard Listing</li>
+                      <li><span class="material-symbols-rounded" style="color:#4285F4; font-size:18px;">check_circle</span> Contact Details</li>
+                      <li><span class="material-symbols-rounded" style="color:#ccc; font-size:18px;">cancel</span> No Verified Badge</li>
+                  </ul>
+                  <button class="action-btn" onclick="openListModal()">Get Started</button>
+              </div>
+
+              <div class="pricing-card featured">
+                  <span class="featured-label">RECOMMENDED</span>
+                  <h3>Professional</h3>
+                  <div class="price-amount">$19<span>/month</span></div>
+                  <ul class="pricing-features">
+                      <li><span class="material-symbols-rounded" style="color:#fff; font-size:18px;">check_circle</span> Verified Badge</li>
+                      <li><span class="material-symbols-rounded" style="color:#fff; font-size:18px;">check_circle</span> Priority Search Result</li>
+                      <li><span class="material-symbols-rounded" style="color:#fff; font-size:18px;">check_circle</span> 10 Photos Gallery</li>
+                  </ul>
+                  <button class="action-btn">Go Pro</button>
+              </div>
+
+              <div class="pricing-card">
+                  <h3>Premium</h3>
+                  <div class="price-amount">$49<span>/month</span></div>
+                  <ul class="pricing-features">
+                      <li><span class="material-symbols-rounded" style="color:#4285F4; font-size:18px;">check_circle</span> Homepage Featured</li>
+                      <li><span class="material-symbols-rounded" style="color:#4285F4; font-size:18px;">check_circle</span> Professional Video</li>
+                      <li><span class="material-symbols-rounded" style="color:#4285F4; font-size:18px;">check_circle</span> 24/7 Priority Support</li>
+                  </ul>
+                  <button class="action-btn">Contact Us</button>
+              </div>
+          </div>
+      </section>
 
       <footer class="footer">
         <div class="footer-grid">
