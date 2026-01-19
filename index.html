@@ -5,358 +5,293 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AllBusiness - Advertising Platform</title>
     <style>
-        /* Reset and base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
-        }
+        /* Reset and base */
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', system-ui, sans-serif; }
+        body { background:#f0f4f8; color:#222; line-height:1.6; overflow-x:hidden; }
 
-        body {
-            background-color: #f0f4f8;
-            color: #333;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Futuristic light theme */
         :root {
-            --primary-color: #4a90e2;
-            --secondary-color: #50e3c2;
-            --accent-color: #f5a623;
-            --bg-gradient: linear-gradient(135deg, #ffffff, #e0eaff);
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            --neon-glow: 0 0 10px var(--primary-color);
+            --primary: #4a90e2;
+            --secondary: #50e3c2;
+            --accent: #f5a623;
+            --bg: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #f8fbff, #e0eaff);
+            --glass: rgba(255,255,255,0.75);
+            --shadow: 0 8px 32px rgba(31,38,135,0.15);
+            --glow: 0 0 15px rgba(74,144,226,0.5);
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Header / Navbar */
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .navbar {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        @keyframes glow {
-            0% { box-shadow: var(--neon-glow); }
-            50% { box-shadow: 0 0 20px var(--primary-color); }
-            100% { box-shadow: var(--neon-glow); }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-shadow: var(--glow);
+            letter-spacing: -1px;
         }
 
-        .animate-fade { animation: fadeIn 1s ease-out; }
-        .animate-pulse { animation: pulse 2s infinite; }
-        .animate-glow { animation: glow 2s infinite; }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
 
-        /* Hero Section */
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active { color: var(--primary); }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0; height: 2px;
+            bottom: -6px; left: 0;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+
+        /* Search in header */
+        .search-container {
+            flex: 1;
+            max-width: 420px;
+            margin: 0 2rem;
+        }
+
+        .search-bar {
+            display: flex;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 1px solid rgba(74,144,226,0.2);
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 0.9rem 1.8rem;
+            border: none;
+            font-size: 1rem;
+            background: transparent;
+        }
+
+        .search-bar button {
+            padding: 0.9rem 1.8rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-bar button:hover { background: #357abd; }
+
+        /* Auth buttons */
+        .auth-buttons button {
+            padding: 0.7rem 1.4rem;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        #loginBtn {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            margin-right: 1rem;
+        }
+
+        #loginBtn:hover { background: var(--primary); color: white; }
+
+        #registerBtnHeader {
+            background: var(--secondary);
+            border: none;
+            color: white;
+        }
+
+        #registerBtnHeader:hover { transform: translateY(-2px); box-shadow: var(--glow); }
+
+        /* Mobile menu */
+        .hamburger { display: none; font-size: 1.8rem; cursor: pointer; color: var(--primary); }
+
+        @media (max-width: 992px) {
+            .nav-links { 
+                position: absolute; top: 100%; left: 0; right: 0;
+                flex-direction: column; background: var(--glass);
+                backdrop-filter: blur(12px);
+                padding: 2rem; gap: 1.5rem;
+                transform: translateY(-100%); opacity: 0;
+                transition: all 0.4s ease;
+                pointer-events: none;
+            }
+            .nav-links.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
+            .search-container { margin: 1rem 0; max-width: none; }
+            .auth-buttons { flex-direction: column; width: 100%; }
+            .hamburger { display: block; }
+        }
+
+        /* Hero - now smaller padding since header is fixed */
         #hero {
-            height: 100vh;
+            min-height: 90vh;
             background: var(--bg-gradient);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(74,144,226,0.2) 0%, transparent 70%);
-            animation: pulse 10s infinite;
+            padding: 8rem 2rem 4rem;
         }
 
         #hero h1 {
-            font-size: 4rem;
+            font-size: 4.2rem;
             margin-bottom: 1rem;
-            color: var(--primary-color);
-            text-shadow: var(--neon-glow);
+            color: var(--primary);
+            text-shadow: var(--glow);
         }
 
-        #hero p {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-        }
+        #hero p { font-size: 1.6rem; max-width: 700px; margin-bottom: 3rem; }
 
-        .search-bar {
-            width: 60%;
-            max-width: 600px;
-            display: flex;
-            background: white;
-            border-radius: 50px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        .search-bar input {
-            flex: 1;
-            padding: 1rem 2rem;
-            border: none;
-            font-size: 1.1rem;
-        }
-
-        .search-bar button {
-            padding: 1rem 2.5rem;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .search-bar button:hover {
-            background: #357abd;
-        }
-
+        /* Search results (below hero) */
         #searchResults {
-            margin-top: 3rem;
-            width: 80%;
-            max-width: 900px;
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
         }
 
         .business-card {
             background: white;
             border-radius: 16px;
-            padding: 1.5rem;
+            padding: 1.8rem;
             box-shadow: var(--shadow);
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.4s;
         }
 
         .business-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--neon-glow);
+            transform: translateY(-10px);
+            box-shadow: var(--glow);
         }
 
-        .business-card h3 {
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
+        .business-card h3 { color: var(--primary); margin-bottom: 0.8rem; }
 
-        .business-card p {
-            color: #555;
-        }
+        #loading, #noResults { text-align: center; margin: 3rem; font-size: 1.3rem; color: #555; }
 
-        #loading, #noResults {
-            margin-top: 2rem;
-            font-size: 1.2rem;
-            color: #666;
-        }
-
-        /* About Section */
-        #about {
-            padding: 5rem 2rem;
-            background: white;
-            text-align: center;
-        }
-
-        #about h2 {
-            font-size: 3rem;
-            margin-bottom: 2rem;
-            color: var(--primary-color);
-        }
-
-        #about p {
-            max-width: 800px;
-            margin: 0 auto 2rem;
-            font-size: 1.2rem;
-        }
-
-        /* Pricing Section */
-        #pricing {
-            padding: 5rem 2rem;
-            background: var(--bg-gradient);
-            text-align: center;
-        }
-
-        #pricing h2 {
-            font-size: 3rem;
-            margin-bottom: 3rem;
-            color: var(--primary-color);
-        }
+        /* Rest of sections (About, Pricing, Footer) - same as before, just condensed */
+        section { padding: 6rem 2rem; }
+        #about { background: white; text-align: center; }
+        #pricing { background: var(--bg-gradient); text-align: center; }
 
         .pricing-tabs {
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            gap: 2.5rem;
             flex-wrap: wrap;
         }
 
         .pricing-card {
             background: white;
             border-radius: 20px;
-            padding: 2rem;
-            width: 300px;
+            padding: 2.5rem;
+            width: 320px;
             box-shadow: var(--shadow);
-            transition: transform 0.3s;
+            transition: all 0.4s;
         }
 
-        .pricing-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--neon-glow);
-        }
+        .pricing-card:hover { transform: translateY(-12px); box-shadow: var(--glow); }
 
-        .pricing-card h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: var(--secondary-color);
-        }
-
-        .pricing-card .price {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--accent-color);
-        }
-
-        .pricing-card ul {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .pricing-card li {
-            margin-bottom: 0.5rem;
-        }
-
-        .pricing-card button {
-            padding: 1rem 2rem;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .pricing-card button:hover {
-            background: #357abd;
-        }
-
-        /* Footer */
         footer {
-            padding: 3rem 2rem;
-            background: #333;
+            background: #2a2a2a;
             color: white;
+            padding: 4rem 2rem 2rem;
             text-align: center;
         }
 
-        footer .footer-content {
+        .footer-content {
             display: flex;
             justify-content: space-around;
             flex-wrap: wrap;
-            margin-bottom: 2rem;
+            max-width: 1200px;
+            margin: 0 auto 3rem;
         }
 
-        footer .footer-section {
-            margin: 1rem;
-        }
-
-        footer h4 {
-            margin-bottom: 1rem;
-        }
-
-        footer ul {
-            list-style: none;
-        }
-
-        footer li {
-            margin-bottom: 0.5rem;
-        }
-
-        footer a {
-            color: var(--secondary-color);
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        footer .copyright {
-            font-size: 0.9rem;
-        }
-
-        /* Registration Modal */
+        /* Modal - same as before */
         .modal {
             display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6);
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
         }
 
         .modal-content {
             background: white;
             padding: 2.5rem;
             border-radius: 20px;
-            width: 90%;
-            max-width: 450px;
+            width: 90%; max-width: 460px;
             box-shadow: var(--shadow);
         }
 
-        .modal-content h2 {
-            margin-bottom: 1.5rem;
-            color: var(--primary-color);
-        }
+        .close { float: right; font-size: 2.2rem; cursor: pointer; color: #777; }
+        .close:hover { color: #333; }
 
         .modal-content input {
             width: 100%;
             padding: 1rem;
-            margin-bottom: 1.2rem;
+            margin: 0.8rem 0;
             border: 1px solid #ddd;
             border-radius: 10px;
-            font-size: 1rem;
         }
 
         .modal-content button {
             width: 100%;
-            padding: 1rem;
-            background: var(--primary-color);
+            padding: 1.1rem;
+            background: var(--primary);
             color: white;
             border: none;
             border-radius: 10px;
-            cursor: pointer;
             font-size: 1.1rem;
-        }
-
-        .close {
-            float: right;
-            font-size: 2rem;
             cursor: pointer;
-            color: #aaa;
         }
 
-        .close:hover {
-            color: #333;
-        }
-
-        /* Scroll reveal */
-        section {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 1s ease-out;
-        }
-
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        /* Animations */
+        @keyframes fadeIn { from { opacity:0; transform:translateY(25px); } to { opacity:1; transform:translateY(0); } }
+        section, .business-card { opacity:0; transform:translateY(40px); transition:all 1s ease; }
+        section.visible, .business-card.visible { opacity:1; transform:translateY(0); }
     </style>
-    <!-- Firebase v9 modular SDK (recommended in 2025+) -->
+
+    <!-- Firebase v9 modular -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -373,11 +308,8 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        window.auth = auth;
-        window.db = db;
+        window.auth = getAuth(app);
+        window.db = getFirestore(app);
         window.collection = collection;
         window.addDoc = addDoc;
         window.query = query;
@@ -388,66 +320,83 @@
 </head>
 <body>
 
-    <!-- Hero Section -->
-    <section id="hero" class="animate-fade animate-pulse">
-        <h1>Welcome to AllBusiness</h1>
-        <p>Your Ultimate Advertising Platform for Businesses</p>
-        
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search by business category (e.g., restaurant, gym, salon)...">
-            <button onclick="searchBusinesses()">Search</button>
-        </div>
+    <!-- Header / Navbar -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">AllBusiness</div>
 
-        <div id="searchResults"></div>
-        <div id="loading" style="display:none;">Loading businesses...</div>
-        <div id="noResults" style="display:none;">No businesses found in this category.</div>
+            <div class="search-container">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search business category (restaurant, gym...)">
+                    <button onclick="searchBusinesses()">Search</button>
+                </div>
+            </div>
 
-        <button id="registerBtn" style="margin-top: 3rem; padding: 1rem 2.5rem; background: var(--secondary-color); color: white; border: none; border-radius: 50px; cursor: pointer; font-size: 1.2rem;">Register Your Business</button>
+            <div class="nav-links" id="navLinks">
+                <a href="#hero">Home</a>
+                <a href="#about">About</a>
+                <a href="#pricing">Pricing</a>
+                <div class="auth-buttons">
+                    <button id="loginBtn">Login</button>
+                    <button id="registerBtnHeader">Register</button>
+                </div>
+            </div>
+
+            <div class="hamburger" id="hamburger">☰</div>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section id="hero">
+        <h1>Discover & Grow Your Business</h1>
+        <p>Use our powerful category search to find local services — or register your own business today to reach thousands of customers.</p>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="animate-fade">
+    <!-- Search Results -->
+    <div id="searchResults"></div>
+    <div id="loading" style="display:none;">Searching businesses...</div>
+    <div id="noResults" style="display:none;">No businesses found for this category.</div>
+
+    <!-- About -->
+    <section id="about">
         <h2>About AllBusiness</h2>
-        <p>AllBusiness is a cutting-edge advertising platform designed to connect businesses with potential customers in a seamless and innovative way.</p>
-        <p>Companies register here, choose a category, and become discoverable through smart category-based searches — helping local customers find exactly what they need.</p>
-        <p>Built with a futuristic interface and real-time capabilities — perfect for the modern business landscape.</p>
+        <p>AllBusiness connects customers with quality local businesses through smart, category-based discovery.</p>
+        <p>Join thousands of companies showcasing their services in a modern, futuristic platform built for growth.</p>
     </section>
 
-    <!-- Pricing Section -->
-    <section id="pricing" class="animate-fade">
-        <h2>Pricing Plans</h2>
+    <!-- Pricing -->
+    <section id="pricing">
+        <h2>Choose Your Plan</h2>
         <div class="pricing-tabs">
-            <div class="pricing-card animate-glow">
+            <div class="pricing-card">
                 <h3>Basic</h3>
-                <div class="price">$9.99/mo</div>
-                <ul>
+                <div class="price" style="font-size:2.8rem;color:var(--accent);">$9.99<span style="font-size:1.2rem">/mo</span></div>
+                <ul style="list-style:none;margin:1.5rem 0;">
                     <li>Business Listing</li>
-                    <li>Basic Search Visibility</li>
+                    <li>Search Visibility</li>
                     <li>Email Support</li>
                 </ul>
-                <button onclick="selectPlan('Basic')">Choose Plan</button>
+                <button>Select</button>
             </div>
-            <div class="pricing-card animate-glow">
+            <div class="pricing-card">
                 <h3>Pro</h3>
-                <div class="price">$19.99/mo</div>
-                <ul>
-                    <li>All Basic Features</li>
-                    <li>Advanced Analytics</li>
-                    <li>Priority Listing</li>
+                <div class="price" style="font-size:2.8rem;color:var(--accent);">$19.99<span style="font-size:1.2rem">/mo</span></div>
+                <ul style="list-style:none;margin:1.5rem 0;">
+                    <li>Priority Placement</li>
+                    <li>Analytics Dashboard</li>
                     <li>Chat Support</li>
                 </ul>
-                <button onclick="selectPlan('Pro')">Choose Plan</button>
+                <button>Select</button>
             </div>
-            <div class="pricing-card animate-glow">
+            <div class="pricing-card">
                 <h3>Enterprise</h3>
-                <div class="price">$49.99/mo</div>
-                <ul>
-                    <li>All Pro Features</li>
-                    <li>Custom Advertising</li>
-                    <li>Dedicated Account Manager</li>
+                <div class="price" style="font-size:2.8rem;color:var(--accent);">$49.99<span style="font-size:1.2rem">/mo</span></div>
+                <ul style="list-style:none;margin:1.5rem 0;">
+                    <li>Custom Ads</li>
+                    <li>Dedicated Manager</li>
                     <li>API Access</li>
                 </ul>
-                <button onclick="selectPlan('Enterprise')">Choose Plan</button>
+                <button>Select</button>
             </div>
         </div>
     </section>
@@ -455,157 +404,135 @@
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <div class="footer-section">
-                <h4>About Us</h4>
-                <p>AllBusiness connects customers with great local businesses.</p>
+            <div>
+                <h4>AllBusiness</h4>
+                <p>Connecting businesses & customers in Johannesburg and beyond.</p>
             </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="#hero">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="#">Contact</a></li>
+            <div>
+                <h4>Links</h4>
+                <ul style="list-style:none;">
+                    <li><a href="#hero" style="color:#50e3c2;text-decoration:none;">Home</a></li>
+                    <li><a href="#about" style="color:#50e3c2;text-decoration:none;">About</a></li>
+                    <li><a href="#pricing" style="color:#50e3c2;text-decoration:none;">Pricing</a></li>
                 </ul>
             </div>
-            <div class="footer-section">
+            <div>
                 <h4>Contact</h4>
-                <p>Email: support@allbusiness.com</p>
-                <p>Phone: +27 11 123 4567</p>
-                <p>Johannesburg, South Africa</p>
-            </div>
-            <div class="footer-section">
-                <h4>Legal</h4>
-                <ul>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                </ul>
+                <p>support@allbusiness.com</p>
+                <p>+27 11 123 4567</p>
             </div>
         </div>
-        <div class="copyright">© 2026 AllBusiness. All rights reserved.</div>
+        <p style="margin-top:2rem;opacity:0.8;">© 2026 AllBusiness. All rights reserved.</p>
     </footer>
 
     <!-- Registration Modal -->
     <div id="registerModal" class="modal">
-        <div class="modal-content animate-fade">
+        <div class="modal-content">
             <span class="close" onclick="closeModal()">×</span>
             <h2>Register Your Business</h2>
             <input type="text" id="businessName" placeholder="Business Name *" required>
             <input type="email" id="email" placeholder="Email *" required>
             <input type="password" id="password" placeholder="Password *" required>
-            <input type="text" id="category" placeholder="Main Category (e.g., restaurant, gym, plumbing)" required>
-            <button onclick="registerBusiness()">Register Business</button>
-            <p id="authMessage" style="margin-top:1rem; color:#e74c3c;"></p>
+            <input type="text" id="category" placeholder="Category (e.g. restaurant, plumbing)" required>
+            <button onclick="registerBusiness()">Register</button>
+            <p id="authMessage" style="margin-top:1.2rem;color:#e74c3c;"></p>
         </div>
     </div>
 
     <script type="module">
-        // Make sure Firebase is loaded
         const { auth, db, collection, addDoc, query, where, getDocs, serverTimestamp } = window;
 
+        // Mobile menu toggle
+        document.getElementById('hamburger').onclick = () => {
+            document.getElementById('navLinks').classList.toggle('active');
+        };
+
+        // Modal
         const modal = document.getElementById('registerModal');
-        const registerBtn = document.getElementById('registerBtn');
-
-        registerBtn.onclick = () => modal.style.display = 'flex';
-
+        document.getElementById('registerBtnHeader').onclick = () => modal.style.display = 'flex';
         window.closeModal = () => modal.style.display = 'none';
 
-        // Register Business
+        // Register
         window.registerBusiness = async () => {
             const name = document.getElementById('businessName').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            let category = document.getElementById('category').value.trim();
+            let category = document.getElementById('category').value.trim().toLowerCase();
 
             if (!name || !email || !password || !category) {
-                document.getElementById('authMessage').textContent = "Please fill in all fields.";
+                document.getElementById('authMessage').textContent = 'Please complete all fields.';
                 return;
             }
 
-            // Normalize category for consistent search
-            category = category.toLowerCase();
-
             try {
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-
+                const userCred = await auth.createUserWithEmailAndPassword(email, password);
                 await addDoc(collection(db, "businesses"), {
-                    name,
-                    category,
-                    email,
-                    uid: user.uid,
+                    name, category, email,
+                    uid: userCred.user.uid,
                     createdAt: serverTimestamp()
                 });
-
-                document.getElementById('authMessage').style.color = "green";
-                document.getElementById('authMessage').textContent = "Success! Your business is now listed.";
-                setTimeout(closeModal, 2500);
-            } catch (error) {
-                document.getElementById('authMessage').textContent = error.message;
+                document.getElementById('authMessage').style.color = 'green';
+                document.getElementById('authMessage').textContent = 'Success! Business registered.';
+                setTimeout(closeModal, 2200);
+            } catch (err) {
+                document.getElementById('authMessage').textContent = err.message;
             }
         };
 
-        // Search Businesses by Category (exact match, case-insensitive)
+        // Search (exact category match)
         window.searchBusinesses = async () => {
-            const searchTerm = document.getElementById('searchInput').value.trim();
-            if (!searchTerm) return;
+            const term = document.getElementById('searchInput').value.trim();
+            if (!term) return;
 
-            const resultsContainer = document.getElementById('searchResults');
+            const container = document.getElementById('searchResults');
             const loading = document.getElementById('loading');
-            const noResults = document.getElementById('noResults');
+            const noRes = document.getElementById('noResults');
 
-            resultsContainer.innerHTML = '';
+            container.innerHTML = '';
             loading.style.display = 'block';
-            noResults.style.display = 'none';
+            noRes.style.display = 'none';
 
             try {
-                const q = query(
-                    collection(db, "businesses"),
-                    where("category", "==", searchTerm.toLowerCase())
-                );
-
-                const querySnapshot = await getDocs(q);
+                const q = query(collection(db, "businesses"), where("category", "==", term.toLowerCase()));
+                const snap = await getDocs(q);
 
                 loading.style.display = 'none';
 
-                if (querySnapshot.empty) {
-                    noResults.style.display = 'block';
+                if (snap.empty) {
+                    noRes.style.display = 'block';
                     return;
                 }
 
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
+                snap.forEach(doc => {
+                    const d = doc.data();
                     const card = document.createElement('div');
-                    card.className = 'business-card';
+                    card.className = 'business-card visible';
                     card.innerHTML = `
-                        <h3>${data.name}</h3>
-                        <p><strong>Category:</strong> ${data.category}</p>
-                        <p><strong>Contact:</strong> ${data.email}</p>
+                        <h3>${d.name}</h3>
+                        <p><strong>Category:</strong> ${d.category}</p>
+                        <p><strong>Email:</strong> ${d.email}</p>
                     `;
-                    resultsContainer.appendChild(card);
+                    container.appendChild(card);
                 });
-            } catch (error) {
+            } catch (err) {
                 loading.style.display = 'none';
-                resultsContainer.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+                container.innerHTML = `<p style="color:red;text-align:center;">Error: ${err.message}</p>`;
             }
         };
 
-        // Mock plan selection
-        window.selectPlan = (plan) => {
-            alert(`Selected ${plan} plan — you'll be redirected to payment in production.`);
+        // Login placeholder
+        document.getElementById('loginBtn').onclick = () => {
+            alert('Login feature coming soon! (Firebase Auth + modal can be added easily)');
         };
 
-        // Scroll animations
-        const sections = document.querySelectorAll('section');
+        // Scroll reveal
         const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+            entries.forEach(e => {
+                if (e.isIntersecting) e.target.classList.add('visible');
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.15 });
 
-        sections.forEach(section => observer.observe(section));
+        document.querySelectorAll('section, .business-card').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
