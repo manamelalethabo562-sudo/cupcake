@@ -5,15 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>All Business • Live Directory</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
-
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
   <style>
     :root {
       --bg-body: #F0F4F9;
@@ -28,9 +25,7 @@
       --sidebar-collapsed: 72px;
       --header-height: 70px;
     }
-
     * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
-
     body {
       background: var(--bg-body);
       color: var(--text-main);
@@ -39,8 +34,6 @@
       display: flex;
       overflow: hidden;
     }
-
-    /* ─── Sidebar ────────────────────────────────────────── */
     .sidebar {
       background: var(--bg-sidebar);
       width: var(--sidebar-collapsed);
@@ -50,13 +43,11 @@
       z-index: 50;
       transition: width 0.3s cubic-bezier(0.2, 0, 0, 1);
     }
-
     @media(min-width: 769px) {
       .sidebar:hover { width: var(--sidebar-width); }
       .sidebar:not(:hover) .nav-label, .sidebar:not(:hover) .brand-text { opacity: 0; display: none; }
       .mobile-menu-trigger { display: none !important; }
     }
-
     @media(max-width: 768px) {
       .sidebar {
         position: fixed; left: 0; top: 0; bottom: 0;
@@ -66,7 +57,6 @@
       }
       .sidebar.open { transform: translateX(0); }
     }
-
     .nav-list { flex: 1; display: flex; flex-direction: column; gap: 4px; margin-top: 20px; }
     .nav-item {
       display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-radius: 24px;
@@ -76,42 +66,34 @@
     .nav-item:hover { background: rgba(0,0,0,0.05); color: var(--text-main); }
     .nav-item.active { background: #D3E3FD; color: #041E49; font-weight: 500; }
     .nav-icon { font-size: 24px; }
-
-    /* ─── Main Content ───────────────────────────────────── */
     .main {
       flex: 1; display: flex; flex-direction: column; position: relative;
       background: #FFFFFF; border-radius: 24px; margin: 16px 16px 16px 0;
       box-shadow: 0 0 0 1px rgba(0,0,0,0.02); overflow: hidden;
     }
     @media(max-width: 768px) { .main { margin: 0; border-radius: 0; } }
-
     .top-bar {
       height: var(--header-height); display: flex; align-items: center; justify-content: space-between;
       padding: 0 24px; border-bottom: 1px solid #f0f0f0; z-index: 10; background: rgba(255,255,255,0.9);
       backdrop-filter: blur(10px); position: absolute; top: 0; width: 100%;
     }
-
     .user-pill {
       display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 12px;
       background: #F0F4F9; border-radius: 32px; cursor: pointer; transition: background 0.2s;
     }
     .user-avatar { width: 32px; height: 32px; border-radius: 50%; background-size: cover; background-position: center; }
-
     .content-scroll { flex: 1; overflow-y: auto; padding-top: var(--header-height); scroll-behavior: smooth; }
-
     .hero-section { padding: 60px 24px 40px; text-align: center; }
     .hero-title {
       font-size: 2.5rem; font-weight: 700; margin-bottom: 12px;
       background: var(--primary-gradient); -webkit-background-clip: text; color: transparent;
     }
-
     .search-wrapper { max-width: 600px; margin: 24px auto 0; position: relative; }
     .search-input {
       width: 100%; padding: 16px 24px 16px 50px; border-radius: 30px; border: 1px solid #e0e0e0;
       font-size: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); outline: none;
     }
     .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-
     .filter-bar {
       display: flex; gap: 10px; overflow-x: auto; padding: 0 24px 20px;
       justify-content: center; scrollbar-width: none;
@@ -122,47 +104,38 @@
       font-size: 0.9rem; font-weight: 500; cursor: pointer; white-space: nowrap; transition: 0.2s;
     }
     .category-pill.active { background: var(--text-main); color: white; }
-
-    /* Directory Grid */
     .business-grid {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 24px; padding: 24px; max-width: 1200px; margin: 0 auto;
       min-height: 400px;
     }
-
     .category-header {
-      grid-column: 1 / -1; font-size: 1.25rem; font-weight: 700; 
+      grid-column: 1 / -1; font-size: 1.25rem; font-weight: 700;
       padding: 20px 0 10px; border-bottom: 2px solid #f0f4f9; margin-bottom: 10px;
       color: var(--text-main); display: flex; align-items: center; gap: 10px;
     }
-
     .cat-badge {
       font-size: 0.75rem; background: #e8f0fe; color: #1967d2;
       padding: 2px 8px; border-radius: 12px; font-weight: 600;
     }
-
     .business-card {
       background: white; border: 1px solid #f0f0f0; border-radius: 16px;
       overflow: hidden; transition: 0.2s; cursor: pointer; display: flex; flex-direction: column;
       position: relative;
     }
     .business-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
-
     .card-img { height: 140px; background-color: #f0f0f0; position: relative; background-size: cover; background-position: center; }
     .card-category {
       position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.9);
       padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;
     }
-
     .card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
     .biz-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
     .biz-rating { display: flex; align-items: center; gap: 4px; font-size: 0.9rem; color: #F4B400; margin-bottom: 12px; }
     .biz-info { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 6px; }
-
     .rating-container { display: flex; gap: 4px; margin-bottom: 16px; cursor: pointer; }
     .rating-container span { font-size: 32px; color: #e0e0e0; transition: color 0.2s; }
     .rating-container span.active { color: #F4B400; }
-
     .action-btn {
       flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #e0e0e0;
       background: transparent; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.2s;
@@ -170,10 +143,8 @@
     }
     .action-btn.primary { background: var(--text-main); color: white; border: none; }
     .action-btn.whatsapp { background: #25D366; color: white; border: none; }
-
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 40; opacity: 0; pointer-events: none; transition: 0.3s; }
     .overlay.active { opacity: 1; pointer-events: auto; }
-    
     .modal-sheet {
       position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95);
       background: white; width: 90%; max-width: 500px; border-radius: 24px;
@@ -187,15 +158,12 @@
       width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
     }
     .modal-content { padding: 24px; max-height: 80vh; overflow-y: auto; }
-
     .form-group { margin-bottom: 16px; }
     .form-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
     .form-input {
       width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid #e0e0e0;
       font-family: inherit; font-size: 0.95rem; outline: none; transition: 0.2s;
     }
-
-    /* ─── Pricing Section ────────────────────────────────── */
     .pricing-section { padding: 60px 24px; background: #fff; text-align: center; }
     .pricing-grid {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -216,8 +184,6 @@
         position: absolute; top: 15px; right: 20px; background: var(--accent-color);
         font-size: 0.7rem; padding: 4px 10px; border-radius: 10px; font-weight: 600;
     }
-
-    /* ─── Footer ─────────────────────────────────────────── */
     .footer {
       background: #f8f9fa;
       padding: 60px 24px 40px;
@@ -253,48 +219,58 @@
       .footer-grid { grid-template-columns: 1fr; gap: 32px; }
       .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
     }
-
-    /* ─── Pricing Card Flip Effect ───────────────────────── */
-.pricing-card {
-  perspective: 1200px;
-}
-
-.pricing-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.2,0,0,1);
-}
-
-.pricing-card:hover .pricing-inner {
-  transform: rotateY(180deg);
-}
-
-.pricing-front,
-.pricing-back {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.pricing-back {
-  transform: rotateY(180deg);
-  align-items: center;
-  text-align: center;
-  padding: 32px;
-}
-
+    .pricing-card {
+      perspective: 1200px;
+    }
+    .pricing-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.2,0,0,1);
+    }
+    .pricing-card:hover .pricing-inner {
+      transform: rotateY(180deg);
+    }
+    .pricing-front,
+    .pricing-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .pricing-back {
+      transform: rotateY(180deg);
+      align-items: center;
+      text-align: center;
+      padding: 32px;
+    }
+    /* New styles for image upload */
+    #imagePreview img {
+      width: 100%;
+      height: auto;
+      max-height: 160px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+    }
+    .form-group small {
+      display: block;
+      margin-top: 6px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
-
   <div class="overlay" id="overlay" onclick="closeOverlays()"></div>
-
   <aside class="sidebar" id="sidebar">
     <div style="padding: 10px 10px 20px;">
         <h2 style="font-size: 1.2rem; font-weight: 700; display:flex; align-items:center; gap:10px;">
@@ -350,7 +326,7 @@
       <section class="pricing-section">
           <h2 style="font-size: 1.8rem; font-weight: 700;">Promote Your Business</h2>
           <p style="color: var(--text-secondary); margin-top: 8px;">Reach more customers with All Business Marketing Tools.</p>
-          
+         
           <div class="pricing-grid">
               <div class="pricing-card">
                   <h3>Basic</h3>
@@ -362,7 +338,6 @@
                   </ul>
                   <button class="action-btn" onclick="openListModal()">Get Started</button>
               </div>
-
               <div class="pricing-card featured">
                   <span class="featured-label">RECOMMENDED</span>
                   <h3>Professional</h3>
@@ -374,7 +349,6 @@
                   </ul>
                   <button class="action-btn">Go Pro</button>
               </div>
-
               <div class="pricing-card">
                   <h3>Premium</h3>
                   <div class="price-amount">R800<span>/month</span></div>
@@ -406,7 +380,7 @@
           <div class="footer-col">
             <h4>Contact Support</h4>
             <ul class="footer-links">
-              <li><a href="mailto:support@vynixbiz.com">support@allbusiness.com</a></li>
+              <li><a href="mailto:support@allbusiness.com">support@allbusiness.com</a></li>
               <li><a href="#">Help Center</a></li>
               <li><a href="#">Report a Listing</a></li>
               <li><a href="#">API Documentation</a></li>
@@ -414,7 +388,7 @@
           </div>
         </div>
         <div class="footer-bottom">
-          <p>&copy; 2026 All Business Cloud Solutions. All rights reserved.</p>
+          <p>© 2026 All Business Cloud Solutions. All rights reserved.</p>
           <div style="display:flex; gap:20px;">
             <a href="#" class="footer-links" style="font-size: 0.85rem;">Terms</a>
             <a href="#" class="footer-links" style="font-size: 0.85rem;">Cookies</a>
@@ -424,6 +398,7 @@
     </div>
   </main>
 
+  <!-- List Business Modal -->
   <div class="modal-sheet" id="listModal">
     <div class="modal-content">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
@@ -431,7 +406,10 @@
             <button onclick="closeOverlays()" style="background:none; border:none; cursor:pointer;"><span class="material-symbols-rounded">close</span></button>
         </div>
         <form id="listingForm" onsubmit="registerBusiness(event)">
-            <div class="form-group"><label class="form-label">Name</label><input type="text" id="bizName" class="form-input" required></div>
+            <div class="form-group">
+              <label class="form-label">Name</label>
+              <input type="text" id="bizName" class="form-input" required>
+            </div>
             <div class="form-group">
                 <label class="form-label">Category</label>
                 <select id="bizCat" class="form-input">
@@ -441,14 +419,28 @@
                     <option value="Tech">Tech</option>
                 </select>
             </div>
-            <div class="form-group"><label class="form-label">Address</label><input type="text" id="bizAddress" class="form-input" required></div>
-            <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="bizPhone" class="form-input" placeholder="e.g. +1234567890" required></div>
-            <div class="form-group"><label class="form-label">Image URL</label><input type="url" id="bizImg" class="form-input" required></div>
-            <button type="submit" class="action-btn primary" style="width:100%;">Register Business</button>
+            <div class="form-group">
+              <label class="form-label">Address</label>
+              <input type="text" id="bizAddress" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone</label>
+              <input type="tel" id="bizPhone" class="form-input" placeholder="e.g. +27123456789" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Business Image</label>
+              <input type="file" id="bizImg" class="form-input" accept="image/*" required>
+              <small>JPG, PNG, WebP • Recommended max 5MB</small>
+              <div id="imagePreview" style="margin-top:12px; display:none;">
+                <img id="previewImg" alt="Preview">
+              </div>
+            </div>
+            <button type="submit" id="submitBtn" class="action-btn primary" style="width:100%;">Register Business</button>
         </form>
     </div>
   </div>
 
+  <!-- Business Detail Modal -->
   <div class="modal-sheet" id="detailModal">
     <div class="modal-img-header" id="modalImg">
         <button class="modal-close" onclick="closeOverlays()"><span class="material-symbols-rounded">close</span></button>
@@ -482,6 +474,9 @@
   </div>
 
   <script>
+    // ────────────────────────────────────────────────
+    //  CONFIG - REPLACE THESE VALUES
+    // ────────────────────────────────────────────────
     const firebaseConfig = {
       apiKey: "AIzaSyAojYRIH8FJL5B8yg1b3qxsc29vB3vLC-8",
       authDomain: "allbusiness-596cc.firebaseapp.com",
@@ -492,16 +487,24 @@
       measurementId: "G-EMZFX7CE8V"
     };
 
+    // ── Cloudinary (get from your dashboard) ──
+    const CLOUDINARY_CLOUD_NAME = 'dxp01qjvb';           // ← e.g. "dabc123xyz"
+    const CLOUDINARY_UPLOAD_PRESET = 'allbusiness';       // ← name of your unsigned preset
+
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
     const provider = new firebase.auth.GoogleAuthProvider();
 
+    // ────────────────────────────────────────────────
+    //  GLOBAL STATE
+    // ────────────────────────────────────────────────
     let allBusinesses = [];
-    let savedIds = []; 
+    let savedIds = [];
     let globalRatings = {};
     let currentCategory = 'All';
-    let currentView = 'all'; 
+    let currentView = 'all';
     let currentActiveBizId = null;
 
     const els = {
@@ -512,9 +515,13 @@
       detailModal: document.getElementById('detailModal'),
       listModal: document.getElementById('listModal'),
       greeting: document.getElementById('greetingName'),
-      avatar: document.getElementById('userAvatar')
+      avatar: document.getElementById('userAvatar'),
+      submitBtn: document.getElementById('submitBtn')
     };
 
+    // ────────────────────────────────────────────────
+    //  FIREBASE LISTENERS
+    // ────────────────────────────────────────────────
     function initDatabaseListener() {
         db.ref('business_ratings').on('value', (snapshot) => {
             globalRatings = snapshot.val() || {};
@@ -541,6 +548,9 @@
         });
     }
 
+    // ────────────────────────────────────────────────
+    //  VIEW / FILTER / RENDER
+    // ────────────────────────────────────────────────
     function switchView(view) {
         currentView = view;
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -569,7 +579,9 @@
         }
         const filtered = allBusinesses.filter(biz => {
             const bizRating = getAverageRating(biz.id).avg.toString();
-            const matchesSearch = biz.name.toLowerCase().includes(query) || biz.address.toLowerCase().includes(query) || bizRating.includes(query);
+            const matchesSearch = biz.name.toLowerCase().includes(query) ||
+                                 biz.address.toLowerCase().includes(query) ||
+                                 bizRating.includes(query);
             const matchesCat = currentCategory === 'All' || biz.cat === currentCategory;
             const matchesView = currentView === 'all' || savedIds.includes(biz.id);
             return matchesSearch && matchesCat && matchesView;
@@ -589,7 +601,10 @@
         els.grid.innerHTML = '';
         const uniqueCategories = [...new Set(allBusinesses.map(biz => biz.cat))].sort();
         uniqueCategories.forEach(category => {
-            const filtered = allBusinesses.filter(biz => biz.cat === category && (biz.name.toLowerCase().includes(query) || biz.address.toLowerCase().includes(query)));
+            const filtered = allBusinesses.filter(biz =>
+                biz.cat === category &&
+                (biz.name.toLowerCase().includes(query) || biz.address.toLowerCase().includes(query))
+            );
             if (filtered.length > 0) {
                 const header = document.createElement('div');
                 header.className = 'category-header';
@@ -620,10 +635,15 @@
     }
 
     function renderCards(data) {
-        els.grid.innerHTML = data.length === 0 ? '<p style="grid-column: 1/-1; text-align:center; padding: 40px; color: #888;">No results found.</p>' : '';
+        els.grid.innerHTML = data.length === 0
+            ? '<p style="grid-column: 1/-1; text-align:center; padding: 40px; color: #888;">No results found.</p>'
+            : '';
         data.forEach(biz => els.grid.appendChild(createCard(biz)));
     }
 
+    // ────────────────────────────────────────────────
+    //  DETAIL MODAL
+    // ────────────────────────────────────────────────
     function openDetailModal(biz) {
         currentActiveBizId = biz.id;
         const ratingData = getAverageRating(biz.id);
@@ -634,14 +654,17 @@
         document.getElementById('modalImg').style.backgroundImage = `url('${biz.img}')`;
         document.getElementById('modalRatingText').innerText = ratingData.avg;
         document.getElementById('modalReviewCount').innerText = `(${ratingData.count} reviews)`;
+
         const phoneClean = biz.phone.replace(/\s+/g, '');
         document.getElementById('modalCallBtn').href = `tel:${phoneClean}`;
-        const waMsg = encodeURIComponent(`Hello ${biz.name}, I found you on Vynix Biz and would like to inquire about your services.`);
+        const waMsg = encodeURIComponent(`Hello ${biz.name}, I found you on All Business and would like to inquire about your services.`);
         document.getElementById('modalWhatsappBtn').href = `https://wa.me/${phoneClean.replace('+', '')}?text=${waMsg}`;
+
         const saveBtn = document.getElementById('saveBizBtn');
         const isAlreadySaved = savedIds.includes(biz.id);
         saveBtn.innerText = isAlreadySaved ? "Remove" : "Save";
         saveBtn.style.color = isAlreadySaved ? "#D96570" : "inherit";
+
         const newSaveBtn = saveBtn.cloneNode(true);
         saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
         newSaveBtn.onclick = () => {
@@ -649,27 +672,38 @@
             const favRef = db.ref(`users_saved/${auth.currentUser.uid}/${biz.id}`);
             isAlreadySaved ? favRef.remove().then(closeOverlays) : favRef.set(true).then(closeOverlays);
         };
+
         const starContainer = document.getElementById('starInput');
         const stars = starContainer.querySelectorAll('span');
-        const updateStarsUI = (val) => { 
-            stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= val)); 
+        const updateStarsUI = (val) => {
+            stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= val));
         };
+
         const userRating = (globalRatings[biz.id] && auth.currentUser) ? globalRatings[biz.id][auth.currentUser.uid] : 0;
         updateStarsUI(userRating);
+
         stars.forEach(star => {
             star.onclick = () => {
                 if(!auth.currentUser) return alert("Please Sign In to rate!");
                 const val = parseInt(star.dataset.value);
-                db.ref(`business_ratings/${biz.id}/${auth.currentUser.uid}`).set(val).then(() => { updateStarsUI(val); });
+                db.ref(`business_ratings/${biz.id}/${auth.currentUser.uid}`).set(val)
+                  .then(() => updateStarsUI(val));
             };
         });
+
         els.detailModal.classList.add('active');
         els.overlay.classList.add('active');
     }
 
+    // ────────────────────────────────────────────────
+    //  AUTH
+    // ────────────────────────────────────────────────
     function handleAuth() {
-        if(auth.currentUser) auth.signOut().then(() => location.reload());
-        else auth.signInWithPopup(provider).catch(e => console.error(e));
+        if(auth.currentUser) {
+            auth.signOut().then(() => location.reload());
+        } else {
+            auth.signInWithPopup(provider).catch(e => console.error(e));
+        }
     }
 
     auth.onAuthStateChanged(user => {
@@ -684,21 +718,80 @@
         }
     });
 
-    function registerBusiness(e) {
-        e.preventDefault();
+    // ────────────────────────────────────────────────
+    //  REGISTER BUSINESS → CLOUDINARY + FIREBASE
+    // ────────────────────────────────────────────────
+    async function registerBusiness(e) {
+      e.preventDefault();
+
+      const fileInput = document.getElementById('bizImg');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert("Please select an image for your business.");
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        alert("Image is too large. Maximum allowed size is 5MB.");
+        return;
+      }
+
+      const submitBtn = els.submitBtn;
+      const originalText = submitBtn.innerText;
+      submitBtn.innerText = "Uploading...";
+      submitBtn.classList.add('loading');
+      submitBtn.disabled = true;
+
+      try {
+        // 1. Upload to Cloudinary
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+        const cloudinaryRes = await fetch(
+          `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+          { method: 'POST', body: formData }
+        );
+
+        if (!cloudinaryRes.ok) {
+          const err = await cloudinaryRes.json();
+          throw new Error(err.error?.message || "Image upload failed");
+        }
+
+        const cloudinaryData = await cloudinaryRes.json();
+        const imageUrl = cloudinaryData.secure_url;
+
+        // 2. Save to Firebase
         const newBiz = {
-            name: document.getElementById('bizName').value,
-            cat: document.getElementById('bizCat').value,
-            address: document.getElementById('bizAddress').value,
-            phone: document.getElementById('bizPhone').value,
-            img: document.getElementById('bizImg').value
+          name: document.getElementById('bizName').value.trim(),
+          cat: document.getElementById('bizCat').value,
+          address: document.getElementById('bizAddress').value.trim(),
+          phone: document.getElementById('bizPhone').value.trim(),
+          img: imageUrl,
+          createdAt: firebase.database.ServerValue.TIMESTAMP
         };
-        db.ref('businesses').push(newBiz).then(() => {
-            document.getElementById('listingForm').reset();
-            closeOverlays();
-        });
+
+        await db.ref('businesses').push(newBiz);
+
+        alert("Business registered successfully!");
+        document.getElementById('listingForm').reset();
+        document.getElementById('imagePreview').style.display = 'none';
+        closeOverlays();
+
+      } catch (error) {
+        console.error("Registration error:", error);
+        alert("Failed to register: " + (error.message || "Unknown error"));
+      } finally {
+        submitBtn.innerText = originalText;
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+      }
     }
 
+    // ────────────────────────────────────────────────
+    //  UTILITIES
+    // ────────────────────────────────────────────────
     function closeOverlays() {
         currentActiveBizId = null;
         els.sidebar.classList.remove('open');
@@ -707,8 +800,16 @@
         els.overlay.classList.remove('active');
     }
 
-    function openListModal() { els.listModal.classList.add('active'); els.overlay.classList.add('active'); }
-    function toggleSidebar() { els.sidebar.classList.add('open'); els.overlay.classList.add('active'); }
+    function openListModal() {
+      els.listModal.classList.add('active');
+      els.overlay.classList.add('active');
+    }
+
+    function toggleSidebar() {
+      els.sidebar.classList.add('open');
+      els.overlay.classList.add('active');
+    }
+
     function filterCategory(cat, btn) {
         currentCategory = cat;
         document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('active'));
@@ -716,6 +817,26 @@
         if (currentView === 'categories') switchView('all');
         else filterBusinesses();
     }
+
+    // ────────────────────────────────────────────────
+    //  IMAGE PREVIEW
+    // ────────────────────────────────────────────────
+    document.getElementById('bizImg').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const preview = document.getElementById('previewImg');
+        preview.src = ev.target.result;
+        document.getElementById('imagePreview').style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // ────────────────────────────────────────────────
+    //  EVENT LISTENERS & INIT
+    // ────────────────────────────────────────────────
     els.search.addEventListener('input', filterBusinesses);
     initDatabaseListener();
   </script>
