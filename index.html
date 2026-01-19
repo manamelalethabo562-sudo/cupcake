@@ -331,6 +331,7 @@
     let globalRatings = {};
     let currentCategory = 'All';
     let currentView = 'all'; 
+    let currentActiveBizId = null;
 
     const els = {
       grid: document.getElementById('businessGrid'),
@@ -344,13 +345,17 @@
     };
 
     function initDatabaseListener() {
+        // LIVE RATING LISTENER: Updates whenever any user rates anything
         db.ref('business_ratings').on('value', (snapshot) => {
             globalRatings = snapshot.val() || {};
-            db.ref('businesses').once('value', (snap) => {
-                const data = snap.val();
-                allBusinesses = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
-                filterBusinesses();
-            });
+            filterBusinesses(); // Redraw main grid with live ratings
+            
+            // If a modal is open for a specific business, update its live text too
+            if (currentActiveBizId && globalRatings[currentActiveBizId]) {
+                const liveData = getAverageRating(currentActiveBizId);
+                document.getElementById('modalRatingText').innerText = liveData.avg;
+                document.getElementById('modalReviewCount').innerText = `(${liveData.count} reviews)`;
+            }
         });
 
         db.ref('businesses').on('value', (snapshot) => {
@@ -452,7 +457,9 @@
     }
 
     function openDetailModal(biz) {
+        currentActiveBizId = biz.id; // Track for live updates
         const ratingData = getAverageRating(biz.id);
+        
         document.getElementById('modalTitle').innerText = biz.name;
         document.getElementById('modalCat').innerText = biz.cat;
         document.getElementById('modalAddress').innerText = biz.address;
@@ -461,7 +468,6 @@
         document.getElementById('modalRatingText').innerText = ratingData.avg;
         document.getElementById('modalReviewCount').innerText = `(${ratingData.count} reviews)`;
         
-        // Setup Functional Contact Links
         const phoneClean = biz.phone.replace(/\s+/g, '');
         document.getElementById('modalCallBtn').href = `tel:${phoneClean}`;
         
@@ -483,15 +489,24 @@
 
         const starContainer = document.getElementById('starInput');
         const stars = starContainer.querySelectorAll('span');
+        
+        // Function to update star colors
+        const updateStarsUI = (val) => { 
+            stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= val)); 
+        };
+
+        // Initial check: Highlight user's previous rating if it exists
         const userRating = (globalRatings[biz.id] && auth.currentUser) ? globalRatings[biz.id][auth.currentUser.uid] : 0;
-        const updateStars = (val) => { stars.forEach(s => s.classList.toggle('active', s.dataset.value <= val)); };
-        updateStars(userRating);
+        updateStarsUI(userRating);
 
         stars.forEach(star => {
             star.onclick = () => {
                 if(!auth.currentUser) return alert("Please Sign In to rate!");
                 const val = parseInt(star.dataset.value);
-                db.ref(`business_ratings/${biz.id}/${auth.currentUser.uid}`).set(val).then(() => { updateStars(val); });
+                // Save rating to Firebase
+                db.ref(`business_ratings/${biz.id}/${auth.currentUser.uid}`).set(val).then(() => { 
+                    updateStarsUI(val); 
+                });
             };
         });
 
@@ -532,6 +547,7 @@
     }
 
     function closeOverlays() {
+        currentActiveBizId = null;
         els.sidebar.classList.remove('open');
         els.detailModal.classList.remove('active');
         els.listModal.classList.remove('active');
