@@ -127,6 +127,7 @@
     .business-grid {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 24px; padding: 24px; max-width: 1200px; margin: 0 auto;
+      min-height: 400px;
     }
 
     .category-header {
@@ -193,6 +194,43 @@
       width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid #e0e0e0;
       font-family: inherit; font-size: 0.95rem; outline: none; transition: 0.2s;
     }
+
+    /* ─── Footer ─────────────────────────────────────────── */
+    .footer {
+      background: #f8f9fa;
+      padding: 60px 24px 40px;
+      border-top: 1px solid #eee;
+      margin-top: 40px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-brand h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .footer-brand p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; max-width: 400px; }
+    .footer-col h4 { font-size: 1rem; font-weight: 600; margin-bottom: 20px; color: var(--text-main); }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 12px; }
+    .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: 0.2s; }
+    .footer-links a:hover { color: var(--accent-color); }
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 40px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    @media(max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+    }
   </style>
 </head>
 <body>
@@ -250,6 +288,40 @@
       </div>
 
       <div class="business-grid" id="businessGrid"></div>
+
+      <footer class="footer">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <h3><span class="material-symbols-rounded" style="color: #4285F4;">business_center</span> Vynix Biz</h3>
+            <p>Empowering local commerce through real-time discovery. Connect with your community's best restaurants, retailers, and service providers effortlessly.</p>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul class="footer-links">
+              <li><a href="#" onclick="switchView('all')">Directory</a></li>
+              <li><a href="#" onclick="switchView('categories')">Browse Categories</a></li>
+              <li><a href="#" onclick="openListModal()">List Your Business</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Contact Support</h4>
+            <ul class="footer-links">
+              <li><a href="mailto:support@vynixbiz.com">support@vynixbiz.com</a></li>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Report a Listing</a></li>
+              <li><a href="#">API Documentation</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 Vynix Cloud Solutions. All rights reserved.</p>
+          <div style="display:flex; gap:20px;">
+            <a href="#" class="footer-links" style="font-size: 0.85rem;">Terms</a>
+            <a href="#" class="footer-links" style="font-size: 0.85rem;">Cookies</a>
+          </div>
+        </div>
+      </footer>
     </div>
   </main>
 
@@ -345,12 +417,9 @@
     };
 
     function initDatabaseListener() {
-        // LIVE RATING LISTENER: Updates whenever any user rates anything
         db.ref('business_ratings').on('value', (snapshot) => {
             globalRatings = snapshot.val() || {};
-            filterBusinesses(); // Redraw main grid with live ratings
-            
-            // If a modal is open for a specific business, update its live text too
+            filterBusinesses();
             if (currentActiveBizId && globalRatings[currentActiveBizId]) {
                 const liveData = getAverageRating(currentActiveBizId);
                 document.getElementById('modalRatingText').innerText = liveData.avg;
@@ -457,9 +526,8 @@
     }
 
     function openDetailModal(biz) {
-        currentActiveBizId = biz.id; // Track for live updates
+        currentActiveBizId = biz.id;
         const ratingData = getAverageRating(biz.id);
-        
         document.getElementById('modalTitle').innerText = biz.name;
         document.getElementById('modalCat').innerText = biz.cat;
         document.getElementById('modalAddress').innerText = biz.address;
@@ -467,18 +535,14 @@
         document.getElementById('modalImg').style.backgroundImage = `url('${biz.img}')`;
         document.getElementById('modalRatingText').innerText = ratingData.avg;
         document.getElementById('modalReviewCount').innerText = `(${ratingData.count} reviews)`;
-        
         const phoneClean = biz.phone.replace(/\s+/g, '');
         document.getElementById('modalCallBtn').href = `tel:${phoneClean}`;
-        
         const waMsg = encodeURIComponent(`Hello ${biz.name}, I found you on Vynix Biz and would like to inquire about your services.`);
         document.getElementById('modalWhatsappBtn').href = `https://wa.me/${phoneClean.replace('+', '')}?text=${waMsg}`;
-
         const saveBtn = document.getElementById('saveBizBtn');
         const isAlreadySaved = savedIds.includes(biz.id);
         saveBtn.innerText = isAlreadySaved ? "Remove" : "Save";
         saveBtn.style.color = isAlreadySaved ? "#D96570" : "inherit";
-
         const newSaveBtn = saveBtn.cloneNode(true);
         saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
         newSaveBtn.onclick = () => {
@@ -486,30 +550,20 @@
             const favRef = db.ref(`users_saved/${auth.currentUser.uid}/${biz.id}`);
             isAlreadySaved ? favRef.remove().then(closeOverlays) : favRef.set(true).then(closeOverlays);
         };
-
         const starContainer = document.getElementById('starInput');
         const stars = starContainer.querySelectorAll('span');
-        
-        // Function to update star colors
         const updateStarsUI = (val) => { 
             stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= val)); 
         };
-
-        // Initial check: Highlight user's previous rating if it exists
         const userRating = (globalRatings[biz.id] && auth.currentUser) ? globalRatings[biz.id][auth.currentUser.uid] : 0;
         updateStarsUI(userRating);
-
         stars.forEach(star => {
             star.onclick = () => {
                 if(!auth.currentUser) return alert("Please Sign In to rate!");
                 const val = parseInt(star.dataset.value);
-                // Save rating to Firebase
-                db.ref(`business_ratings/${biz.id}/${auth.currentUser.uid}`).set(val).then(() => { 
-                    updateStarsUI(val); 
-                });
+                db.ref(`business_ratings/${biz.id}/${auth.currentUser.uid}`).set(val).then(() => { updateStarsUI(val); });
             };
         });
-
         els.detailModal.classList.add('active');
         els.overlay.classList.add('active');
     }
@@ -556,7 +610,6 @@
 
     function openListModal() { els.listModal.classList.add('active'); els.overlay.classList.add('active'); }
     function toggleSidebar() { els.sidebar.classList.add('open'); els.overlay.classList.add('active'); }
-    
     function filterCategory(cat, btn) {
         currentCategory = cat;
         document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('active'));
@@ -564,7 +617,6 @@
         if (currentView === 'categories') switchView('all');
         else filterBusinesses();
     }
-
     els.search.addEventListener('input', filterBusinesses);
     initDatabaseListener();
   </script>
