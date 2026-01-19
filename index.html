@@ -3,29 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AllBusiness - Advertising Platform</title>
+  <title>AllBusiness - Find & List Businesses</title>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', system-ui, sans-serif; }
-    body { background:#f0f4f8; color:#222; line-height:1.6; overflow-x:hidden; }
+    * { margin:0; padding:0; box-sizing:border-box; font-family: system-ui, -apple-system, sans-serif; }
+    body { background: #f8faff; color: #1a1a1a; line-height: 1.6; }
 
     :root {
-      --primary: #4a90e2;
-      --secondary: #50e3c2;
-      --accent: #f5a623;
-      --bg-gradient: linear-gradient(135deg, #f8fbff, #e0eaff);
-      --glass: rgba(255,255,255,0.82);
-      --shadow: 0 8px 32px rgba(31,38,135,0.18);
-      --glow: 0 0 15px rgba(74,144,226,0.5);
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --secondary: #10b981;
+      --accent: #f59e0b;
+      --bg: #ffffff;
+      --glass: rgba(255,255,255,0.85);
+      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+      --glow: 0 0 20px rgba(59,130,246,0.4);
     }
 
     header {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 1000;
       background: var(--glass);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255,255,255,0.3);
+      border-bottom: 1px solid rgba(255,255,255,0.4);
       box-shadow: var(--shadow);
+      z-index: 1000;
     }
 
     .navbar {
@@ -41,44 +42,44 @@
       font-size: 1.9rem;
       font-weight: 800;
       color: var(--primary);
-      text-shadow: var(--glow);
+      letter-spacing: -0.5px;
     }
 
     .search-container {
       flex: 1;
-      max-width: 500px;
+      max-width: 520px;
       margin: 0 2rem;
       position: relative;
     }
 
     .search-bar {
       display: flex;
-      background: rgba(255,255,255,0.95);
-      border-radius: 50px;
+      background: white;
+      border-radius: 999px;
       overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      border: 1px solid rgba(74,144,226,0.2);
+      border: 1px solid #d1d5db;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     }
 
     .search-bar input {
       flex: 1;
-      padding: 1rem 1.8rem;
+      padding: 1rem 1.6rem;
       border: none;
       font-size: 1.05rem;
-      background: transparent;
       outline: none;
     }
 
     .search-bar button {
-      padding: 1rem 1.8rem;
+      padding: 0 1.8rem;
       background: var(--primary);
       color: white;
       border: none;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.2s;
     }
 
-    .search-bar button:hover { background: #357abd; }
+    .search-bar button:hover { background: var(--primary-dark); }
 
     .autocomplete-dropdown {
       position: absolute;
@@ -87,23 +88,23 @@
       background: white;
       border-radius: 12px;
       margin-top: 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-      max-height: 320px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.15);
+      max-height: 360px;
       overflow-y: auto;
-      z-index: 999;
-      border: 1px solid rgba(0,0,0,0.1);
+      z-index: 9999;
+      border: 1px solid #e5e7eb;
       display: none;
     }
 
     .autocomplete-item {
-      padding: 0.9rem 1.6rem;
+      padding: 0.9rem 1.5rem;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.15s;
     }
 
     .autocomplete-item:hover,
     .autocomplete-item.highlight {
-      background: #f0f7ff;
+      background: #eff6ff;
       color: var(--primary);
     }
 
@@ -113,57 +114,9 @@
       font-weight: 600;
     }
 
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 2.5rem;
-    }
-
-    .nav-links a {
-      color: #333;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s;
-    }
-
-    .nav-links a:hover { color: var(--primary); }
-
-    .auth-buttons button {
-      padding: 0.7rem 1.4rem;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    #loginBtn {
-      background: transparent;
-      border: 2px solid var(--primary);
-      color: var(--primary);
-    }
-
-    #registerBtnHeader {
-      background: var(--secondary);
-      border: none;
-      color: white;
-    }
-
-    .hamburger { display: none; font-size: 1.8rem; cursor: pointer; color: var(--primary); }
-
-    @media (max-width: 992px) {
-      .nav-links {
-        position: absolute; top: 100%; left: 0; right: 0;
-        flex-direction: column; background: var(--glass);
-        padding: 2rem; transform: translateY(-100%); opacity: 0;
-        transition: all 0.4s; pointer-events: none;
-      }
-      .nav-links.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
-      .search-container { margin: 1rem 0; max-width: none; }
-      .hamburger { display: block; }
-    }
-
-    #hero {
+    .hero {
       min-height: 90vh;
-      background: var(--bg-gradient);
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -172,115 +125,57 @@
       padding: 8rem 2rem 4rem;
     }
 
-    #hero h1 {
-      font-size: 4.2rem;
-      color: var(--primary);
-      text-shadow: var(--glow);
+    .hero h1 {
+      font-size: 3.8rem;
+      color: #1e40af;
+      margin-bottom: 1.2rem;
     }
 
-    #hero p { font-size: 1.6rem; max-width: 700px; margin: 1.5rem 0 3rem; }
-
-    #searchResults {
-      max-width: 1200px;
-      margin: 0 auto 4rem;
-      padding: 0 2rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 2rem;
-    }
-
-    .business-card {
-      background: white;
-      border-radius: 16px;
-      padding: 1.8rem;
-      box-shadow: var(--shadow);
-      transition: all 0.4s;
-    }
-
-    .business-card:hover {
-      transform: translateY(-10px);
-      box-shadow: var(--glow);
-    }
-
-    #loading, #noResults {
-      text-align: center;
-      margin: 3rem;
-      font-size: 1.3rem;
-      color: #555;
-    }
-
-    section { padding: 6rem 2rem; }
-    #about { background: white; text-align: center; }
-    #pricing { background: var(--bg-gradient); text-align: center; }
-
-    .pricing-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 2.5rem;
-      flex-wrap: wrap;
-    }
-
-    .pricing-card {
-      background: white;
-      border-radius: 20px;
-      padding: 2.5rem;
-      width: 320px;
-      box-shadow: var(--shadow);
-      transition: all 0.4s;
-    }
-
-    .pricing-card:hover {
-      transform: translateY(-12px);
-      box-shadow: var(--glow);
-    }
-
-    footer {
-      background: #2a2a2a;
-      color: white;
-      padding: 4rem 2rem 2rem;
-      text-align: center;
-    }
-
-    .footer-content {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      max-width: 1200px;
-      margin: 0 auto 3rem;
+    .hero p {
+      font-size: 1.35rem;
+      color: #4b5563;
+      max-width: 680px;
+      margin-bottom: 2.5rem;
     }
 
     .modal {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.65);
       justify-content: center;
       align-items: center;
       z-index: 2000;
+      backdrop-filter: blur(4px);
     }
 
     .modal-content {
       background: white;
-      padding: 2.5rem;
-      border-radius: 20px;
+      padding: 2.4rem;
+      border-radius: 16px;
       width: 90%;
-      max-width: 460px;
-      box-shadow: var(--shadow);
+      max-width: 440px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
     }
 
     .close {
       float: right;
       font-size: 2.2rem;
       cursor: pointer;
-      color: #777;
+      color: #6b7280;
+    }
+
+    .modal-content h2 {
+      margin-bottom: 1.6rem;
+      color: #1e40af;
     }
 
     .modal-content input,
     .modal-content button {
       width: 100%;
       padding: 1rem;
-      margin: 0.6rem 0;
-      border: 1px solid #ddd;
+      margin: 0.7rem 0;
+      border: 1px solid #d1d5db;
       border-radius: 10px;
       font-size: 1rem;
     }
@@ -288,6 +183,7 @@
     .modal-content button {
       border: none;
       cursor: pointer;
+      font-weight: 600;
     }
 
     #googleBtn {
@@ -296,28 +192,40 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 12px;
     }
 
-    #googleBtn img { height: 20px; }
+    #googleBtn img { height: 22px; }
 
     .divider {
       display: flex;
       align-items: center;
-      margin: 1.5rem 0;
-      color: #aaa;
+      margin: 1.6rem 0;
+      color: #9ca3af;
     }
 
     .divider::before,
     .divider::after {
       content: '';
       flex: 1;
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid #d1d5db;
     }
 
-    .divider span { padding: 0 1rem; }
+    .divider span { padding: 0 1.2rem; }
 
-    #authMessage { margin-top: 1rem; font-size: 0.95rem; }
+    #authMessage {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    footer {
+      background: #111827;
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+      margin-top: 4rem;
+    }
   </style>
 </head>
 <body>
@@ -328,114 +236,47 @@
 
       <div class="search-container">
         <div class="search-bar">
-          <input type="text" id="searchInput" placeholder="Search business category (e.g. restaurant, gym...)">
+          <input type="text" id="searchInput" placeholder="Search business categories..." autocomplete="off"/>
           <button onclick="searchBusinesses()">Search</button>
         </div>
         <div class="autocomplete-dropdown" id="suggestionsDropdown"></div>
       </div>
 
-      <div class="nav-links" id="navLinks">
-        <a href="#hero">Home</a>
-        <a href="#about">About</a>
-        <a href="#pricing">Pricing</a>
-        <div class="auth-buttons">
-          <button id="loginBtn">Login</button>
-          <button id="registerBtnHeader">Sign Up</button>
-        </div>
-      </div>
-
-      <div class="hamburger" id="hamburger">☰</div>
+      <button id="registerBtn">Sign Up</button>
     </nav>
   </header>
 
-  <section id="hero">
-    <h1>Discover & Grow Your Business</h1>
-    <p>Start typing a category to see suggestions — or register your business today!</p>
+  <section class="hero">
+    <h1>Find Local Businesses & Services</h1>
+    <p>Discover restaurants, gyms, plumbers, salons and more — or list your own business today.</p>
   </section>
 
-  <div id="searchResults"></div>
-  <div id="loading" style="display:none;">Searching businesses...</div>
-  <div id="noResults" style="display:none;">No businesses found.</div>
-
-  <section id="about">
-    <h2>About AllBusiness</h2>
-    <p>AllBusiness connects customers with quality local businesses through smart category discovery.</p>
-    <p>Join thousands of companies in a modern platform built for growth.</p>
-  </section>
-
-  <section id="pricing">
-    <h2>Choose Your Plan</h2>
-    <div class="pricing-tabs">
-      <div class="pricing-card">
-        <h3>Basic</h3>
-        <div class="price" style="font-size:2.8rem; color:var(--accent);">$9.99/mo</div>
-        <ul style="list-style:none; margin:1.5rem 0;">
-          <li>Business Listing</li>
-          <li>Search Visibility</li>
-          <li>Email Support</li>
-        </ul>
-        <button>Select</button>
-      </div>
-      <div class="pricing-card">
-        <h3>Pro</h3>
-        <div class="price" style="font-size:2.8rem; color:var(--accent);">$19.99/mo</div>
-        <ul style="list-style:none; margin:1.5rem 0;">
-          <li>Priority Placement</li>
-          <li>Analytics Dashboard</li>
-          <li>Chat Support</li>
-        </ul>
-        <button>Select</button>
-      </div>
-      <div class="pricing-card">
-        <h3>Enterprise</h3>
-        <div class="price" style="font-size:2.8rem; color:var(--accent);">$49.99/mo</div>
-        <ul style="list-style:none; margin:1.5rem 0;">
-          <li>Custom Advertising</li>
-          <li>Dedicated Manager</li>
-          <li>API Access</li>
-        </ul>
-        <button>Select</button>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="footer-content">
-      <div><h4>AllBusiness</h4><p>Connecting Johannesburg businesses & customers.</p></div>
-      <div><h4>Links</h4><ul style="list-style:none;">
-        <li><a href="#hero" style="color:#50e3c2; text-decoration:none;">Home</a></li>
-        <li><a href="#about" style="color:#50e3c2; text-decoration:none;">About</a></li>
-        <li><a href="#pricing" style="color:#50e3c2; text-decoration:none;">Pricing</a></li>
-      </ul></div>
-      <div><h4>Contact</h4><p>support@allbusiness.com</p><p>+27 11 123 4567</p></div>
-    </div>
-    <p style="margin-top:2rem; opacity:0.8;">© 2026 AllBusiness. All rights reserved.</p>
-  </footer>
-
-  <!-- Auth Modal -->
+  <!-- Registration Modal -->
   <div id="registerModal" class="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeModal()">×</span>
-      <h2>Sign Up or Log In</h2>
+      <span class="close" onclick="document.getElementById('registerModal').style.display='none'">×</span>
+      <h2>Join AllBusiness</h2>
 
       <button id="googleBtn">
-        <img src="https://www.google.com/favicon.ico" alt="Google" />
+        <img src="https://www.google.com/favicon.ico" alt="Google"/> 
         Continue with Google
       </button>
 
       <div class="divider"><span>or</span></div>
 
-      <div id="emailSection">
-        <input type="text" id="businessName" placeholder="Business Name *" required />
-        <input type="email" id="email" placeholder="Email *" required />
-        <input type="password" id="password" placeholder="Password *" required />
-        <input type="text" id="category" placeholder="Category (e.g. restaurant, plumbing)" required />
-        <button onclick="registerWithEmail()">Register with Email</button>
-      </div>
+      <input type="text" id="businessName" placeholder="Business Name *" required/>
+      <input type="email" id="email" placeholder="Email *" required/>
+      <input type="password" id="password" placeholder="Password *" required/>
+      <input type="text" id="category" placeholder="Your main category (e.g. plumbing)" required/>
+      <button onclick="registerWithEmail()">Create Account</button>
 
       <p id="authMessage"></p>
     </div>
   </div>
+
+  <footer>
+    <p>© 2026 AllBusiness • Johannesburg, South Africa</p>
+  </footer>
 
   <!-- Firebase SDK -->
   <script type="module">
@@ -446,7 +287,18 @@
       signInWithPopup,
       GoogleAuthProvider
     } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-    import { getDatabase, ref, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+    import {
+      getDatabase,
+      ref,
+      set,
+      serverTimestamp,
+      query,
+      orderByChild,
+      startAt,
+      endAt,
+      limitToFirst,
+      get
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAojYRIH8FJL5B8yg1b3qxsc29vB3vLC-8",
@@ -463,109 +315,186 @@
     const auth = getAuth(app);
     const db = getDatabase(app);
 
-    // Mobile menu
-    document.getElementById('hamburger').onclick = () => {
-      document.getElementById('navLinks').classList.toggle('active');
+    // ────────────────────────────────
+    // MODAL CONTROLS
+    // ────────────────────────────────
+    document.getElementById('registerBtn').onclick = () => {
+      document.getElementById('registerModal').style.display = 'flex';
     };
 
-    // Modal
-    const modal = document.getElementById('registerModal');
-    document.getElementById('registerBtnHeader').onclick = () => modal.style.display = 'flex';
-    document.getElementById('loginBtn').onclick = () => modal.style.display = 'flex'; // Reuse same modal
-    window.closeModal = () => modal.style.display = 'none';
-
-    const messageEl = document.getElementById('authMessage');
-
-    // Google Sign-In
+    // ────────────────────────────────
+    // GOOGLE SIGN-IN
+    // ────────────────────────────────
     document.getElementById('googleBtn').onclick = async () => {
-      messageEl.textContent = 'Connecting to Google...';
-      messageEl.style.color = '#555';
+      const message = document.getElementById('authMessage');
+      message.textContent = 'Connecting...';
+      message.style.color = '#4b5563';
 
       const provider = new GoogleAuthProvider();
 
       try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
-        const isNewUser = result._tokenResponse?.isNewUser || false;
+        const isNew = result._tokenResponse?.isNewUser || false;
 
-        if (isNewUser) {
-          const businessRef = ref(db, 'businesses/' + user.uid);
-          await set(businessRef, {
-            name: user.displayName || "New Business",
+        if (isNew) {
+          await set(ref(db, 'businesses/' + user.uid), {
+            name: user.displayName || "My Business",
             category: "general",
             email: user.email,
             uid: user.uid,
-            createdAt: serverTimestamp(),
-            photoURL: user.photoURL || null
+            createdAt: serverTimestamp()
           });
-          messageEl.style.color = 'green';
-          messageEl.textContent = 'Welcome! Your business profile has been created.';
+          message.style.color = 'green';
+          message.textContent = 'Welcome! Profile created.';
         } else {
-          messageEl.style.color = 'green';
-          messageEl.textContent = `Welcome back, ${user.displayName || 'User'}!`;
+          message.style.color = 'green';
+          message.textContent = 'Welcome back!';
         }
 
-        setTimeout(closeModal, 2200);
-      } catch (error) {
-        let msg = 'An error occurred.';
-        if (error.code === 'auth/popup-blocked') msg = 'Popup blocked. Please allow popups.';
-        else if (error.code === 'auth/popup-closed-by-user') msg = 'Sign-in cancelled.';
-        else if (error.code === 'auth/account-exists-with-different-credential') msg = 'Account exists with different method.';
-        else msg = error.message;
-
-        messageEl.style.color = '#e74c3c';
-        messageEl.textContent = msg;
-        console.error(error);
+        setTimeout(() => document.getElementById('registerModal').style.display = 'none', 1800);
+      } catch (err) {
+        message.style.color = '#dc2626';
+        message.textContent = err.message.includes('popup') ? 'Popup blocked – allow popups' : err.message;
       }
     };
 
-    // Email/Password Register
+    // ────────────────────────────────
+    // EMAIL REGISTER
+    // ────────────────────────────────
     window.registerWithEmail = async () => {
       const name = document.getElementById('businessName').value.trim();
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
       let category = document.getElementById('category').value.trim().toLowerCase();
 
+      const message = document.getElementById('authMessage');
+
       if (!name || !email || !password || !category) {
-        messageEl.textContent = 'Please fill in all fields.';
-        messageEl.style.color = '#e74c3c';
+        message.textContent = 'Please complete all fields.';
+        message.style.color = '#dc2626';
         return;
       }
 
-      messageEl.textContent = 'Creating account...';
-      messageEl.style.color = '#555';
+      message.textContent = 'Creating account...';
+      message.style.color = '#4b5563';
 
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        const businessRef = ref(db, 'businesses/' + user.uid);
-        await set(businessRef, {
-          name,
-          category,
-          email,
+        await set(ref(db, 'businesses/' + user.uid), {
+          name, category, email,
           uid: user.uid,
           createdAt: serverTimestamp()
         });
 
-        messageEl.style.color = 'green';
-        messageEl.textContent = 'Success! Your business is registered.';
-        setTimeout(closeModal, 2200);
-      } catch (error) {
-        messageEl.style.color = '#e74c3c';
-        messageEl.textContent = error.message;
+        message.style.color = 'green';
+        message.textContent = 'Success! Your business is listed.';
+        setTimeout(() => document.getElementById('registerModal').style.display = 'none', 2000);
+      } catch (err) {
+        message.style.color = '#dc2626';
+        message.textContent = err.message;
       }
     };
 
-    // ────────────────────────────────────────────────
-    // Basic category autocomplete + search (Firestore)
-    // You can keep or replace with Realtime Database queries later
-    // ────────────────────────────────────────────────
-    // ... (add your previous autocomplete & searchBusinesses logic here if needed)
+    // ────────────────────────────────
+    // CATEGORY AUTOCOMPLETE DROPDOWN
+    // ────────────────────────────────
+    const input = document.getElementById('searchInput');
+    const dropdown = document.getElementById('suggestionsDropdown');
+    let focusIndex = -1;
 
-    // For now placeholder – expand as required
+    async function showSuggestions() {
+      const term = input.value.trim().toLowerCase();
+      dropdown.innerHTML = '';
+      focusIndex = -1;
+
+      if (term.length < 2) {
+        dropdown.style.display = 'none';
+        return;
+      }
+
+      try {
+        const q = query(
+          ref(db, 'businesses'),
+          orderByChild('category'),
+          startAt(term),
+          endAt(term + '\uf8ff'),
+          limitToFirst(15)
+        );
+
+        const snap = await get(q);
+
+        if (!snap.exists()) {
+          dropdown.style.display = 'none';
+          return;
+        }
+
+        const seen = new Set();
+        snap.forEach(child => {
+          const cat = child.val()?.category;
+          if (cat && cat.startsWith(term) && !seen.has(cat)) {
+            seen.add(cat);
+            const item = document.createElement('div');
+            item.className = 'autocomplete-item';
+            const highlighted = cat.replace(new RegExp(term, 'gi'), m => `<em>${m}</em>`);
+            item.innerHTML = highlighted;
+            item.onclick = () => {
+              input.value = cat;
+              dropdown.style.display = 'none';
+              // You can trigger searchBusinesses() here if you want auto-search
+            };
+            dropdown.appendChild(item);
+          }
+        });
+
+        dropdown.style.display = seen.size > 0 ? 'block' : 'none';
+      } catch (err) {
+        console.error(err);
+        dropdown.style.display = 'none';
+      }
+    }
+
+    function navigate(e) {
+      const items = dropdown.querySelectorAll('.autocomplete-item');
+      if (!items.length) return;
+
+      if (e.key === 'ArrowDown') {
+        focusIndex = (focusIndex + 1) % items.length;
+        highlight(items);
+      } else if (e.key === 'ArrowUp') {
+        focusIndex = (focusIndex - 1 + items.length) % items.length;
+        highlight(items);
+      } else if (e.key === 'Enter' && focusIndex >= 0) {
+        e.preventDefault();
+        items[focusIndex].click();
+      } else if (e.key === 'Escape') {
+        dropdown.style.display = 'none';
+      }
+    }
+
+    function highlight(items) {
+      items.forEach((el, i) => el.classList.toggle('highlight', i === focusIndex));
+      if (focusIndex >= 0) items[focusIndex].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+
+    input.addEventListener('input', showSuggestions);
+    input.addEventListener('keydown', navigate);
+
+    document.addEventListener('click', e => {
+      if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+
+    // Placeholder for full search
     window.searchBusinesses = () => {
-      alert("Search functionality – implement Firestore or Realtime query here");
+      const term = input.value.trim().toLowerCase();
+      if (term) {
+        alert(`Searching for: ${term}\n(Implement full results list here)`);
+      }
+      dropdown.style.display = 'none';
     };
   </script>
 </body>
