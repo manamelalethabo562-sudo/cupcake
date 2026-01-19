@@ -1,225 +1,309 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Vynix Biz • Live Directory</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Vynix Biz • Live Directory</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
-  <style>
-    :root {
-      --bg-body: #F0F4F9;
-      --bg-sidebar: #F0F4F9;
-      --bg-surface: #FFFFFF;
-      --primary-gradient: linear-gradient(135deg, #4285F4, #D96570);
-      --text-main: #1F1F1F;
-      --text-secondary: #444746;
-      --text-muted: #8E918F;
-      --accent-color: #4285F4;
-      --sidebar-width: 260px;
-      --sidebar-collapsed: 72px;
-      --header-height: 70px;
-    }
+<style>
+:root{
+--bg:#F0F4F9;
+--text:#1f1f1f;
+--muted:#6b6b6b;
+--primary:#4285F4;
+}
 
-    * { margin:0; padding:0; box-sizing:border-box; }
+*{box-sizing:border-box;margin:0;padding:0}
 
-    body {
-      background: var(--bg-body);
-      color: var(--text-main);
-      font-family: 'Outfit', sans-serif;
-      height: 100vh;
-      display: flex;
-      overflow: hidden;
-    }
+body{
+font-family:Outfit,sans-serif;
+background:var(--bg);
+color:var(--text);
+display:flex;
+height:100vh;
+overflow:hidden;
+}
 
-    /* ───────── Pricing Section ───────── */
-    .pricing-section {
-      padding: 80px 24px;
-      background: #f8f9fa;
-    }
+.main{
+flex:1;
+background:#fff;
+margin:16px;
+border-radius:24px;
+overflow-y:auto;
+}
 
-    .pricing-header {
-      text-align: center;
-      margin-bottom: 50px;
-    }
+/* HERO */
+.hero{
+padding:70px 24px;
+text-align:center;
+}
+.hero h1{
+font-size:2.6rem;
+background:linear-gradient(135deg,#4285F4,#D96570);
+-webkit-background-clip:text;
+color:transparent;
+}
+.hero p{color:var(--muted);margin-top:10px}
 
-    .pricing-header h2 {
-      font-size: 2.2rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
+/* SEARCH */
+.search-box{
+max-width:500px;
+margin:30px auto;
+position:relative;
+}
+.search-box input{
+width:100%;
+padding:16px 20px;
+border-radius:30px;
+border:1px solid #ddd;
+font-size:1rem;
+}
 
-    .pricing-header p {
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto;
-    }
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+gap:24px;
+padding:24px;
+max-width:1200px;
+margin:auto;
+}
+.card{
+border:1px solid #eee;
+border-radius:18px;
+overflow:hidden;
+cursor:pointer;
+transition:.3s;
+}
+.card:hover{
+transform:translateY(-6px);
+box-shadow:0 20px 40px rgba(0,0,0,.12);
+}
+.card-img{
+height:140px;
+background:#eee center/cover;
+}
+.card-body{
+padding:16px;
+}
+.card h3{font-size:1.1rem;margin-bottom:6px}
+.card small{color:var(--muted)}
 
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 28px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+/* ─── PRICING ───────────────────────── */
+.pricing{
+background:#f8f9fa;
+padding:90px 24px;
+}
+.pricing h2{text-align:center;font-size:2.2rem;margin-bottom:12px}
+.pricing p{text-align:center;color:var(--muted);margin-bottom:50px}
 
-    .pricing-card {
-      background: white;
-      border-radius: 20px;
-      padding: 32px 28px;
-      border: 1px solid #eee;
-      text-align: center;
-      transition: 0.35s;
-      cursor: pointer;
-      opacity: 0;
-      transform: translateY(30px);
-    }
+.price-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:30px;
+max-width:1100px;
+margin:auto;
+}
 
-    .pricing-card.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+.price-card{
+background:#fff;
+border-radius:22px;
+padding:32px;
+border:1px solid #eee;
+text-align:center;
+transition:.35s;
+opacity:0;
+transform:translateY(40px);
+cursor:pointer;
+}
+.price-card.visible{
+opacity:1;
+transform:translateY(0);
+}
+.price-card:hover{
+transform:translateY(-10px) scale(1.03);
+box-shadow:0 24px 48px rgba(0,0,0,.15);
+}
 
-    .pricing-card:hover {
-      transform: translateY(-10px) scale(1.03);
-      box-shadow: 0 24px 48px rgba(0,0,0,0.15);
-    }
+.price-card.popular{
+border:2px solid var(--primary);
+}
+.badge{
+background:var(--primary);
+color:#fff;
+padding:6px 16px;
+border-radius:20px;
+font-size:.75rem;
+display:inline-block;
+margin-bottom:10px;
+}
 
-    .pricing-card.popular {
-      border: 2px solid var(--accent-color);
-    }
+.price{
+font-size:2.4rem;
+font-weight:800;
+margin:20px 0;
+}
+.price span{font-size:1rem;color:var(--muted)}
 
-    .popular-badge {
-      background: var(--accent-color);
-      color: white;
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      display: inline-block;
-      margin-bottom: 14px;
-    }
+.features{
+list-style:none;
+margin:24px 0;
+display:flex;
+flex-direction:column;
+gap:12px;
+color:#444;
+font-size:.95rem;
+}
 
-    .price-title {
-      font-size: 1.3rem;
-      font-weight: 700;
-    }
+.btn{
+padding:14px;
+border-radius:14px;
+border:none;
+font-weight:700;
+cursor:pointer;
+transition:.2s;
+}
+.btn.primary{background:#1f1f1f;color:#fff}
+.btn.outline{background:transparent;border:1px solid #ddd}
+.btn:hover{transform:scale(1.05)}
 
-    .price-value {
-      font-size: 2.4rem;
-      font-weight: 800;
-      margin: 18px 0;
-    }
+/* FOOTER */
+footer{
+padding:60px 24px;
+border-top:1px solid #eee;
+background:#fff;
+margin-top:40px;
+}
+.footer-inner{
+max-width:1100px;
+margin:auto;
+display:grid;
+grid-template-columns:2fr 1fr 1fr;
+gap:40px;
+}
+footer h4{margin-bottom:16px}
+footer a{
+text-decoration:none;
+color:var(--muted);
+display:block;
+margin-bottom:10px;
+}
+footer a:hover{color:var(--primary)}
 
-    .price-value span {
-      font-size: 1rem;
-      color: var(--text-muted);
-    }
-
-    .price-features {
-      list-style: none;
-      margin: 24px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-    }
-
-    .price-btn {
-      padding: 14px;
-      border-radius: 14px;
-      border: none;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .price-btn.primary {
-      background: var(--text-main);
-      color: white;
-    }
-
-    .price-btn.outline {
-      background: transparent;
-      border: 1px solid #ddd;
-    }
-
-    .price-btn:hover {
-      transform: scale(1.05);
-    }
-  </style>
+@media(max-width:768px){
+.footer-inner{grid-template-columns:1fr}
+}
+</style>
 </head>
 
 <body>
 
-<main style="flex:1; overflow-y:auto">
+<div class="main">
 
-<section class="pricing-section">
-  <div class="pricing-header">
-    <h2>Simple Pricing for Every Business</h2>
-    <p>Upgrade your visibility and grow faster with premium tools.</p>
-  </div>
+<!-- HERO -->
+<section class="hero">
+<h1>Find Local Businesses</h1>
+<p>Live directory powered by Vynix Cloud</p>
 
-  <div class="pricing-grid">
-    <div class="pricing-card">
-      <h3 class="price-title">Starter</h3>
-      <div class="price-value">$0 <span>/mo</span></div>
-      <ul class="price-features">
-        <li>✔ Business listing</li>
-        <li>✔ Customer ratings</li>
-        <li>✔ Search discovery</li>
-      </ul>
-      <button class="price-btn outline">Get Started</button>
-    </div>
-
-    <div class="pricing-card popular">
-      <div class="popular-badge">Most Popular</div>
-      <h3 class="price-title">Pro</h3>
-      <div class="price-value">$19 <span>/mo</span></div>
-      <ul class="price-features">
-        <li>✔ Featured placement</li>
-        <li>✔ WhatsApp contact</li>
-        <li>✔ Analytics dashboard</li>
-        <li>✔ Priority support</li>
-      </ul>
-      <button class="price-btn primary">Upgrade</button>
-    </div>
-
-    <div class="pricing-card">
-      <h3 class="price-title">Enterprise</h3>
-      <div class="price-value">$49 <span>/mo</span></div>
-      <ul class="price-features">
-        <li>✔ Unlimited listings</li>
-        <li>✔ API access</li>
-        <li>✔ Custom branding</li>
-        <li>✔ Dedicated support</li>
-      </ul>
-      <button class="price-btn outline">Contact Sales</button>
-    </div>
-  </div>
+<div class="search-box">
+<input type="text" placeholder="Search businesses...">
+</div>
 </section>
 
-</main>
+<!-- DIRECTORY -->
+<section class="grid">
+<div class="card">
+<div class="card-img" style="background-image:url('https://picsum.photos/400/300')"></div>
+<div class="card-body">
+<h3>Sample Business</h3>
+<small>📍 Main Street</small>
+</div>
+</div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing">
+<h2>Simple Pricing</h2>
+<p>Choose the right plan for your growth</p>
+
+<div class="price-grid">
+<div class="price-card">
+<h3>Starter</h3>
+<div class="price">$0 <span>/mo</span></div>
+<ul class="features">
+<li>✔ Basic listing</li>
+<li>✔ Ratings</li>
+<li>✔ Search visibility</li>
+</ul>
+<button class="btn outline">Get Started</button>
+</div>
+
+<div class="price-card popular">
+<div class="badge">Most Popular</div>
+<h3>Pro</h3>
+<div class="price">$19 <span>/mo</span></div>
+<ul class="features">
+<li>✔ Featured listing</li>
+<li>✔ WhatsApp contact</li>
+<li>✔ Analytics</li>
+<li>✔ Priority support</li>
+</ul>
+<button class="btn primary">Upgrade</button>
+</div>
+
+<div class="price-card">
+<h3>Enterprise</h3>
+<div class="price">$49 <span>/mo</span></div>
+<ul class="features">
+<li>✔ Unlimited businesses</li>
+<li>✔ API access</li>
+<li>✔ Custom branding</li>
+<li>✔ Dedicated manager</li>
+</ul>
+<button class="btn outline">Contact Sales</button>
+</div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+<div class="footer-inner">
+<div>
+<h4>Vynix Biz</h4>
+<p style="color:var(--muted)">Empowering local businesses with real-time discovery.</p>
+</div>
+<div>
+<h4>Links</h4>
+<a href="#">Directory</a>
+<a href="#">Pricing</a>
+<a href="#">List Business</a>
+</div>
+<div>
+<h4>Support</h4>
+<a href="#">Help Center</a>
+<a href="#">Privacy</a>
+<a href="#">Terms</a>
+</div>
+</div>
+</footer>
+
+</div>
 
 <script>
-  const pricingCards = document.querySelectorAll('.pricing-card');
-
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) e.target.classList.add('visible');
-    });
-  }, { threshold: 0.2 });
-
-  pricingCards.forEach(card => observer.observe(card));
+const cards=document.querySelectorAll('.price-card');
+const obs=new IntersectionObserver(e=>{
+e.forEach(i=>i.isIntersecting&&i.target.classList.add('visible'))
+},{threshold:.2});
+cards.forEach(c=>obs.observe(c));
 </script>
 
 </body>
