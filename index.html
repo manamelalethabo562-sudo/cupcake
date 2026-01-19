@@ -158,7 +158,6 @@
     .biz-rating { display: flex; align-items: center; gap: 4px; font-size: 0.9rem; color: #F4B400; margin-bottom: 12px; }
     .biz-info { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 6px; }
 
-    /* Rating System Styles */
     .rating-container { display: flex; gap: 4px; margin-bottom: 16px; cursor: pointer; }
     .rating-container span { font-size: 32px; color: #e0e0e0; transition: color 0.2s; }
     .rating-container span.active { color: #F4B400; }
@@ -166,8 +165,10 @@
     .action-btn {
       flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #e0e0e0;
       background: transparent; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; color: inherit;
     }
     .action-btn.primary { background: var(--text-main); color: white; border: none; }
+    .action-btn.whatsapp { background: #25D366; color: white; border: none; }
 
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 40; opacity: 0; pointer-events: none; transition: 0.3s; }
     .overlay.active { opacity: 1; pointer-events: auto; }
@@ -270,7 +271,7 @@
                 </select>
             </div>
             <div class="form-group"><label class="form-label">Address</label><input type="text" id="bizAddress" class="form-input" required></div>
-            <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="bizPhone" class="form-input" required></div>
+            <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="bizPhone" class="form-input" placeholder="e.g. +1234567890" required></div>
             <div class="form-group"><label class="form-label">Image URL</label><input type="url" id="bizImg" class="form-input" required></div>
             <button type="submit" class="action-btn primary" style="width:100%;">Register Business</button>
         </form>
@@ -284,13 +285,11 @@
     </div>
     <div class="modal-content">
         <h2 id="modalTitle" style="font-weight:700; margin-bottom:8px;">Business Name</h2>
-        
         <div class="biz-rating" style="margin-bottom:8px;">
             <span class="material-symbols-rounded" style="font-size:20px;">star</span>
             <strong id="modalRatingText" style="color:#1f1f1f;">0.0</strong>
             <span id="modalReviewCount" style="color:var(--text-muted); font-size:0.85rem;">(0 reviews)</span>
         </div>
-
         <p class="form-label">Tap to rate:</p>
         <div class="rating-container" id="starInput">
             <span class="material-symbols-rounded" data-value="1">star</span>
@@ -299,15 +298,15 @@
             <span class="material-symbols-rounded" data-value="4">star</span>
             <span class="material-symbols-rounded" data-value="5">star</span>
         </div>
-
         <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
             <div class="biz-info"><span class="material-symbols-rounded">location_on</span> <span id="modalAddress">Address</span></div>
             <div class="biz-info"><span class="material-symbols-rounded">call</span> <span id="modalPhone">Phone</span></div>
         </div>
-        <div style="display:flex; gap:10px;">
-            <button id="saveBizBtn" class="action-btn">Save Favorite</button>
-            <button class="action-btn primary">Contact</button>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+            <button id="saveBizBtn" class="action-btn">Save</button>
+            <a id="modalCallBtn" href="#" class="action-btn primary"><span class="material-symbols-rounded" style="font-size:18px">call</span> Call</a>
         </div>
+        <a id="modalWhatsappBtn" href="#" target="_blank" class="action-btn whatsapp" style="width:100%"><span class="material-symbols-rounded" style="font-size:18px">chat</span> WhatsApp</a>
     </div>
   </div>
 
@@ -345,7 +344,6 @@
     };
 
     function initDatabaseListener() {
-        // Listen for ratings first, then businesses
         db.ref('business_ratings').on('value', (snapshot) => {
             globalRatings = snapshot.val() || {};
             db.ref('businesses').once('value', (snap) => {
@@ -355,7 +353,6 @@
             });
         });
 
-        // Re-sync businesses when they change
         db.ref('businesses').on('value', (snapshot) => {
             const data = snapshot.val();
             allBusinesses = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
@@ -374,7 +371,6 @@
     function switchView(view) {
         currentView = view;
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        
         if(view === 'all') {
             document.getElementById('nav-dir').classList.add('active');
             document.getElementById('pageTitle').innerText = "Find Local Businesses";
@@ -388,26 +384,19 @@
             document.getElementById('pageTitle').innerText = "Your Favorites";
             document.getElementById('categoryContainer').style.display = "flex";
         }
-        
         filterBusinesses();
         closeOverlays();
     }
 
     function filterBusinesses() {
         const query = els.search.value.toLowerCase();
-        
         if (currentView === 'categories') {
             renderByCategory(query);
             return;
         }
-
         const filtered = allBusinesses.filter(biz => {
             const bizRating = getAverageRating(biz.id).avg.toString();
-            const matchesSearch = 
-                biz.name.toLowerCase().includes(query) || 
-                biz.address.toLowerCase().includes(query) ||
-                bizRating.includes(query);
-            
+            const matchesSearch = biz.name.toLowerCase().includes(query) || biz.address.toLowerCase().includes(query) || bizRating.includes(query);
             const matchesCat = currentCategory === 'All' || biz.cat === currentCategory;
             const matchesView = currentView === 'all' || savedIds.includes(biz.id);
             return matchesSearch && matchesCat && matchesView;
@@ -426,12 +415,8 @@
     function renderByCategory(query) {
         els.grid.innerHTML = '';
         const uniqueCategories = [...new Set(allBusinesses.map(biz => biz.cat))].sort();
-        
         uniqueCategories.forEach(category => {
-            const filtered = allBusinesses.filter(biz => 
-                biz.cat === category && (biz.name.toLowerCase().includes(query) || biz.address.toLowerCase().includes(query))
-            );
-
+            const filtered = allBusinesses.filter(biz => biz.cat === category && (biz.name.toLowerCase().includes(query) || biz.address.toLowerCase().includes(query)));
             if (filtered.length > 0) {
                 const header = document.createElement('div');
                 header.className = 'category-header';
@@ -476,12 +461,18 @@
         document.getElementById('modalRatingText').innerText = ratingData.avg;
         document.getElementById('modalReviewCount').innerText = `(${ratingData.count} reviews)`;
         
+        // Setup Functional Contact Links
+        const phoneClean = biz.phone.replace(/\s+/g, '');
+        document.getElementById('modalCallBtn').href = `tel:${phoneClean}`;
+        
+        const waMsg = encodeURIComponent(`Hello ${biz.name}, I found you on Vynix Biz and would like to inquire about your services.`);
+        document.getElementById('modalWhatsappBtn').href = `https://wa.me/${phoneClean.replace('+', '')}?text=${waMsg}`;
+
         const saveBtn = document.getElementById('saveBizBtn');
         const isAlreadySaved = savedIds.includes(biz.id);
-        saveBtn.innerText = isAlreadySaved ? "Remove Favorite" : "Save Favorite";
+        saveBtn.innerText = isAlreadySaved ? "Remove" : "Save";
         saveBtn.style.color = isAlreadySaved ? "#D96570" : "inherit";
 
-        // Refresh save button listener
         const newSaveBtn = saveBtn.cloneNode(true);
         saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
         newSaveBtn.onclick = () => {
@@ -490,23 +481,17 @@
             isAlreadySaved ? favRef.remove().then(closeOverlays) : favRef.set(true).then(closeOverlays);
         };
 
-        // Rating Logic
         const starContainer = document.getElementById('starInput');
         const stars = starContainer.querySelectorAll('span');
         const userRating = (globalRatings[biz.id] && auth.currentUser) ? globalRatings[biz.id][auth.currentUser.uid] : 0;
-
-        const updateStars = (val) => {
-            stars.forEach(s => s.classList.toggle('active', s.dataset.value <= val));
-        };
+        const updateStars = (val) => { stars.forEach(s => s.classList.toggle('active', s.dataset.value <= val)); };
         updateStars(userRating);
 
         stars.forEach(star => {
             star.onclick = () => {
                 if(!auth.currentUser) return alert("Please Sign In to rate!");
                 const val = parseInt(star.dataset.value);
-                db.ref(`business_ratings/${biz.id}/${auth.currentUser.uid}`).set(val).then(() => {
-                    updateStars(val);
-                });
+                db.ref(`business_ratings/${biz.id}/${auth.currentUser.uid}`).set(val).then(() => { updateStars(val); });
             };
         });
 
