@@ -172,10 +172,23 @@
     .pricing-card {
       padding: 32px; border-radius: 20px; border: 1px solid #eee;
       display: flex; flex-direction: column; transition: 0.3s;
+      cursor: pointer;
     }
-    .pricing-card:hover { border-color: var(--accent-color); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-    .pricing-card.featured { background: #041E49; color: white; border: none; position: relative; }
-    .pricing-card.featured .action-btn { background: white; color: #041E49; }
+    .pricing-card:hover { 
+      border-color: var(--accent-color); 
+      transform: translateY(-5px); 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+    }
+    .pricing-card.featured { 
+      background: #041E49; 
+      color: white; 
+      border: none; 
+      position: relative; 
+    }
+    .pricing-card.featured .action-btn { 
+      background: white; 
+      color: #041E49; 
+    }
     .price-amount { font-size: 2.5rem; font-weight: 700; margin: 20px 0; }
     .price-amount span { font-size: 1rem; font-weight: 400; opacity: 0.7; }
     .pricing-features { list-style: none; margin-bottom: 30px; text-align: left; }
@@ -219,36 +232,28 @@
       .footer-grid { grid-template-columns: 1fr; gap: 32px; }
       .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
     }
+    /* ─── New pricing card interactivity styles ─── */
     .pricing-card {
       perspective: 1200px;
+      cursor: pointer;
     }
-    .pricing-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transform-style: preserve-3d;
-      transition: transform 0.8s cubic-bezier(0.2,0,0,1);
+    .pricing-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
     }
-    .pricing-card:hover .pricing-inner {
-      transform: rotateY(180deg);
+    .pricing-card:active {
+      transform: translateY(-2px);
     }
-    .pricing-front,
-    .pricing-back {
-      position: absolute;
-      inset: 0;
-      backface-visibility: hidden;
-      border-radius: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    .pricing-card .action-btn {
+      transition: all 0.2s ease;
     }
-    .pricing-back {
-      transform: rotateY(180deg);
-      align-items: center;
-      text-align: center;
-      padding: 32px;
+    .pricing-card:hover .action-btn {
+      transform: scale(1.04);
     }
-    /* New styles for image upload */
+    .pricing-card.featured:hover {
+      box-shadow: 0 20px 40px rgba(4,30,73,0.25);
+    }
+    /* Image upload preview */
     #imagePreview img {
       width: 100%;
       height: auto;
@@ -291,7 +296,6 @@
       </div>
     </div>
   </aside>
-
   <main class="main">
     <div class="top-bar">
       <div style="display:flex; align-items:center; gap:12px;">
@@ -302,7 +306,6 @@
         <div class="user-avatar" id="userAvatar" style="background-image: url('https://ui-avatars.com/api/?name=Guest')"></div>
       </div>
     </div>
-
     <div class="content-scroll">
       <div class="hero-section">
         <h1 class="hero-title" id="pageTitle">Find Local Businesses</h1>
@@ -312,7 +315,6 @@
           <input type="text" class="search-input" id="searchInput" placeholder="Search by name, address or rating..." autocomplete="off">
         </div>
       </div>
-
       <div class="filter-bar" id="categoryContainer">
         <div class="category-pill active" onclick="filterCategory('All', this)">All</div>
         <div class="category-pill" onclick="filterCategory('Restaurant', this)">Restaurant</div>
@@ -320,7 +322,6 @@
         <div class="category-pill" onclick="filterCategory('Service', this)">Service</div>
         <div class="category-pill" onclick="filterCategory('Tech', this)">Tech</div>
       </div>
-
       <div class="business-grid" id="businessGrid"></div>
 
       <section class="pricing-section">
@@ -328,7 +329,7 @@
           <p style="color: var(--text-secondary); margin-top: 8px;">Reach more customers with All Business Marketing Tools.</p>
          
           <div class="pricing-grid">
-              <div class="pricing-card">
+              <div class="pricing-card" onclick="handlePricingClick('basic')">
                   <h3>Basic</h3>
                   <div class="price-amount">R0<span>/month</span></div>
                   <ul class="pricing-features">
@@ -336,9 +337,9 @@
                       <li><span class="material-symbols-rounded" style="color:#4285F4; font-size:18px;">check_circle</span> Contact Details</li>
                       <li><span class="material-symbols-rounded" style="color:#ccc; font-size:18px;">cancel</span> No Verified Badge</li>
                   </ul>
-                  <button class="action-btn" onclick="openListModal()">Get Started</button>
+                  <button class="action-btn" onclick="handlePricingClick('basic'); event.stopPropagation();">Get Started</button>
               </div>
-              <div class="pricing-card featured">
+              <div class="pricing-card featured" onclick="handlePricingClick('professional')">
                   <span class="featured-label">RECOMMENDED</span>
                   <h3>Professional</h3>
                   <div class="price-amount">R350<span>/month</span></div>
@@ -347,9 +348,9 @@
                       <li><span class="material-symbols-rounded" style="color:#fff; font-size:18px;">check_circle</span> Priority Search Result</li>
                       <li><span class="material-symbols-rounded" style="color:#fff; font-size:18px;">check_circle</span> 10 Photos Gallery</li>
                   </ul>
-                  <button class="action-btn">Go Pro</button>
+                  <button class="action-btn" onclick="handlePricingClick('professional'); event.stopPropagation();">Go Pro</button>
               </div>
-              <div class="pricing-card">
+              <div class="pricing-card" onclick="handlePricingClick('premium')">
                   <h3>Premium</h3>
                   <div class="price-amount">R800<span>/month</span></div>
                   <ul class="pricing-features">
@@ -357,7 +358,7 @@
                       <li><span class="material-symbols-rounded" style="color:#4285F4; font-size:18px;">check_circle</span> Professional Video</li>
                       <li><span class="material-symbols-rounded" style="color:#4285F4; font-size:18px;">check_circle</span> 24/7 Priority Support</li>
                   </ul>
-                  <button class="action-btn">Contact Us</button>
+                  <button class="action-btn" onclick="handlePricingClick('premium'); event.stopPropagation();">Contact Us</button>
               </div>
           </div>
       </section>
@@ -475,7 +476,7 @@
 
   <script>
     // ────────────────────────────────────────────────
-    //  CONFIG - REPLACE THESE VALUES
+    //  CONFIG
     // ────────────────────────────────────────────────
     const firebaseConfig = {
       apiKey: "AIzaSyAojYRIH8FJL5B8yg1b3qxsc29vB3vLC-8",
@@ -487,19 +488,14 @@
       measurementId: "G-EMZFX7CE8V"
     };
 
-    // ── Cloudinary (get from your dashboard) ──
-    const CLOUDINARY_CLOUD_NAME = 'dxp01qjvb';           // ← e.g. "dabc123xyz"
-    const CLOUDINARY_UPLOAD_PRESET = 'allbusiness';       // ← name of your unsigned preset
+    const CLOUDINARY_CLOUD_NAME = 'dxp01qjvb';
+    const CLOUDINARY_UPLOAD_PRESET = 'allbusiness';
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
     const provider = new firebase.auth.GoogleAuthProvider();
 
-    // ────────────────────────────────────────────────
-    //  GLOBAL STATE
-    // ────────────────────────────────────────────────
     let allBusinesses = [];
     let savedIds = [];
     let globalRatings = {};
@@ -519,9 +515,6 @@
       submitBtn: document.getElementById('submitBtn')
     };
 
-    // ────────────────────────────────────────────────
-    //  FIREBASE LISTENERS
-    // ────────────────────────────────────────────────
     function initDatabaseListener() {
         db.ref('business_ratings').on('value', (snapshot) => {
             globalRatings = snapshot.val() || {};
@@ -532,7 +525,6 @@
                 document.getElementById('modalReviewCount').innerText = `(${liveData.count} reviews)`;
             }
         });
-
         db.ref('businesses').on('value', (snapshot) => {
             const data = snapshot.val();
             allBusinesses = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
@@ -548,9 +540,6 @@
         });
     }
 
-    // ────────────────────────────────────────────────
-    //  VIEW / FILTER / RENDER
-    // ────────────────────────────────────────────────
     function switchView(view) {
         currentView = view;
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -641,9 +630,6 @@
         data.forEach(biz => els.grid.appendChild(createCard(biz)));
     }
 
-    // ────────────────────────────────────────────────
-    //  DETAIL MODAL
-    // ────────────────────────────────────────────────
     function openDetailModal(biz) {
         currentActiveBizId = biz.id;
         const ratingData = getAverageRating(biz.id);
@@ -695,9 +681,6 @@
         els.overlay.classList.add('active');
     }
 
-    // ────────────────────────────────────────────────
-    //  AUTH
-    // ────────────────────────────────────────────────
     function handleAuth() {
         if(auth.currentUser) {
             auth.signOut().then(() => location.reload());
@@ -718,51 +701,38 @@
         }
     });
 
-    // ────────────────────────────────────────────────
-    //  REGISTER BUSINESS → CLOUDINARY + FIREBASE
-    // ────────────────────────────────────────────────
     async function registerBusiness(e) {
       e.preventDefault();
-
       const fileInput = document.getElementById('bizImg');
       const file = fileInput.files[0];
-
       if (!file) {
         alert("Please select an image for your business.");
         return;
       }
-
       if (file.size > 5 * 1024 * 1024) {
         alert("Image is too large. Maximum allowed size is 5MB.");
         return;
       }
-
       const submitBtn = els.submitBtn;
       const originalText = submitBtn.innerText;
       submitBtn.innerText = "Uploading...";
       submitBtn.classList.add('loading');
       submitBtn.disabled = true;
-
       try {
-        // 1. Upload to Cloudinary
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-
         const cloudinaryRes = await fetch(
           `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
           { method: 'POST', body: formData }
         );
-
         if (!cloudinaryRes.ok) {
           const err = await cloudinaryRes.json();
           throw new Error(err.error?.message || "Image upload failed");
         }
-
         const cloudinaryData = await cloudinaryRes.json();
         const imageUrl = cloudinaryData.secure_url;
 
-        // 2. Save to Firebase
         const newBiz = {
           name: document.getElementById('bizName').value.trim(),
           cat: document.getElementById('bizCat').value,
@@ -771,14 +741,11 @@
           img: imageUrl,
           createdAt: firebase.database.ServerValue.TIMESTAMP
         };
-
         await db.ref('businesses').push(newBiz);
-
         alert("Business registered successfully!");
         document.getElementById('listingForm').reset();
         document.getElementById('imagePreview').style.display = 'none';
         closeOverlays();
-
       } catch (error) {
         console.error("Registration error:", error);
         alert("Failed to register: " + (error.message || "Unknown error"));
@@ -790,8 +757,38 @@
     }
 
     // ────────────────────────────────────────────────
-    //  UTILITIES
+    //  NEW: Pricing Plans Interaction
     // ────────────────────────────────────────────────
+    function handlePricingClick(plan) {
+      // You can later replace these alerts with:
+      // - Open payment gateway
+      // - Redirect to checkout page
+      // - Open WhatsApp/chat support
+      // - Show custom modal with form
+
+      let message = "";
+      switch(plan) {
+        case 'basic':
+          message = "The Basic plan is completely free!\n\nYou can start listing your business right now.";
+          if (confirm(message + "\n\nWould you like to list your business now?")) {
+            openListModal();
+          }
+          break;
+
+        case 'professional':
+          message = "Professional Plan – R350/month\n\nIncludes:\n• Verified Badge\n• Priority in search results\n• Up to 10 photos\n\nReady to upgrade and get more visibility?";
+          alert(message);
+          // Example next step: window.open('https://wa.me/27123456789?text=I want the Professional plan', '_blank');
+          break;
+
+        case 'premium':
+          message = "Premium Plan – R800/month\n\nIncludes:\n• Homepage featured spot\n• Professional video upload\n• 24/7 priority support\n\nThis is our top tier — let's discuss your needs!";
+          alert(message);
+          // Example next step: window.open('mailto:support@allbusiness.com?subject=Premium Plan Inquiry');
+          break;
+      }
+    }
+
     function closeOverlays() {
         currentActiveBizId = null;
         els.sidebar.classList.remove('open');
@@ -818,13 +815,9 @@
         else filterBusinesses();
     }
 
-    // ────────────────────────────────────────────────
-    //  IMAGE PREVIEW
-    // ────────────────────────────────────────────────
     document.getElementById('bizImg').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
-
       const reader = new FileReader();
       reader.onload = function(ev) {
         const preview = document.getElementById('previewImg');
@@ -834,9 +827,6 @@
       reader.readAsDataURL(file);
     });
 
-    // ────────────────────────────────────────────────
-    //  EVENT LISTENERS & INIT
-    // ────────────────────────────────────────────────
     els.search.addEventListener('input', filterBusinesses);
     initDatabaseListener();
   </script>
