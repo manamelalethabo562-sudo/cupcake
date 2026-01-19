@@ -1,209 +1,500 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AllBusiness - Advertising Platform</title>
-  <style>
-    /* ────────────────────────────────────────────────
-       Previous styles (kept compact – add your full CSS here)
-    ──────────────────────────────────────────────── */
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
-    body { background:#f0f4f8; color:#222; line-height:1.6; }
-    :root {
-      --primary:#4a90e2; --secondary:#50e3c2; --accent:#f5a623;
-      --glow:0 0 15px rgba(74,144,226,0.5);
-      --shadow:0 8px 32px rgba(31,38,135,0.15);
-    }
-    header { position:fixed; top:0; left:0; right:0; background:rgba(255,255,255,0.85); backdrop-filter:blur(12px); box-shadow:var(--shadow); z-index:1000; }
-    .navbar { max-width:1400px; margin:0 auto; padding:1rem 2rem; display:flex; align-items:center; justify-content:space-between; }
-    .logo { font-size:1.9rem; font-weight:800; color:var(--primary); text-shadow:var(--glow); }
-    .search-container { flex:1; max-width:520px; margin:0 1.5rem; position:relative; }
-    .search-bar { display:flex; background:white; border-radius:999px; overflow:hidden; border:1px solid #ddd; box-shadow:0 2px 12px rgba(0,0,0,0.08); }
-    .search-bar input { flex:1; padding:0.95rem 1.6rem; border:none; font-size:1.05rem; outline:none; }
-    .search-bar button { padding:0 1.8rem; background:var(--primary); color:white; border:none; cursor:pointer; }
-    .autocomplete-dropdown {
-      position:absolute; top:100%; left:0; right:0;
-      background:white; border-radius:12px; margin-top:6px;
-      box-shadow:0 12px 32px rgba(0,0,0,0.18);
-      max-height:340px; overflow-y:auto; z-index:9999;
-      border:1px solid #e0e0e0; display:none;
-    }
-    .autocomplete-item {
-      padding:0.85rem 1.5rem; cursor:pointer; transition:0.15s;
-    }
-    .autocomplete-item:hover, .autocomplete-item.highlight {
-      background:#eef7ff; color:var(--primary);
-    }
-    .autocomplete-item em { font-style:normal; color:var(--primary); font-weight:600; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AllBusiness - Advertising Platform</title>
+    <style>
+        /* Reset and base */
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', system-ui, sans-serif; }
+        body { background:#f0f4f8; color:#222; line-height:1.6; overflow-x:hidden; }
 
-    /* ... rest of your styles (hero, modal, pricing, etc.) ... */
-    .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:2000; }
-    .modal-content { background:white; padding:2.4rem; border-radius:16px; width:90%; max-width:440px; box-shadow:var(--shadow); }
-    #googleBtn { background:#4285F4; color:white; display:flex; align-items:center; justify-content:center; gap:12px; }
-    #googleBtn img { height:22px; }
-    .divider { display:flex; align-items:center; margin:1.4rem 0; color:#aaa; }
-    .divider::before, .divider::after { content:''; flex:1; border-bottom:1px solid #ddd; }
-    .divider span { padding:0 1.2rem; }
-  </style>
+        :root {
+            --primary: #4a90e2;
+            --secondary: #50e3c2;
+            --accent: #f5a623;
+            --bg: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #f8fbff, #e0eaff);
+            --glass: rgba(255,255,255,0.8);
+            --shadow: 0 8px 32px rgba(31,38,135,0.15);
+            --glow: 0 0 15px rgba(74,144,226,0.5);
+        }
+
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            box-shadow: var(--shadow);
+        }
+
+        .navbar {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-shadow: var(--glow);
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 2rem;
+            position: relative;
+        }
+
+        .search-bar {
+            display: flex;
+            background: rgba(255,255,255,0.95);
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 1px solid rgba(74,144,226,0.2);
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 1rem 1.8rem;
+            border: none;
+            font-size: 1.05rem;
+            background: transparent;
+            outline: none;
+        }
+
+        .search-bar button {
+            padding: 1rem 1.8rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-bar button:hover { background: #357abd; }
+
+        /* Autocomplete dropdown */
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            margin-top: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            max-height: 320px;
+            overflow-y: auto;
+            z-index: 999;
+            border: 1px solid rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .autocomplete-item {
+            padding: 0.9rem 1.6rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .autocomplete-item:hover,
+        .autocomplete-item.highlight {
+            background: #f0f7ff;
+            color: var(--primary);
+        }
+
+        .autocomplete-item em {
+            font-style: normal;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-links { display: flex; align-items: center; gap: 2.5rem; }
+        .nav-links a { color: #333; text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+
+        .auth-buttons button {
+            padding: 0.7rem 1.4rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        #loginBtn { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        #registerBtnHeader { background: var(--secondary); border: none; color: white; }
+
+        .hamburger { display: none; font-size: 1.8rem; cursor: pointer; color: var(--primary); }
+
+        @media (max-width: 992px) {
+            .nav-links { position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; background: var(--glass); padding: 2rem; transform: translateY(-100%); opacity: 0; transition: all 0.4s; }
+            .nav-links.active { transform: translateY(0); opacity: 1; }
+            .search-container { margin: 1rem 0; max-width: none; }
+            .hamburger { display: block; }
+        }
+
+        #hero { min-height: 90vh; background: var(--bg-gradient); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 8rem 2rem 4rem; }
+        #hero h1 { font-size: 4.2rem; color: var(--primary); text-shadow: var(--glow); }
+        #hero p { font-size: 1.6rem; max-width: 700px; margin: 1.5rem 0 3rem; }
+
+        #searchResults { max-width: 1200px; margin: 0 auto 4rem; padding: 0 2rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
+        .business-card { background: white; border-radius: 16px; padding: 1.8rem; box-shadow: var(--shadow); transition: all 0.4s; }
+        .business-card:hover { transform: translateY(-10px); box-shadow: var(--glow); }
+
+        #loading, #noResults { text-align: center; margin: 3rem; font-size: 1.3rem; color: #555; }
+
+        section { padding: 6rem 2rem; }
+        #about { background: white; text-align: center; }
+        #pricing { background: var(--bg-gradient); text-align: center; }
+
+        .pricing-tabs { display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
+        .pricing-card { background: white; border-radius: 20px; padding: 2.5rem; width: 320px; box-shadow: var(--shadow); transition: all 0.4s; }
+        .pricing-card:hover { transform: translateY(-12px); box-shadow: var(--glow); }
+
+        footer { background: #2a2a2a; color: white; padding: 4rem 2rem 2rem; text-align: center; }
+        .footer-content { display: flex; justify-content: space-around; flex-wrap: wrap; max-width: 1200px; margin: 0 auto 3rem; }
+
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: white; padding: 2.5rem; border-radius: 20px; width: 90%; max-width: 460px; box-shadow: var(--shadow); }
+        .close { float: right; font-size: 2.2rem; cursor: pointer; color: #777; }
+        .modal-content input { width: 100%; padding: 1rem; margin: 0.8rem 0; border: 1px solid #ddd; border-radius: 10px; }
+        .modal-content button { width: 100%; padding: 1.1rem; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer; }
+    </style>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, where, getDocs, serverTimestamp, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAojYRIH8FJL5B8yg1b3qxsc29vB3vLC-8",
+            authDomain: "allbusiness-596cc.firebaseapp.com",
+            projectId: "allbusiness-596cc",
+            storageBucket: "allbusiness-596cc.firebasestorage.app",
+            messagingSenderId: "665302840524",
+            appId: "1:665302840524:web:e9c1078e14bc0de6a87e69",
+            measurementId: "G-EMZFX7CE8V"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        window.auth = getAuth(app);
+        window.db = getFirestore(app);
+        window.collection = collection;
+        window.addDoc = addDoc;
+        window.query = query;
+        window.where = where;
+        window.getDocs = getDocs;
+        window.serverTimestamp = serverTimestamp;
+        window.orderBy = orderBy;
+        window.limit = limit;
+    </script>
 </head>
 <body>
 
-  <!-- Header -->
-  <header>
-    <nav class="navbar">
-      <div class="logo">AllBusiness</div>
-      <div class="search-container">
-        <div class="search-bar">
-          <input type="text" id="searchInput" placeholder="Search categories (restaurant, gym, plumber...)">
-          <button>Search</button>
+    <header>
+        <nav class="navbar">
+            <div class="logo">AllBusiness</div>
+
+            <div class="search-container">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search business category (e.g. restaurant, gym...)">
+                    <button onclick="searchBusinesses()">Search</button>
+                </div>
+                <div class="autocomplete-dropdown" id="suggestionsDropdown"></div>
+            </div>
+
+            <div class="nav-links" id="navLinks">
+                <a href="#hero">Home</a>
+                <a href="#about">About</a>
+                <a href="#pricing">Pricing</a>
+                <div class="auth-buttons">
+                    <button id="loginBtn">Login</button>
+                    <button id="registerBtnHeader">Register</button>
+                </div>
+            </div>
+
+            <div class="hamburger" id="hamburger">☰</div>
+        </nav>
+    </header>
+
+    <section id="hero">
+        <h1>Discover & Grow Your Business</h1>
+        <p>Start typing a category to see suggestions — or register your business to reach more customers.</p>
+    </section>
+
+    <div id="searchResults"></div>
+    <div id="loading" style="display:none;">Searching businesses...</div>
+    <div id="noResults" style="display:none;">No businesses found.</div>
+
+    <!-- About, Pricing, Footer sections remain the same as previous version -->
+    <section id="about">
+        <h2>About AllBusiness</h2>
+        <p>AllBusiness connects customers with quality local businesses through smart category discovery.</p>
+        <p>Join thousands of companies in a modern platform built for growth.</p>
+    </section>
+
+    <section id="pricing">
+        <h2>Choose Your Plan</h2>
+        <div class="pricing-tabs">
+            <div class="pricing-card">
+                <h3>Basic</h3>
+                <div class="price" style="font-size:2.8rem;color:var(--accent);">$9.99/mo</div>
+                <ul style="list-style:none;margin:1.5rem 0;">
+                    <li>Business Listing</li>
+                    <li>Search Visibility</li>
+                    <li>Email Support</li>
+                </ul>
+                <button>Select</button>
+            </div>
+            <!-- Pro and Enterprise cards same as before -->
+            <div class="pricing-card">
+                <h3>Pro</h3>
+                <div class="price" style="font-size:2.8rem;color:var(--accent);">$19.99/mo</div>
+                <ul style="list-style:none;margin:1.5rem 0;">
+                    <li>Priority Placement</li>
+                    <li>Analytics</li>
+                    <li>Chat Support</li>
+                </ul>
+                <button>Select</button>
+            </div>
+            <div class="pricing-card">
+                <h3>Enterprise</h3>
+                <div class="price" style="font-size:2.8rem;color:var(--accent);">$49.99/mo</div>
+                <ul style="list-style:none;margin:1.5rem 0;">
+                    <li>Custom Ads</li>
+                    <li>Dedicated Manager</li>
+                    <li>API Access</li>
+                </ul>
+                <button>Select</button>
+            </div>
         </div>
-        <div class="autocomplete-dropdown" id="suggestions"></div>
-      </div>
-      <div>
-        <button id="registerBtnHeader">Sign Up</button>
-      </div>
-    </nav>
-  </header>
+    </section>
 
-  <!-- Auth Modal (simplified for focus) -->
-  <div id="registerModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="document.getElementById('registerModal').style.display='none'">×</span>
-      <h2>Join AllBusiness</h2>
-      <button id="googleBtn"><img src="https://www.google.com/favicon.ico" alt="G"> Continue with Google</button>
-      <div class="divider"><span>or</span></div>
-      <!-- Your email fields here -->
-      <p id="authMessage"></p>
+    <footer>
+        <div class="footer-content">
+            <div><h4>AllBusiness</h4><p>Connecting Johannesburg businesses & customers.</p></div>
+            <div><h4>Links</h4><ul style="list-style:none;"><li><a href="#hero" style="color:#50e3c2;">Home</a></li><li><a href="#about" style="color:#50e3c2;">About</a></li><li><a href="#pricing" style="color:#50e3c2;">Pricing</a></li></ul></div>
+            <div><h4>Contact</h4><p>support@allbusiness.com</p><p>+27 11 123 4567</p></div>
+        </div>
+        <p style="margin-top:2rem;opacity:0.8;">© 2026 AllBusiness. All rights reserved.</p>
+    </footer>
+
+    <!-- Registration Modal (same as before) -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
+            <h2>Register Your Business</h2>
+            <input type="text" id="businessName" placeholder="Business Name *" required>
+            <input type="email" id="email" placeholder="Email *" required>
+            <input type="password" id="password" placeholder="Password *" required>
+            <input type="text" id="category" placeholder="Category (e.g. restaurant, plumbing)" required>
+            <button onclick="registerBusiness()">Register</button>
+            <p id="authMessage" style="margin-top:1.2rem;color:#e74c3c;"></p>
+        </div>
     </div>
-  </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { getDatabase, ref, query, orderByChild, startAt, endAt, limitToFirst, get } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+    <script type="module">
+        const { auth, db, collection, addDoc, query, where, getDocs, serverTimestamp, orderBy, limit } = window;
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAojYRIH8FJL5B8yg1b3qxsc29vB3vLC-8",
-      authDomain: "allbusiness-596cc.firebaseapp.com",
-      databaseURL: "https://allbusiness-596cc-default-rtdb.firebaseio.com",
-      projectId: "allbusiness-596cc",
-      storageBucket: "allbusiness-596cc.firebasestorage.app",
-      messagingSenderId: "665302840524",
-      appId: "1:665302840524:web:e9c1078e14bc0de6a87e69",
-      measurementId: "G-EMZFX7CE8V"
-    };
+        // Mobile menu
+        document.getElementById('hamburger').onclick = () => document.getElementById('navLinks').classList.toggle('active');
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+        // Modal
+        const modal = document.getElementById('registerModal');
+        document.getElementById('registerBtnHeader').onclick = () => modal.style.display = 'flex';
+        window.closeModal = () => modal.style.display = 'none';
 
-    const input = document.getElementById('searchInput');
-    const dropdown = document.getElementById('suggestions');
-    let currentFocus = -1;
+        // Register (same as before)
+        window.registerBusiness = async () => {
+            const name = document.getElementById('businessName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            let category = document.getElementById('category').value.trim().toLowerCase();
 
-    // ────────────────────────────────────────────────
-    // CATEGORY AUTOCOMPLETE (Realtime Database – prefix match)
-    // ────────────────────────────────────────────────
-    async function showSuggestions() {
-      const val = input.value.trim().toLowerCase();
-      dropdown.innerHTML = '';
-      currentFocus = -1;
+            if (!name || !email || !password || !category) {
+                document.getElementById('authMessage').textContent = 'Please fill all fields.';
+                return;
+            }
 
-      if (val.length < 2) {
-        dropdown.style.display = 'none';
-        return;
-      }
+            try {
+                const userCred = await auth.createUserWithEmailAndPassword(email, password);
+                await addDoc(collection(db, "businesses"), {
+                    name, category, email, uid: userCred.user.uid, createdAt: serverTimestamp()
+                });
+                document.getElementById('authMessage').style.color = 'green';
+                document.getElementById('authMessage').textContent = 'Success! Business registered.';
+                setTimeout(closeModal, 2200);
+            } catch (err) { document.getElementById('authMessage').textContent = err.message; }
+        };
 
-      try {
-        const q = query(
-          ref(db, 'businesses'),
-          orderByChild('category'),
-          startAt(val),
-          endAt(val + '\uf8ff'),
-          limitToFirst(12)
-        );
+        // ────────────────────────────────────────────────
+        // AUTOCOMPLETE / SUGGESTIONS
+        // ────────────────────────────────────────────────
+        const input = document.getElementById('searchInput');
+        const dropdown = document.getElementById('suggestionsDropdown');
+        let currentFocus = -1;
 
-        const snapshot = await get(q);
+        // Show dropdown with matching categories (prefix search)
+        async function showSuggestions() {
+            const val = input.value.trim().toLowerCase();
+            dropdown.innerHTML = '';
+            currentFocus = -1;
 
-        if (!snapshot.exists()) {
-          dropdown.style.display = 'none';
-          return;
+            if (!val || val.length < 2) {
+                dropdown.style.display = 'none';
+                return;
+            }
+
+            try {
+                // Prefix search using >= and <= trick (very common for Firestore autocomplete)
+                const q = query(
+                    collection(db, "businesses"),
+                    where("category", ">=", val),
+                    where("category", "<=", val + '\uf8ff'),
+                    orderBy("category"),
+                    limit(12)   // limit suggestions to avoid too many reads
+                );
+
+                const snap = await getDocs(q);
+
+                if (snap.empty) {
+                    dropdown.style.display = 'none';
+                    return;
+                }
+
+                // Use Set to get unique categories
+                const uniqueCategories = new Set();
+                snap.forEach(doc => {
+                    const cat = doc.data().category;
+                    if (cat.startsWith(val)) uniqueCategories.add(cat);
+                });
+
+                uniqueCategories.forEach(cat => {
+                    const item = document.createElement('div');
+                    item.className = 'autocomplete-item';
+                    const highlighted = cat.replace(new RegExp(val, 'gi'), match => `<em>${match}</em>`);
+                    item.innerHTML = highlighted;
+                    item.onclick = () => {
+                        input.value = cat;
+                        dropdown.style.display = 'none';
+                        // Optional: trigger full search immediately
+                        // searchBusinesses();
+                    };
+                    dropdown.appendChild(item);
+                });
+
+                dropdown.style.display = 'block';
+            } catch (err) {
+                console.error('Suggestions error:', err);
+                dropdown.style.display = 'none';
+            }
         }
 
-        const unique = new Set();
-        snapshot.forEach(child => {
-          const cat = child.val().category;
-          if (cat && cat.startsWith(val)) unique.add(cat);
+        // Keyboard navigation
+        function handleKeydown(e) {
+            const items = dropdown.querySelectorAll('.autocomplete-item');
+            if (!items.length) return;
+
+            if (e.key === 'ArrowDown') {
+                currentFocus++;
+                if (currentFocus >= items.length) currentFocus = 0;
+                addActive(items);
+            } else if (e.key === 'ArrowUp') {
+                currentFocus--;
+                if (currentFocus < 0) currentFocus = items.length - 1;
+                addActive(items);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    items[currentFocus].click();
+                }
+            } else if (e.key === 'Escape') {
+                dropdown.style.display = 'none';
+            }
+        }
+
+        function addActive(items) {
+            removeActive(items);
+            if (currentFocus >= 0 && currentFocus < items.length) {
+                items[currentFocus].classList.add('highlight');
+                items[currentFocus].scrollIntoView({ block: 'nearest' });
+            }
+        }
+
+        function removeActive(items) {
+            items.forEach(item => item.classList.remove('highlight'));
+        }
+
+        // Events
+        input.addEventListener('input', showSuggestions);
+        input.addEventListener('keydown', handleKeydown);
+
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', e => {
+            if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
         });
 
-        if (unique.size === 0) {
-          dropdown.style.display = 'none';
-          return;
-        }
+        // Full search (same as before, but now can be triggered by button or after selection)
+        window.searchBusinesses = async () => {
+            const term = input.value.trim().toLowerCase();
+            if (!term) return;
 
-        unique.forEach(cat => {
-          const item = document.createElement('div');
-          item.className = 'autocomplete-item';
-          const highlighted = cat.replace(new RegExp(val, 'gi'), m => `<em>${m}</em>`);
-          item.innerHTML = highlighted;
-          item.onclick = () => {
-            input.value = cat;
             dropdown.style.display = 'none';
-            // Optional: auto-trigger full search
-            // searchBusinesses(cat);
-          };
-          dropdown.appendChild(item);
-        });
 
-        dropdown.style.display = 'block';
-      } catch (err) {
-        console.error(err);
-        dropdown.style.display = 'none';
-      }
-    }
+            const container = document.getElementById('searchResults');
+            const loading = document.getElementById('loading');
+            const noRes = document.getElementById('noResults');
 
-    // Keyboard support
-    function handleKey(e) {
-      const items = dropdown.querySelectorAll('.autocomplete-item');
-      if (!items.length) return;
+            container.innerHTML = '';
+            loading.style.display = 'block';
+            noRes.style.display = 'none';
 
-      if (e.key === 'ArrowDown') {
-        currentFocus = (currentFocus + 1) % items.length;
-        highlight(items);
-      } else if (e.key === 'ArrowUp') {
-        currentFocus = (currentFocus - 1 + items.length) % items.length;
-        highlight(items);
-      } else if (e.key === 'Enter' && currentFocus > -1) {
-        e.preventDefault();
-        items[currentFocus].click();
-      } else if (e.key === 'Escape') {
-        dropdown.style.display = 'none';
-      }
-    }
+            try {
+                const q = query(collection(db, "businesses"), where("category", "==", term));
+                const snap = await getDocs(q);
 
-    function highlight(items) {
-      items.forEach((el, i) => el.classList.toggle('highlight', i === currentFocus));
-      if (currentFocus >= 0) items[currentFocus].scrollIntoView({ block: 'nearest' });
-    }
+                loading.style.display = 'none';
 
-    // Events
-    input.addEventListener('input', showSuggestions);
-    input.addEventListener('keydown', handleKey);
+                if (snap.empty) {
+                    noRes.style.display = 'block';
+                    return;
+                }
 
-    document.addEventListener('click', e => {
-      if (!input.contains(e.target) && !dropdown.contains(e.target)) {
-        dropdown.style.display = 'none';
-      }
-    });
+                snap.forEach(doc => {
+                    const d = doc.data();
+                    const card = document.createElement('div');
+                    card.className = 'business-card';
+                    card.innerHTML = `
+                        <h3>${d.name}</h3>
+                        <p><strong>Category:</strong> ${d.category}</p>
+                        <p><strong>Email:</strong> ${d.email}</p>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (err) {
+                loading.style.display = 'none';
+                container.innerHTML = `<p style="color:red;text-align:center;">Error: ${err.message}</p>`;
+            }
+        };
 
-    // Optional: full search when pressing the button
-    window.searchBusinesses = () => {
-      const term = input.value.trim().toLowerCase();
-      if (!term) return;
-      alert(`Searching businesses in category: ${term}\n(Implement full list fetch here)`);
-      dropdown.style.display = 'none';
-    };
+        // Login placeholder
+        document.getElementById('loginBtn').onclick = () => alert('Login coming soon!');
 
-    // Your Google / Email auth logic here (from previous messages) ...
-  </script>
+        // Scroll reveal (optional)
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('section, .business-card').forEach(el => observer.observe(el));
+    </script>
 </body>
 </html>
