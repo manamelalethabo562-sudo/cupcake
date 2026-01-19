@@ -2,387 +2,514 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cupcake – Your Profile</title>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Vynix Biz • Live Directory</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    
+    :root {
+      --bg-body: #F0F4F9;
+      --bg-sidebar: #F0F4F9;
+      --bg-surface: #FFFFFF;
+      --primary-gradient: linear-gradient(135deg, #4285F4, #D96570);
+      --text-main: #1F1F1F;
+      --text-secondary: #444746;
+      --text-muted: #8E918F;
+      --accent-color: #4285F4;
+      --sidebar-width: 260px;
+      --sidebar-collapsed: 72px;
+      --header-height: 70px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+
     body {
-      font-family: 'Poppins', sans-serif;
-      min-height: 100vh;
-      background: #fff8f5;
-      color: #2d1b12;
+      background: var(--bg-body);
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+      height: 100vh;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
+      overflow: hidden;
     }
-    
-    .bg {
-      position: fixed;
-      inset: 0;
-      background: url('https://images.unsplash.com/photo-1550617931-eb3a88e84519?auto=format&fit=crop&q=80') center/cover no-repeat;
-      z-index: -2;
-    }
-    
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(255,245,240,0.92), rgba(255,230,235,0.94));
-      z-index: -1;
-    }
-    
-    .card {
-      background: white;
-      border-radius: 24px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
-      padding: 3rem 2.5rem;
-      width: 100%;
-      max-width: 520px;
-      text-align: center;
-    }
-    
-    .avatar-wrap {
-      width: 140px;
-      height: 140px;
-      margin: 0 auto 1.8rem;
-      position: relative;
-    }
-    
-    .avatar {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 6px solid #ffebee;
-      box-shadow: 0 10px 30px rgba(196,69,105,0.25);
-    }
-    
-    .avatar-placeholder {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #ffebee, #ffcdd2);
+
+    /* ─── Sidebar ────────────────────────────────────────── */
+    .sidebar {
+      background: var(--bg-sidebar);
+      width: var(--sidebar-collapsed);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 5.5rem;
-      color: #c44569;
-      border: 6px solid #ffebee;
-      box-shadow: 0 10px 30px rgba(196,69,105,0.25);
+      flex-direction: column;
+      padding: 12px;
+      z-index: 50;
+      transition: width 0.3s cubic-bezier(0.2, 0, 0, 1);
     }
-    
-    h1 {
-      font-size: 2.8rem;
-      color: #c44569;
-      margin-bottom: 0.5rem;
+
+    @media(min-width: 769px) {
+      .sidebar:hover { width: var(--sidebar-width); }
+      .sidebar:not(:hover) .nav-label, .sidebar:not(:hover) .brand-text { opacity: 0; display: none; }
+      .mobile-menu-trigger { display: none !important; }
     }
-    
-    .email {
-      font-size: 1.25rem;
-      color: #555;
-      margin-bottom: 1.5rem;
+
+    @media(max-width: 768px) {
+      .sidebar {
+        position: fixed; left: 0; top: 0; bottom: 0;
+        width: 280px; background: #fff;
+        transform: translateX(-100%);
+        box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+      }
+      .sidebar.open { transform: translateX(0); }
     }
-    
-    .info-box {
-      background: #fff5f5;
-      border-radius: 16px;
-      padding: 1.8rem;
-      margin: 1.5rem 0 2rem;
-      text-align: left;
+
+    .nav-list { flex: 1; display: flex; flex-direction: column; gap: 4px; margin-top: 20px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-radius: 24px;
+      color: var(--text-secondary); cursor: pointer; text-decoration: none; white-space: nowrap;
+      transition: background 0.2s;
     }
-    
-    .info-box p {
-      margin: 1rem 0;
-      font-size: 1.08rem;
+    .nav-item:hover { background: rgba(0,0,0,0.05); color: var(--text-main); }
+    .nav-item.active { background: #D3E3FD; color: #041E49; font-weight: 500; }
+    .nav-icon { font-size: 24px; }
+
+    /* ─── Main Content ───────────────────────────────────── */
+    .main {
+      flex: 1; display: flex; flex-direction: column; position: relative;
+      background: #FFFFFF; border-radius: 24px; margin: 16px 16px 16px 0;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.02); overflow: hidden;
     }
-    
-    .info-box strong {
-      color: #c44569;
+    @media(max-width: 768px) { .main { margin: 0; border-radius: 0; } }
+
+    .top-bar {
+      height: var(--header-height); display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; border-bottom: 1px solid #f0f0f0; z-index: 10; background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(10px); position: absolute; top: 0; width: 100%;
     }
-    
-    .username-section {
-      margin: 2rem 0;
-      text-align: left;
+
+    .user-pill {
+      display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 12px;
+      background: #F0F4F9; border-radius: 32px; cursor: pointer; transition: background 0.2s;
     }
-    
-    .username-section label {
-      display: block;
-      margin-bottom: 0.6rem;
-      font-weight: 500;
-      color: #444;
+    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background-size: cover; background-position: center; }
+
+    .content-scroll { flex: 1; overflow-y: auto; padding-top: var(--header-height); scroll-behavior: smooth; }
+
+    .hero-section { padding: 60px 24px 40px; text-align: center; }
+    .hero-title {
+      font-size: 2.5rem; font-weight: 700; margin-bottom: 12px;
+      background: var(--primary-gradient); -webkit-background-clip: text; color: transparent;
     }
-    
-    .username-input {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #d0d0d0;
-      border-radius: 12px;
-      font-size: 1.05rem;
-      background: #fafafa;
+
+    .search-wrapper { max-width: 600px; margin: 24px auto 0; position: relative; }
+    .search-input {
+      width: 100%; padding: 16px 24px 16px 50px; border-radius: 30px; border: 1px solid #e0e0e0;
+      font-size: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); outline: none;
     }
-    
-    .save-btn {
-      padding: 12px 40px;
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: white;
-      background: #e84a5f;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      margin-top: 1rem;
-      box-shadow: 0 6px 20px rgba(232,74,95,0.35);
-      transition: all 0.3s;
+    .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+
+    .filter-bar {
+      display: flex; gap: 10px; overflow-x: auto; padding: 0 24px 20px;
+      justify-content: center; scrollbar-width: none;
     }
-    
-    .save-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(232,74,95,0.5);
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .category-pill {
+      padding: 8px 16px; border-radius: 20px; border: 1px solid #e0e0e0;
+      font-size: 0.9rem; font-weight: 500; cursor: pointer; white-space: nowrap; transition: 0.2s;
     }
-    
-    .save-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+    .category-pill.active { background: var(--text-main); color: white; }
+
+    /* Directory Grid */
+    .business-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px; padding: 24px; max-width: 1200px; margin: 0 auto;
     }
-    
-    .status {
-      font-size: 0.95rem;
-      margin-top: 0.8rem;
-      min-height: 1.4em;
+
+    .category-header {
+      grid-column: 1 / -1; font-size: 1.25rem; font-weight: 700; 
+      padding: 20px 0 10px; border-bottom: 2px solid #f0f4f9; margin-bottom: 10px;
+      color: var(--text-main); display: flex; align-items: center; gap: 10px;
     }
-    
-    .success { color: #2e7d32; }
-    .error   { color: #c62828; }
-    
-    .signout-btn {
-      padding: 14px 48px;
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: white;
-      background: #e84a5f;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      margin-top: 2.5rem;
-      box-shadow: 0 8px 25px rgba(232,74,95,0.4);
-      transition: all 0.3s;
+
+    .business-card {
+      background: white; border: 1px solid #f0f0f0; border-radius: 16px;
+      overflow: hidden; transition: 0.2s; cursor: pointer; display: flex; flex-direction: column;
     }
-    
-    .signout-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 40px rgba(232,74,95,0.55);
+    .business-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
+
+    .card-img { height: 140px; background-color: #f0f0f0; position: relative; background-size: cover; background-position: center; }
+    .card-category {
+      position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.9);
+      padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;
     }
-    
-    .loading {
-      font-size: 1.4rem;
-      color: #777;
-      margin: 4rem 0;
+
+    .card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+    .biz-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+    .biz-rating { display: flex; align-items: center; gap: 4px; font-size: 0.9rem; color: #F4B400; margin-bottom: 12px; }
+    .biz-info { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 6px; }
+
+    .action-btn {
+      flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #e0e0e0;
+      background: transparent; font-weight: 500; font-size: 0.85rem; cursor: pointer;
     }
-    
-    .no-user {
-      font-size: 1.3rem;
-      color: #c62828;
-      margin: 3rem 0;
+    .action-btn.primary { background: var(--text-main); color: white; border: none; }
+
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 40; opacity: 0; pointer-events: none; transition: 0.3s; }
+    .overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-sheet {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95);
+      background: white; width: 90%; max-width: 500px; border-radius: 24px;
+      z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2); overflow: hidden;
+    }
+    .modal-sheet.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+    .modal-img-header { height: 180px; background-size: cover; position: relative; background-color: #f0f4f9; }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px; background: white; border: none;
+      width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .modal-content { padding: 24px; max-height: 80vh; overflow-y: auto; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
+    .form-input {
+      width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid #e0e0e0;
+      font-family: inherit; font-size: 0.95rem; outline: none; transition: 0.2s;
     }
   </style>
 </head>
 <body>
 
-  <div class="bg"></div>
-  <div class="overlay"></div>
+  <div class="overlay" id="overlay" onclick="closeOverlays()"></div>
 
-  <div class="card">
-    <div id="loading" class="loading">Loading your profile...</div>
-    
-    <div id="noUser" class="no-user" style="display:none;">
-      Not signed in.<br>Redirecting back...
+  <aside class="sidebar" id="sidebar">
+    <div style="padding: 10px 10px 20px;">
+        <h2 style="font-size: 1.2rem; font-weight: 700; display:flex; align-items:center; gap:10px;">
+           <span class="material-symbols-rounded" style="color: #4285F4;">business_center</span>
+           <span class="brand-text">Vynix Biz</span>
+        </h2>
     </div>
-    
-    <div id="userProfile" style="display:none;">
-      <div class="avatar-wrap">
-        <img id="photo" class="avatar" alt="Profile picture" style="display:none;">
-        <div id="avatarPlaceholder" class="avatar-placeholder">🧁</div>
+    <div class="nav-list">
+      <div class="nav-item active" id="nav-dir" onclick="switchView('all')"><span class="material-symbols-rounded nav-icon">storefront</span><span class="nav-label">Directory</span></div>
+      <div class="nav-item" id="nav-cat" onclick="switchView('categories')"><span class="material-symbols-rounded nav-icon">category</span><span class="nav-label">Categories</span></div>
+      <div class="nav-item" id="nav-fav" onclick="switchView('saved')"><span class="material-symbols-rounded nav-icon">favorite</span><span class="nav-label">Saved</span></div>
+      <div class="nav-item" onclick="openListModal()"><span class="material-symbols-rounded nav-icon">add_business</span><span class="nav-label">List Business</span></div>
+    </div>
+    <div style="margin-top: auto;">
+      <div class="nav-item" id="authBtnSidebar" onclick="handleAuth()">
+        <span class="material-symbols-rounded nav-icon">login</span>
+        <span class="nav-label">Sign In</span>
       </div>
-      
-      <h1 id="name">Hello!</h1>
-      <p class="email" id="email"></p>
-      
-      <div class="info-box">
-        <p><strong>User ID:</strong> <span id="uid"></span></p>
-        <p><strong>Created:</strong> <span id="created"></span></p>
-        <p><strong>Last sign-in:</strong> <span id="lastSignIn"></span></p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top-bar">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <button class="mobile-menu-trigger" onclick="toggleSidebar()" style="background:none; border:none; padding:8px;"><span class="material-symbols-rounded">menu</span></button>
+        <span id="greetingName" style="font-weight:600; color:var(--text-secondary)">Hello, Guest</span>
       </div>
-      
-      <div class="username-section">
-        <label for="usernameInput">Your username</label>
-        <input type="text" id="usernameInput" class="username-input" placeholder="Enter your username..." />
-        <button id="saveBtn" class="save-btn" disabled>Saving...</button>
-        <div id="status" class="status"></div>
+      <div class="user-pill" onclick="handleAuth()">
+        <div class="user-avatar" id="userAvatar" style="background-image: url('https://ui-avatars.com/api/?name=Guest')"></div>
       </div>
-      
-      <button id="signOutBtn" class="signout-btn">Sign Out</button>
+    </div>
+
+    <div class="content-scroll">
+      <div class="hero-section">
+        <h1 class="hero-title" id="pageTitle">Find Local Businesses</h1>
+        <p style="color:var(--text-secondary);" id="pageSubtitle">Live data powered by Vynix Cloud.</p>
+        <div class="search-wrapper">
+          <span class="material-symbols-rounded search-icon">search</span>
+          <input type="text" class="search-input" id="searchInput" placeholder="Search businesses..." autocomplete="off">
+        </div>
+      </div>
+
+      <div class="filter-bar" id="categoryContainer">
+        <div class="category-pill active" onclick="filterCategory('All', this)">All</div>
+        <div class="category-pill" onclick="filterCategory('Restaurant', this)">Restaurant</div>
+        <div class="category-pill" onclick="filterCategory('Retail', this)">Retail</div>
+        <div class="category-pill" onclick="filterCategory('Service', this)">Service</div>
+        <div class="category-pill" onclick="filterCategory('Tech', this)">Tech</div>
+      </div>
+
+      <div class="business-grid" id="businessGrid"></div>
+    </div>
+  </main>
+
+  <div class="modal-sheet" id="listModal">
+    <div class="modal-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2 style="font-weight:700;">List Your Business</h2>
+            <button onclick="closeOverlays()" style="background:none; border:none; cursor:pointer;"><span class="material-symbols-rounded">close</span></button>
+        </div>
+        <form id="listingForm" onsubmit="registerBusiness(event)">
+            <div class="form-group"><label class="form-label">Name</label><input type="text" id="bizName" class="form-input" required></div>
+            <div class="form-group">
+                <label class="form-label">Category</label>
+                <select id="bizCat" class="form-input">
+                    <option value="Restaurant">Restaurant</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Service">Service</option>
+                    <option value="Tech">Tech</option>
+                </select>
+            </div>
+            <div class="form-group"><label class="form-label">Address</label><input type="text" id="bizAddress" class="form-input" required></div>
+            <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="bizPhone" class="form-input" required></div>
+            <div class="form-group"><label class="form-label">Image URL</label><input type="url" id="bizImg" class="form-input" required></div>
+            <button type="submit" class="action-btn primary" style="width:100%; padding:14px;">Register Business</button>
+        </form>
     </div>
   </div>
 
-  <!-- Firebase SDK – Auth + Realtime Database -->
-  <script type="module">
-    // https://firebase.google.com/docs/web/setup#available-libraries
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { 
-      getAuth, 
-      onAuthStateChanged, 
-      signOut 
-    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-    
-    import { 
-      getDatabase, 
-      ref, 
-      onValue, 
-      set 
-    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+  <div class="modal-sheet" id="detailModal">
+    <div class="modal-img-header" id="modalImg">
+        <button class="modal-close" onclick="closeOverlays()"><span class="material-symbols-rounded">close</span></button>
+        <span class="card-category" id="modalCat" style="top:auto; bottom:12px; left:12px;">Category</span>
+    </div>
+    <div class="modal-content">
+        <h2 id="modalTitle" style="font-weight:700; margin-bottom:8px;">Business Name</h2>
+        <div class="biz-rating" style="margin-bottom:20px;">
+            <span class="material-symbols-rounded" style="font-size:20px;">star</span>
+            <strong id="modalRating" style="color:#1f1f1f;">5.0</strong> <span id="modalReviews">(0 reviews)</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
+            <div class="biz-info"><span class="material-symbols-rounded">location_on</span> <span id="modalAddress">Address</span></div>
+            <div class="biz-info"><span class="material-symbols-rounded">call</span> <span id="modalPhone">Phone</span></div>
+        </div>
+        <button id="saveBizBtn" class="action-btn" style="width:100%; padding:14px; margin-bottom:12px; border:2px solid #eee;">Save to Favorites</button>
+        <button class="action-btn primary" style="width:100%; padding:14px;">Contact Now</button>
+    </div>
+  </div>
 
+  <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyCPTCZqUPrHgfwqVmNe4aLtVLEXqAdLpmA",
-      authDomain: "cupcake-202c4.firebaseapp.com",
-      projectId: "cupcake-202c4",
-      storageBucket: "cupcake-202c4.firebasestorage.app",
-      messagingSenderId: "549565498078",
-      appId: "1:549565498078:web:4efd4d7c7fd4561882784f",
-      measurementId: "G-9PK7NV0K5N",
-      databaseURL: "https://cupcake-202c4-default-rtdb.firebaseio.com/"
-      // ↑ IMPORTANT: replace with your actual database URL from Firebase Console
+      apiKey: "AIzaSyAojYRIH8FJL5B8yg1b3qxsc29vB3vLC-8",
+      authDomain: "allbusiness-596cc.firebaseapp.com",
+      projectId: "allbusiness-596cc",
+      storageBucket: "allbusiness-596cc.firebasestorage.app",
+      messagingSenderId: "665302840524",
+      appId: "1:665302840524:web:e9c1078e14bc0de6a87e69",
+      measurementId: "G-EMZFX7CE8V"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+    const provider = new firebase.auth.GoogleAuthProvider();
 
-    // DOM elements
-    const loading         = document.getElementById('loading');
-    const noUser          = document.getElementById('noUser');
-    const profile         = document.getElementById('userProfile');
-    const photo           = document.getElementById('photo');
-    const placeholder     = document.getElementById('avatarPlaceholder');
-    const nameEl          = document.getElementById('name');
-    const emailEl         = document.getElementById('email');
-    const uidEl           = document.getElementById('uid');
-    const createdEl       = document.getElementById('created');
-    const lastEl          = document.getElementById('lastSignIn');
-    const signOutBtn      = document.getElementById('signOutBtn');
+    let allBusinesses = [];
+    let savedIds = []; 
+    let currentCategory = 'All';
+    let currentView = 'all'; 
+
+    const els = {
+      grid: document.getElementById('businessGrid'),
+      search: document.getElementById('searchInput'),
+      sidebar: document.getElementById('sidebar'),
+      overlay: document.getElementById('overlay'),
+      detailModal: document.getElementById('detailModal'),
+      listModal: document.getElementById('listModal'),
+      greeting: document.getElementById('greetingName'),
+      avatar: document.getElementById('userAvatar')
+    };
+
+    // ─── Listeners ──────────────────────────────────────────────────
     
-    const usernameInput   = document.getElementById('usernameInput');
-    const saveBtn         = document.getElementById('saveBtn');
-    const statusEl        = document.getElementById('status');
+    function initDatabaseListener() {
+        db.ref('businesses').on('value', (snapshot) => {
+            const data = snapshot.val();
+            allBusinesses = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+            filterBusinesses();
+        });
+    }
 
-    let currentUser = null;
-    let usernameRef = null;
+    function initSavedListener(uid) {
+        db.ref(`users_saved/${uid}`).on('value', (snapshot) => {
+            const data = snapshot.val();
+            savedIds = data ? Object.keys(data) : [];
+            filterBusinesses();
+        });
+    }
 
-    onAuthStateChanged(auth, (user) => {
-      loading.style.display = 'none';
+    // ─── Core Logic ─────────────────────────────────────────────────
 
-      if (user) {
-        currentUser = user;
-        profile.style.display = 'block';
-
-        // Show Google profile picture if available
-        if (user.photoURL) {
-          photo.src = user.photoURL;
-          photo.style.display = 'block';
-          placeholder.style.display = 'none';
+    function switchView(view) {
+        currentView = view;
+        document.getElementById('nav-dir').classList.remove('active');
+        document.getElementById('nav-fav').classList.remove('active');
+        document.getElementById('nav-cat').classList.remove('active');
+        
+        if(view === 'all') {
+            document.getElementById('nav-dir').classList.add('active');
+            document.getElementById('pageTitle').innerText = "Find Local Businesses";
+            document.getElementById('categoryContainer').style.display = "flex";
+        } else if(view === 'categories') {
+            document.getElementById('nav-cat').classList.add('active');
+            document.getElementById('pageTitle').innerText = "Browse by Category";
+            document.getElementById('categoryContainer').style.display = "none";
         } else {
-          photo.style.display = 'none';
-          placeholder.style.display = 'flex';
+            document.getElementById('nav-fav').classList.add('active');
+            document.getElementById('pageTitle').innerText = "Saved Favorites";
+            document.getElementById('categoryContainer').style.display = "flex";
+        }
+        filterBusinesses();
+        closeOverlays();
+    }
+
+    function filterBusinesses() {
+        const query = els.search.value.toLowerCase();
+        
+        if (currentView === 'categories') {
+            renderByCategory(query);
+            return;
         }
 
-        nameEl.textContent   = user.displayName || 'Cupcake User';
-        emailEl.textContent  = user.email || '—';
-        uidEl.textContent    = user.uid;
-
-        const meta = user.metadata;
-        createdEl.textContent = meta.creationTime 
-          ? new Date(meta.creationTime).toLocaleString('en-ZA', { dateStyle: 'medium', timeStyle: 'short' }) 
-          : '—';
-        lastEl.textContent = meta.lastSignInTime 
-          ? new Date(meta.lastSignInTime).toLocaleString('en-ZA', { dateStyle: 'medium', timeStyle: 'short' }) 
-          : '—';
-
-        // ────────────────────────────────────────────────
-        // Realtime Database – username
-        // ────────────────────────────────────────────────
-        usernameRef = ref(db, `users/${user.uid}/username`);
-
-        // Listen for value changes (real-time)
-        onValue(usernameRef, (snapshot) => {
-          const savedUsername = snapshot.val();
-          const displayValue = savedUsername || user.displayName || 'Cupcake User';
-          usernameInput.value = displayValue;
-          
-          // Reset save button state after data loads
-          saveBtn.disabled = true;
-          saveBtn.textContent = 'Save';
-          statusEl.textContent = '';
+        const filtered = allBusinesses.filter(biz => {
+            const matchesSearch = biz.name.toLowerCase().includes(query);
+            const matchesCat = currentCategory === 'All' || biz.cat === currentCategory;
+            const matchesView = currentView === 'all' || savedIds.includes(biz.id);
+            return matchesSearch && matchesCat && matchesView;
         });
+        renderCards(filtered);
+    }
 
-        // Enable save button only when there's a meaningful change
-        usernameInput.addEventListener('input', () => {
-          const currentVal = usernameInput.value.trim();
-          saveBtn.disabled = !currentVal || currentVal === (currentUser.displayName || '');
-        });
-
-      } else {
-        noUser.style.display = 'block';
-        setTimeout(() => {
-          window.location.href = 'index.html'; // or your login page
-        }, 2200);
-      }
-    });
-
-    // Save username to Realtime Database
-    saveBtn.addEventListener('click', async () => {
-      const newUsername = usernameInput.value.trim();
-      
-      if (!newUsername) {
-        statusEl.textContent = 'Username cannot be empty';
-        statusEl.className = 'status error';
-        return;
-      }
-
-      saveBtn.disabled = true;
-      saveBtn.textContent = 'Saving...';
-      statusEl.textContent = '';
-
-      try {
-        await set(usernameRef, newUsername);
-        statusEl.textContent = 'Username saved successfully!';
-        statusEl.className = 'status success';
+    // NEW FUNCTION: Renders businesses grouped by category
+    function renderByCategory(query) {
+        els.grid.innerHTML = '';
+        const categories = ["Restaurant", "Retail", "Service", "Tech"];
         
-        // Optional: also update Firebase Auth displayName
-        // await updateProfile(auth.currentUser, { displayName: newUsername });
-      } catch (error) {
-        console.error('Save failed:', error);
-        statusEl.textContent = 'Failed to save username. Try again.';
-        statusEl.className = 'status error';
-      } finally {
-        saveBtn.textContent = 'Save';
-        saveBtn.disabled = false;
-      }
+        categories.forEach(category => {
+            const filtered = allBusinesses.filter(biz => 
+                biz.cat === category && biz.name.toLowerCase().includes(query)
+            );
+
+            if (filtered.length > 0) {
+                // Add category header
+                const header = document.createElement('div');
+                header.className = 'category-header';
+                header.innerHTML = `<span class="material-symbols-rounded">label</span> ${category}`;
+                els.grid.appendChild(header);
+
+                // Add business cards for this category
+                filtered.forEach(biz => {
+                    els.grid.appendChild(createCard(biz));
+                });
+            }
+        });
+
+        if (els.grid.innerHTML === '') {
+            els.grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding: 40px; color: #888;">No results found.</p>';
+        }
+    }
+
+    function createCard(biz) {
+        const card = document.createElement('div');
+        card.className = 'business-card';
+        card.onclick = () => openDetailModal(biz);
+        card.innerHTML = `
+            <div class="card-img" style="background-image: url('${biz.img}')">
+                <span class="card-category">${biz.cat}</span>
+            </div>
+            <div class="card-body">
+                <div class="biz-name">${biz.name}</div>
+                <div class="biz-rating"><span class="material-symbols-rounded" style="font-size:16px;">star</span>${biz.rating}</div>
+                <div class="biz-info"><span class="material-symbols-rounded" style="font-size:16px">location_on</span>${biz.address}</div>
+            </div>`;
+        return card;
+    }
+
+    function renderCards(data) {
+        els.grid.innerHTML = data.length === 0 ? '<p style="grid-column: 1/-1; text-align:center; padding: 40px; color: #888;">No results found.</p>' : '';
+        data.forEach(biz => {
+            els.grid.appendChild(createCard(biz));
+        });
+    }
+
+    function openDetailModal(biz) {
+        document.getElementById('modalTitle').innerText = biz.name;
+        document.getElementById('modalCat').innerText = biz.cat;
+        document.getElementById('modalAddress').innerText = biz.address;
+        document.getElementById('modalPhone').innerText = biz.phone;
+        document.getElementById('modalImg').style.backgroundImage = `url('${biz.img}')`;
+        
+        const saveBtn = document.getElementById('saveBizBtn');
+        const isAlreadySaved = savedIds.includes(biz.id);
+
+        saveBtn.innerText = isAlreadySaved ? "Remove from Favorites" : "Save to Favorites";
+        saveBtn.style.background = isAlreadySaved ? "#FEE7E9" : "transparent";
+        saveBtn.style.color = isAlreadySaved ? "#D96570" : "inherit";
+
+        saveBtn.onclick = () => {
+            if(!auth.currentUser) return alert("Please sign in to save!");
+            const favRef = db.ref(`users_saved/${auth.currentUser.uid}/${biz.id}`);
+            if(isAlreadySaved) favRef.remove();
+            else favRef.set(true);
+            closeOverlays();
+        };
+
+        els.detailModal.classList.add('active');
+        els.overlay.classList.add('active');
+    }
+
+    function registerBusiness(e) {
+        e.preventDefault();
+        const newBiz = {
+            name: document.getElementById('bizName').value,
+            cat: document.getElementById('bizCat').value,
+            address: document.getElementById('bizAddress').value,
+            phone: document.getElementById('bizPhone').value,
+            img: document.getElementById('bizImg').value,
+            rating: 5.0, reviews: 0
+        };
+        db.ref('businesses').push(newBiz).then(() => {
+            document.getElementById('listingForm').reset();
+            closeOverlays();
+        });
+    }
+
+    function closeOverlays() {
+        els.sidebar.classList.remove('open');
+        els.detailModal.classList.remove('active');
+        els.listModal.classList.remove('active');
+        els.overlay.classList.remove('active');
+    }
+
+    function openListModal() { els.listModal.classList.add('active'); els.overlay.classList.add('active'); }
+    function toggleSidebar() { els.sidebar.classList.add('open'); els.overlay.classList.add('active'); }
+
+    function filterCategory(cat, btn) {
+        currentCategory = cat;
+        document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+        // If they click a pill while in category view, switch back to directory for better UX
+        if (currentView === 'categories') switchView('all');
+        else filterBusinesses();
+    }
+
+    els.search.addEventListener('input', filterBusinesses);
+
+    function handleAuth() {
+        if(auth.currentUser) auth.signOut().then(() => location.reload());
+        else auth.signInWithPopup(provider).catch(e => alert(e.message));
+    }
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            els.greeting.innerText = `Hello, ${user.displayName.split(' ')[0]}`;
+            els.avatar.style.backgroundImage = `url(${user.photoURL})`;
+            document.getElementById('authBtnSidebar').querySelector('.nav-label').innerText = "Sign Out";
+            initSavedListener(user.uid);
+        } else {
+            savedIds = [];
+            filterBusinesses();
+        }
     });
 
-    // Sign out
-    signOutBtn.addEventListener('click', async () => {
-      try {
-        await signOut(auth);
-        window.location.href = 'index.html';
-      } catch (err) {
-        console.error('Sign out error:', err);
-        alert('Sign out failed. Please try again.');
-      }
-    });
+    initDatabaseListener();
   </script>
-
 </body>
 </html>
