@@ -3,172 +3,128 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lumina • Education Portal</title>
+  <title>Lumina • Multi-Subject Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0f172a; --surface: #1e293b; --surface-elev: #334155;
       --text: #f8fafc; --text-muted: #94a3b8; --border: rgba(255, 255, 255, 0.1);
-      --primary: #8b5cf6; --primary-hover: #7c3aed; 
-      --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
+      --primary: #8b5cf6; --danger: #ef4444; --warning: #f59e0b; --success: #10b981;
       --radius: 24px;
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
     
-    .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+    .container { max-width: 1250px; margin: 0 auto; padding: 2rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
     .hidden { display: none !important; }
     
-    /* MODERN PILL BUTTONS */
+    .dashboard-grid { display: grid; grid-template-columns: 300px 1fr 320px; gap: 20px; }
+
     .btn-modern { 
-      background: linear-gradient(135deg, var(--primary), #6366f1); 
-      color: white; 
-      width: 100%; 
-      padding: 1.1rem; 
-      border: none; 
-      border-radius: 50px; /* Fully rounded pill shape */
-      font-weight: 700; 
-      cursor: pointer; 
-      font-size: 1rem;
-      letter-spacing: 0.5px;
-      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-      box-shadow: 0 10px 20px -5px rgba(139, 92, 246, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+      background: linear-gradient(135deg, var(--primary), #6366f1); color: white; 
+      width: 100%; padding: 0.9rem; border: none; border-radius: 50px; 
+      font-weight: 700; cursor: pointer; transition: 0.3s;
+    }
+    .btn-action { padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: white; cursor: pointer; }
+
+    input, textarea, select { width: 100%; padding: 0.8rem; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border); color: white; border-radius: 12px; margin-bottom: 1rem; }
+
+    /* SUBJECT TAGS */
+    .subject-pill {
+        display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem;
+        background: rgba(139, 92, 246, 0.2); border: 1px solid var(--primary); color: var(--primary);
+        margin: 4px; font-weight: 600;
     }
 
-    .btn-modern:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 30px -5px rgba(139, 92, 246, 0.6);
-      filter: brightness(1.1);
-    }
-
-    .btn-modern:active {
-      transform: translateY(-1px);
-    }
-
-    /* PILL TAB AT BOTTOM */
-    .pill-tabs {
-      background: rgba(15, 23, 42, 0.8);
-      padding: 6px;
-      border-radius: 50px;
-      display: flex;
-      margin-top: 2.5rem;
-      border: 1px solid var(--border);
-    }
-    .pill-tab {
-      flex: 1;
-      padding: 12px;
-      text-align: center;
-      cursor: pointer;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 0.85rem;
-      transition: 0.3s ease;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-    .pill-tab.active {
-      background: rgba(255, 255, 255, 0.05);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    /* FORMS */
-    h1.brand { text-align: center; font-size: 2.8rem; margin-bottom: 2rem; font-weight: 800; }
-    input, textarea, select { 
-      width: 100%; padding: 1rem; background: rgba(15, 23, 42, 0.6); 
-      border: 1px solid var(--border); color: white; border-radius: 16px; margin-bottom: 1.2rem;
-      font-size: 1rem;
-    }
-    input:focus { border-color: var(--primary); outline: none; background: rgba(15, 23, 42, 0.8); }
-    label { display: block; margin-bottom: 0.6rem; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; padding-left: 5px; }
-
-    /* DASHBOARD ELEMENTS */
-    .dashboard-grid { display: grid; grid-template-columns: 280px 1fr 320px; gap: 24px; }
-    .chat-box { height: 420px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 1.2rem; border-radius: 16px; display: flex; flex-direction: column; gap: 12px; }
-    .msg { padding: 0.9rem 1.1rem; border-radius: 18px; max-width: 85%; line-height: 1.4; }
-    .msg.teacher { background: var(--primary); align-self: flex-start; border-bottom-left-radius: 4px; }
-    .msg.learner { background: var(--surface-elev); align-self: flex-end; border-bottom-right-radius: 4px; }
+    .chat-box { height: 350px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 16px; display: flex; flex-direction: column; gap: 8px; }
+    .msg { padding: 0.7rem 1rem; border-radius: 14px; max-width: 85%; font-size: 0.85rem; }
+    .msg.teacher { background: var(--primary); align-self: flex-start; }
+    .msg.learner { background: var(--surface-elev); align-self: flex-end; }
+    
+    .pill-tabs { background: rgba(15, 23, 42, 0.8); padding: 5px; border-radius: 50px; display: flex; margin-top: 1.5rem; border: 1px solid var(--border); }
+    .pill-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; border-radius: 50px; font-weight: 700; font-size: 0.8rem; color: var(--text-muted); }
+    .pill-tab.active { background: rgba(255, 255, 255, 0.05); color: white; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <div id="authSection" class="card" style="max-width: 440px; margin: 10vh auto;">
-    <h1 class="brand" style="background: linear-gradient(to right, #8b5cf6, #d946ef); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Lumina</h1>
-    
+  <div id="authSection" class="card" style="max-width: 400px; margin: 10vh auto; text-align:center;">
+    <h1>Lumina</h1>
     <div id="formIn">
       <input type="text" id="siUser" placeholder="Username">
       <input type="password" id="siPass" placeholder="Password">
-      <button class="btn-modern" onclick="handleLogin()">Sign In &rarr;</button>
+      <button class="btn-modern" onclick="handleLogin()">Sign In</button>
     </div>
-
     <div id="formUp" class="hidden">
-      <input type="text" id="suUser" placeholder="Username">
-      <input type="password" id="suPass" placeholder="Create Password">
-      <label>I am a...</label>
+      <input type="text" id="suUser" placeholder="Full Name">
+      <input type="password" id="suPass" placeholder="Password">
       <select id="suRole">
         <option value="teacher">Teacher</option>
         <option value="learner">Learner</option>
       </select>
       <button class="btn-modern" onclick="handleRegister()">Create Account</button>
     </div>
-
     <div class="pill-tabs">
       <div class="pill-tab active" id="tabIn" onclick="toggleAuth('in')">Login</div>
-      <div class="pill-tab" id="tabUp" onclick="toggleAuth('up')">Join Us</div>
+      <div class="pill-tab" id="tabUp" onclick="toggleAuth('up')">Join</div>
     </div>
   </div>
 
   <div id="dashboard" class="hidden">
-    <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2.5rem; padding-bottom:1.2rem; border-bottom:1px solid var(--border);">
-      <div>
-        <h1 style="font-size:1.8rem;">Lumina <span style="font-weight:300; opacity:0.5;">Hub</span></h1>
-        <p id="userInfo" style="font-size:0.85rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;"></p>
-      </div>
-      <button onclick="location.reload()" style="background:transparent; border:1px solid var(--border); color:white; padding:0.6rem 1.2rem; border-radius:50px; cursor:pointer; font-weight:600;">Sign Out</button>
+    <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; border-bottom:1px solid var(--border); padding-bottom:1rem;">
+      <h1>Lumina Hub</h1>
+      <button onclick="location.reload()" class="btn-action">Sign Out</button>
     </header>
 
     <div class="dashboard-grid">
       <aside>
-        <div class="card teacher-only hidden" style="padding:1.5rem;">
-          <h3 style="font-size:1.1rem; margin-bottom:1rem;">Add Classroom</h3>
-          <input type="text" id="newClassName" placeholder="e.g. Physics 101">
-          <button class="btn-modern" style="padding:0.7rem;" onclick="createClass()">Create</button>
+        <div class="card teacher-only hidden">
+          <h3 style="font-size: 0.9rem; margin-bottom: 10px;">Register New Subject</h3>
+          <input type="text" id="newSubjInput" placeholder="e.g. Mathematics">
+          <button class="btn-modern" style="padding: 0.6rem;" onclick="addGlobalSubject()">Add Subject</button>
         </div>
-        <div class="card" style="padding:1.5rem; margin-top:20px;">
-          <h3 style="font-size:1.1rem; margin-bottom:1rem;">Active Classes</h3>
-          <div id="classList"></div>
+
+        <div class="card">
+          <h3 style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted);">Active Subjects</h3>
+          <div id="subjectPool"></div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted);">Learner Directory</h3>
+          <div id="fullLearnerList"></div>
         </div>
       </aside>
 
       <main>
-        <div class="card teacher-only hidden" style="padding:1.5rem;">
-          <h3 style="margin-bottom:1rem;">Assign New Task</h3>
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
-            <input type="text" id="taskSubj" placeholder="Subject">
-            <select id="taskTargetClass"></select>
+        <div class="card teacher-only hidden">
+          <h3 id="formTitle">Assign New Task</h3>
+          <input type="hidden" id="editTaskId">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
+            <select id="taskSubjDropdown"></select>
+            <select id="taskTargetClass">
+                <option>Grade 10</option>
+                <option>Grade 11</option>
+                <option>Grade 12</option>
+            </select>
           </div>
-          <input type="text" id="taskTitle" placeholder="Assignment Title">
-          <label>Due Date</label>
+          <input type="text" id="taskTitle" placeholder="Task Title">
           <input type="date" id="taskDue">
-          <textarea id="taskDesc" rows="3" placeholder="Describe the task..."></textarea>
-          <button class="btn-modern" onclick="addTask()">Post Assignment</button>
+          <textarea id="taskDesc" rows="3" placeholder="Instructions..."></textarea>
+          <button class="btn-modern" id="taskSubmitBtn" onclick="addTask()">Post Assignment</button>
+          <button class="btn-action hidden" id="cancelEditBtn" onclick="resetTaskForm()" style="width:100%; margin-top:10px;">Cancel Edit</button>
         </div>
         <div id="taskList"></div>
       </main>
 
       <section>
-        <div class="card" style="padding:1.5rem;">
-          <h3 style="margin-bottom:1rem;">Classroom Chat</h3>
-          <div id="chatBox" class="chat-box"></div>
-          <div style="display: flex; gap: 8px; margin-top: 15px;">
-            <input type="text" id="chatInput" placeholder="Write a message..." style="margin:0;">
-            <button class="btn-modern" style="width:auto; padding:0 1.5rem;" onclick="sendMessage()">Send</button>
+        <div class="card">
+          <h3>Classroom Chat</h3>
+          <div id="chatBox" class="chat-box" style="margin-top:10px;"></div>
+          <div style="display: flex; gap: 5px; margin-top: 10px;">
+            <input type="text" id="chatInput" placeholder="Message..." style="margin:0;">
+            <button class="btn-modern" style="width:auto; padding:0 1rem;" onclick="sendMessage()">Send</button>
           </div>
         </div>
       </section>
@@ -179,8 +135,8 @@
 <script>
   let currentUser = null;
   const db = {
-    get: (key) => JSON.parse(localStorage.getItem('lumina_v5_' + key) || '[]'),
-    save: (key, data) => localStorage.setItem('lumina_v5_' + key, JSON.stringify(data))
+    get: (key) => JSON.parse(localStorage.getItem('lumina_v8_' + key) || '[]'),
+    save: (key, data) => localStorage.setItem('lumina_v8_' + key, JSON.stringify(data))
   };
 
   function toggleAuth(type) {
@@ -194,12 +150,11 @@
     const name = document.getElementById('suUser').value.trim();
     const pass = document.getElementById('suPass').value;
     const role = document.getElementById('suRole').value;
-    if(!name || !pass) return alert("Please fill in all fields.");
+    if(!name || !pass) return;
     let users = db.get('users');
-    if(users.some(u => u.name === name)) return alert("Username already taken.");
     users.push({ name, pass, role });
     db.save('users', users);
-    alert("Welcome! You can now log in.");
+    alert("Profile Created!");
     toggleAuth('in');
   }
 
@@ -207,48 +162,103 @@
     const name = document.getElementById('siUser').value.trim();
     const pass = document.getElementById('siPass').value;
     let user = db.get('users').find(u => u.name === name && u.pass === pass);
-    if(!user) return alert("Invalid username or password.");
+    if(!user) return alert("Login failed");
     currentUser = user;
     document.getElementById('authSection').classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
-    document.getElementById('userInfo').textContent = `${currentUser.role} // ${currentUser.name}`;
     if (currentUser.role === 'teacher') document.querySelectorAll('.teacher-only').forEach(el => el.classList.remove('hidden'));
     refreshAll();
   }
 
-  function createClass() {
-    const name = document.getElementById('newClassName').value;
-    if(!name) return;
-    let classes = db.get('classes');
-    classes.push(name);
-    db.save('classes', classes);
-    document.getElementById('newClassName').value = '';
+  // SUBJECT MANAGEMENT
+  function addGlobalSubject() {
+    const subjName = document.getElementById('newSubjInput').value.trim();
+    if(!subjName) return;
+    let subjects = db.get('subjects');
+    if(!subjects.includes(subjName)) {
+        subjects.push(subjName);
+        db.save('subjects', subjects);
+    }
+    document.getElementById('newSubjInput').value = '';
     refreshAll();
   }
 
   function addTask() {
     const title = document.getElementById('taskTitle').value;
-    const subj = document.getElementById('taskSubj').value;
-    const target = document.getElementById('taskTargetClass').value;
-    const due = document.getElementById('taskDue').value;
-    const desc = document.getElementById('taskDesc').value;
-    if(!title || !target) return;
+    const subj = document.getElementById('taskSubjDropdown').value;
+    const editId = document.getElementById('editTaskId').value;
+    if(!title || !subj) return alert("Select a subject and enter a title");
+
     let tasks = db.get('tasks');
-    tasks.push({ id: Date.now(), title, subj, target, due, desc, teacher: currentUser.name, submissions: [] });
+    const taskData = {
+      id: editId ? parseInt(editId) : Date.now(),
+      title, subj,
+      target: document.getElementById('taskTargetClass').value,
+      due: document.getElementById('taskDue').value,
+      desc: document.getElementById('taskDesc').value,
+      submissions: editId ? tasks.find(t => t.id == editId).submissions : []
+    };
+
+    if (editId) {
+      const idx = tasks.findIndex(t => t.id == editId);
+      tasks[idx] = taskData;
+    } else {
+      tasks.push(taskData);
+    }
+
     db.save('tasks', tasks);
+    resetTaskForm();
     refreshAll();
   }
 
-  function submitWork(taskId) {
-    const text = document.getElementById(`ans-${taskId}`).value;
-    if(!text) return;
-    let tasks = db.get('tasks');
-    const idx = tasks.findIndex(t => t.id === taskId);
-    tasks[idx].submissions.push({ learner: currentUser.name, content: text });
-    db.save('tasks', tasks);
-    refreshAll();
+  // RENDER LOGIC
+  function refreshAll() {
+    const users = db.get('users');
+    const learners = users.filter(u => u.role === 'learner');
+    const subjects = db.get('subjects');
+
+    // Update Learner List
+    document.getElementById('fullLearnerList').innerHTML = learners.map(l => `<div class="learner-list-item">${l.name}</div>`).join('');
+    
+    // Update Subject Sidebar & Dropdown
+    document.getElementById('subjectPool').innerHTML = subjects.map(s => `<span class="subject-pill">${s}</span>`).join('');
+    document.getElementById('taskSubjDropdown').innerHTML = subjects.map(s => `<option value="${s}">${s}</option>`).join('');
+    
+    renderTasks();
+    renderChat();
   }
 
+  function renderTasks() {
+    const tasks = db.get('tasks');
+    const container = document.getElementById('taskList');
+    container.innerHTML = tasks.length ? '' : '<p style="text-align:center; opacity:0.3;">No tasks posted.</p>';
+    
+    tasks.forEach(task => {
+      let html = `<div class="card" style="border-left:5px solid var(--primary)">
+          <div style="display:flex; justify-content:space-between;">
+            <span class="subject-pill">${task.subj}</span>
+            ${currentUser.role === 'teacher' ? `<button class="btn-action" onclick="deleteTask(${task.id})">Delete</button>` : ''}
+          </div>
+          <h2 style="margin:10px 0;">${task.title}</h2>
+          <p style="font-size:0.9rem; color:var(--text-muted);">${task.desc}</p>
+          <small style="color:var(--warning); display:block; margin-top:5px;">Due: ${task.due}</small>`;
+      
+      if(currentUser.role === 'teacher') {
+        html += `<div style="margin-top:10px; border-top:1px solid var(--border); padding-top:10px;">
+                  <b style="font-size:0.8rem;">Submissions (${task.submissions.length}):</b>
+                  ${task.submissions.map(s => `<div style="font-size:0.8rem; margin-top:5px;"><b>${s.learner}:</b> ${s.content}</div>`).join('')}
+                </div>`;
+      } else {
+        const submitted = task.submissions.some(s => s.learner === currentUser.name);
+        html += submitted ? '<p style="color:var(--success); font-weight:bold; margin-top:10px;">✓ Submitted</p>' : 
+          `<textarea id="ans-${task.id}" placeholder="Your answer..." style="margin-top:10px;"></textarea>
+           <button class="btn-modern" onclick="submitWork(${task.id})">Send Answer</button>`;
+      }
+      container.innerHTML += html + '</div>';
+    });
+  }
+
+  // CHAT & CORE
   function sendMessage() {
     const input = document.getElementById('chatInput');
     if (!input.value) return;
@@ -259,47 +269,29 @@
     renderChat();
   }
 
-  function refreshAll() {
-    const classes = db.get('classes');
-    document.getElementById('classList').innerHTML = classes.map(c => `<div style="padding:12px; border-bottom:1px solid var(--border); font-weight:500;">🏫 ${c}</div>`).join('');
-    document.getElementById('taskTargetClass').innerHTML = classes.map(c => `<option value="${c}">${c}</option>`).join('');
-    renderTasks();
-    renderChat();
-  }
-
-  function renderTasks() {
-    const tasks = db.get('tasks');
-    const container = document.getElementById('taskList');
-    container.innerHTML = tasks.length ? '' : '<div class="card" style="text-align:center; opacity:0.5;">No assignments available.</div>';
-    tasks.forEach(task => {
-      const submitted = task.submissions.some(s => s.learner === currentUser.name);
-      let html = `<div class="card" style="margin-top:20px; border-top:4px solid var(--primary)">
-          <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:bold; margin-bottom:15px;">
-            <span style="color:var(--primary)">${task.subj.toUpperCase()}</span>
-            <span style="color:var(--warning)">DUE: ${task.due}</span>
-          </div>
-          <h2 style="font-size:1.3rem;">${task.title}</h2>
-          <p style="font-size:0.95rem; margin:15px 0; color:var(--text-muted);">${task.desc}</p>`;
-      if(currentUser.role === 'teacher') {
-        html += `<div style="margin-top:15px; padding:15px; background:rgba(0,0,0,0.2); border-radius:12px;">
-                  <b style="font-size:0.85rem; color:var(--success);">Submissions (${task.submissions.length})</b>
-                  ${task.submissions.map(s => `<div style="font-size:0.85rem; margin-top:8px; border-top:1px solid rgba(255,255,255,0.05); padding-top:8px;"><b>${s.learner}:</b> ${s.content}</div>`).join('')}
-                 </div>`;
-      } else {
-        html += submitted ? '<div class="card" style="background:rgba(16,185,129,0.1); border:1px solid var(--success); text-align:center; color:var(--success); font-weight:700;">✓ ASSIGNMENT SUBMITTED</div>' : 
-          `<textarea id="ans-${task.id}" placeholder="Type your answer here..."></textarea>
-           <button class="btn-modern" onclick="submitWork(${task.id})">Turn In Work</button>`;
-      }
-      container.innerHTML += html + '</div>';
-    });
-  }
-
   function renderChat() {
     const msgs = db.get('messages');
-    document.getElementById('chatBox').innerHTML = msgs.map(m => `
-      <div class="msg ${m.role}"><small style="display:block; font-size:0.7rem; font-weight:700; text-transform:uppercase; margin-bottom:4px; opacity:0.6;">${m.user}</small>${m.text}</div>
-    `).join('');
+    document.getElementById('chatBox').innerHTML = msgs.map(m => `<div class="msg ${m.role}"><small style="display:block; opacity:0.6; font-size:0.65rem;">${m.user}</small>${m.text}</div>`).join('');
     document.getElementById('chatBox').scrollTop = 99999;
+  }
+
+  function submitWork(taskId) {
+    const text = document.getElementById(`ans-${taskId}`).value;
+    if(!text) return;
+    let tasks = db.get('tasks');
+    const idx = tasks.findIndex(t => t.id == taskId);
+    tasks[idx].submissions.push({ learner: currentUser.name, content: text });
+    db.save('tasks', tasks);
+    refreshAll();
+  }
+
+  function deleteTask(id) { if(confirm("Delete?")) { db.save('tasks', db.get('tasks').filter(t => t.id != id)); refreshAll(); } }
+
+  function resetTaskForm() {
+    document.getElementById('editTaskId').value = '';
+    document.getElementById('taskTitle').value = '';
+    document.getElementById('taskDue').value = '';
+    document.getElementById('taskDesc').value = '';
   }
 
   setInterval(renderChat, 5000);
