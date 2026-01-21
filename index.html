@@ -3,329 +3,235 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lumina • Teacher Hub</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <title>Lumina • Education Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0e1a;
-      --surface: rgba(25, 30, 55, 0.85);
-      --surface-elev: rgba(35, 45, 80, 0.95);
-      --text: #f8fafc;
-      --text-muted: #cbd5e1;
-      --border: rgba(203, 213, 225, 0.35);
-      --primary: #8b5cf6;
-      --primary-soft: #c4b5fd;
-      --primary-glow: rgba(139, 92, 246, 0.35);
-      --danger: #f87171;
-      --success: #34d399;
-      --radius: 1.25rem;
-      --radius-sm: 0.8rem;
-      --shadow: 0 12px 40px rgba(0,0,0,0.55);
-      --transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+      --bg: #0a0e1a; --surface: #1a1f2e; --surface-elev: #232d50;
+      --text: #f8fafc; --text-muted: #cbd5e1; --border: rgba(203, 213, 225, 0.2);
+      --primary: #8b5cf6; --success: #34d399; --danger: #f87171;
+      --radius: 12px;
     }
-
     * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .container { max-width: 460px; margin: 10vh auto; padding: 1rem; width: 100%; }
-
-    .card {
-      background: var(--surface-elev);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 2.4rem 2rem;
-      box-shadow: var(--shadow);
-    }
-
-    .tabs {
-      display: flex;
-      margin-bottom: 2rem;
-      border-bottom: 2px solid var(--border);
-    }
-
-    .tab {
-      flex: 1;
-      padding: 1rem 0;
-      text-align: center;
-      font-weight: 600;
-      color: var(--text-muted);
-      cursor: pointer;
-      position: relative;
-      transition: var(--transition);
-    }
-
-    .tab.active { color: var(--text); }
-    .tab.active::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: var(--primary);
-      border-radius: 4px 4px 0 0;
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-      background: linear-gradient(90deg, var(--primary), var(--primary-soft));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .input-group { position: relative; margin-bottom: 1.2rem; }
-
-    input:not([type="checkbox"]) {
-      background: rgba(40,50,80,0.4);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 1rem 1.2rem;
-      border-radius: var(--radius-sm);
-      width: 100%;
-      font-size: 1rem;
-      transition: var(--transition);
-      margin-bottom: 1rem;
-    }
-
-    .input-group input { margin-bottom: 0; padding-right: 3.5rem; }
-
-    input:focus {
-      outline: none;
-      border-color: var(--primary);
-      background: rgba(40,50,80,0.6);
-      box-shadow: 0 0 0 4px var(--primary-glow);
-    }
-
-    .password-toggle {
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 1.2rem;
-      opacity: 0.7;
-    }
-
-    button[type="submit"] {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 1rem;
-      border-radius: var(--radius-sm);
-      font-weight: 600;
-      width: 100%;
-      cursor: pointer;
-      font-size: 1rem;
-      margin-top: 1rem;
-      transition: var(--transition);
-    }
-
-    button[type="submit"]:hover:not(:disabled) {
-      filter: brightness(1.1);
-      transform: translateY(-1px);
-    }
-
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    .error-msg { color: var(--danger); font-size: 0.9rem; text-align: center; margin-top: 1rem; min-height: 1.2rem; }
-    .success-msg { color: var(--success); font-size: 0.9rem; text-align: center; margin-top: 1rem; }
-
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    
+    /* Layout */
+    .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; margin-bottom: 1.5rem; }
     .hidden { display: none !important; }
-
-    /* Dashboard */
-    #dashboard { max-width: 800px; text-align: center; }
-    .logout-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 0.5rem 1rem;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      margin-top: 2rem;
+    
+    /* Forms & UI */
+    input, textarea, select { 
+      width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.2); 
+      border: 1px solid var(--border); color: white; border-radius: 8px; margin-bottom: 1rem;
     }
-
-    .spinner {
-      width: 18px;
-      height: 18px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      display: inline-block;
-      animation: spin 0.8s linear infinite;
-      margin-right: 8px;
-      vertical-align: middle;
+    button { 
+      padding: 0.8rem 1.5rem; border: none; border-radius: 8px; cursor: pointer; 
+      font-weight: 600; transition: 0.2s;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: white; }
+    
+    /* Task & Chat Styles */
+    .task-item { background: var(--surface-elev); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--primary); }
+    .chat-box { height: 300px; overflow-y: auto; background: #000; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: flex; flex-direction: column; }
+    .msg { margin-bottom: 0.8rem; padding: 0.5rem 1rem; border-radius: 15px; max-width: 80%; }
+    .msg.teacher { background: var(--primary); align-self: flex-start; }
+    .msg.learner { background: #444; align-self: flex-end; }
+    .role-badge { font-size: 0.7rem; background: var(--primary); padding: 2px 6px; border-radius: 4px; margin-right: 5px; }
+
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
   </style>
 </head>
 <body>
 
-  <div id="authArea" class="container">
-    <h1>Lumina</h1>
-    <p style="text-align:center; color:var(--text-muted); margin-bottom: 2rem;">Teacher Hub</p>
+<div class="container">
+  <div id="authSection" class="card" style="max-width: 400px; margin: 10vh auto;">
+    <h2 id="authTitle">Teacher/Learner Login</h2>
+    <div style="display: flex; gap: 10px; margin: 1rem 0;">
+      <button class="btn-outline" onclick="setRole('teacher')" id="roleT">I am a Teacher</button>
+      <button class="btn-outline" onclick="setRole('learner')" id="roleL">I am a Learner</button>
+    </div>
+    <input type="text" id="username" placeholder="Enter Name">
+    <input type="password" id="password" placeholder="Password">
+    <button class="btn-primary" style="width: 100%;" onclick="handleAuth()">Login / Sign Up</button>
+  </div>
 
-    <div class="card">
-      <div class="tabs">
-        <div class="tab active" id="tabSignIn" onclick="switchTab('signin')">Sign In</div>
-        <div class="tab" id="tabSignUp" onclick="switchTab('signup')">Sign Up</div>
+  <div id="dashboard" class="hidden">
+    <header>
+      <h1>Lumina <span id="viewLabel" style="font-size: 1rem; opacity: 0.6;"></span></h1>
+      <button class="btn-outline" onclick="logout()">Logout</button>
+    </header>
+
+    <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px;">
+      
+      <div>
+        <div id="teacherOnly" class="card hidden">
+          <h3>Create New Task</h3>
+          <input type="text" id="taskTitle" placeholder="Task Title">
+          <textarea id="taskDesc" placeholder="Instructions for learners..."></textarea>
+          <button class="btn-primary" onclick="addTask()">Post Task</button>
+        </div>
+
+        <div class="card">
+          <h3>Current Tasks</h3>
+          <div id="taskList"></div>
+        </div>
       </div>
 
-      <form id="signinForm">
-        <input type="email" id="siEmail" placeholder="Email address" required>
-        <div class="input-group">
-          <input type="password" id="siPassword" placeholder="Password" required>
-          <button type="button" class="password-toggle" onclick="togglePass('siPassword')">👁️</button>
+      <div>
+        <div class="card">
+          <h3>Class Chat</h3>
+          <div id="chatBox" class="chat-box"></div>
+          <div style="display: flex; gap: 5px;">
+            <input type="text" id="chatInput" placeholder="Type message..." style="margin-bottom:0;">
+            <button class="btn-primary" onclick="sendMessage()">Send</button>
+          </div>
         </div>
-        <button type="submit" id="signinBtn">Sign In</button>
-        <div id="signinError" class="error-msg"></div>
-      </form>
+      </div>
 
-      <form id="signupForm" class="hidden">
-        <input type="text" id="suName" placeholder="Full Name" required>
-        <input type="email" id="suEmail" placeholder="Email address" required>
-        <div class="input-group">
-          <input type="password" id="suPassword" placeholder="Password (min 6 chars)" required minlength="6">
-          <button type="button" class="password-toggle" onclick="togglePass('suPassword')">👁️</button>
-        </div>
-        <div class="input-group">
-          <input type="password" id="suConfirm" placeholder="Confirm Password" required>
-          <button type="button" class="password-toggle" onclick="togglePass('suConfirm')">👁️</button>
-        </div>
-        <button type="submit" id="signupBtn">Create Account</button>
-        <div id="signupError" class="error-msg"></div>
-        <div id="signupSuccess" class="success-msg hidden"></div>
-      </form>
     </div>
   </div>
+</div>
 
-  <div id="dashboard" class="container hidden">
-    <div class="card">
-      <h1 style="font-size: 1.8rem;">Welcome, <span id="userDisp">Teacher</span>!</h1>
-      <p style="margin: 1.5rem 0; color: var(--text-muted);">You have successfully accessed the Lumina Teacher Hub.</p>
-      <button class="logout-btn" onclick="logout()">Sign Out</button>
-    </div>
-  </div>
+<script>
+  let currentUser = null;
+  let selectedRole = 'teacher';
 
-  <script>
-    const USERS_KEY = 'lumina_users_db';
+  // --- Core Data Controllers ---
+  const db = {
+    get: (key) => JSON.parse(localStorage.getItem('lumina_' + key) || '[]'),
+    save: (key, data) => localStorage.setItem('lumina_' + key, JSON.stringify(data))
+  };
+
+  // --- Auth Logic ---
+  function setRole(role) {
+    selectedRole = role;
+    document.getElementById('roleT').style.borderColor = role === 'teacher' ? 'var(--primary)' : 'var(--border)';
+    document.getElementById('roleL').style.borderColor = role === 'learner' ? 'var(--primary)' : 'var(--border)';
+  }
+
+  function handleAuth() {
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value;
+    if (!user || !pass) return alert("Fill all fields");
+
+    let users = db.get('users');
+    let existing = users.find(u => u.name === user);
+
+    if (existing) {
+      if (existing.pass !== pass) return alert("Wrong password");
+      currentUser = existing;
+    } else {
+      currentUser = { name: user, pass: pass, role: selectedRole };
+      users.push(currentUser);
+      db.save('users', users);
+    }
+
+    showDashboard();
+  }
+
+  function showDashboard() {
+    document.getElementById('authSection').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    document.getElementById('viewLabel').textContent = `(${currentUser.role}: ${currentUser.name})`;
     
-    // Selectors
-    const signinForm = document.getElementById('signinForm');
-    const signupForm = document.getElementById('signupForm');
-    const authArea = document.getElementById('authArea');
-    const dashboard = document.getElementById('dashboard');
-
-    // Tab Switching
-    function switchTab(type) {
-      document.getElementById('tabSignIn').classList.toggle('active', type === 'signin');
-      document.getElementById('tabSignUp').classList.toggle('active', type === 'signup');
-      signinForm.classList.toggle('hidden', type !== 'signin');
-      signupForm.classList.toggle('hidden', type !== 'signup');
-      document.getElementById('signinError').textContent = '';
-      document.getElementById('signupError').textContent = '';
+    if (currentUser.role === 'teacher') {
+      document.getElementById('teacherOnly').classList.remove('hidden');
     }
+    renderTasks();
+    renderChat();
+    setInterval(renderChat, 3000); // Simple auto-refresh for chat
+  }
 
-    // Password Toggle
-    function togglePass(id) {
-      const el = document.getElementById(id);
-      el.type = el.type === 'password' ? 'text' : 'password';
-    }
+  // --- Task Management ---
+  function addTask() {
+    const title = document.getElementById('taskTitle').value;
+    const desc = document.getElementById('taskDesc').value;
+    if (!title) return;
 
-    // AUTH LOGIC
-    const getUsers = () => JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
-    const saveUsers = (users) => localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    let tasks = db.get('tasks');
+    tasks.push({ id: Date.now(), title, desc, teacher: currentUser.name, answers: [] });
+    db.save('tasks', tasks);
+    
+    document.getElementById('taskTitle').value = '';
+    document.getElementById('taskDesc').value = '';
+    renderTasks();
+  }
 
-    // Sign Up Logic
-    signupForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('suName').value;
-      const email = document.getElementById('suEmail').value.toLowerCase().trim();
-      const pass = document.getElementById('suPassword').value;
-      const conf = document.getElementById('suConfirm').value;
-      const err = document.getElementById('signupError');
-      const succ = document.getElementById('signupSuccess');
-      const btn = document.getElementById('signupBtn');
+  function renderTasks() {
+    const tasks = db.get('tasks');
+    const container = document.getElementById('taskList');
+    container.innerHTML = tasks.length ? '' : '<p>No tasks assigned yet.</p>';
 
-      if (pass !== conf) {
-        err.textContent = "Passwords do not match!";
-        return;
+    tasks.forEach(task => {
+      let html = `
+        <div class="task-item">
+          <strong>${task.title}</strong>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">${task.desc}</p>
+          <hr style="margin: 10px 0; opacity: 0.1;">
+      `;
+
+      if (currentUser.role === 'learner') {
+        html += `
+          <input type="text" id="ans-${task.id}" placeholder="Type your answer...">
+          <button class="btn-primary" style="padding: 0.4rem 1rem; font-size: 0.8rem;" onclick="submitAnswer(${task.id})">Submit Answer</button>
+        `;
+      } else {
+        html += `<h4>Submissions:</h4>`;
+        task.answers.forEach(a => {
+          html += `<div style="font-size:0.8rem; margin-top:5px;"><b>${a.user}:</b> ${a.text}</div>`;
+        });
       }
-
-      const users = getUsers();
-      if (users.find(u => u.email === email)) {
-        err.textContent = "Email already registered!";
-        return;
-      }
-
-      btn.disabled = true;
-      btn.innerHTML = '<span class="spinner"></span> Creating...';
-
-      setTimeout(() => {
-        users.push({ name, email, password: pass });
-        saveUsers(users);
-        
-        succ.textContent = "Account created! Switching to Sign In...";
-        succ.classList.remove('hidden');
-        err.textContent = "";
-
-        setTimeout(() => {
-          signupForm.reset();
-          switchTab('signin');
-          document.getElementById('siEmail').value = email;
-          btn.disabled = false;
-          btn.textContent = "Create Account";
-          succ.classList.add('hidden');
-        }, 1500);
-      }, 800);
+      html += `</div>`;
+      container.innerHTML += html;
     });
+  }
 
-    // Sign In Logic (Accepts the written password)
-    signinForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('siEmail').value.toLowerCase().trim();
-      const pass = document.getElementById('siPassword').value;
-      const err = document.getElementById('signinError');
-      const btn = document.getElementById('signinBtn');
+  function submitAnswer(taskId) {
+    const text = document.getElementById(`ans-${taskId}`).value;
+    if (!text) return;
 
-      btn.disabled = true;
-      btn.innerHTML = '<span class="spinner"></span> Verifying...';
+    let tasks = db.get('tasks');
+    const taskIdx = tasks.findIndex(t => t.id === taskId);
+    tasks[taskIdx].answers.push({ user: currentUser.name, text: text });
+    db.save('tasks', tasks);
+    alert("Answer sent to teacher!");
+    renderTasks();
+  }
 
-      setTimeout(() => {
-        const users = getUsers();
-        // EXACT MATCH CHECK
-        const user = users.find(u => u.email === email && u.password === pass);
+  // --- Chat Management ---
+  function sendMessage() {
+    const text = document.getElementById('chatInput').value;
+    if (!text) return;
 
-        if (user) {
-          document.getElementById('userDisp').textContent = user.name;
-          authArea.classList.add('hidden');
-          dashboard.classList.remove('hidden');
-        } else {
-          err.textContent = "Invalid email or password.";
-          btn.disabled = false;
-          btn.textContent = "Sign In";
-        }
-      }, 800);
+    let messages = db.get('messages');
+    messages.push({ user: currentUser.name, role: currentUser.role, text: text, time: new Date().toLocaleTimeString() });
+    db.save('messages', messages);
+    document.getElementById('chatInput').value = '';
+    renderChat();
+  }
+
+  function renderChat() {
+    const messages = db.get('messages');
+    const box = document.getElementById('chatBox');
+    box.innerHTML = '';
+    messages.forEach(m => {
+      const isMe = m.user === currentUser.name;
+      box.innerHTML += `
+        <div class="msg ${m.role}">
+          <span class="role-badge">${m.role}</span>
+          <small>${m.user}</small><br>${m.text}
+        </div>`;
     });
+    box.scrollTop = box.scrollHeight;
+  }
 
-    function logout() {
-      dashboard.classList.add('hidden');
-      authArea.classList.remove('hidden');
-      signinForm.reset();
-    }
-  </script>
+  function logout() { location.reload(); }
+  
+  // Initialize role
+  setRole('teacher');
+</script>
+
 </body>
 </html>
