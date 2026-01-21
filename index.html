@@ -3,175 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LMS Admin Dashboard - Manage Learners</title>
+  <title>LMS Admin - Learners & Courses</title>
   <style>
     :root {
-      --primary: #1e40af;
-      --primary-dark: #1e3a8a;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --gray: #6b7280;
-      --light: #f3f4f6;
-      --bg: #f8fafc;
+      --primary: #1e40af; --primary-dark: #1e3a8a;
+      --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
+      --gray: #6b7280; --light: #f3f4f6; --bg: #f8fafc;
     }
-
     * { box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg);
-      margin: 0;
-      color: #1f2937;
-      min-height: 100vh;
-    }
-    .layout {
-      display: grid;
-      grid-template-columns: 240px 1fr;
-      height: 100vh;
-    }
-    aside {
-      background: white;
-      border-right: 1px solid #e5e7eb;
-      padding: 1.5rem 0;
-      overflow-y: auto;
-    }
-    .logo {
-      padding: 0 1.5rem 1.5rem;
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: var(--primary-dark);
-      border-bottom: 1px solid #e5e7eb;
-    }
-    nav ul {
-      list-style: none;
-      padding: 1rem 0 0;
-      margin: 0;
-    }
-    nav a {
-      display: block;
-      padding: 0.75rem 1.5rem;
-      color: #4b5563;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    nav a.active, nav a:hover {
-      background: var(--light);
-      color: var(--primary);
-    }
-    header {
-      background: var(--primary);
-      color: white;
-      padding: 1.25rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    main {
-      padding: 2rem;
-      overflow-y: auto;
-    }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    .stat-card {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-      text-align: center;
-    }
-    .stat-number { font-size: 2.2rem; font-weight: bold; margin: 0.5rem 0; }
-    .stat-label { color: var(--gray); font-size: 0.95rem; }
-
-    .card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-      padding: 1.75rem;
-      margin-bottom: 2rem;
-    }
-    h2 { margin: 0 0 1.25rem; color: #111827; }
-    .actions-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    input[type="search"], input[type="email"], select {
-      padding: 0.75rem 1rem;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      font-size: 1rem;
-      min-width: 240px;
-    }
-    button {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 0.75rem 1.4rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: background 0.2s;
-    }
-    button:hover { background: var(--primary-dark); }
-    button.danger { background: var(--danger); }
-    button.danger:hover { background: #dc2626; }
-    button.secondary { background: #6b7280; }
-    button.secondary:hover { background: #4b5563; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.95rem;
-    }
-    th, td {
-      padding: 1rem;
-      text-align: left;
-      border-bottom: 1px solid #e5e7eb;
-    }
-    th {
-      background: var(--light);
-      font-weight: 600;
-      color: #374151;
-    }
-    .status-badge {
-      padding: 0.35rem 0.75rem;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 500;
-    }
-    .status-pending  { background: #fef3c7; color: #92400e; }
-    .status-registered { background: #d1fae5; color: #065f46; }
-    .status-active   { background: #dbeafe; color: #1e40af; }
-    .status-inactive { background: #fee2e2; color: #991b1b; }
-
-    .table-actions button {
-      background: none;
-      color: var(--primary);
-      padding: 0.4rem 0.6rem;
-      margin: 0 0.3rem;
-      font-size: 0.9rem;
-    }
-    .table-actions button.danger { color: var(--danger); }
-
-    #message, #authMessage {
-      margin-top: 1rem;
-      padding: 1rem;
-      border-radius: 6px;
-    }
-    .success { background: #d1fae5; color: #065f46; }
-    .error   { background: #fee2e2; color: #991b1b; }
-
-    @media (max-width: 1024px) {
-      .layout { grid-template-columns: 1fr; }
-      aside { display: none; } /* → can become mobile menu later */
-    }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin:0; color:#1f2937; min-height:100vh; }
+    .layout { display: grid; grid-template-columns: 240px 1fr; height:100vh; }
+    aside { background:white; border-right:1px solid #e5e7eb; padding:1.5rem 0; overflow-y:auto; }
+    .logo { padding:0 1.5rem 1.5rem; font-size:1.5rem; font-weight:bold; color:var(--primary-dark); border-bottom:1px solid #e5e7eb; }
+    nav ul { list-style:none; padding:1rem 0 0; margin:0; }
+    nav a { display:block; padding:0.75rem 1.5rem; color:#4b5563; text-decoration:none; font-weight:500; }
+    nav a.active, nav a:hover { background:var(--light); color:var(--primary); }
+    header { background:var(--primary); color:white; padding:1.25rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+    main { padding:2rem; overflow-y:auto; }
+    .card { background:white; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.06); padding:1.75rem; margin-bottom:2rem; }
+    h2 { margin:0 0 1.25rem; color:#111827; }
+    button { background:var(--primary); color:white; border:none; padding:0.75rem 1.4rem; border-radius:6px; cursor:pointer; font-weight:500; }
+    button:hover { background:var(--primary-dark); }
+    button.danger { background:var(--danger); } button.danger:hover { background:#dc2626; }
+    button.secondary { background:#6b7280; } button.secondary:hover { background:#4b5563; }
+    input, select, textarea { padding:0.75rem 1rem; border:1px solid #d1d5db; border-radius:6px; font-size:1rem; }
+    table { width:100%; border-collapse:collapse; font-size:0.95rem; }
+    th, td { padding:1rem; text-align:left; border-bottom:1px solid #e5e7eb; }
+    th { background:var(--light); font-weight:600; color:#374151; }
+    .status-badge { padding:0.35rem 0.75rem; border-radius:999px; font-size:0.8rem; font-weight:500; }
+    .status-pending { background:#fef3c7; color:#92400e; }
+    .status-registered { background:#d1fae5; color:#065f46; }
+    .status-active { background:#dbeafe; color:#1e40af; }
+    .status-inactive { background:#fee2e2; color:#991b1b; }
+    #message, #authMessage { margin-top:1rem; padding:1rem; border-radius:6px; }
+    .success { background:#d1fae5; color:#065f46; }
+    .error { background:#fee2e2; color:#991b1b; }
+    .courses-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:1.5rem; }
+    .course-card { border:1px solid #e5e7eb; border-radius:8px; padding:1.25rem; background:#fff; }
+    .assign-form { display:flex; flex-wrap:wrap; gap:1rem; margin-top:1rem; }
+    @media (max-width:1024px) { .layout { grid-template-columns:1fr; } aside { display:none; } }
   </style>
 </head>
 <body>
@@ -181,79 +51,60 @@
     <div class="logo">LMS Admin</div>
     <nav>
       <ul>
-        <li><a href="#" class="active">Dashboard</a></li>
-        <li><a href="#">Learners</a></li>
-        <li><a href="#">Invitations</a></li>
-        <li><a href="#">Courses</a></li>
+        <li><a href="#" class="active">Learners</a></li>
+        <li><a href="#courses-section">Courses</a></li>
+        <li><a href="#">Assignments</a></li>
         <li><a href="#">Reports</a></li>
-        <li><a href="#">Settings</a></li>
       </ul>
     </nav>
   </aside>
 
   <div style="display:flex; flex-direction:column; height:100vh;">
     <header>
-      <h1 style="margin:0; font-size:1.4rem;">Learner Management</h1>
-      <div>
-        <button id="signOutBtn">Sign Out</button>
-      </div>
+      <h1 style="margin:0; font-size:1.4rem;">Manage Learners & Courses</h1>
+      <button id="signOutBtn">Sign Out</button>
     </header>
 
     <main>
-      <!-- Auth section (shown when not logged in) -->
       <div id="auth-section" class="card" style="max-width:500px; margin:4rem auto; display:none;">
         <h2>Admin Login</h2>
-        <p>Sign in with Google to manage learners and invitations.</p>
         <button id="googleSignInBtn">Sign in with Google</button>
         <div id="authMessage"></div>
       </div>
 
-      <!-- Main dashboard (shown when logged in) -->
       <div id="dashboard" style="display:none;">
-        <div class="stats">
-          <div class="stat-card">
-            <div class="stat-label">Total Learners</div>
-            <div class="stat-number" id="totalLearners">—</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Pending Invites</div>
-            <div class="stat-number" id="pendingInvites">—</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Active Learners</div>
-            <div class="stat-number" id="activeLearners">—</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Registered (not active)</div>
-            <div class="stat-number" id="registeredCount">—</div>
-          </div>
-        </div>
 
-        <!-- Invite new learner -->
+        <!-- Invite Learner (existing) -->
         <div class="card">
           <h2>Invite New Learner</h2>
           <form id="inviteForm" style="display:flex; gap:1rem; flex-wrap:wrap;">
-            <input type="email" id="learnerEmail" placeholder="Enter learner's email address" required style="flex:1; min-width:300px;" />
+            <input type="email" id="learnerEmail" placeholder="Learner's email" required style="flex:1;" />
             <button type="submit">Send Invite</button>
           </form>
           <div id="message"></div>
         </div>
 
-        <!-- Learners / Invites table -->
+        <!-- Courses Section -->
+        <div class="card" id="courses-section">
+          <h2>Courses</h2>
+          <form id="addCourseForm" style="margin-bottom:2rem;">
+            <input type="text" id="courseTitle" placeholder="Course title" required style="width:100%; margin-bottom:0.75rem;" />
+            <textarea id="courseDesc" placeholder="Short description" rows="2" style="width:100%; margin-bottom:0.75rem;"></textarea>
+            <button type="submit">Create Course</button>
+          </form>
+
+          <div class="courses-grid" id="coursesList"></div>
+        </div>
+
+        <!-- Learners Table with Assignment -->
         <div class="card">
-          <div class="actions-bar">
-            <h2>Learners & Invitations</h2>
-            <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-              <input type="search" id="searchInput" placeholder="Search by email or name..." />
-              <select id="statusFilter">
-                <option value="">All Statuses</option>
-                <option value="Pending">Pending</option>
-                <option value="Registered">Registered</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem;">
+            <h2>Learners & Course Assignments</h2>
+            <div>
+              <select id="courseSelectForAssign" style="margin-right:0.75rem; min-width:220px;">
+                <option value="">Select course to assign...</option>
               </select>
-              <button class="secondary">Bulk Resend</button>
-              <button class="danger">Bulk Delete</button>
+              <button id="bulkAssignBtn" class="secondary" disabled>Bulk Assign Selected</button>
             </div>
           </div>
 
@@ -263,8 +114,8 @@
                 <th><input type="checkbox" id="selectAll" /></th>
                 <th>Email</th>
                 <th>Name</th>
-                <th>Invited / Joined</th>
                 <th>Status</th>
+                <th>Assigned Courses</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -276,11 +127,8 @@
   </div>
 </div>
 
-<!-- Firebase SDK -->
 <script type="module">
-  // ────────────────────────────────────────────────
-  // Your existing firebaseConfig remains the same
-  // ────────────────────────────────────────────────
+  // Your existing firebaseConfig
   const firebaseConfig = {
     apiKey: "AIzaSyDLvkRwSpd-hbPaDP31pV1H-4N5_Re-_xc",
     authDomain: "learnermanagementsystem-f3b6a.firebaseapp.com",
@@ -294,23 +142,26 @@
 
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
   import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-  import { getDatabase, ref, push, set, serverTimestamp, onValue, query, orderByChild, remove, update } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+  import { getDatabase, ref, push, set, serverTimestamp, onValue, query, orderByChild, remove, update, get } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getDatabase(app);
 
-  const authSection   = document.getElementById('auth-section');
-  const dashboard     = document.getElementById('dashboard');
-  const googleBtn     = document.getElementById('googleSignInBtn');
-  const signOutBtn    = document.getElementById('signOutBtn');
-  const messageDiv    = document.getElementById('message');
+  const authSection = document.getElementById('auth-section');
+  const dashboard = document.getElementById('dashboard');
+  const messageDiv = document.getElementById('message');
 
-  // ─── Auth ────────────────────────────────────────
+  let currentUser = null;
+  let selectedLearners = new Set();   // for bulk assign
+  let coursesMap = {};                // courseKey → {title, ...}
+
   onAuthStateChanged(auth, (user) => {
+    currentUser = user;
     if (user) {
       authSection.style.display = 'none';
       dashboard.style.display = 'block';
+      loadCourses();
       loadLearnersList();
     } else {
       authSection.style.display = 'block';
@@ -318,36 +169,214 @@
     }
   });
 
-  googleBtn.addEventListener('click', async () => {
+  document.getElementById('googleSignInBtn')?.addEventListener('click', async () => {
     const provider = new GoogleAuthProvider();
+    try { await signInWithPopup(auth, provider); } 
+    catch (error) { document.getElementById('authMessage').innerHTML = `<div class="error">${error.message}</div>`; }
+  });
+
+  document.getElementById('signOutBtn').addEventListener('click', () => signOut(auth));
+
+  // ─── Courses ─────────────────────────────────────
+  async function loadCourses() {
+    const coursesRef = ref(db, 'courses');
+    onValue(coursesRef, (snap) => {
+      const listEl = document.getElementById('coursesList');
+      const selectEl = document.getElementById('courseSelectForAssign');
+      listEl.innerHTML = '';
+      selectEl.innerHTML = '<option value="">Select course to assign...</option>';
+
+      if (!snap.exists()) {
+        listEl.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:2rem;">No courses yet</p>';
+        return;
+      }
+
+      coursesMap = {};
+      const courses = [];
+      snap.forEach(child => {
+        const data = child.val();
+        data.key = child.key;
+        coursesMap[child.key] = data;
+        courses.push(data);
+      });
+
+      courses.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+
+      courses.forEach(c => {
+        // Course card
+        const card = document.createElement('div');
+        card.className = 'course-card';
+        card.innerHTML = `
+          <h3>${c.title}</h3>
+          <p style="color:var(--gray);">${c.description || 'No description'}</p>
+          <small>Created: ${c.createdAt ? new Date(c.createdAt).toLocaleDateString() : '—'}</small>
+        `;
+        listEl.appendChild(card);
+
+        // Select option
+        const opt = document.createElement('option');
+        opt.value = c.key;
+        opt.textContent = c.title;
+        selectEl.appendChild(opt);
+      });
+
+      document.getElementById('courseSelectForAssign').disabled = false;
+    });
+  }
+
+  document.getElementById('addCourseForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const title = document.getElementById('courseTitle').value.trim();
+    const desc  = document.getElementById('courseDesc').value.trim();
+
+    if (!title) return;
+
     try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      document.getElementById('authMessage').innerHTML = `<div class="error">Error: ${error.message}</div>`;
+      const newRef = push(ref(db, 'courses'));
+      await set(newRef, {
+        title,
+        description: desc,
+        createdAt: serverTimestamp(),
+        createdBy: currentUser?.uid || 'admin',
+        status: 'active'
+      });
+      e.target.reset();
+      messageDiv.textContent = `Course "${title}" created!`;
+      messageDiv.className = 'success';
+    } catch (err) {
+      messageDiv.textContent = `Error: ${err.message}`;
+      messageDiv.className = 'error';
     }
   });
 
-  signOutBtn.addEventListener('click', () => signOut(auth));
+  // ─── Learners with Assignments ───────────────────
+  function loadLearnersList() {
+    const learnersRef = ref(db, 'learners');
+    onValue(query(learnersRef, orderByChild('invitedAt')), (snap) => {
+      const tbody = document.querySelector('#learnersTable tbody');
+      tbody.innerHTML = '';
 
-  // ─── Invite Form ─────────────────────────────────
+      if (!snap.exists()) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:3rem;">No learners yet</td></tr>';
+        return;
+      }
+
+      const learners = [];
+      snap.forEach(child => {
+        const d = child.val();
+        d.key = child.key;
+        learners.push(d);
+      });
+
+      learners.sort((a,b) => (b.invitedAt||0) - (a.invitedAt||0));
+
+      learners.forEach(data => {
+        const row = document.createElement('tr');
+        const statusClass = `status-${(data.status||'pending').toLowerCase()}`;
+        const courseCount = data.assignedCourseCount || 0;
+
+        row.innerHTML = `
+          <td><input type="checkbox" class="row-select" data-key="${data.key}" /></td>
+          <td>${data.email}</td>
+          <td>${data.name || '—'}</td>
+          <td><span class="status-badge ${statusClass}">${data.status || 'Pending'}</span></td>
+          <td>${courseCount} course${courseCount !== 1 ? 's' : ''}</td>
+          <td>
+            <button onclick="showAssignModal('${data.key}', '${data.email}')">Assign Course</button>
+            <button class="secondary" onclick="viewAssignments('${data.key}')">View</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    });
+  }
+
+  // Checkbox selection for bulk
+  document.getElementById('selectAll')?.addEventListener('change', (e) => {
+    document.querySelectorAll('.row-select').forEach(cb => cb.checked = e.target.checked);
+    updateBulkButton();
+  });
+
+  document.addEventListener('change', (e) => {
+    if (e.target.classList.contains('row-select')) {
+      updateBulkButton();
+    }
+  });
+
+  function updateBulkButton() {
+    selectedLearners.clear();
+    document.querySelectorAll('.row-select:checked').forEach(cb => {
+      selectedLearners.add(cb.dataset.key);
+    });
+    const btn = document.getElementById('bulkAssignBtn');
+    const courseId = document.getElementById('courseSelectForAssign').value;
+    btn.disabled = selectedLearners.size === 0 || !courseId;
+  }
+
+  document.getElementById('courseSelectForAssign')?.addEventListener('change', updateBulkButton);
+
+  document.getElementById('bulkAssignBtn')?.addEventListener('click', async () => {
+    const courseId = document.getElementById('courseSelectForAssign').value;
+    if (!courseId || selectedLearners.size === 0) return;
+
+    if (!confirm(`Assign "${coursesMap[courseId]?.title}" to ${selectedLearners.size} learner(s)?`)) return;
+
+    const updates = {};
+    const now = serverTimestamp();
+
+    for (const learnerId of selectedLearners) {
+      const assignRef = push(ref(db, 'courseAssignments'));
+      updates[`courseAssignments/${assignRef.key}`] = {
+        courseId,
+        learnerId,
+        assignedAt: now,
+        assignedBy: currentUser?.uid,
+        status: 'assigned'
+      };
+      // Optional: increment count (transaction better in production)
+      updates[`learners/${learnerId}/assignedCourseCount`] = (await get(ref(db, `learners/${learnerId}/assignedCourseCount`))).val() + 1 || 1;
+    }
+
+    try {
+      await update(ref(db), updates);
+      messageDiv.textContent = `Assigned to ${selectedLearners.size} learner(s)`;
+      messageDiv.className = 'success';
+      selectedLearners.clear();
+      document.getElementById('selectAll').checked = false;
+      updateBulkButton();
+    } catch (err) {
+      messageDiv.textContent = `Error: ${err.message}`;
+      messageDiv.className = 'error';
+    }
+  });
+
+  // Single learner assign (placeholder - can open modal in future)
+  window.showAssignModal = (learnerKey, email) => {
+    const courseId = prompt(`Enter course key to assign to ${email} (or use dropdown in bulk)`);
+    if (!courseId) return;
+    // Similar logic as bulk but for one
+    alert(`Would assign course ${courseId} to ${learnerKey} — implement fully if needed`);
+  };
+
+  window.viewAssignments = (learnerKey) => {
+    alert(`View assignments for learner ${learnerKey} — open modal/table in future`);
+    // Future: query courseAssignments where learnerId == learnerKey, join with courses
+  };
+
+  // Existing invite logic (adapted path to 'learners')
   document.getElementById('inviteForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('learnerEmail').value.trim().toLowerCase();
     if (!email) return;
 
-    messageDiv.className = '';
-    messageDiv.textContent = '';
-
     try {
-      const newInviteRef = push(ref(db, 'learners'));
-      await set(newInviteRef, {
+      const newRef = push(ref(db, 'learners'));
+      await set(newRef, {
         email,
         invitedAt: serverTimestamp(),
-        status: 'Pending',
-        // name: "",           // ← can be filled later by learner
-        // lastActive: null,
+        status: 'Pending'
       });
-      messageDiv.textContent = `Invite recorded for ${email}`;
+      messageDiv.textContent = `Invited ${email}`;
       messageDiv.className = 'success';
       e.target.reset();
     } catch (err) {
@@ -355,109 +384,6 @@
       messageDiv.className = 'error';
     }
   });
-
-  // ─── Real-time Learners List ─────────────────────
-  function loadLearnersList() {
-    const learnersRef = ref(db, 'learners');
-    const q = query(learnersRef, orderByChild('invitedAt'));
-
-    onValue(q, (snapshot) => {
-      const tbody = document.querySelector('#learnersTable tbody');
-      tbody.innerHTML = '';
-
-      if (!snapshot.exists()) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:3rem;">No learners yet</td></tr>';
-        updateStats(0,0,0,0);
-        return;
-      }
-
-      const learners = [];
-      let pending = 0, registered = 0, active = 0;
-
-      snapshot.forEach(child => {
-        const data = child.val();
-        data.key = child.key;
-        learners.push(data);
-
-        if (data.status === 'Pending') pending++;
-        else if (data.status === 'Registered') registered++;
-        else if (data.status === 'Active') active++;
-      });
-
-      // Newest first
-      learners.sort((a,b) => (b.invitedAt || 0) - (a.invitedAt || 0));
-
-      learners.forEach(data => {
-        const row = document.createElement('tr');
-        const date = data.invitedAt ? new Date(data.invitedAt).toLocaleString() : '—';
-        const joined = data.joinedAt ? new Date(data.joinedAt).toLocaleDateString() : '—';
-
-        const statusClass = `status-${data.status?.toLowerCase() || 'pending'}`;
-        row.innerHTML = `
-          <td><input type="checkbox" class="row-select" data-key="${data.key}" /></td>
-          <td>${data.email}</td>
-          <td>${data.name || '—'}</td>
-          <td title="${date}">${joined !== '—' ? joined : date}</td>
-          <td><span class="status-badge ${statusClass}">${data.status || 'Pending'}</span></td>
-          <td class="table-actions">
-            <button onclick="editLearner('${data.key}')">Edit</button>
-            <button onclick="resendInvite('${data.key}', '${data.email}')">Resend</button>
-            <button class="danger" onclick="deleteLearner('${data.key}')">Delete</button>
-          </td>
-        `;
-        tbody.appendChild(row);
-      });
-
-      updateStats(learners.length, pending, registered, active);
-    });
-  }
-
-  function updateStats(total, pending, registered, active) {
-    document.getElementById('totalLearners').textContent = total;
-    document.getElementById('pendingInvites').textContent = pending;
-    document.getElementById('activeLearners').textContent = active;
-    document.getElementById('registeredCount').textContent = registered;
-  }
-
-  // Placeholder action handlers (implement as needed)
-  window.editLearner = (key) => {
-    alert(`Edit learner: ${key} (implement modal / form here)`);
-  };
-
-  window.resendInvite = (key, email) => {
-    if (confirm(`Resend invite to ${email}?`)) {
-      // You can update timestamp or trigger email function
-      alert(`Resend triggered for ${email}`);
-    }
-  };
-
-  window.deleteLearner = (key) => {
-    if (confirm("Delete this learner permanently?")) {
-      remove(ref(db, `learners/${key}`))
-        .then(() => alert("Learner removed"))
-        .catch(err => alert("Error: " + err.message));
-    }
-  };
-
-  // Basic client-side search & filter (can be improved server-side later)
-  document.getElementById('searchInput')?.addEventListener('input', filterTable);
-  document.getElementById('statusFilter')?.addEventListener('change', filterTable);
-
-  function filterTable() {
-    const search = document.getElementById('searchInput').value.toLowerCase().trim();
-    const status = document.getElementById('statusFilter').value;
-
-    document.querySelectorAll('#learnersTable tbody tr').forEach(row => {
-      const email = row.cells[1].textContent.toLowerCase();
-      const name  = row.cells[2].textContent.toLowerCase();
-      const rowStatus = row.querySelector('.status-badge').textContent;
-
-      const matchSearch = email.includes(search) || name.includes(search);
-      const matchStatus = !status || rowStatus === status;
-
-      row.style.display = matchSearch && matchStatus ? '' : 'none';
-    });
-  }
 </script>
 </body>
 </html>
