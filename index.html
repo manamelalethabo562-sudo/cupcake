@@ -14,44 +14,38 @@
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
-    
+   
     .container { max-width: 1250px; margin: 0 auto; padding: 2rem; }
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
     .hidden { display: none !important; }
-    
-    /* DASHBOARD GRID */
+   
     .dashboard-grid { display: grid; grid-template-columns: 300px 1fr 320px; gap: 20px; }
-
-    /* MODERN BUTTONS */
-    .btn-modern { 
-      background: linear-gradient(135deg, var(--primary), #6366f1); color: white; 
-      width: 100%; padding: 0.9rem; border: none; border-radius: 50px; 
+   
+    .btn-modern {
+      background: linear-gradient(135deg, var(--primary), #6366f1); color: white;
+      width: 100%; padding: 0.9rem; border: none; border-radius: 50px;
       font-weight: 700; cursor: pointer; transition: 0.3s;
     }
     .btn-action { padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: white; cursor: pointer; }
     .btn-delete { border-color: var(--danger); color: var(--danger); }
     .btn-edit { border-color: var(--warning); color: var(--warning); }
-
-    /* INPUTS */
+   
     input, textarea, select { width: 100%; padding: 0.8rem; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border); color: white; border-radius: 12px; margin-bottom: 1rem; }
-
-    /* CHAT & LISTS */
+   
     .chat-box { height: 350px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 16px; display: flex; flex-direction: column; gap: 8px; }
     .msg { padding: 0.7rem 1rem; border-radius: 14px; max-width: 85%; font-size: 0.85rem; }
     .msg.teacher { background: var(--primary); align-self: flex-start; }
     .msg.learner { background: var(--surface-elev); align-self: flex-end; }
-    
+   
     .learner-list-item { font-size: 0.85rem; padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,0.03); margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
     .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
-
-    /* PILL TABS */
+   
     .pill-tabs { background: rgba(15, 23, 42, 0.8); padding: 5px; border-radius: 50px; display: flex; margin-top: 1.5rem; border: 1px solid var(--border); }
     .pill-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; border-radius: 50px; font-weight: 700; font-size: 0.8rem; color: var(--text-muted); }
     .pill-tab.active { background: rgba(255, 255, 255, 0.05); color: white; }
   </style>
 </head>
 <body>
-
 <div class="container">
   <div id="authSection" class="card" style="max-width: 400px; margin: 10vh auto; text-align:center;">
     <h1 style="font-size:2.5rem; margin-bottom:1.5rem;">Lumina</h1>
@@ -63,10 +57,19 @@
     <div id="formUp" class="hidden">
       <input type="text" id="suUser" placeholder="Full Name">
       <input type="password" id="suPass" placeholder="Password">
-      <select id="suRole">
+      <select id="suRole" onchange="toggleSubjectField()">
+        <option value="">Select role...</option>
         <option value="teacher">Teacher</option>
         <option value="learner">Learner</option>
       </select>
+
+      <div id="teacherSubjectsContainer" class="hidden" style="margin: 1rem 0;">
+        <label style="font-size:0.9rem; color:var(--text-muted); display:block; margin-bottom:0.5rem;">
+          Subjects you teach (comma separated)
+        </label>
+        <textarea id="suSubjects" rows="2" placeholder="e.g. Mathematics, Life Sciences, Physical Sciences, IT, Accounting"></textarea>
+      </div>
+
       <button class="btn-modern" onclick="handleRegister()">Create Account</button>
     </div>
     <div class="pill-tabs">
@@ -80,26 +83,24 @@
       <h1>Lumina Hub</h1>
       <button onclick="location.reload()" class="btn-action">Sign Out</button>
     </header>
-
     <div class="dashboard-grid">
       <aside>
         <div class="card" style="text-align: center;">
             <h2 id="learnerCount" style="font-size: 2.5rem; color: var(--primary);">0</h2>
             <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">Registered Learners</p>
         </div>
-        
+       
         <div class="card">
           <h3 style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted);">Learner Directory</h3>
           <div id="fullLearnerList"></div>
         </div>
       </aside>
-
       <main>
         <div class="card teacher-only hidden">
           <h3 id="formTitle">Assign New Task</h3>
           <input type="hidden" id="editTaskId">
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
-            <input type="text" id="taskSubj" placeholder="Subject">
+            <select id="taskSubj"></select>
             <select id="taskTargetClass"></select>
           </div>
           <input type="text" id="taskTitle" placeholder="Task Title">
@@ -110,7 +111,6 @@
         </div>
         <div id="taskList"></div>
       </main>
-
       <section>
         <div class="card">
           <h3>Classroom Chat</h3>
@@ -139,15 +139,55 @@
     document.getElementById('formUp').classList.toggle('hidden', type !== 'up');
   }
 
+  function toggleSubjectField() {
+    const role = document.getElementById('suRole').value;
+    document.getElementById('teacherSubjectsContainer').classList.toggle('hidden', role !== 'teacher');
+  }
+
   function handleRegister() {
     const name = document.getElementById('suUser').value.trim();
     const pass = document.getElementById('suPass').value;
     const role = document.getElementById('suRole').value;
-    if(!name || !pass) return;
+
+    if (!name || !pass || !role) {
+      alert("Please fill all required fields");
+      return;
+    }
+
+    let subjects = [];
+    if (role === 'teacher') {
+      const subjectsStr = document.getElementById('suSubjects').value.trim();
+      if (!subjectsStr) {
+        alert("Teachers must enter at least one subject");
+        return;
+      }
+      subjects = subjectsStr.split(',').map(s => s.trim()).filter(s => s.length > 0);
+    }
+
     let users = db.get('users');
-    users.push({ name, pass, role });
+
+    if (users.some(u => u.name === name)) {
+      alert("Username already taken");
+      return;
+    }
+
+    users.push({
+      name,
+      pass,
+      role,
+      subjects: role === 'teacher' ? subjects : undefined
+    });
+
     db.save('users', users);
-    alert("Registered! Now Sign In.");
+    alert("Registered successfully! Please sign in.");
+
+    // Reset form
+    document.getElementById('suUser').value = '';
+    document.getElementById('suPass').value = '';
+    document.getElementById('suRole').value = '';
+    document.getElementById('suSubjects').value = '';
+    toggleSubjectField();
+
     toggleAuth('in');
   }
 
@@ -155,33 +195,50 @@
     const name = document.getElementById('siUser').value.trim();
     const pass = document.getElementById('siPass').value;
     let user = db.get('users').find(u => u.name === name && u.pass === pass);
-    if(!user) return alert("User not found");
+    if (!user) return alert("User not found or incorrect password");
+
     currentUser = user;
     document.getElementById('authSection').classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
-    if (currentUser.role === 'teacher') document.querySelectorAll('.teacher-only').forEach(el => el.classList.remove('hidden'));
+
+    if (currentUser.role === 'teacher') {
+      document.querySelectorAll('.teacher-only').forEach(el => el.classList.remove('hidden'));
+    }
+
     refreshAll();
   }
 
-  // TASK CRUD
-  function addTask() {
-    const title = document.getElementById('taskTitle').value;
-    const editId = document.getElementById('editTaskId').value;
-    let tasks = db.get('tasks');
+  // ──────────────────────────────────────────────
+  // Task CRUD
+  // ──────────────────────────────────────────────
 
+  function addTask() {
+    const title = document.getElementById('taskTitle').value.trim();
+    const subj  = document.getElementById('taskSubj').value;
+    const target = document.getElementById('taskTargetClass').value;
+    const due   = document.getElementById('taskDue').value;
+    const desc  = document.getElementById('taskDesc').value.trim();
+    const editId = document.getElementById('editTaskId').value;
+
+    if (!title || !subj || !target || !due) {
+      alert("Please fill all required fields (title, subject, class, due date)");
+      return;
+    }
+
+    let tasks = db.get('tasks');
     const taskData = {
       id: editId ? parseInt(editId) : Date.now(),
-      title: title,
-      subj: document.getElementById('taskSubj').value,
-      target: document.getElementById('taskTargetClass').value,
-      due: document.getElementById('taskDue').value,
-      desc: document.getElementById('taskDesc').value,
-      submissions: editId ? tasks.find(t => t.id == editId).submissions : []
+      title,
+      subj,
+      target,
+      due,
+      desc,
+      submissions: editId ? tasks.find(t => t.id == editId)?.submissions || [] : []
     };
 
     if (editId) {
       const idx = tasks.findIndex(t => t.id == editId);
-      tasks[idx] = taskData;
+      if (idx !== -1) tasks[idx] = taskData;
     } else {
       tasks.push(taskData);
     }
@@ -192,30 +249,36 @@
   }
 
   function deleteTask(id) {
-    if(confirm("Delete task?")) {
-      db.save('tasks', db.get('tasks').filter(t => t.id != id));
-      refreshAll();
-    }
+    if (!confirm("Delete this task?")) return;
+    let tasks = db.get('tasks');
+    tasks = tasks.filter(t => t.id != id);
+    db.save('tasks', tasks);
+    refreshAll();
   }
 
   function editTask(id) {
     const task = db.get('tasks').find(t => t.id == id);
+    if (!task) return;
+
     document.getElementById('editTaskId').value = task.id;
     document.getElementById('taskTitle').value = task.title;
     document.getElementById('taskSubj').value = task.subj;
     document.getElementById('taskTargetClass').value = task.target;
     document.getElementById('taskDue').value = task.due;
     document.getElementById('taskDesc').value = task.desc;
+
     document.getElementById('formTitle').textContent = "Edit Task";
     document.getElementById('taskSubmitBtn').textContent = "Save Changes";
     document.getElementById('cancelEditBtn').classList.remove('hidden');
-    window.scrollTo({top: 0, behavior: 'smooth'});
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function resetTaskForm() {
     document.getElementById('editTaskId').value = '';
     document.getElementById('taskTitle').value = '';
     document.getElementById('taskSubj').value = '';
+    document.getElementById('taskTargetClass').value = '';
     document.getElementById('taskDue').value = '';
     document.getElementById('taskDesc').value = '';
     document.getElementById('formTitle').textContent = "Assign New Task";
@@ -223,19 +286,38 @@
     document.getElementById('cancelEditBtn').classList.add('hidden');
   }
 
-  // GLOBAL REFRESH
+  // ──────────────────────────────────────────────
+  // Refresh / Render
+  // ──────────────────────────────────────────────
+
   function refreshAll() {
     const users = db.get('users');
     const learners = users.filter(u => u.role === 'learner');
-    
-    // Update Sidebar Learner List
-    document.getElementById('learnerCount').textContent = learners.length;
-    document.getElementById('fullLearnerList').innerHTML = learners.length ? 
-      learners.map(l => `<div class="learner-list-item"><div class="dot"></div> ${l.name}</div>`).join('') :
-      '<p style="font-size:0.8rem; opacity:0.5;">No learners yet.</p>';
 
-    const classes = db.get('classes');
-    document.getElementById('taskTargetClass').innerHTML = classes.map(c => `<option value="${c}">${c}</option>`).join('');
+    // Learner count & list
+    document.getElementById('learnerCount').textContent = learners.length;
+    document.getElementById('fullLearnerList').innerHTML = learners.length
+      ? learners.map(l => `<div class="learner-list-item"><div class="dot"></div> ${l.name}</div>`).join('')
+      : '<p style="font-size:0.8rem; opacity:0.5;">No learners yet.</p>';
+
+    // Classes dropdown
+    const classes = db.get('classes') || [];
+    document.getElementById('taskTargetClass').innerHTML =
+      '<option value="">Select class...</option>' +
+      classes.map(c => `<option value="${c}">${c}</option>`).join('');
+
+    // Subjects dropdown — only teacher's subjects
+    const subjSelect = document.getElementById('taskSubj');
+    subjSelect.innerHTML = '<option value="">Select subject...</option>';
+
+    if (currentUser?.role === 'teacher' && currentUser.subjects?.length > 0) {
+      currentUser.subjects.forEach(s => {
+        subjSelect.innerHTML += `<option value="${s}">${s}</option>`;
+      });
+    } else {
+      subjSelect.innerHTML += '<option value="General">General</option>';
+    }
+
     renderTasks();
     renderChat();
   }
@@ -243,62 +325,75 @@
   function renderTasks() {
     const tasks = db.get('tasks');
     const container = document.getElementById('taskList');
-    container.innerHTML = tasks.length ? '' : '<p style="text-align:center; opacity:0.5;">No active tasks.</p>';
-    
+    container.innerHTML = tasks.length ? '' : '<p style="text-align:center; opacity:0.5; padding:2rem;">No active tasks.</p>';
+
     tasks.forEach(task => {
-      let html = `<div class="card" style="border-left:5px solid var(--primary)">
+      let html = `
+        <div class="card" style="border-left:5px solid var(--primary);">
           <div style="display:flex; justify-content:space-between; align-items:start;">
             <small style="color:var(--primary); font-weight:bold;">${task.subj.toUpperCase()}</small>
-            ${currentUser.role === 'teacher' ? `<div>
-              <button class="btn-action btn-edit" onclick="editTask(${task.id})">Edit</button>
-              <button class="btn-action btn-delete" onclick="deleteTask(${task.id})">Delete</button>
-            </div>` : ''}
+            ${currentUser.role === 'teacher' ? `
+              <div>
+                <button class="btn-action btn-edit" onclick="editTask(${task.id})">Edit</button>
+                <button class="btn-action btn-delete" onclick="deleteTask(${task.id})">Delete</button>
+              </div>` : ''}
           </div>
           <h2 style="margin:5px 0;">${task.title}</h2>
-          <p style="font-size:0.9rem; color:var(--text-muted);">${task.desc}</p>
-          <small style="color:var(--warning)">Due: ${task.due}</small>`;
-      
-      if(currentUser.role === 'teacher') {
-        html += `<div style="margin-top:15px; border-top:1px solid var(--border); padding-top:10px;">
-                  <b style="font-size:0.8rem; color:var(--success);">Submissions (${task.submissions.length}):</b>
-                  ${task.submissions.map(s => `<div style="font-size:0.8rem; margin-top:5px; background:rgba(0,0,0,0.1); padding:8px; border-radius:8px;">
-                    <b>${s.learner}:</b> ${s.content}
-                  </div>`).join('')}
-                </div>`;
+          <p style="font-size:0.9rem; color:var(--text-muted);">${task.desc || '(no description)'}</p>
+          <small style="color:var(--warning)">Due: ${task.due || '—'}</small>`;
+
+      if (currentUser.role === 'teacher') {
+        html += `
+          <div style="margin-top:15px; border-top:1px solid var(--border); padding-top:10px;">
+            <b style="font-size:0.8rem; color:var(--success);">Submissions (${task.submissions.length}):</b>
+            ${task.submissions.map(s => `
+              <div style="font-size:0.8rem; margin-top:5px; background:rgba(0,0,0,0.1); padding:8px; border-radius:8px;">
+                <b>${s.learner}:</b> ${s.content}
+              </div>
+            `).join('')}
+          </div>`;
       } else {
-        const submitted = task.submissions.some(s => s.learner === currentUser.name);
-        html += submitted ? '<p style="color:var(--success); font-weight:bold; margin-top:10px;">✓ Submitted</p>' : 
-          `<textarea id="ans-${task.id}" placeholder="Type answer..." style="margin-top:10px;"></textarea>
-           <button class="btn-modern" onclick="submitWork(${task.id})">Submit Answer</button>`;
+        const alreadySubmitted = task.submissions.some(s => s.learner === currentUser.name);
+        html += alreadySubmitted
+          ? '<p style="color:var(--success); font-weight:bold; margin-top:10px;">✓ Submitted</p>'
+          : `
+            <textarea id="ans-${task.id}" placeholder="Type your answer here..." style="margin-top:12px; min-height:90px;"></textarea>
+            <button class="btn-modern" style="margin-top:8px;" onclick="submitWork(${task.id})">Submit Answer</button>`;
       }
+
       container.innerHTML += html + '</div>';
     });
   }
 
   function submitWork(taskId) {
-    const text = document.getElementById(`ans-${taskId}`).value;
-    if(!text) return;
+    const textarea = document.getElementById(`ans-${taskId}`);
+    const content = textarea?.value.trim();
+    if (!content) return;
+
     let tasks = db.get('tasks');
     const idx = tasks.findIndex(t => t.id == taskId);
-    tasks[idx].submissions.push({ learner: currentUser.name, content: text });
-    db.save('tasks', tasks);
-    refreshAll();
-  }
+    if (idx === -1) return;
 
-  function createClass() {
-    const name = prompt("Enter Class Name:");
-    if(!name) return;
-    let classes = db.get('classes');
-    classes.push(name);
-    db.save('classes', classes);
+    tasks[idx].submissions.push({
+      learner: currentUser.name,
+      content
+    });
+
+    db.save('tasks', tasks);
     refreshAll();
   }
 
   function sendMessage() {
     const input = document.getElementById('chatInput');
-    if (!input.value) return;
+    if (!input.value.trim()) return;
+
     let msgs = db.get('messages');
-    msgs.push({ user: currentUser.name, role: currentUser.role, text: input.value });
+    msgs.push({
+      user: currentUser.name,
+      role: currentUser.role,
+      text: input.value.trim(),
+      time: new Date().toISOString()
+    });
     db.save('messages', msgs);
     input.value = '';
     renderChat();
@@ -306,11 +401,23 @@
 
   function renderChat() {
     const msgs = db.get('messages');
-    document.getElementById('chatBox').innerHTML = msgs.map(m => `<div class="msg ${m.role}"><small style="display:block; opacity:0.6; font-weight:bold; font-size:0.65rem;">${m.user}</small>${m.text}</div>`).join('');
-    document.getElementById('chatBox').scrollTop = 99999;
+    const box = document.getElementById('chatBox');
+    box.innerHTML = msgs.map(m => `
+      <div class="msg ${m.role}">
+        <small style="display:block; opacity:0.6; font-weight:bold; font-size:0.65rem;">
+          ${m.user}
+        </small>
+        ${m.text}
+      </div>
+    `).join('');
+    box.scrollTop = box.scrollHeight;
   }
 
+  // Auto-refresh chat every 5 seconds
   setInterval(renderChat, 5000);
+
+  // Initial chat render
+  renderChat();
 </script>
 </body>
 </html>
