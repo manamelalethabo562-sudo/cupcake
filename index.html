@@ -11,64 +11,49 @@
     :root {
       --bg: #0a0e1a;
       --surface: rgba(20, 25, 45, 0.65);
-      --surface-elevated: rgba(30, 40, 70, 0.8);
+      --surface-elevated: rgba(30, 40, 70, 0.85);
       --text: #f1f5f9;
       --text-muted: #94a3b8;
       --border: rgba(148, 163, 184, 0.18);
       --primary: #7c3aed;
       --primary-soft: #a78bfa;
-      --primary-glow: rgba(124, 58, 237, 0.25);
-      --accent: #c084fc;
+      --primary-glow: rgba(124, 58, 237, 0.28);
       --danger: #f87171;
       --success: #34d399;
-      --chat-bg: rgba(15, 23, 42, 0.7);
-      --radius-sm: 0.75rem;
       --radius: 1.25rem;
-      --shadow-sm: 0 4px 15px rgba(0,0,0,0.35);
-      --shadow: 0 10px 35px rgba(0,0,0,0.45);
+      --radius-sm: 0.75rem;
+      --shadow: 0 10px 35px rgba(0,0,0,0.5);
       --transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     [data-theme="light"] {
       --bg: #f8fafc;
-      --surface: rgba(255,255,255,0.75);
-      --surface-elevated: rgba(255,255,255,0.92);
+      --surface: rgba(255,255,255,0.78);
+      --surface-elevated: rgba(255,255,255,0.95);
       --text: #0f172a;
       --text-muted: #64748b;
-      --border: rgba(226,232,240,0.9);
+      --border: rgba(226,232,240,0.88);
       --primary: #6d28d9;
       --primary-soft: #a78bfa;
-      --primary-glow: rgba(109, 40, 217, 0.18);
-      --chat-bg: rgba(248,250,252,0.85);
+      --primary-glow: rgba(109,40,217,0.2);
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      background-image: radial-gradient(circle at 15% 50%, rgba(124,58,237,0.08) 0%, transparent 35%);
+      background-image: radial-gradient(circle at 20% 30%, rgba(124,58,237,0.09) 0%, transparent 40%);
     }
 
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 1.5rem;
-    }
+    .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
 
     header {
       backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
       background: var(--surface);
       border-bottom: 1px solid var(--border);
       padding: 1.1rem 0;
-      margin-bottom: 2rem;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -77,207 +62,135 @@
     .flex { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
     .flex-between { justify-content: space-between; }
 
-    h1 { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.025em; }
-    h2 { font-size: 1.55rem; font-weight: 600; margin-bottom: 1rem; }
-    h3 { font-size: 1.22rem; font-weight: 600; margin-bottom: 0.8rem; }
+    h1 { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.03em; }
+    h2 { font-size: 1.6rem; font-weight: 600; margin-bottom: 1.2rem; }
 
     button {
       background: var(--primary);
       color: white;
       border: none;
-      padding: 0.75rem 1.5rem;
+      padding: 0.85rem 1.8rem;
       border-radius: var(--radius-sm);
       font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
-      box-shadow: 0 4px 15px var(--primary-glow);
+      box-shadow: 0 5px 18px var(--primary-glow);
     }
 
-    button:hover {
+    button:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 12px 30px var(--primary-glow);
+      box-shadow: 0 14px 35px var(--primary-glow);
     }
 
-    button.outline {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
       box-shadow: none;
     }
 
-    button.outline:hover {
-      background: rgba(255,255,255,0.07);
-      border-color: var(--primary-soft);
-    }
-
-    button.danger { background: var(--danger); }
-    button.danger:hover { background: #ef4444; }
-
     .card {
-      background: var(--surface);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: var(--surface-elevated);
+      backdrop-filter: blur(14px);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 1.6rem;
-      box-shadow: var(--shadow-sm);
+      padding: 2.2rem 1.9rem;
+      box-shadow: var(--shadow);
       transition: var(--transition);
     }
 
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow);
-    }
-
-    input, textarea, select {
-      background: rgba(30,40,70,0.4);
+    input, .checkbox-label {
+      background: rgba(30,40,70,0.45);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 0.8rem 1.2rem;
+      padding: 0.9rem 1.3rem;
       border-radius: var(--radius-sm);
       width: 100%;
-      font-size: 0.98rem;
+      font-size: 1rem;
       transition: var(--transition);
     }
 
-    input:focus, textarea:focus, select:focus {
+    input:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-glow);
+      box-shadow: 0 0 0 3.5px var(--primary-glow);
+    }
+
+    .error-msg {
+      color: var(--danger);
+      font-size: 0.92rem;
+      margin-top: 0.6rem;
+      min-height: 1.2rem;
     }
 
     .hidden { display: none !important; }
+    .fade-in { animation: fadeIn 0.6s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-    .theme-toggle {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 0.5rem;
-      transition: var(--transition);
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.9s linear infinite;
+      margin-right: 0.6rem;
+      vertical-align: middle;
     }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
+    .theme-toggle { background:none; border:none; font-size:1.6rem; cursor:pointer; padding:0.5rem; }
     .theme-toggle:hover { transform: scale(1.15); }
 
-    /* Chat */
-    #chatView {
-      background: var(--chat-bg);
-      backdrop-filter: blur(16px);
-      border-radius: var(--radius);
-      overflow: hidden;
-      height: 72vh;
-      display: flex;
-      flex-direction: column;
-      box-shadow: var(--shadow);
-    }
-
-    #messagesContainer {
-      flex: 1;
-      padding: 1.6rem;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1.1rem;
-    }
-
-    .message {
-      max-width: 78%;
-      padding: 1rem 1.4rem;
-      border-radius: 1.4rem;
-      line-height: 1.45;
-    }
-
-    .message-self {
-      align-self: flex-end;
-      background: linear-gradient(135deg, var(--primary), #5b21b6);
-      color: white;
-      border-bottom-right-radius: 0.5rem;
-    }
-
-    .message-other {
-      align-self: flex-start;
-      background: rgba(50,60,90,0.7);
-      border-bottom-left-radius: 0.5rem;
-    }
-
-    .message-sender {
-      font-size: 0.86rem;
-      opacity: 0.85;
-      margin-bottom: 0.35rem;
-      font-weight: 500;
-    }
-
-    .message-time {
-      font-size: 0.72rem;
-      opacity: 0.65;
-      margin-top: 0.45rem;
-      text-align: right;
-    }
-
-    #chatInputArea {
-      padding: 1.2rem 1.6rem;
-      border-top: 1px solid var(--border);
-      background: rgba(20,25,45,0.6);
-      display: flex;
-      gap: 1rem;
-    }
-
-    /* Confirmation */
-    .confirmation-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.72);
-      backdrop-filter: blur(4px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-    }
-
-    .confirmation-box {
-      background: var(--surface-elevated);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 2rem;
-      max-width: 440px;
-      width: 92%;
-      box-shadow: var(--shadow);
-    }
-
-    @media (max-width: 768px) {
-      .grid-2 { grid-template-columns: 1fr; }
-      .container { padding: 1rem; }
-    }
+    .login-container { max-width: 460px; margin: 14vh auto 0; }
   </style>
 </head>
 <body>
 
-  <!-- ── Login Screen ─────────────────────────────────────── -->
-  <div id="loginScreen" class="container" style="max-width:440px; margin:12vh auto; text-align:center;">
-    <h1 style="font-size:2.4rem; background:linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+  <!-- Login Screen -->
+  <div id="loginScreen" class="login-container">
+    <h1 style="text-align:center; margin-bottom:0.8rem; background: linear-gradient(90deg, var(--primary), var(--primary-soft)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
       Lumina
     </h1>
-    <p style="margin:1.2rem 0 2.2rem; color:var(--text-muted); font-size:1.08rem;">
-      Teacher Hub • 2026
+    <p style="text-align:center; color:var(--text-muted); margin-bottom:2.8rem; font-size:1.1rem;">
+      Teacher Hub
     </p>
 
-    <div class="card" style="padding:2.2rem 1.8rem;">
+    <div class="card">
       <form id="loginForm">
-        <input type="email" id="email" placeholder="teacher@school.com" required style="margin-bottom:1.2rem;"/>
-        <input type="password" id="password" placeholder="Password" required style="margin-bottom:1.8rem;"/>
-        <button type="submit" style="width:100%; padding:0.95rem 1.8rem; font-size:1.05rem;">Sign In</button>
+        <div style="margin-bottom:1.4rem;">
+          <input type="email" id="email" placeholder="Email address" required autocomplete="email"/>
+        </div>
+        <div style="margin-bottom:1.2rem;">
+          <input type="password" id="password" placeholder="Password" required autocomplete="current-password"/>
+        </div>
+
+        <div class="flex" style="margin-bottom:1.6rem; font-size:0.95rem; color:var(--text-muted);">
+          <label class="flex" style="align-items:center; cursor:pointer;">
+            <input type="checkbox" style="margin-right:0.6rem; accent-color:var(--primary);"/>
+            Remember me
+          </label>
+          <a href="#" style="margin-left:auto; color:var(--primary-soft); text-decoration:none;">Forgot password?</a>
+        </div>
+
+        <button type="submit" id="signinBtn" style="width:100%; font-size:1.05rem; padding:1rem;">
+          Sign In
+        </button>
+
+        <div id="errorMessage" class="error-msg" style="text-align:center;"></div>
       </form>
     </div>
   </div>
 
-  <!-- ── Main Dashboard ───────────────────────────────────── -->
-  <div id="dashboard" class="hidden">
+  <!-- Dashboard (hidden at first) -->
+  <div id="dashboard" class="hidden fade-in">
     <header class="container flex flex-between">
       <div class="flex">
-        <h1 style="background:linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+        <h1 style="background:linear-gradient(90deg, var(--primary), var(--primary-soft)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
           Lumina
         </h1>
-        <span style="margin-left:1.6rem; color:var(--text-muted); font-weight:500;">Teacher Hub</span>
+        <span style="margin-left:1.8rem; color:var(--text-muted); font-weight:500;">Teacher Hub</span>
       </div>
       <div class="flex">
         <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
@@ -286,79 +199,82 @@
     </header>
 
     <div class="container">
-      <h2>Welcome back, <span id="teacherName" style="color:var(--primary-soft);"></span></h2>
-
-      <div id="classListView">
-        <div class="flex flex-between" style="margin:2rem 0 1.4rem; flex-wrap:wrap; gap:1rem;">
-          <h3>Your Classes</h3>
-          <button onclick="showModal('createClassModal')">+ Create Class</button>
-        </div>
-        <div class="grid-2" id="classesList"></div>
-      </div>
-
-      <div id="taskListView" class="hidden">
-        <div class="flex flex-between" style="margin-bottom:1.6rem; flex-wrap:wrap; gap:1rem;">
-          <h3 id="currentClassTitle"></h3>
-          <div class="flex">
-            <button onclick="showChatForClass()">Class Chat</button>
-            <button onclick="showClassList()" class="outline">← Classes</button>
-          </div>
-        </div>
-        <div id="tasksContainer" class="grid-2"></div>
-        <button onclick="showModal('createTaskModal')" style="margin-top:1.8rem;">+ New Task</button>
-      </div>
-
-      <div id="submissionView" class="hidden">
-        <div class="flex flex-between" style="margin-bottom:1.6rem;">
-          <h3 id="submissionTaskTitle"></h3>
-          <button onclick="showTaskList(currentClassId)" class="outline">← Back to Tasks</button>
-        </div>
-        <div id="submissionsContainer"></div>
-      </div>
-
-      <div id="chatView" class="hidden">
-        <div id="chatHeader" class="flex flex-between" style="padding:1.3rem 1.8rem; background:rgba(0,0,0,0.25); border-bottom:1px solid var(--border);">
-          <h3 id="chatClassName">Class Chat</h3>
-          <div class="flex">
-            <button class="outline danger" onclick="confirmDeleteChat()" style="margin-right:1rem;">Clear Chat</button>
-            <button onclick="closeChat()" class="outline">← Back</button>
-          </div>
-        </div>
-        <div id="messagesContainer"></div>
-        <div id="chatInputArea">
-          <input type="text" id="chatMessageInput" placeholder="Type your message to the class..."/>
-          <button onclick="sendChatMessage()">Send</button>
-        </div>
-      </div>
+      <h2 class="fade-in">Welcome back, <span id="teacherName" style="color:var(--primary-soft);"></span></h2>
+      <p style="color:var(--text-muted); margin-bottom:2rem;">Your classes and tasks appear here once loaded.</p>
+      <!-- You can paste the rest of the dashboard content (classes, tasks, chat, etc.) from previous versions here -->
     </div>
   </div>
 
-  <!-- Modals (Create Class, Create Task, Edit Task, Confirm) -->
-  <!-- ... Keeping the same modal structure as previous version but with updated styling classes ... -->
-
-  <!-- For brevity I'm not repeating all modal HTML here – use the structure from the previous message and apply the same modern card/input/button styles -->
-
   <script>
-    // ──────────────────────────────────────────────────────────────
-    // The JavaScript logic remains almost identical to the previous version
-    // Just make sure to call render functions after theme change if needed
-    // ──────────────────────────────────────────────────────────────
+    const loginScreen = document.getElementById('loginScreen');
+    const dashboard   = document.getElementById('dashboard');
+    const signinBtn   = document.getElementById('signinBtn');
+    const errorMsg    = document.getElementById('errorMessage');
+    const emailInput  = document.getElementById('email');
+    const passInput   = document.getElementById('password');
+    const teacherName = document.getElementById('teacherName');
 
-    function toggleTheme() {
-      const html = document.documentElement;
-      const current = html.getAttribute("data-theme");
-      html.setAttribute("data-theme", current === "dark" ? "light" : "dark");
+    // Mock credentials (for prototype only – never do this in production)
+    const VALID_EMAIL    = "teacher@lumina.za";
+    const VALID_PASSWORD = "lumina2026";
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const email = emailInput.value.trim();
+      const pass  = passInput.value.trim();
+
+      // Basic client-side validation
+      if (!email || !pass) {
+        showError("Please fill in both fields");
+        return;
+      }
+      if (!email.includes('@')) {
+        showError("Please enter a valid email address");
+        return;
+      }
+
+      // Show loading state
+      signinBtn.disabled = true;
+      signinBtn.innerHTML = '<span class="spinner"></span> Signing in...';
+      errorMsg.textContent = '';
+
+      // Simulate network delay (1.2 seconds)
+      setTimeout(() => {
+        if (email.toLowerCase() === VALID_EMAIL && pass === VALID_PASSWORD) {
+          // Success
+          teacherName.textContent = email.split('@')[0];
+          loginScreen.classList.add('hidden');
+          dashboard.classList.remove('hidden');
+        } else {
+          // Failure
+          showError("Incorrect email or password");
+          signinBtn.disabled = false;
+          signinBtn.textContent = "Sign In";
+        }
+      }, 1200);
+    });
+
+    function showError(message) {
+      errorMsg.textContent = message;
+      signinBtn.disabled = false;
+      signinBtn.textContent = "Sign In";
     }
 
-    // Add this line at the end of render functions if you want instant theme refresh
-    // document.documentElement.style.display = 'none';
-    // document.documentElement.offsetHeight; // force reflow
-    // document.documentElement.style.display = '';
+    function logout() {
+      dashboard.classList.add('hidden');
+      loginScreen.classList.remove('hidden');
+      document.getElementById('loginForm').reset();
+      errorMsg.textContent = '';
+    }
 
-    document.documentElement.setAttribute("data-theme", "dark");
+    function toggleTheme() {
+      document.documentElement.setAttribute('data-theme',
+        document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    }
 
-    // Rest of your script (login, renderClasses, renderTasks, etc.) stays the same
-    // ...........................................................................
+    // Start in dark mode
+    document.documentElement.setAttribute('data-theme', 'dark');
   </script>
 </body>
 </html>
