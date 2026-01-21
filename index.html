@@ -10,75 +10,71 @@
       --bg: #0f172a; --surface: #1e293b; --surface-elev: #334155;
       --text: #f8fafc; --text-muted: #94a3b8; --border: rgba(255, 255, 255, 0.1);
       --primary: #8b5cf6; --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
-      --radius: 16px;
+      --radius: 20px;
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
     
     .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
     .hidden { display: none !important; }
     
-    /* PILL TAB DESIGN */
+    /* PILL TAB AT BOTTOM */
     .pill-tabs {
-      background: rgba(0,0,0,0.2);
-      padding: 5px;
+      background: rgba(0,0,0,0.3);
+      padding: 6px;
       border-radius: 50px;
       display: flex;
-      margin-bottom: 2rem;
+      margin-top: 2rem;
       border: 1px solid var(--border);
     }
     .pill-tab {
       flex: 1;
-      padding: 10px;
+      padding: 12px;
       text-align: center;
       cursor: pointer;
       border-radius: 50px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     .pill-tab.active {
       background: var(--primary);
       color: white;
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
     }
 
-    /* GRID & UI */
-    .dashboard-grid { display: grid; grid-template-columns: 280px 1fr 320px; gap: 20px; }
+    /* FORMS */
+    h1.brand { text-align: center; font-size: 2.5rem; margin-bottom: 1.5rem; letter-spacing: -1px; }
     input, textarea, select { 
-      width: 100%; padding: 0.75rem; background: #0f172a; 
-      border: 1px solid var(--border); color: white; border-radius: 10px; margin-bottom: 0.8rem;
+      width: 100%; padding: 0.9rem; background: rgba(15, 23, 42, 0.6); 
+      border: 1px solid var(--border); color: white; border-radius: 12px; margin-bottom: 1rem;
+      transition: border 0.3s;
     }
-    label { display: block; margin-bottom: 0.4rem; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
-    button { padding: 0.75rem 1.2rem; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-    .btn-primary { background: var(--primary); color: white; width: 100%; }
-    .btn-outline { background: transparent; border: 1px solid var(--border); color: white; }
+    input:focus { border-color: var(--primary); outline: none; }
+    label { display: block; margin-bottom: 0.5rem; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+    .btn-primary { background: var(--primary); color: white; width: 100%; padding: 1rem; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:1rem; }
     
-    /* Chat & Tasks */
-    .task-card { border-left: 4px solid var(--primary); }
-    .chat-box { height: 400px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 10px; display: flex; flex-direction: column; gap: 10px; }
-    .msg { padding: 0.7rem 1rem; border-radius: 12px; max-width: 85%; font-size: 0.85rem; }
+    /* DASHBOARD */
+    .dashboard-grid { display: grid; grid-template-columns: 280px 1fr 320px; gap: 20px; }
+    .chat-box { height: 400px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 12px; display: flex; flex-direction: column; gap: 10px; }
+    .msg { padding: 0.8rem 1rem; border-radius: 14px; max-width: 85%; font-size: 0.9rem; }
     .msg.teacher { background: var(--primary); align-self: flex-start; }
     .msg.learner { background: var(--surface-elev); align-self: flex-end; }
+    
     .stat-bar { height: 8px; background: #0f172a; border-radius: 4px; overflow: hidden; margin: 10px 0; }
     .stat-fill { height: 100%; background: var(--success); transition: 0.5s; }
-
-    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <div id="authSection" class="card" style="max-width: 400px; margin: 15vh auto;">
-    <h1 style="text-align: center; margin-bottom: 1.5rem; font-size: 2rem;">Lumina</h1>
+  <div id="authSection" class="card" style="max-width: 420px; margin: 12vh auto;">
+    <h1 class="brand">Lumina</h1>
     
-    <div class="pill-tabs">
-      <div class="pill-tab active" id="tabIn" onclick="toggleAuth('in')">Sign In</div>
-      <div class="pill-tab" id="tabUp" onclick="toggleAuth('up')">Sign Up</div>
-    </div>
-
     <div id="formIn">
       <input type="text" id="siUser" placeholder="Username">
       <input type="password" id="siPass" placeholder="Password">
@@ -88,30 +84,35 @@
     <div id="formUp" class="hidden">
       <input type="text" id="suUser" placeholder="Username">
       <input type="password" id="suPass" placeholder="Password">
-      <label>Choose Role</label>
+      <label>Register as:</label>
       <select id="suRole">
         <option value="teacher">Teacher</option>
         <option value="learner">Learner</option>
       </select>
       <button class="btn-primary" onclick="handleRegister()">Create Account</button>
     </div>
+
+    <div class="pill-tabs">
+      <div class="pill-tab active" id="tabIn" onclick="toggleAuth('in')">Login</div>
+      <div class="pill-tab" id="tabUp" onclick="toggleAuth('up')">New Account</div>
+    </div>
   </div>
 
   <div id="dashboard" class="hidden">
-    <header>
+    <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; padding-bottom:1rem; border-bottom:1px solid var(--border);">
       <div>
-        <h1 style="background: linear-gradient(to right, #a78bfa, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Lumina Hub</h1>
-        <p id="userInfo" style="font-size: 0.8rem; color: var(--text-muted);"></p>
+        <h1 style="color:var(--primary)">Lumina Hub</h1>
+        <p id="userInfo" style="font-size:0.8rem; color:var(--text-muted)"></p>
       </div>
-      <button class="btn-outline" onclick="location.reload()">Sign Out</button>
+      <button onclick="location.reload()" style="background:transparent; border:1px solid var(--border); color:white; padding:0.5rem 1rem; border-radius:10px; cursor:pointer;">Sign Out</button>
     </header>
 
     <div class="dashboard-grid">
       <aside>
         <div class="card teacher-only hidden">
           <h3>Create Class</h3>
-          <input type="text" id="newClassName" placeholder="e.g. Science 10-A" style="margin-top:10px;">
-          <button class="btn-primary" onclick="createClass()">Add Class</button>
+          <input type="text" id="newClassName" placeholder="Class Name" style="margin-top:10px;">
+          <button class="btn-primary" onclick="createClass()">Add</button>
         </div>
         <div class="card">
           <h3>My Classes</h3>
@@ -121,16 +122,16 @@
 
       <main>
         <div class="card teacher-only hidden">
-          <h3>Assign New Task</h3>
+          <h3>Assign Task</h3>
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
             <input type="text" id="taskSubj" placeholder="Subject">
             <select id="taskTargetClass"></select>
           </div>
-          <input type="text" id="taskTitle" placeholder="Task Title">
+          <input type="text" id="taskTitle" placeholder="Title">
           <label>Due Date</label>
           <input type="date" id="taskDue">
           <textarea id="taskDesc" rows="3" placeholder="Instructions..."></textarea>
-          <button class="btn-primary" onclick="addTask()">Assign Task</button>
+          <button class="btn-primary" onclick="addTask()">Post Task</button>
         </div>
         <div id="taskList"></div>
       </main>
@@ -144,8 +145,8 @@
             <button class="btn-primary" style="width:auto;" onclick="sendMessage()">Send</button>
           </div>
         </div>
-        <div class="card" id="statsCard">
-          <h3>Submission Stats</h3>
+        <div class="card">
+          <h3>Tracking</h3>
           <div id="submissionStats" style="margin-top:10px;"></div>
         </div>
       </section>
@@ -156,11 +157,10 @@
 <script>
   let currentUser = null;
   const db = {
-    get: (key) => JSON.parse(localStorage.getItem('lumina_v3_' + key) || '[]'),
-    save: (key, data) => localStorage.setItem('lumina_v3_' + key, JSON.stringify(data))
+    get: (key) => JSON.parse(localStorage.getItem('lumina_v4_' + key) || '[]'),
+    save: (key, data) => localStorage.setItem('lumina_v4_' + key, JSON.stringify(data))
   };
 
-  // UI AUTH TOGGLE
   function toggleAuth(type) {
     document.getElementById('tabIn').classList.toggle('active', type === 'in');
     document.getElementById('tabUp').classList.toggle('active', type === 'up');
@@ -168,42 +168,32 @@
     document.getElementById('formUp').classList.toggle('hidden', type !== 'up');
   }
 
-  // REGISTER & LOGIN
   function handleRegister() {
     const name = document.getElementById('suUser').value.trim();
     const pass = document.getElementById('suPass').value;
     const role = document.getElementById('suRole').value;
-    if(!name || !pass) return alert("Fill all fields");
-
+    if(!name || !pass) return;
     let users = db.get('users');
-    if(users.some(u => u.name === name)) return alert("User exists");
-
+    if(users.some(u => u.name === name)) return alert("Username taken");
     users.push({ name, pass, role });
     db.save('users', users);
-    alert("Account created! Please Sign In.");
+    alert("Success! Now please login.");
     toggleAuth('in');
   }
 
   function handleLogin() {
     const name = document.getElementById('siUser').value.trim();
     const pass = document.getElementById('siPass').value;
-    let users = db.get('users');
-    let user = users.find(u => u.name === name && u.pass === pass);
-
-    if(!user) return alert("Invalid credentials");
-    
+    let user = db.get('users').find(u => u.name === name && u.pass === pass);
+    if(!user) return alert("Error in credentials");
     currentUser = user;
     document.getElementById('authSection').classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
-    document.getElementById('userInfo').textContent = `${currentUser.role.toUpperCase()}: ${currentUser.name}`;
-    
-    if (currentUser.role === 'teacher') {
-      document.querySelectorAll('.teacher-only').forEach(el => el.classList.remove('hidden'));
-    }
+    document.getElementById('userInfo').textContent = `${currentUser.role.toUpperCase()} PROFILE: ${currentUser.name}`;
+    if (currentUser.role === 'teacher') document.querySelectorAll('.teacher-only').forEach(el => el.classList.remove('hidden'));
     refreshAll();
   }
 
-  // LOGIC
   function createClass() {
     const name = document.getElementById('newClassName').value;
     if(!name) return;
@@ -221,7 +211,6 @@
     const due = document.getElementById('taskDue').value;
     const desc = document.getElementById('taskDesc').value;
     if(!title || !target) return;
-
     let tasks = db.get('tasks');
     tasks.push({ id: Date.now(), title, subj, target, due, desc, teacher: currentUser.name, submissions: [] });
     db.save('tasks', tasks);
@@ -233,7 +222,7 @@
     if(!text) return;
     let tasks = db.get('tasks');
     const idx = tasks.findIndex(t => t.id === taskId);
-    tasks[idx].submissions.push({ learner: currentUser.name, content: text, date: new Date().toLocaleDateString() });
+    tasks[idx].submissions.push({ learner: currentUser.name, content: text });
     db.save('tasks', tasks);
     refreshAll();
   }
@@ -248,7 +237,6 @@
     renderChat();
   }
 
-  // RENDERERS
   function refreshAll() {
     const classes = db.get('classes');
     document.getElementById('classList').innerHTML = classes.map(c => `<div style="padding:10px; border-bottom:1px solid var(--border);">🏫 ${c}</div>`).join('');
@@ -261,27 +249,24 @@
   function renderTasks() {
     const tasks = db.get('tasks');
     const container = document.getElementById('taskList');
-    container.innerHTML = tasks.length ? '' : '<div class="card">No active tasks.</div>';
+    container.innerHTML = tasks.length ? '' : '<div class="card">No assignments found.</div>';
     tasks.forEach(task => {
       const submitted = task.submissions.some(s => s.learner === currentUser.name);
-      let html = `
-        <div class="card task-card">
-          <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.75rem; font-weight:bold;">
-            <span style="color:var(--primary)">${task.subj.toUpperCase()}</span>
-            <span style="color:var(--warning)">DUE: ${task.due}</span>
+      let html = `<div class="card" style="border-left:5px solid var(--primary)">
+          <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-weight:bold; margin-bottom:10px;">
+            <span>${task.subj}</span><span style="color:var(--warning)">DUE: ${task.due}</span>
           </div>
           <h3>${task.title}</h3>
-          <p style="font-size:0.85rem; margin:10px 0;">${task.desc}</p>`;
-      
+          <p style="font-size:0.9rem; margin:10px 0;">${task.desc}</p>`;
       if(currentUser.role === 'teacher') {
-        html += `<div style="margin-top:15px; border-top:1px solid var(--border); padding-top:10px;">
-                  <b style="font-size:0.8rem;">Submissions (${task.submissions.length}):</b>
-                  ${task.submissions.map(s => `<div style="font-size:0.8rem; margin-top:5px;">• ${s.learner}: ${s.content}</div>`).join('')}
-                </div>`;
+        html += `<div style="margin-top:10px; padding:10px; background:rgba(0,0,0,0.1); border-radius:10px;">
+                  <b>Submissions:</b>
+                  ${task.submissions.map(s => `<div style="font-size:0.8rem; margin-top:4px;">${s.learner}: ${s.content}</div>`).join('')}
+                 </div>`;
       } else {
-        html += submitted ? '<p style="color:var(--success); font-weight:bold;">✓ Submitted</p>' : 
-          `<textarea id="ans-${task.id}" placeholder="Your answer..."></textarea>
-           <button class="btn-primary" onclick="submitWork(${task.id})">Submit</button>`;
+        html += submitted ? '<p style="color:var(--success)">✓ Work Submitted</p>' : 
+          `<textarea id="ans-${task.id}" placeholder="Type your answer..."></textarea>
+           <button class="btn-primary" onclick="submitWork(${task.id})">Send to Teacher</button>`;
       }
       container.innerHTML += html + '</div>';
     });
@@ -290,10 +275,8 @@
   function renderChat() {
     const msgs = db.get('messages');
     document.getElementById('chatBox').innerHTML = msgs.map(m => `
-      <div class="msg ${m.role}">
-        <small style="opacity:0.7; font-size:0.7rem; display:block;">${m.user}</small>
-        ${m.text}
-      </div>`).join('');
+      <div class="msg ${m.role}"><small style="display:block; font-size:0.7rem;">${m.user}</small>${m.text}</div>
+    `).join('');
     document.getElementById('chatBox').scrollTop = 9999;
   }
 
@@ -302,11 +285,11 @@
     document.getElementById('submissionStats').innerHTML = tasks.map(t => `
       <div style="margin-bottom:10px; font-size:0.8rem;">
         <span>${t.title}</span>
-        <div class="stat-bar"><div class="stat-fill" style="width:${Math.min(t.submissions.length * 20, 100)}%"></div></div>
+        <div class="stat-bar"><div class="stat-fill" style="width:${Math.min(t.submissions.length * 25, 100)}%"></div></div>
       </div>`).join('');
   }
 
-  setInterval(renderChat, 4000);
+  setInterval(renderChat, 5000);
 </script>
 </body>
 </html>
