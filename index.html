@@ -30,30 +30,28 @@
     .btn-delete { border-color: var(--danger); color: var(--danger); }
     .btn-edit { border-color: var(--warning); color: var(--warning); }
    
-    /* Password field wrapper */
     .password-wrapper {
       position: relative;
       margin-bottom: 1rem;
     }
     .password-wrapper input {
-      padding-right: 48px; /* space for eye icon */
+      padding-right: 48px;
+      width: 100%;
     }
     .toggle-password {
       position: absolute;
-      right: 12px;
+      right: 14px;
       top: 50%;
       transform: translateY(-50%);
       background: none;
       border: none;
       color: var(--text-muted);
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       cursor: pointer;
-      padding: 0 8px;
+      padding: 0;
       line-height: 1;
     }
-    .toggle-password:hover {
-      color: var(--text);
-    }
+    .toggle-password:hover { color: var(--text); }
 
     input, textarea, select { 
       width: 100%; padding: 0.8rem; background: rgba(15, 23, 42, 0.6); 
@@ -78,25 +76,23 @@
   <div id="authSection" class="card" style="max-width: 400px; margin: 10vh auto; text-align:center;">
     <h1 style="font-size:2.5rem; margin-bottom:1.5rem;">Lumina</h1>
 
-    <!-- ── SIGN IN ─────────────────────────────────────── -->
     <div id="formIn">
       <input type="text" id="siUser" placeholder="Username">
       
       <div class="password-wrapper">
         <input type="password" id="siPass" placeholder="Password">
-        <button type="button" class="toggle-password" onclick="togglePassword('siPass', this)">👁️</button>
+        <button type="button" class="toggle-password" data-show="👁️" data-hide="🙈" onclick="togglePassword('siPass', this)">👁️</button>
       </div>
 
       <button class="btn-modern" onclick="handleLogin()">Sign In</button>
     </div>
 
-    <!-- ── SIGN UP ─────────────────────────────────────── -->
     <div id="formUp" class="hidden">
       <input type="text" id="suUser" placeholder="Full Name">
       
       <div class="password-wrapper">
         <input type="password" id="suPass" placeholder="Password">
-        <button type="button" class="toggle-password" onclick="togglePassword('suPass', this)">👁️</button>
+        <button type="button" class="toggle-password" data-show="👁️" data-hide="🙈" onclick="togglePassword('suPass', this)">👁️</button>
       </div>
 
       <select id="suRole" onchange="toggleTeacherFields()">
@@ -126,32 +122,69 @@
     </div>
   </div>
 
-  <!-- Dashboard section remains unchanged -->
   <div id="dashboard" class="hidden">
-    <!-- ... your existing dashboard HTML ... -->
+    <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; border-bottom:1px solid var(--border); padding-bottom:1rem;">
+      <h1>Lumina Hub</h1>
+      <button onclick="location.reload()" class="btn-action">Sign Out</button>
+    </header>
+    <div class="dashboard-grid">
+      <aside>
+        <div class="card" style="text-align: center;">
+            <h2 id="learnerCount" style="font-size: 2.5rem; color: var(--primary);">0</h2>
+            <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">Registered Learners</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted);">Learner Directory</h3>
+          <div id="fullLearnerList"></div>
+        </div>
+      </aside>
+      <main>
+        <div class="card teacher-only hidden">
+          <h3 id="formTitle">Assign New Task</h3>
+          <input type="hidden" id="editTaskId">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin:12px 0;">
+            <select id="taskSubj"></select>
+            <select id="taskTargetClass"></select>
+          </div>
+          <input type="text" id="taskTitle" placeholder="Task Title">
+          <input type="date" id="taskDue">
+          <textarea id="taskDesc" rows="3" placeholder="Instructions / description..."></textarea>
+          <button class="btn-modern" id="taskSubmitBtn" onclick="addTask()">Post Assignment</button>
+          <button class="btn-action hidden" id="cancelEditBtn" onclick="resetTaskForm()" style="width:100%; margin-top:10px;">Cancel Edit</button>
+        </div>
+        <div id="taskList"></div>
+      </main>
+      <section>
+        <div class="card">
+          <h3>Classroom Chat</h3>
+          <div id="chatBox" class="chat-box" style="margin-top:10px;"></div>
+          <div style="display: flex; gap: 5px; margin-top: 10px;">
+            <input type="text" id="chatInput" placeholder="Message..." style="margin:0;">
+            <button class="btn-modern" style="width:auto; padding:0 1rem;" onclick="sendMessage()">Send</button>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 </div>
 
 <script>
-  // ──────────────────────────────────────────────
-  // Password visibility toggle
-  // ──────────────────────────────────────────────
-  function togglePassword(inputId, button) {
-    const input = document.getElementById(inputId);
-    if (input.type === 'password') {
-      input.type = 'text';
-      button.textContent = '🙈';
-    } else {
-      input.type = 'password';
-      button.textContent = '👁️';
-    }
-  }
-
   let currentUser = null;
   const db = {
     get: (key) => JSON.parse(localStorage.getItem('lumina_v8_' + key) || '[]'),
     save: (key, data) => localStorage.setItem('lumina_v8_' + key, JSON.stringify(data))
   };
+
+  function togglePassword(inputId, button) {
+    const input = document.getElementById(inputId);
+    if (input.type === 'password') {
+      input.type = 'text';
+      button.textContent = button.dataset.hide;  // 🙈
+    } else {
+      input.type = 'password';
+      button.textContent = button.dataset.show;  // 👁️
+    }
+  }
 
   function toggleAuth(type) {
     document.getElementById('tabIn').classList.toggle('active', type === 'in');
@@ -165,18 +198,41 @@
     document.getElementById('teacherFields').classList.toggle('hidden', !isTeacher);
   }
 
-  // ── Your existing handleRegister(), handleLogin(), addTask(), etc. functions remain the same ──
-  // Just paste your previous script content here (from handleRegister to the end)
+  function handleRegister() {
+    const name    = document.getElementById('suUser').value.trim();
+    const pass    = document.getElementById('suPass').value;
+    const role    = document.getElementById('suRole').value;
 
-  // For completeness – minimal version (replace with your full script):
-  function handleRegister() { /* your code */ }
-  function handleLogin() { /* your code */ }
-  function addTask() { /* ... */ }
-  function renderTasks() { /* ... */ }
-  // etc.
+    if (!name || !pass || !role) {
+      alert("Please complete all required fields");
+      return;
+    }
 
-  // Initial chat render (if you have it)
-  // renderChat();
-</script>
-</body>
-</html>
+    let subjects = [];
+    let classes  = [];
+
+    if (role === 'teacher') {
+      const subjStr = document.getElementById('suSubjects').value.trim();
+      const classStr = document.getElementById('suClasses').value.trim();
+
+      if (!subjStr || !classStr) {
+        alert("Teachers must enter at least one subject and one class/grade");
+        return;
+      }
+
+      subjects = subjStr.split(',').map(s => s.trim()).filter(Boolean);
+      classes  = classStr.split(',').map(c => c.trim()).filter(Boolean);
+    }
+
+    let users = db.get('users');
+
+    if (users.some(u => u.name === name)) {
+      alert("That username is already taken");
+      return;
+    }
+
+    users.push({
+      name,
+      pass,
+      role,
+      subjects: role ===
