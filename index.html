@@ -132,13 +132,10 @@
       font-size: 1.35rem;
       cursor: pointer;
       padding: 0.4rem;
-      transition: color 0.2s;
     }
 
     .password-toggle:hover,
-    .password-toggle.active {
-      color: var(--primary-soft);
-    }
+    .password-toggle.active { color: var(--primary-soft); }
 
     button[type="submit"] {
       background: var(--primary);
@@ -175,21 +172,8 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .error-msg {
-      color: var(--danger);
-      font-size: 0.95rem;
-      text-align: center;
-      margin: 1.2rem 0 0.5rem;
-      font-weight: 500;
-    }
-
-    .success-msg {
-      color: var(--success);
-      font-size: 1rem;
-      text-align: center;
-      margin: 1.4rem 0;
-      font-weight: 500;
-    }
+    .error-msg   { color: var(--danger);   font-size: 0.95rem; text-align: center; margin: 1.2rem 0 0.5rem; font-weight: 500; }
+    .success-msg { color: var(--success); font-size: 1rem;     text-align: center; margin: 1.4rem 0;         font-weight: 500; }
 
     .hidden { display: none !important; }
     .fade-in { animation: fadeIn 0.7s ease-out; }
@@ -210,13 +194,13 @@
         <div class="tab" id="tabSignUp" onclick="switchTab('signup')">Sign Up</div>
       </div>
 
-      <!-- Sign In Form -->
+      <!-- ── Sign In ──────────────────────────────────────── -->
       <form id="signinForm" class="form-container">
         <input type="email" id="siEmail" placeholder="Email address" required autocomplete="email"/>
 
         <div class="input-group">
           <input type="password" id="siPassword" placeholder="Password" required autocomplete="current-password"/>
-          <button type="button" class="password-toggle" id="toggleSi" onclick="togglePassword('siPassword', this)">👁️</button>
+          <button type="button" class="password-toggle" onclick="togglePassword('siPassword', this)">👁️</button>
         </div>
 
         <div style="margin:1.5rem 0; font-size:0.97rem; color:var(--text-muted);" class="flex">
@@ -230,23 +214,25 @@
         <div id="signinError" class="error-msg"></div>
       </form>
 
-      <!-- Sign Up Form -->
+      <!-- ── Sign Up ──────────────────────────────────────── -->
       <form id="signupForm" class="form-container hidden">
-        <input type="text" id="suName" placeholder="Full name" required autocomplete="name"/>
-        <input type="email" id="suEmail" placeholder="Email address" required autocomplete="email"/>
+        <input type="text"   id="suName"     placeholder="Full name" required autocomplete="name"/>
+        <input type="email"  id="suEmail"    placeholder="Email address" required autocomplete="email"/>
 
         <div class="input-group">
           <input type="password" id="suPassword" placeholder="Create password (min 6 chars)" required minlength="6"/>
-          <button type="button" class="password-toggle" id="toggleSuPass" onclick="togglePassword('suPassword', this)">👁️</button>
+          <button type="button" class="password-toggle" onclick="togglePassword('suPassword', this)">👁️</button>
         </div>
 
         <div class="input-group">
           <input type="password" id="suConfirm" placeholder="Confirm password" required/>
-          <button type="button" class="password-toggle" id="toggleSuConfirm" onclick="togglePassword('suConfirm', this)">👁️</button>
+          <button type="button" class="password-toggle" onclick="togglePassword('suConfirm', this)">👁️</button>
         </div>
 
+        <div id="passwordStrength" style="font-size:0.9rem; margin:0.6rem 0 1.2rem; min-height:1.3rem;"></div>
+
         <button type="submit" id="signupBtn">Create Account</button>
-        <div id="signupError" class="error-msg"></div>
+        <div id="signupError"   class="error-msg"></div>
         <div id="signupSuccess" class="success-msg hidden"></div>
       </form>
     </div>
@@ -259,28 +245,81 @@
       <button onclick="logout()" style="background:transparent; border:1px solid var(--border); color:var(--text); padding:0.8rem 1.5rem;">Sign Out</button>
     </header>
     <h2 style="color:var(--primary-soft); font-size:2rem;">Welcome back, <span id="teacherNameDisplay"></span>!</h2>
-    <p style="color:var(--text-muted); font-size:1.1rem; margin-top:1rem;">You can now type and view your password clearly.</p>
+    <p style="color:var(--text-muted); font-size:1.1rem; margin-top:1rem;">
+      You are now logged in with your own account.<br>
+      (Credentials are stored only in this browser – localStorage)
+    </p>
   </div>
 
   <script>
-    // Toggle password visibility
-    function togglePassword(inputId, buttonElement) {
+    // ──────────────────────────────
+    // Password visibility toggle
+    // ──────────────────────────────
+    function togglePassword(inputId, button) {
       const input = document.getElementById(inputId);
-
       if (input.type === 'password') {
         input.type = 'text';
-        buttonElement.textContent = '🙈';
-        buttonElement.classList.add('active');
+        button.textContent = '🙈';
+        button.classList.add('active');
       } else {
         input.type = 'password';
-        buttonElement.textContent = '👁️';
-        buttonElement.classList.remove('active');
+        button.textContent = '👁️';
+        button.classList.remove('active');
       }
     }
 
-    // ──────────────────────────────────────────────
-    // Tab switching & form logic (unchanged core)
-    // ──────────────────────────────────────────────
+    // ──────────────────────────────
+    // Simple password strength feedback
+    // ──────────────────────────────
+    document.getElementById('suPassword')?.addEventListener('input', function() {
+      const pass = this.value;
+      const strengthEl = document.getElementById('passwordStrength');
+      if (!pass) {
+        strengthEl.textContent = '';
+        strengthEl.style.color = '';
+        return;
+      }
+
+      let strength = 0;
+      if (pass.length >= 8) strength++;
+      if (/[A-Z]/.test(pass)) strength++;
+      if (/[0-9]/.test(pass)) strength++;
+      if (/[^A-Za-z0-9]/.test(pass)) strength++;
+
+      const messages = [
+        "", 
+        "Weak – try adding more characters",
+        "Fair – consider uppercase & numbers",
+        "Good",
+        "Strong"
+      ];
+
+      const colors = ["", "#f87171", "#fb923c", "#fbbf24", "#34d399"];
+
+      strengthEl.textContent = messages[strength] || '';
+      strengthEl.style.color = colors[strength] || '';
+    });
+
+    // ──────────────────────────────
+    // LocalStorage based auth (prototype only!)
+    // ──────────────────────────────
+    const USERS_KEY = 'lumina_teachers';
+
+    function getUsers() {
+      return JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+    }
+
+    function saveUsers(users) {
+      localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    }
+
+    function userExists(email) {
+      return getUsers().some(u => u.email.toLowerCase() === email.toLowerCase());
+    }
+
+    // ──────────────────────────────
+    // Form logic
+    // ──────────────────────────────
     const signinForm    = document.getElementById('signinForm');
     const signupForm    = document.getElementById('signupForm');
     const signinBtn     = document.getElementById('signinBtn');
@@ -290,9 +329,6 @@
     const signupSuccess = document.getElementById('signupSuccess');
     const dashboard     = document.getElementById('dashboard');
     const loginArea     = document.querySelector('.container');
-
-    const VALID_EMAIL    = "teacher@lumina.za";
-    const VALID_PASSWORD = "lumina2026";
 
     function switchTab(tab) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -315,41 +351,51 @@
       signinBtn.innerHTML = '<span class="spinner"></span> Signing in...';
 
       setTimeout(() => {
-        if (email.toLowerCase() === VALID_EMAIL && pass === VALID_PASSWORD) {
-          loginSuccess(email.split('@')[0]);
+        const users = getUsers();
+        const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+        if (user && user.password === pass) {
+          loginSuccess(user.name || email.split('@')[0]);
         } else {
           showError(signinError, "Incorrect email or password");
           signinBtn.disabled = false;
           signinBtn.textContent = "Sign In";
         }
-      }, 1100);
+      }, 900);
     });
 
     signupForm.addEventListener('submit', e => {
       e.preventDefault();
+
       const name    = document.getElementById('suName').value.trim();
       const email   = document.getElementById('suEmail').value.trim();
       const pass    = document.getElementById('suPassword').value;
       const confirm = document.getElementById('suConfirm').value;
 
       if (!name || !email || !pass || !confirm) return showError(signupError, "All fields required");
-      if (!email.includes('@') || !email.includes('.')) return showError(signupError, "Invalid email");
+      if (!email.includes('@') || !email.includes('.')) return showError(signupError, "Invalid email format");
       if (pass.length < 6) return showError(signupError, "Password must be at least 6 characters");
       if (pass !== confirm) return showError(signupError, "Passwords do not match");
+      if (userExists(email)) return showError(signupError, "This email is already registered");
 
       signupBtn.disabled = true;
       signupBtn.innerHTML = '<span class="spinner"></span> Creating...';
 
       setTimeout(() => {
-        signupSuccess.textContent = "Account created! Switching to Sign In...";
+        const users = getUsers();
+        users.push({ name, email, password: pass });
+        saveUsers(users);
+
+        signupSuccess.textContent = "Account created! You can now sign in.";
         signupSuccess.classList.remove('hidden');
+
         setTimeout(() => {
           switchTab('signin');
           signupForm.reset();
           signupBtn.disabled = false;
           signupBtn.textContent = "Create Account";
-        }, 1800);
-      }, 1300);
+        }, 1600);
+      }, 1200);
     });
 
     function showError(el, msg) {
@@ -381,6 +427,7 @@
         document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
     }
 
+    // Start
     document.documentElement.setAttribute('data-theme', 'dark');
     switchTab('signin');
   </script>
