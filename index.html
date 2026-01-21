@@ -3,92 +3,132 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lumina • Education Portal</title>
+  <title>Lumina • Advanced LMS</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0e1a; --surface: #1a1f2e; --surface-elev: #232d50;
-      --text: #f8fafc; --text-muted: #cbd5e1; --border: rgba(203, 213, 225, 0.2);
-      --primary: #8b5cf6; --success: #34d399; --danger: #f87171;
+      --bg: #0f172a; --surface: #1e293b; --surface-elev: #334155;
+      --text: #f8fafc; --text-muted: #94a3b8; --border: rgba(255, 255, 255, 0.1);
+      --primary: #8b5cf6; --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
       --radius: 12px;
     }
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
     
-    /* Layout */
-    .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; margin-bottom: 1.5rem; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
     .hidden { display: none !important; }
     
-    /* Forms & UI */
+    /* Grid System */
+    .dashboard-grid { display: grid; grid-template-columns: 280px 1fr 320px; gap: 20px; }
+    
+    /* UI Elements */
     input, textarea, select { 
-      width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.2); 
-      border: 1px solid var(--border); color: white; border-radius: 8px; margin-bottom: 1rem;
+      width: 100%; padding: 0.75rem; background: #0f172a; 
+      border: 1px solid var(--border); color: white; border-radius: 8px; margin-bottom: 0.8rem; font-size: 0.9rem;
     }
-    button { 
-      padding: 0.8rem 1.5rem; border: none; border-radius: 8px; cursor: pointer; 
-      font-weight: 600; transition: 0.2s;
-    }
-    .btn-primary { background: var(--primary); color: white; }
+    label { display: block; margin-bottom: 0.4rem; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+    button { padding: 0.7rem 1.2rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s; font-size: 0.9rem; }
+    .btn-primary { background: var(--primary); color: white; width: 100%; }
     .btn-outline { background: transparent; border: 1px solid var(--border); color: white; }
     
-    /* Task & Chat Styles */
-    .task-item { background: var(--surface-elev); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--primary); }
-    .chat-box { height: 300px; overflow-y: auto; background: #000; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: flex; flex-direction: column; }
-    .msg { margin-bottom: 0.8rem; padding: 0.5rem 1rem; border-radius: 15px; max-width: 80%; }
+    /* Task Tracking */
+    .task-card { border-left: 4px solid var(--primary); position: relative; }
+    .badge { padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+    .badge-subject { background: #3b82f6; }
+    .badge-date { background: var(--surface-elev); color: var(--warning); }
+    
+    /* Chat */
+    .chat-box { height: 400px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; display: flex; flex-direction: column; gap: 10px; }
+    .msg { padding: 0.6rem 1rem; border-radius: 12px; max-width: 85%; font-size: 0.85rem; }
     .msg.teacher { background: var(--primary); align-self: flex-start; }
-    .msg.learner { background: #444; align-self: flex-end; }
-    .role-badge { font-size: 0.7rem; background: var(--primary); padding: 2px 6px; border-radius: 4px; margin-right: 5px; }
+    .msg.learner { background: var(--surface-elev); align-self: flex-end; }
 
-    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    /* Stats bar */
+    .stat-bar { height: 8px; background: #0f172a; border-radius: 4px; overflow: hidden; margin: 10px 0; }
+    .stat-fill { height: 100%; background: var(--success); transition: 0.5s; }
+
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <div id="authSection" class="card" style="max-width: 400px; margin: 10vh auto;">
-    <h2 id="authTitle">Teacher/Learner Login</h2>
-    <div style="display: flex; gap: 10px; margin: 1rem 0;">
-      <button class="btn-outline" onclick="setRole('teacher')" id="roleT">I am a Teacher</button>
-      <button class="btn-outline" onclick="setRole('learner')" id="roleL">I am a Learner</button>
+  <div id="authSection" class="card" style="max-width: 400px; margin: 15vh auto;">
+    <h2 style="text-align: center; margin-bottom: 1.5rem;">Lumina Portal</h2>
+    <div style="display: flex; gap: 10px; margin-bottom: 1.5rem;">
+      <button class="btn-outline" style="flex:1;" onclick="setRole('teacher')" id="roleT">Teacher</button>
+      <button class="btn-outline" style="flex:1;" onclick="setRole('learner')" id="roleL">Learner</button>
     </div>
-    <input type="text" id="username" placeholder="Enter Name">
+    <input type="text" id="username" placeholder="Username">
     <input type="password" id="password" placeholder="Password">
-    <button class="btn-primary" style="width: 100%;" onclick="handleAuth()">Login / Sign Up</button>
+    <button class="btn-primary" onclick="handleAuth()">Enter Classroom</button>
   </div>
 
   <div id="dashboard" class="hidden">
     <header>
-      <h1>Lumina <span id="viewLabel" style="font-size: 1rem; opacity: 0.6;"></span></h1>
-      <button class="btn-outline" onclick="logout()">Logout</button>
+      <div>
+        <h1 style="background: linear-gradient(to right, #a78bfa, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Lumina Hub</h1>
+        <p id="userInfo" style="font-size: 0.8rem; color: var(--text-muted);"></p>
+      </div>
+      <button class="btn-outline" onclick="location.reload()">Sign Out</button>
     </header>
 
-    <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px;">
+    <div class="dashboard-grid">
       
-      <div>
-        <div id="teacherOnly" class="card hidden">
-          <h3>Create New Task</h3>
-          <input type="text" id="taskTitle" placeholder="Task Title">
-          <textarea id="taskDesc" placeholder="Instructions for learners..."></textarea>
-          <button class="btn-primary" onclick="addTask()">Post Task</button>
+      <aside>
+        <div class="card teacher-only hidden">
+          <h3 style="margin-bottom:1rem; font-size: 1rem;">Create New Class</h3>
+          <input type="text" id="newClassName" placeholder="e.g. Grade 10-B">
+          <button class="btn-primary" onclick="createClass()">Add Class</button>
         </div>
 
         <div class="card">
-          <h3>Current Tasks</h3>
-          <div id="taskList"></div>
+          <h3 style="margin-bottom:1rem; font-size: 1rem;">My Classes</h3>
+          <div id="classList"></div>
         </div>
-      </div>
+      </aside>
 
-      <div>
+      <main>
+        <div class="card teacher-only hidden">
+          <h3 style="margin-bottom:1rem;">Assign New Task</h3>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <div>
+              <label>Subject</label>
+              <input type="text" id="taskSubj" placeholder="e.g. Mathematics">
+            </div>
+            <div>
+              <label>Target Class</label>
+              <select id="taskTargetClass"></select>
+            </div>
+          </div>
+          <label>Task Title</label>
+          <input type="text" id="taskTitle" placeholder="The title of your task">
+          <label>Due Date</label>
+          <input type="date" id="taskDue">
+          <label>Instructions</label>
+          <textarea id="taskDesc" rows="3" placeholder="Describe the task..."></textarea>
+          <button class="btn-primary" onclick="addTask()">Assign to Learners</button>
+        </div>
+
+        <div id="taskList"></div>
+      </main>
+
+      <section>
         <div class="card">
-          <h3>Class Chat</h3>
+          <h3 style="margin-bottom:1rem; font-size: 1rem;">Global Chat</h3>
           <div id="chatBox" class="chat-box"></div>
-          <div style="display: flex; gap: 5px;">
-            <input type="text" id="chatInput" placeholder="Type message..." style="margin-bottom:0;">
-            <button class="btn-primary" onclick="sendMessage()">Send</button>
+          <div style="display: flex; gap: 5px; margin-top: 10px;">
+            <input type="text" id="chatInput" placeholder="Message..." style="margin:0;">
+            <button class="btn-primary" style="width:auto;" onclick="sendMessage()">Send</button>
           </div>
         </div>
-      </div>
+
+        <div class="card" id="statsCard">
+          <h3 style="margin-bottom:1rem; font-size: 1rem;">Submission Overview</h3>
+          <div id="submissionStats"></div>
+        </div>
+      </section>
 
     </div>
   </div>
@@ -98,139 +138,183 @@
   let currentUser = null;
   let selectedRole = 'teacher';
 
-  // --- Core Data Controllers ---
   const db = {
-    get: (key) => JSON.parse(localStorage.getItem('lumina_' + key) || '[]'),
-    save: (key, data) => localStorage.setItem('lumina_' + key, JSON.stringify(data))
+    get: (key) => JSON.parse(localStorage.getItem('lumina_v2_' + key) || '[]'),
+    save: (key, data) => localStorage.setItem('lumina_v2_' + key, JSON.stringify(data))
   };
 
-  // --- Auth Logic ---
   function setRole(role) {
     selectedRole = role;
-    document.getElementById('roleT').style.borderColor = role === 'teacher' ? 'var(--primary)' : 'var(--border)';
-    document.getElementById('roleL').style.borderColor = role === 'learner' ? 'var(--primary)' : 'var(--border)';
+    document.getElementById('roleT').style.background = role === 'teacher' ? 'var(--primary)' : 'transparent';
+    document.getElementById('roleL').style.background = role === 'learner' ? 'var(--primary)' : 'transparent';
   }
 
   function handleAuth() {
-    const user = document.getElementById('username').value.trim();
-    const pass = document.getElementById('password').value;
-    if (!user || !pass) return alert("Fill all fields");
-
-    let users = db.get('users');
-    let existing = users.find(u => u.name === user);
-
-    if (existing) {
-      if (existing.pass !== pass) return alert("Wrong password");
-      currentUser = existing;
-    } else {
-      currentUser = { name: user, pass: pass, role: selectedRole };
-      users.push(currentUser);
-      db.save('users', users);
-    }
-
-    showDashboard();
-  }
-
-  function showDashboard() {
+    const name = document.getElementById('username').value.trim();
+    if(!name) return;
+    currentUser = { name, role: selectedRole };
     document.getElementById('authSection').classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
-    document.getElementById('viewLabel').textContent = `(${currentUser.role}: ${currentUser.name})`;
+    document.getElementById('userInfo').textContent = `${currentUser.role.toUpperCase()} | ${currentUser.name}`;
     
     if (currentUser.role === 'teacher') {
-      document.getElementById('teacherOnly').classList.remove('hidden');
+      document.querySelectorAll('.teacher-only').forEach(el => el.classList.remove('hidden'));
     }
-    renderTasks();
-    renderChat();
-    setInterval(renderChat, 3000); // Simple auto-refresh for chat
+    
+    refreshAll();
   }
 
-  // --- Task Management ---
+  // CLASSROOMS
+  function createClass() {
+    const name = document.getElementById('newClassName').value;
+    if(!name) return;
+    let classes = db.get('classes');
+    classes.push(name);
+    db.save('classes', classes);
+    document.getElementById('newClassName').value = '';
+    refreshAll();
+  }
+
+  // TASKS
   function addTask() {
     const title = document.getElementById('taskTitle').value;
+    const subj = document.getElementById('taskSubj').value;
+    const target = document.getElementById('taskTargetClass').value;
+    const due = document.getElementById('taskDue').value;
     const desc = document.getElementById('taskDesc').value;
-    if (!title) return;
+
+    if(!title || !target) return alert("Title and Class are required");
 
     let tasks = db.get('tasks');
-    tasks.push({ id: Date.now(), title, desc, teacher: currentUser.name, answers: [] });
+    tasks.push({ 
+      id: Date.now(), title, subj, target, due, desc, 
+      teacher: currentUser.name, 
+      submissions: [] 
+    });
     db.save('tasks', tasks);
-    
-    document.getElementById('taskTitle').value = '';
-    document.getElementById('taskDesc').value = '';
+    refreshAll();
+  }
+
+  function submitWork(taskId) {
+    const text = document.getElementById(`ans-${taskId}`).value;
+    if(!text) return;
+
+    let tasks = db.get('tasks');
+    const idx = tasks.findIndex(t => t.id === taskId);
+    tasks[idx].submissions.push({ 
+      learner: currentUser.name, 
+      content: text, 
+      date: new Date().toLocaleDateString() 
+    });
+    db.save('tasks', tasks);
+    alert("Task submitted successfully!");
+    refreshAll();
+  }
+
+  // UI RENDERING
+  function refreshAll() {
+    renderClasses();
     renderTasks();
+    renderChat();
+    updateStats();
+  }
+
+  function renderClasses() {
+    const classes = db.get('classes');
+    const list = document.getElementById('classList');
+    const select = document.getElementById('taskTargetClass');
+    
+    list.innerHTML = classes.map(c => `<div style="padding:8px; border-bottom:1px solid var(--border); font-size:0.9rem;">🏫 ${c}</div>`).join('');
+    select.innerHTML = classes.map(c => `<option value="${c}">${c}</option>`).join('');
   }
 
   function renderTasks() {
     const tasks = db.get('tasks');
     const container = document.getElementById('taskList');
-    container.innerHTML = tasks.length ? '' : '<p>No tasks assigned yet.</p>';
+    container.innerHTML = tasks.length ? '' : '<div class="card">No tasks assigned to your classes yet.</div>';
 
     tasks.forEach(task => {
+      const isTeacher = currentUser.role === 'teacher';
+      const hasSubmitted = task.submissions.some(s => s.learner === currentUser.name);
+
       let html = `
-        <div class="task-item">
-          <strong>${task.title}</strong>
-          <p style="font-size: 0.9rem; color: var(--text-muted);">${task.desc}</p>
-          <hr style="margin: 10px 0; opacity: 0.1;">
+        <div class="card task-card">
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <span class="badge badge-subject">${task.subj || 'General'}</span>
+            <span class="badge badge-date">Due: ${task.due || 'No Date'}</span>
+          </div>
+          <h2 style="font-size:1.2rem; margin-bottom:5px;">${task.title}</h2>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1rem;">Target: ${task.target}</p>
+          <p style="margin-bottom:1rem;">${task.desc}</p>
       `;
 
-      if (currentUser.role === 'learner') {
-        html += `
-          <input type="text" id="ans-${task.id}" placeholder="Type your answer...">
-          <button class="btn-primary" style="padding: 0.4rem 1rem; font-size: 0.8rem;" onclick="submitAnswer(${task.id})">Submit Answer</button>
-        `;
-      } else {
-        html += `<h4>Submissions:</h4>`;
-        task.answers.forEach(a => {
-          html += `<div style="font-size:0.8rem; margin-top:5px;"><b>${a.user}:</b> ${a.text}</div>`;
+      if (isTeacher) {
+        html += `<div style="background:rgba(0,0,0,0.2); padding:10px; border-radius:8px;">
+                  <h4 style="font-size:0.8rem; color:var(--success);">Submissions (${task.submissions.length})</h4>`;
+        task.submissions.forEach(s => {
+          html += `<div style="font-size:0.8rem; margin-top:5px; border-bottom:1px solid rgba(255,255,255,0.05);">
+                    <b>${s.learner}:</b> ${s.content} <span style="float:right; opacity:0.5;">${s.date}</span>
+                   </div>`;
         });
+        html += `</div>`;
+      } else {
+        if (hasSubmitted) {
+          html += `<div style="color:var(--success); font-weight:600; font-size:0.9rem;">✓ Submitted</div>`;
+        } else {
+          html += `
+            <textarea id="ans-${task.id}" placeholder="Type your answer here..."></textarea>
+            <button class="btn-primary" onclick="submitWork(${task.id})">Submit Work</button>
+          `;
+        }
       }
       html += `</div>`;
       container.innerHTML += html;
     });
   }
 
-  function submitAnswer(taskId) {
-    const text = document.getElementById(`ans-${taskId}`).value;
-    if (!text) return;
+  function updateStats() {
+    const tasks = db.get('tasks');
+    const stats = document.getElementById('submissionStats');
+    if (!tasks.length) { stats.innerHTML = "No active tasks."; return; }
 
-    let tasks = db.get('tasks');
-    const taskIdx = tasks.findIndex(t => t.id === taskId);
-    tasks[taskIdx].answers.push({ user: currentUser.name, text: text });
-    db.save('tasks', tasks);
-    alert("Answer sent to teacher!");
-    renderTasks();
+    stats.innerHTML = tasks.map(t => {
+      const count = t.submissions.length;
+      return `
+        <div style="margin-bottom:15px;">
+          <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
+            <span>${t.title}</span>
+            <span>${count} submissions</span>
+          </div>
+          <div class="stat-bar"><div class="stat-fill" style="width:${Math.min(count * 10, 100)}%"></div></div>
+        </div>
+      `;
+    }).join('');
   }
 
-  // --- Chat Management ---
+  // CHAT
   function sendMessage() {
-    const text = document.getElementById('chatInput').value;
-    if (!text) return;
-
-    let messages = db.get('messages');
-    messages.push({ user: currentUser.name, role: currentUser.role, text: text, time: new Date().toLocaleTimeString() });
-    db.save('messages', messages);
-    document.getElementById('chatInput').value = '';
+    const input = document.getElementById('chatInput');
+    if (!input.value) return;
+    let msgs = db.get('messages');
+    msgs.push({ user: currentUser.name, role: currentUser.role, text: input.value });
+    db.save('messages', msgs);
+    input.value = '';
     renderChat();
   }
 
   function renderChat() {
-    const messages = db.get('messages');
+    const msgs = db.get('messages');
     const box = document.getElementById('chatBox');
-    box.innerHTML = '';
-    messages.forEach(m => {
-      const isMe = m.user === currentUser.name;
-      box.innerHTML += `
-        <div class="msg ${m.role}">
-          <span class="role-badge">${m.role}</span>
-          <small>${m.user}</small><br>${m.text}
-        </div>`;
-    });
+    box.innerHTML = msgs.map(m => `
+      <div class="msg ${m.role}">
+        <b style="font-size:0.7rem; display:block; opacity:0.7;">${m.user} (${m.role})</b>
+        ${m.text}
+      </div>
+    `).join('');
     box.scrollTop = box.scrollHeight;
   }
 
-  function logout() { location.reload(); }
-  
-  // Initialize role
-  setRole('teacher');
+  setInterval(renderChat, 5000);
 </script>
 
 </body>
