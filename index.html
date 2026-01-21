@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lumina • Multi-Subject Hub</title>
+  <title>Lumina • Management Suite</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -19,29 +19,32 @@
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
     .hidden { display: none !important; }
     
+    /* DASHBOARD GRID */
     .dashboard-grid { display: grid; grid-template-columns: 300px 1fr 320px; gap: 20px; }
 
+    /* MODERN BUTTONS */
     .btn-modern { 
       background: linear-gradient(135deg, var(--primary), #6366f1); color: white; 
       width: 100%; padding: 0.9rem; border: none; border-radius: 50px; 
       font-weight: 700; cursor: pointer; transition: 0.3s;
     }
     .btn-action { padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: white; cursor: pointer; }
+    .btn-delete { border-color: var(--danger); color: var(--danger); }
+    .btn-edit { border-color: var(--warning); color: var(--warning); }
 
+    /* INPUTS */
     input, textarea, select { width: 100%; padding: 0.8rem; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border); color: white; border-radius: 12px; margin-bottom: 1rem; }
 
-    /* SUBJECT TAGS */
-    .subject-pill {
-        display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem;
-        background: rgba(139, 92, 246, 0.2); border: 1px solid var(--primary); color: var(--primary);
-        margin: 4px; font-weight: 600;
-    }
-
+    /* CHAT & LISTS */
     .chat-box { height: 350px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 16px; display: flex; flex-direction: column; gap: 8px; }
     .msg { padding: 0.7rem 1rem; border-radius: 14px; max-width: 85%; font-size: 0.85rem; }
     .msg.teacher { background: var(--primary); align-self: flex-start; }
     .msg.learner { background: var(--surface-elev); align-self: flex-end; }
     
+    .learner-list-item { font-size: 0.85rem; padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,0.03); margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+
+    /* PILL TABS */
     .pill-tabs { background: rgba(15, 23, 42, 0.8); padding: 5px; border-radius: 50px; display: flex; margin-top: 1.5rem; border: 1px solid var(--border); }
     .pill-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; border-radius: 50px; font-weight: 700; font-size: 0.8rem; color: var(--text-muted); }
     .pill-tab.active { background: rgba(255, 255, 255, 0.05); color: white; }
@@ -51,7 +54,7 @@
 
 <div class="container">
   <div id="authSection" class="card" style="max-width: 400px; margin: 10vh auto; text-align:center;">
-    <h1>Lumina</h1>
+    <h1 style="font-size:2.5rem; margin-bottom:1.5rem;">Lumina</h1>
     <div id="formIn">
       <input type="text" id="siUser" placeholder="Username">
       <input type="password" id="siPass" placeholder="Password">
@@ -80,17 +83,11 @@
 
     <div class="dashboard-grid">
       <aside>
-        <div class="card teacher-only hidden">
-          <h3 style="font-size: 0.9rem; margin-bottom: 10px;">Register New Subject</h3>
-          <input type="text" id="newSubjInput" placeholder="e.g. Mathematics">
-          <button class="btn-modern" style="padding: 0.6rem;" onclick="addGlobalSubject()">Add Subject</button>
+        <div class="card" style="text-align: center;">
+            <h2 id="learnerCount" style="font-size: 2.5rem; color: var(--primary);">0</h2>
+            <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">Registered Learners</p>
         </div>
-
-        <div class="card">
-          <h3 style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted);">Active Subjects</h3>
-          <div id="subjectPool"></div>
-        </div>
-
+        
         <div class="card">
           <h3 style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted);">Learner Directory</h3>
           <div id="fullLearnerList"></div>
@@ -102,12 +99,8 @@
           <h3 id="formTitle">Assign New Task</h3>
           <input type="hidden" id="editTaskId">
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
-            <select id="taskSubjDropdown"></select>
-            <select id="taskTargetClass">
-                <option>Grade 10</option>
-                <option>Grade 11</option>
-                <option>Grade 12</option>
-            </select>
+            <input type="text" id="taskSubj" placeholder="Subject">
+            <select id="taskTargetClass"></select>
           </div>
           <input type="text" id="taskTitle" placeholder="Task Title">
           <input type="date" id="taskDue">
@@ -135,8 +128,8 @@
 <script>
   let currentUser = null;
   const db = {
-    get: (key) => JSON.parse(localStorage.getItem('lumina_v8_' + key) || '[]'),
-    save: (key, data) => localStorage.setItem('lumina_v8_' + key, JSON.stringify(data))
+    get: (key) => JSON.parse(localStorage.getItem('lumina_v7_' + key) || '[]'),
+    save: (key, data) => localStorage.setItem('lumina_v7_' + key, JSON.stringify(data))
   };
 
   function toggleAuth(type) {
@@ -154,7 +147,7 @@
     let users = db.get('users');
     users.push({ name, pass, role });
     db.save('users', users);
-    alert("Profile Created!");
+    alert("Registered! Now Sign In.");
     toggleAuth('in');
   }
 
@@ -162,7 +155,7 @@
     const name = document.getElementById('siUser').value.trim();
     const pass = document.getElementById('siPass').value;
     let user = db.get('users').find(u => u.name === name && u.pass === pass);
-    if(!user) return alert("Login failed");
+    if(!user) return alert("User not found");
     currentUser = user;
     document.getElementById('authSection').classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
@@ -170,29 +163,16 @@
     refreshAll();
   }
 
-  // SUBJECT MANAGEMENT
-  function addGlobalSubject() {
-    const subjName = document.getElementById('newSubjInput').value.trim();
-    if(!subjName) return;
-    let subjects = db.get('subjects');
-    if(!subjects.includes(subjName)) {
-        subjects.push(subjName);
-        db.save('subjects', subjects);
-    }
-    document.getElementById('newSubjInput').value = '';
-    refreshAll();
-  }
-
+  // TASK CRUD
   function addTask() {
     const title = document.getElementById('taskTitle').value;
-    const subj = document.getElementById('taskSubjDropdown').value;
     const editId = document.getElementById('editTaskId').value;
-    if(!title || !subj) return alert("Select a subject and enter a title");
-
     let tasks = db.get('tasks');
+
     const taskData = {
       id: editId ? parseInt(editId) : Date.now(),
-      title, subj,
+      title: title,
+      subj: document.getElementById('taskSubj').value,
       target: document.getElementById('taskTargetClass').value,
       due: document.getElementById('taskDue').value,
       desc: document.getElementById('taskDesc').value,
@@ -211,19 +191,51 @@
     refreshAll();
   }
 
-  // RENDER LOGIC
+  function deleteTask(id) {
+    if(confirm("Delete task?")) {
+      db.save('tasks', db.get('tasks').filter(t => t.id != id));
+      refreshAll();
+    }
+  }
+
+  function editTask(id) {
+    const task = db.get('tasks').find(t => t.id == id);
+    document.getElementById('editTaskId').value = task.id;
+    document.getElementById('taskTitle').value = task.title;
+    document.getElementById('taskSubj').value = task.subj;
+    document.getElementById('taskTargetClass').value = task.target;
+    document.getElementById('taskDue').value = task.due;
+    document.getElementById('taskDesc').value = task.desc;
+    document.getElementById('formTitle').textContent = "Edit Task";
+    document.getElementById('taskSubmitBtn').textContent = "Save Changes";
+    document.getElementById('cancelEditBtn').classList.remove('hidden');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function resetTaskForm() {
+    document.getElementById('editTaskId').value = '';
+    document.getElementById('taskTitle').value = '';
+    document.getElementById('taskSubj').value = '';
+    document.getElementById('taskDue').value = '';
+    document.getElementById('taskDesc').value = '';
+    document.getElementById('formTitle').textContent = "Assign New Task";
+    document.getElementById('taskSubmitBtn').textContent = "Post Assignment";
+    document.getElementById('cancelEditBtn').classList.add('hidden');
+  }
+
+  // GLOBAL REFRESH
   function refreshAll() {
     const users = db.get('users');
     const learners = users.filter(u => u.role === 'learner');
-    const subjects = db.get('subjects');
+    
+    // Update Sidebar Learner List
+    document.getElementById('learnerCount').textContent = learners.length;
+    document.getElementById('fullLearnerList').innerHTML = learners.length ? 
+      learners.map(l => `<div class="learner-list-item"><div class="dot"></div> ${l.name}</div>`).join('') :
+      '<p style="font-size:0.8rem; opacity:0.5;">No learners yet.</p>';
 
-    // Update Learner List
-    document.getElementById('fullLearnerList').innerHTML = learners.map(l => `<div class="learner-list-item">${l.name}</div>`).join('');
-    
-    // Update Subject Sidebar & Dropdown
-    document.getElementById('subjectPool').innerHTML = subjects.map(s => `<span class="subject-pill">${s}</span>`).join('');
-    document.getElementById('taskSubjDropdown').innerHTML = subjects.map(s => `<option value="${s}">${s}</option>`).join('');
-    
+    const classes = db.get('classes');
+    document.getElementById('taskTargetClass').innerHTML = classes.map(c => `<option value="${c}">${c}</option>`).join('');
     renderTasks();
     renderChat();
   }
@@ -231,48 +243,36 @@
   function renderTasks() {
     const tasks = db.get('tasks');
     const container = document.getElementById('taskList');
-    container.innerHTML = tasks.length ? '' : '<p style="text-align:center; opacity:0.3;">No tasks posted.</p>';
+    container.innerHTML = tasks.length ? '' : '<p style="text-align:center; opacity:0.5;">No active tasks.</p>';
     
     tasks.forEach(task => {
       let html = `<div class="card" style="border-left:5px solid var(--primary)">
-          <div style="display:flex; justify-content:space-between;">
-            <span class="subject-pill">${task.subj}</span>
-            ${currentUser.role === 'teacher' ? `<button class="btn-action" onclick="deleteTask(${task.id})">Delete</button>` : ''}
+          <div style="display:flex; justify-content:space-between; align-items:start;">
+            <small style="color:var(--primary); font-weight:bold;">${task.subj.toUpperCase()}</small>
+            ${currentUser.role === 'teacher' ? `<div>
+              <button class="btn-action btn-edit" onclick="editTask(${task.id})">Edit</button>
+              <button class="btn-action btn-delete" onclick="deleteTask(${task.id})">Delete</button>
+            </div>` : ''}
           </div>
-          <h2 style="margin:10px 0;">${task.title}</h2>
+          <h2 style="margin:5px 0;">${task.title}</h2>
           <p style="font-size:0.9rem; color:var(--text-muted);">${task.desc}</p>
-          <small style="color:var(--warning); display:block; margin-top:5px;">Due: ${task.due}</small>`;
+          <small style="color:var(--warning)">Due: ${task.due}</small>`;
       
       if(currentUser.role === 'teacher') {
-        html += `<div style="margin-top:10px; border-top:1px solid var(--border); padding-top:10px;">
-                  <b style="font-size:0.8rem;">Submissions (${task.submissions.length}):</b>
-                  ${task.submissions.map(s => `<div style="font-size:0.8rem; margin-top:5px;"><b>${s.learner}:</b> ${s.content}</div>`).join('')}
+        html += `<div style="margin-top:15px; border-top:1px solid var(--border); padding-top:10px;">
+                  <b style="font-size:0.8rem; color:var(--success);">Submissions (${task.submissions.length}):</b>
+                  ${task.submissions.map(s => `<div style="font-size:0.8rem; margin-top:5px; background:rgba(0,0,0,0.1); padding:8px; border-radius:8px;">
+                    <b>${s.learner}:</b> ${s.content}
+                  </div>`).join('')}
                 </div>`;
       } else {
         const submitted = task.submissions.some(s => s.learner === currentUser.name);
         html += submitted ? '<p style="color:var(--success); font-weight:bold; margin-top:10px;">✓ Submitted</p>' : 
-          `<textarea id="ans-${task.id}" placeholder="Your answer..." style="margin-top:10px;"></textarea>
-           <button class="btn-modern" onclick="submitWork(${task.id})">Send Answer</button>`;
+          `<textarea id="ans-${task.id}" placeholder="Type answer..." style="margin-top:10px;"></textarea>
+           <button class="btn-modern" onclick="submitWork(${task.id})">Submit Answer</button>`;
       }
       container.innerHTML += html + '</div>';
     });
-  }
-
-  // CHAT & CORE
-  function sendMessage() {
-    const input = document.getElementById('chatInput');
-    if (!input.value) return;
-    let msgs = db.get('messages');
-    msgs.push({ user: currentUser.name, role: currentUser.role, text: input.value });
-    db.save('messages', msgs);
-    input.value = '';
-    renderChat();
-  }
-
-  function renderChat() {
-    const msgs = db.get('messages');
-    document.getElementById('chatBox').innerHTML = msgs.map(m => `<div class="msg ${m.role}"><small style="display:block; opacity:0.6; font-size:0.65rem;">${m.user}</small>${m.text}</div>`).join('');
-    document.getElementById('chatBox').scrollTop = 99999;
   }
 
   function submitWork(taskId) {
@@ -285,13 +285,29 @@
     refreshAll();
   }
 
-  function deleteTask(id) { if(confirm("Delete?")) { db.save('tasks', db.get('tasks').filter(t => t.id != id)); refreshAll(); } }
+  function createClass() {
+    const name = prompt("Enter Class Name:");
+    if(!name) return;
+    let classes = db.get('classes');
+    classes.push(name);
+    db.save('classes', classes);
+    refreshAll();
+  }
 
-  function resetTaskForm() {
-    document.getElementById('editTaskId').value = '';
-    document.getElementById('taskTitle').value = '';
-    document.getElementById('taskDue').value = '';
-    document.getElementById('taskDesc').value = '';
+  function sendMessage() {
+    const input = document.getElementById('chatInput');
+    if (!input.value) return;
+    let msgs = db.get('messages');
+    msgs.push({ user: currentUser.name, role: currentUser.role, text: input.value });
+    db.save('messages', msgs);
+    input.value = '';
+    renderChat();
+  }
+
+  function renderChat() {
+    const msgs = db.get('messages');
+    document.getElementById('chatBox').innerHTML = msgs.map(m => `<div class="msg ${m.role}"><small style="display:block; opacity:0.6; font-weight:bold; font-size:0.65rem;">${m.user}</small>${m.text}</div>`).join('');
+    document.getElementById('chatBox').scrollTop = 99999;
   }
 
   setInterval(renderChat, 5000);
