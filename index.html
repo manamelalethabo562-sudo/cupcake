@@ -44,7 +44,6 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      background-image: radial-gradient(circle at 15% 25%, rgba(139,92,246,0.12) 0%, transparent 45%);
     }
 
     .container { max-width: 460px; margin: 12vh auto 0; padding: 1rem; }
@@ -71,7 +70,6 @@
       font-weight: 600;
       color: var(--text-muted);
       cursor: pointer;
-      transition: var(--transition);
       position: relative;
     }
 
@@ -109,12 +107,10 @@
       background: rgba(40,50,80,0.6);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 1rem 1.4rem;
-      padding-right: 3.2rem;           /* space for eye icon */
+      padding: 1rem 3.5rem 1rem 1.4rem;
       border-radius: var(--radius-sm);
       width: 100%;
       font-size: 1rem;
-      transition: var(--transition);
     }
 
     input::placeholder { color: var(--text-muted); opacity: 0.7; }
@@ -127,15 +123,15 @@
 
     .password-toggle {
       position: absolute;
-      right: 1rem;
+      right: 1.1rem;
       top: 50%;
       transform: translateY(-50%);
       background: none;
       border: none;
       color: var(--text-muted);
-      font-size: 1.3rem;
+      font-size: 1.35rem;
       cursor: pointer;
-      padding: 0.5rem;
+      padding: 0.4rem;
       transition: color 0.2s;
     }
 
@@ -144,7 +140,7 @@
       color: var(--primary-soft);
     }
 
-    button {
+    button[type="submit"] {
       background: var(--primary);
       color: white;
       border: none;
@@ -153,12 +149,12 @@
       font-weight: 600;
       width: 100%;
       cursor: pointer;
-      transition: var(--transition);
       box-shadow: 0 6px 20px var(--primary-glow);
       font-size: 1.05rem;
+      margin-top: 0.8rem;
     }
 
-    button:hover:not(:disabled) {
+    button[type="submit"]:hover:not(:disabled) {
       transform: translateY(-2px);
       box-shadow: 0 16px 40px var(--primary-glow);
     }
@@ -198,8 +194,6 @@
     .hidden { display: none !important; }
     .fade-in { animation: fadeIn 0.7s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-
-    .form-container { transition: opacity 0.4s ease; }
   </style>
 </head>
 <body>
@@ -216,17 +210,17 @@
         <div class="tab" id="tabSignUp" onclick="switchTab('signup')">Sign Up</div>
       </div>
 
-      <!-- Sign In -->
+      <!-- Sign In Form -->
       <form id="signinForm" class="form-container">
         <input type="email" id="siEmail" placeholder="Email address" required autocomplete="email"/>
 
         <div class="input-group">
           <input type="password" id="siPassword" placeholder="Password" required autocomplete="current-password"/>
-          <button type="button" class="password-toggle" id="toggleSiPassword" onclick="togglePassword('siPassword', 'toggleSiPassword')">👁️</button>
+          <button type="button" class="password-toggle" id="toggleSi" onclick="togglePassword('siPassword', this)">👁️</button>
         </div>
 
         <div style="margin:1.5rem 0; font-size:0.97rem; color:var(--text-muted);" class="flex">
-          <label class="flex" style="align-items:center; cursor:pointer;">
+          <label style="display:flex; align-items:center; cursor:pointer;">
             <input type="checkbox" style="margin-right:0.7rem; accent-color:var(--primary);"/> Remember me
           </label>
           <a href="#" style="margin-left:auto; color:var(--primary-soft); text-decoration:none; font-weight:500;">Forgot password?</a>
@@ -236,22 +230,22 @@
         <div id="signinError" class="error-msg"></div>
       </form>
 
-      <!-- Sign Up -->
+      <!-- Sign Up Form -->
       <form id="signupForm" class="form-container hidden">
         <input type="text" id="suName" placeholder="Full name" required autocomplete="name"/>
         <input type="email" id="suEmail" placeholder="Email address" required autocomplete="email"/>
 
         <div class="input-group">
           <input type="password" id="suPassword" placeholder="Create password (min 6 chars)" required minlength="6"/>
-          <button type="button" class="password-toggle" id="toggleSuPassword" onclick="togglePassword('suPassword', 'toggleSuPassword')">👁️</button>
+          <button type="button" class="password-toggle" id="toggleSuPass" onclick="togglePassword('suPassword', this)">👁️</button>
         </div>
 
         <div class="input-group">
           <input type="password" id="suConfirm" placeholder="Confirm password" required/>
-          <button type="button" class="password-toggle" id="toggleSuConfirm" onclick="togglePassword('suConfirm', 'toggleSuConfirm')">👁️</button>
+          <button type="button" class="password-toggle" id="toggleSuConfirm" onclick="togglePassword('suConfirm', this)">👁️</button>
         </div>
 
-        <button type="submit" id="signupBtn" style="margin-top:1.8rem;">Create Account</button>
+        <button type="submit" id="signupBtn">Create Account</button>
         <div id="signupError" class="error-msg"></div>
         <div id="signupSuccess" class="success-msg hidden"></div>
       </form>
@@ -262,37 +256,31 @@
   <div id="dashboard" class="hidden container fade-in" style="max-width:1200px; margin:8vh auto;">
     <header class="flex flex-between" style="margin-bottom:3rem; padding-bottom:1.4rem; border-bottom:2px solid var(--border);">
       <h1 style="font-size:2.3rem;">Lumina Teacher Hub</h1>
-      <div class="flex">
-        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" style="font-size:1.8rem; margin-right:1rem;">🌙</button>
-        <button onclick="logout()" style="background:transparent; border:1px solid var(--border); color:var(--text); padding:0.8rem 1.5rem;">Sign Out</button>
-      </div>
+      <button onclick="logout()" style="background:transparent; border:1px solid var(--border); color:var(--text); padding:0.8rem 1.5rem;">Sign Out</button>
     </header>
     <h2 style="color:var(--primary-soft); font-size:2rem;">Welcome back, <span id="teacherNameDisplay"></span>!</h2>
-    <p style="color:var(--text-muted); font-size:1.1rem; margin-top:1rem;">Your classes, tasks, submissions and class chat are ready.</p>
+    <p style="color:var(--text-muted); font-size:1.1rem; margin-top:1rem;">You can now type and view your password clearly.</p>
   </div>
 
   <script>
-    // ──────────────────────────────
-    // Password visibility toggle
-    // ──────────────────────────────
-    function togglePassword(inputId, buttonId) {
+    // Toggle password visibility
+    function togglePassword(inputId, buttonElement) {
       const input = document.getElementById(inputId);
-      const button = document.getElementById(buttonId);
 
       if (input.type === 'password') {
         input.type = 'text';
-        button.textContent = '🙈';
-        button.classList.add('active');
+        buttonElement.textContent = '🙈';
+        buttonElement.classList.add('active');
       } else {
         input.type = 'password';
-        button.textContent = '👁️';
-        button.classList.remove('active');
+        buttonElement.textContent = '👁️';
+        buttonElement.classList.remove('active');
       }
     }
 
-    // ──────────────────────────────
-    // Tab switching & form logic
-    // ──────────────────────────────
+    // ──────────────────────────────────────────────
+    // Tab switching & form logic (unchanged core)
+    // ──────────────────────────────────────────────
     const signinForm    = document.getElementById('signinForm');
     const signupForm    = document.getElementById('signupForm');
     const signinBtn     = document.getElementById('signinBtn');
@@ -353,7 +341,7 @@
       signupBtn.innerHTML = '<span class="spinner"></span> Creating...';
 
       setTimeout(() => {
-        signupSuccess.textContent = "Account created successfully! Switching to Sign In...";
+        signupSuccess.textContent = "Account created! Switching to Sign In...";
         signupSuccess.classList.remove('hidden');
         setTimeout(() => {
           switchTab('signin');
@@ -393,7 +381,6 @@
         document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
     }
 
-    // Initialize
     document.documentElement.setAttribute('data-theme', 'dark');
     switchTab('signin');
   </script>
