@@ -1,56 +1,446 @@
--- Users (extended from auth)
-users
-  id                uuid primary key
-  email             text unique
-  role              text check(role in ('student', 'teacher', 'admin'))
-  full_name         text
-  profile_picture   text
-  created_at        timestamptz default now()
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lumina • Teacher Portal</title>
+  <style>
+    :root {
+      --bg: #0f0f17;
+      --surface: #1a1a2e;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --accent: #a78bfa;
+      --border: #334155;
+      --success: #10b981;
+      --danger: #ef4444;
+    }
 
--- Classes / Groups (teacher owns)
-classes
-  id                uuid primary key
-  teacher_id        uuid references users(id)
-  name              text           -- e.g. "Grade 10 Mathematics"
-  subject           text
-  description       text
-  invite_code       text unique    -- optional 6-8 char code for students to join
-  created_at        timestamptz
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+    }
 
--- Class Membership (many-to-many)
-class_members
-  class_id          uuid references classes
-  user_id           uuid references users
-  joined_at         timestamptz
-  primary key (class_id, user_id)
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    .container { max-width:1280px; margin:0 auto; padding:1.5rem; }
+    header { border-bottom:1px solid var(--border); padding:1rem 0; margin-bottom:2rem; }
+    .flex { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
+    .flex-between { justify-content:space-between; }
+    h1 { font-size:1.8rem; font-weight:700; }
+    h2 { font-size:1.4rem; margin-bottom:1rem; }
+    h3 { font-size:1.15rem; margin-bottom:0.75rem; }
+    button {
+      background:var(--primary); color:white; border:none;
+      padding:0.65rem 1.25rem; border-radius:0.5rem;
+      font-weight:600; cursor:pointer; transition:all 0.2s;
+    }
+    button:hover { background:var(--primary-hover); transform:translateY(-1px); }
+    button.outline { background:transparent; border:1px solid var(--border); color:var(--text); }
+    button.outline:hover { background:rgba(255,255,255,0.08); }
+    input, textarea, select {
+      background:var(--surface); border:1px solid var(--border); color:var(--text);
+      padding:0.65rem 1rem; border-radius:0.5rem; width:100%; font-size:1rem;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(99,102,241,0.2);
+    }
+    .card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:0.75rem; padding:1.5rem; margin-bottom:1.5rem;
+    }
+    .grid-2 { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:1.5rem; }
+    .login-screen { max-width:420px; margin:10vh auto; text-align:center; }
+    .hidden { display:none !important; }
+    .theme-toggle { background:none; border:none; font-size:1.3rem; cursor:pointer; padding:0.5rem; }
+    small { color:var(--text-muted); }
+    .submission-item {
+      border:1px solid var(--border); border-radius:0.5rem;
+      padding:1rem; margin:1rem 0;
+    }
+    .submission-header { margin-bottom:0.75rem; font-weight:600; }
+  </style>
+</head>
+<body>
 
--- Tasks / Assignments
-tasks
-  id                uuid primary key
-  class_id          uuid references classes
-  title             text
-  description       text
-  due_date          date
-  points_possible   integer default 100
-  created_at        timestamptz
+  <!-- Login Screen -->
+  <div id="loginScreen" class="container login-screen">
+    <h1>Lumina Teacher</h1>
+    <p style="margin:1rem 0 2rem; color:var(--text-muted);">
+      Manage classes, tasks and view learner feedback
+    </p>
+    <div class="card">
+      <form id="loginForm">
+        <div style="margin-bottom:1.25rem;">
+          <input type="email" id="email" placeholder="teacher@school.com" required/>
+        </div>
+        <div style="margin-bottom:1.5rem;">
+          <input type="password" id="password" placeholder="••••••••" required/>
+        </div>
+        <button type="submit" style="width:100%;">Sign In</button>
+      </form>
+    </div>
+  </div>
 
--- Student Submissions
-submissions
-  id                uuid primary key
-  task_id           uuid references tasks
-  student_id        uuid references users
-  content           text           -- or JSON for rich answers / file links
-  submitted_at      timestamptz
-  score             integer        -- out of points_possible
-  feedback          text
-  status            text           -- pending, submitted, graded
+  <!-- Dashboard -->
+  <div id="dashboard" class="hidden">
+    <header class="container flex flex-between">
+      <div class="flex">
+        <h1>Lumina</h1>
+        <span style="margin-left:1.5rem; color:var(--text-muted);">Teacher Portal</span>
+      </div>
+      <div class="flex">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+        <button onclick="logout()">Sign Out</button>
+      </div>
+    </header>
 
--- Messages / Communication (simple threaded)
-messages
-  id                uuid primary key
-  sender_id         uuid references users
-  receiver_id       uuid references users     -- or null if class-wide announcement
-  class_id          uuid references classes   -- optional
-  content           text
-  created_at        timestamptz
-  read_at           timestamptz               -- per recipient if needed
+    <div class="container">
+      <div class="flex flex-between" style="margin-bottom:2rem;">
+        <h2>Welcome, <span id="teacherName">Teacher</span></h2>
+        <button onclick="showModal('createClassModal')">+ New Class</button>
+      </div>
+
+      <div id="mainContent">
+        <div id="classListView">
+          <h3>Your Classes</h3>
+          <div class="grid-2" id="classesList"></div>
+        </div>
+
+        <div id="taskListView" class="hidden">
+          <div class="flex flex-between" style="margin-bottom:1.5rem;">
+            <h3 id="currentClassTitle">Tasks</h3>
+            <button onclick="showClassList()">← Back to Classes</button>
+          </div>
+          <div id="tasksContainer"></div>
+          <button onclick="showModal('createTaskModal')" style="margin-top:1.5rem;">+ Assign New Task</button>
+        </div>
+
+        <div id="submissionView" class="hidden">
+          <div class="flex flex-between" style="margin-bottom:1.5rem;">
+            <h3 id="submissionTaskTitle">Submissions</h3>
+            <button onclick="showTaskList()">← Back to Tasks</button>
+          </div>
+          <div id="submissionsContainer"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals (same as before + minor updates) -->
+  <div id="createClassModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:1000;">
+    <div class="card" style="width:90%;max-width:500px;">
+      <h2>Create New Class</h2>
+      <form id="createClassForm" style="margin-top:1.5rem;">
+        <div style="margin-bottom:1.25rem;">
+          <label>Class Name</label>
+          <input type="text" id="className" placeholder="e.g. Grade 10 Mathematics" required/>
+        </div>
+        <div style="margin-bottom:1.5rem;">
+          <label>Subject</label>
+          <input type="text" id="classSubject" placeholder="Mathematics, English..."/>
+        </div>
+        <div class="flex" style="justify-content:flex-end;gap:1rem;">
+          <button type="button" class="outline" onclick="closeModal('createClassModal')">Cancel</button>
+          <button type="submit">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="createTaskModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:1000;">
+    <div class="card" style="width:90%;max-width:580px;">
+      <h2>Assign New Task</h2>
+      <form id="createTaskForm" style="margin-top:1.5rem;">
+        <div style="margin-bottom:1.25rem;">
+          <label>Class</label>
+          <select id="taskClassId" required></select>
+        </div>
+        <div style="margin-bottom:1.25rem;">
+          <label>Task Title</label>
+          <input type="text" id="taskTitle" placeholder="e.g. Essay on Climate Change" required/>
+        </div>
+        <div style="margin-bottom:1.25rem;">
+          <label>Instructions</label>
+          <textarea id="taskDesc" rows="5" placeholder="Describe what learners should do..."></textarea>
+        </div>
+        <div style="margin-bottom:1.5rem;">
+          <label>Due Date</label>
+          <input type="date" id="taskDueDate"/>
+        </div>
+        <div class="flex" style="justify-content:flex-end;gap:1rem;">
+          <button type="button" class="outline" onclick="closeModal('createTaskModal')">Cancel</button>
+          <button type="submit">Assign</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ──────────────────────────────────────────────
+    // In-memory data
+    // ──────────────────────────────────────────────
+    let currentUser = null;
+    let classes = [];
+    let tasks = [];
+    let submissions = [];
+
+    let currentClassId = null;
+    let currentTaskId = null;
+
+    const views = {
+      classList: document.getElementById("classListView"),
+      taskList: document.getElementById("taskListView"),
+      submission: document.getElementById("submissionView")
+    };
+
+    // ──────────────────────────────────────────────
+    // Login / Logout
+    // ──────────────────────────────────────────────
+    document.getElementById("loginForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      if (email) {
+        currentUser = { name: email.split("@")[0] || "Teacher" };
+        document.getElementById("teacherName").textContent = currentUser.name;
+        document.getElementById("loginScreen").classList.add("hidden");
+        document.getElementById("dashboard").classList.remove("hidden");
+        renderClasses();
+      }
+    });
+
+    function logout() {
+      currentUser = null;
+      document.getElementById("dashboard").classList.add("hidden");
+      document.getElementById("loginScreen").classList.remove("hidden");
+    }
+
+    // ──────────────────────────────────────────────
+    // Navigation between views
+    // ──────────────────────────────────────────────
+    function showClassList() {
+      currentClassId = null;
+      views.classList.classList.remove("hidden");
+      views.taskList.classList.add("hidden");
+      views.submission.classList.add("hidden");
+      renderClasses();
+    }
+
+    function showTaskList(classId) {
+      currentClassId = classId;
+      const cls = classes.find(c => c.id === classId);
+      document.getElementById("currentClassTitle").textContent = `Tasks • ${cls?.name || ''}`;
+      views.classList.classList.add("hidden");
+      views.taskList.classList.remove("hidden");
+      views.submission.classList.add("hidden");
+      renderTasksForCurrentClass();
+    }
+
+    function showSubmissions(taskId) {
+      currentTaskId = taskId;
+      const task = tasks.find(t => t.id === taskId);
+      document.getElementById("submissionTaskTitle").textContent = `Submissions • ${task?.title || ''}`;
+      views.classList.classList.add("hidden");
+      views.taskList.classList.add("hidden");
+      views.submission.classList.remove("hidden");
+      renderSubmissionsForTask();
+    }
+
+    // ──────────────────────────────────────────────
+    // Render functions
+    // ──────────────────────────────────────────────
+    function renderClasses() {
+      const container = document.getElementById("classesList");
+      container.innerHTML = "";
+      if (classes.length === 0) {
+        container.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">No classes yet — create one!</p>`;
+        return;
+      }
+      classes.forEach(cls => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <h3>${cls.name}</h3>
+          <p style="color:var(--text-muted);">${cls.subject} • ${cls.studentCount || 0} learners</p>
+          <div style="margin-top:1.25rem;" class="flex">
+            <button onclick="showTaskList('${cls.id}')">View Tasks</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderTasksForCurrentClass() {
+      const container = document.getElementById("tasksContainer");
+      container.innerHTML = "";
+      const classTasks = tasks.filter(t => t.classId === currentClassId);
+      if (classTasks.length === 0) {
+        container.innerHTML = `<p style="text-align:center;color:var(--text-muted);">No tasks assigned yet.</p>`;
+        return;
+      }
+      classTasks.forEach(task => {
+        const subs = submissions.filter(s => s.taskId === task.id);
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <h3>${task.title}</h3>
+          <p style="color:var(--text-muted); margin:0.5rem 0;">
+            ${task.description?.substring(0,80)}${task.description?.length > 80 ? '...' : ''}
+          </p>
+          <p style="color:var(--text-muted); font-size:0.95rem;">
+            Due: ${task.dueDate || "No due date"} • ${subs.length} submission${subs.length !== 1 ? 's' : ''}
+          </p>
+          <button style="margin-top:1rem;" onclick="showSubmissions('${task.id}')">
+            View Submissions
+          </button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderSubmissionsForTask() {
+      const container = document.getElementById("submissionsContainer");
+      container.innerHTML = "";
+      const taskSubs = submissions.filter(s => s.taskId === currentTaskId);
+      if (taskSubs.length === 0) {
+        container.innerHTML = `<p style="text-align:center;color:var(--text-muted);">No submissions received yet.</p>`;
+        return;
+      }
+      taskSubs.forEach(sub => {
+        const div = document.createElement("div");
+        div.className = "submission-item";
+        div.innerHTML = `
+          <div class="submission-header flex flex-between">
+            <span>Learner: ${sub.studentName}</span>
+            <span>Submitted: ${sub.submittedAt || "—"}</span>
+          </div>
+          <p style="margin:0.75rem 0; white-space:pre-wrap;">${sub.content || "(No content submitted)"}</p>
+          <div style="margin-top:1rem;">
+            <strong>Grade: </strong> ${sub.grade !== undefined ? sub.grade + '%' : "—"}<br>
+            <strong>Feedback: </strong>
+            <p style="margin-top:0.25rem; white-space:pre-wrap;">${sub.teacherFeedback || "(No feedback yet)"}</p>
+          </div>
+          <form class="grade-form" data-sub-id="${sub.id}" style="margin-top:1.25rem;">
+            <div style="margin-bottom:0.75rem;">
+              <label>Update Grade (0–100)</label>
+              <input type="number" min="0" max="100" value="${sub.grade || ''}" placeholder="e.g. 85"/>
+            </div>
+            <div style="margin-bottom:0.75rem;">
+              <label>Feedback to Learner</label>
+              <textarea rows="3" placeholder="Your comments...">${sub.teacherFeedback || ''}</textarea>
+            </div>
+            <button type="submit">Save Grade & Feedback</button>
+          </form>
+        `;
+        container.appendChild(div);
+
+        // Handle form submit
+        div.querySelector("form").addEventListener("submit", e => {
+          e.preventDefault();
+          const gradeInput = e.target.querySelector("input[type=number]");
+          const feedbackInput = e.target.querySelector("textarea");
+          sub.grade = parseInt(gradeInput.value) || null;
+          sub.teacherFeedback = feedbackInput.value.trim();
+          alert("Feedback saved for " + sub.studentName);
+          renderSubmissionsForTask(); // refresh view
+        });
+      });
+    }
+
+    function updateTaskClassOptions() {
+      const select = document.getElementById("taskClassId");
+      select.innerHTML = '<option value="">Select class...</option>';
+      classes.forEach(cls => {
+        const opt = document.createElement("option");
+        opt.value = cls.id;
+        opt.textContent = cls.name;
+        select.appendChild(opt);
+      });
+    }
+
+    // ──────────────────────────────────────────────
+    // Create Class
+    // ──────────────────────────────────────────────
+    document.getElementById("createClassForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const name = document.getElementById("className").value.trim();
+      const subject = document.getElementById("classSubject").value.trim();
+      if (!name) return;
+      const newClass = {
+        id: "cls_" + Date.now(),
+        name,
+        subject: subject || "General",
+        studentCount: 0
+      };
+      classes.push(newClass);
+      renderClasses();
+      updateTaskClassOptions();
+      closeModal("createClassModal");
+      document.getElementById("createClassForm").reset();
+    });
+
+    // ──────────────────────────────────────────────
+    // Create Task + auto-create demo submissions
+    // ──────────────────────────────────────────────
+    document.getElementById("createTaskForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const classId = document.getElementById("taskClassId").value;
+      const title = document.getElementById("taskTitle").value.trim();
+      const desc = document.getElementById("taskDesc").value.trim();
+      const due = document.getElementById("taskDueDate").value;
+
+      if (!classId || !title) return alert("Class and title are required");
+
+      const newTask = {
+        id: "task_" + Date.now(),
+        classId,
+        title,
+        description: desc,
+        dueDate: due || null
+      };
+      tasks.push(newTask);
+
+      // Demo: auto-create 3 fake submissions so you can see the feature
+      ["Thabo", "Lerato", "Amahle"].forEach((name, i) => {
+        submissions.push({
+          id: "sub_" + Date.now() + i,
+          taskId: newTask.id,
+          studentName: name,
+          content: `This is my answer for ${title}... [demo submission]`,
+          submittedAt: new Date().toLocaleDateString(),
+          grade: null,
+          teacherFeedback: ""
+        });
+      });
+
+      closeModal("createTaskModal");
+      document.getElementById("createTaskForm").reset();
+      showTaskList(classId);
+    });
+
+    // ──────────────────────────────────────────────
+    // Modal & Theme helpers
+    // ──────────────────────────────────────────────
+    function showModal(id) { document.getElementById(id).classList.remove("hidden"); }
+    function closeModal(id) { document.getElementById(id).classList.add("hidden"); }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      html.setAttribute("data-theme", html.getAttribute("data-theme") === "dark" ? "light" : "dark");
+    }
+
+    document.documentElement.setAttribute("data-theme", "dark");
+  </script>
+</body>
+</html>
