@@ -17,17 +17,22 @@
       --radius: 24px;
     }
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); transition: all 0.3s ease; }
     .container { max-width: 1300px; margin: 0 auto; padding: 2rem; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
     .hidden { display: none !important; }
     .brand-main { font-size: 3rem; font-weight: 800; background: linear-gradient(to right, #a78bfa, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; }
     .brand-sub { text-align: center; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 4px; color: var(--text-muted); margin-bottom: 2rem; }
     .dashboard-grid { display: grid; grid-template-columns: 320px 1fr 320px; gap: 20px; }
     .btn-modern { background: linear-gradient(135deg, var(--primary), #6366f1); color: white; width: 100%; padding: 0.9rem; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+    .btn-modern:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4); }
     input, textarea, select { width: 100%; padding: 0.8rem; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border); color: white; border-radius: 12px; margin-bottom: 10px; }
     .learner-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
     .btn-delete { background: none; border: 1px solid var(--danger); color: var(--danger); padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; }
+    .btn-delete:hover { background: var(--danger); color: white; }
+    .chat-box { height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 5px; }
+    .msg { padding: 10px; border-radius: 15px; background: var(--surface-elev); max-width: 85%; font-size: 0.9rem; border: 1px solid var(--border); }
+    .msg.me { align-self: flex-end; background: var(--primary); border: none; }
   </style>
 </head>
 <body>
@@ -35,27 +40,31 @@
 <div class="container">
   <div id="authSection" style="max-width: 400px; margin: 10vh auto;">
     <h1 class="brand-main">Lumina</h1>
-    <p class="brand-sub">Real-Time Portal</p>
+    <p class="brand-sub">Real-Time Teacher Portal</p>
     
     <div id="loginForm" class="card">
       <input type="text" id="siUser" placeholder="Username">
       <input type="password" id="siPass" placeholder="Password">
       <button class="btn-modern" onclick="handleLogin()">Sign In</button>
-      <p style="text-align:center; margin-top:15px; font-size:0.8rem; cursor:pointer; color:var(--primary);" onclick="toggleAuth()">Create Teacher Account</p>
+      <p style="text-align:center; margin-top:15px; font-size:0.8rem; cursor:pointer; color:var(--primary);" onclick="toggleAuth()">New Teacher? Create Account</p>
     </div>
 
     <div id="regForm" class="card hidden">
       <input type="text" id="suUser" placeholder="Full Name">
       <input type="password" id="suPass" placeholder="Password">
-      <textarea id="suSubjects" placeholder="Subjects (e.g. Math, IT)"></textarea>
+      <textarea id="suSubjects" placeholder="Subjects (e.g. Math, Science)"></textarea>
       <textarea id="suClasses" placeholder="Grades (e.g. Grade 10, 11)"></textarea>
       <button class="btn-modern" onclick="handleRegister()">Register</button>
+      <p style="text-align:center; margin-top:15px; font-size:0.8rem; cursor:pointer; color:var(--primary);" onclick="toggleAuth()">Back to Login</p>
     </div>
   </div>
 
   <div id="dashboard" class="hidden">
     <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-      <h1>Lumina <span style="font-size:0.8rem; color:var(--success);">● LIVE</span></h1>
+      <div>
+        <h1 style="font-size: 1.8rem; color: var(--primary);">Lumina <span style="font-size: 0.7rem; color: var(--success); vertical-align: middle;">● LIVE</span></h1>
+        <p id="teacherWelcome" style="font-size:0.8rem; color:var(--text-muted);"></p>
+      </div>
       <button onclick="location.reload()" class="btn-modern" style="width:auto; padding:8px 20px;">Sign Out</button>
     </header>
 
@@ -81,7 +90,7 @@
             <select id="tClass"></select>
           </div>
           <input type="text" id="tTitle" placeholder="Title">
-          <textarea id="tDesc" placeholder="Description"></textarea>
+          <textarea id="tDesc" placeholder="Instructions..."></textarea>
           <button class="btn-modern" onclick="addTask()">Post Live</button>
         </div>
         <div id="taskFeed"></div>
@@ -89,10 +98,12 @@
 
       <section>
         <div class="card">
-          <h3>Live Chat</h3>
-          <div id="chatBox" style="height:300px; overflow-y:auto; margin-bottom:10px;"></div>
-          <input type="text" id="chatMsg" placeholder="Message..." style="margin:0;">
-          <button class="btn-modern" style="margin-top:5px;" onclick="sendChat()">Send</button>
+          <h3>Announcements</h3>
+          <div id="chatBox" class="chat-box" style="margin: 15px 0;"></div>
+          <div style="display:flex; gap:5px;">
+            <input type="text" id="chatMsg" placeholder="Message..." style="margin:0;">
+            <button class="btn-modern" style="width:auto; padding:0 15px;" onclick="sendChat()">Send</button>
+          </div>
         </div>
       </section>
     </div>
@@ -100,7 +111,7 @@
 </div>
 
 <script>
-  // 1. YOUR FIREBASE CONFIG
+  // --- PASTE YOUR FIREBASE CONFIG HERE ---
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -113,7 +124,7 @@
 
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
-  const rdb = firebase.database();
+  const db = firebase.database();
 
   let currentUser = null;
 
@@ -122,81 +133,137 @@
     document.getElementById('regForm').classList.toggle('hidden');
   }
 
-  // 2. REAL-TIME REGISTRATION
   function handleRegister() {
-    const name = document.getElementById('suUser').value;
+    const name = document.getElementById('suUser').value.trim();
     const pass = document.getElementById('suPass').value;
-    if(!name || !pass) return;
+    if(!name || !pass) return alert("Fill all fields");
 
-    rdb.ref('users/' + name).set({
+    db.ref('teachers/' + name).set({
       name, pass,
-      subjects: document.getElementById('suSubjects').value.split(','),
-      classes: document.getElementById('suClasses').value.split(',')
-    }).then(() => { alert("Account Ready!"); toggleAuth(); });
+      subjects: document.getElementById('suSubjects').value.split(',').map(s => s.trim()),
+      classes: document.getElementById('suClasses').value.split(',').map(c => c.trim())
+    }).then(() => {
+      alert("Teacher account created!");
+      toggleAuth();
+    });
   }
 
-  // 3. LOGIN & REAL-TIME LISTENERS
   function handleLogin() {
-    const name = document.getElementById('siUser').value;
+    const name = document.getElementById('siUser').value.trim();
     const pass = document.getElementById('siPass').value;
 
-    rdb.ref('users/' + name).once('value', (snap) => {
+    db.ref('teachers/' + name).once('value', (snap) => {
       const user = snap.val();
       if(user && user.pass === pass) {
         currentUser = user;
-        startRealtimeApp();
-      } else { alert("Error"); }
+        launchDashboard();
+      } else {
+        alert("Invalid credentials");
+      }
     });
   }
 
-  function startRealtimeApp() {
+  function launchDashboard() {
     document.getElementById('authSection').classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
+    document.getElementById('teacherWelcome').textContent = `Logged in as ${currentUser.name}`;
 
     // Fill selects
-    document.getElementById('tSubj').innerHTML = currentUser.subjects.map(s => `<option>${s.trim()}</option>`).join('');
-    document.getElementById('tClass').innerHTML = currentUser.classes.map(c => `<option>${c.trim()}</option>`).join('');
+    document.getElementById('tSubj').innerHTML = currentUser.subjects.map(s => `<option>${s}</option>`).join('');
+    document.getElementById('tClass').innerHTML = currentUser.classes.map(c => `<option>${c}</option>`).join('');
 
-    // Listen for Learners
-    rdb.ref('learners/' + currentUser.name).on('value', (snap) => {
+    // --- REAL-TIME LISTENERS ---
+
+    // 1. Listen for Learners
+    db.ref('learners/' + currentUser.name).on('value', (snap) => {
       const dir = document.getElementById('learnerDir');
       dir.innerHTML = '';
+      if(!snap.exists()) dir.innerHTML = '<p style="opacity:0.5; font-size:0.8rem;">No students yet.</p>';
       snap.forEach((child) => {
         const l = child.val();
-        dir.innerHTML += `<div class="learner-row">
-          <span>${l.name}</span>
-          <button class="btn-delete" onclick="removeLearner('${child.key}')">×</button>
-        </div>`;
+        dir.innerHTML += `
+          <div class="learner-row">
+            <div><strong>${l.name}</strong><br><small style="color:var(--text-muted)">${l.email}</small></div>
+            <button class="btn-delete" onclick="removeLearner('${child.key}')">×</button>
+          </div>`;
       });
     });
 
-    // Listen for Tasks
-    rdb.ref('tasks').on('value', (snap) => {
+    // 2. Listen for Tasks
+    db.ref('tasks').on('value', (snap) => {
       const feed = document.getElementById('taskFeed');
       feed.innerHTML = '';
+      let hasTasks = false;
       snap.forEach((child) => {
         const t = child.val();
-        feed.innerHTML += `<div class="card"><h4>${t.title}</h4><p>${t.desc}</p></div>`;
+        if(t.teacher === currentUser.name) {
+          hasTasks = true;
+          feed.innerHTML += `
+            <div class="card" style="border-left: 4px solid var(--primary);">
+              <small style="color:var(--primary); font-weight:bold;">${t.subj} • ${t.class}</small>
+              <h3>${t.title}</h3>
+              <p style="font-size:0.9rem; margin-top:5px; opacity:0.8;">${t.desc}</p>
+            </div>`;
+        }
       });
+      if(!hasTasks) feed.innerHTML = '<p style="text-align:center; opacity:0.5;">No active tasks.</p>';
+    });
+
+    // 3. Listen for Chat
+    db.ref('announcements').limitToLast(20).on('value', (snap) => {
+      const box = document.getElementById('chatBox');
+      box.innerHTML = '';
+      snap.forEach((child) => {
+        const m = child.val();
+        const isMe = m.user === currentUser.name;
+        box.innerHTML += `<div class="msg ${isMe ? 'me' : ''}">
+          <small style="display:block; font-weight:bold; font-size:0.7rem; margin-bottom:2px;">${m.user}</small>
+          ${m.text}
+        </div>`;
+      });
+      box.scrollTop = box.scrollHeight;
     });
   }
 
   function addLearner() {
     const name = document.getElementById('lName').value;
     const email = document.getElementById('lEmail').value;
-    rdb.ref('learners/' + currentUser.name).push({ name, email });
+    if(!name || !email) return;
+    db.ref('learners/' + currentUser.name).push({ name, email });
+    document.getElementById('lName').value = '';
+    document.getElementById('lEmail').value = '';
   }
 
   function removeLearner(key) {
-    rdb.ref('learners/' + currentUser.name + '/' + key).remove();
+    if(confirm("Remove student?")) {
+      db.ref('learners/' + currentUser.name + '/' + key).remove();
+    }
   }
 
   function addTask() {
-    rdb.ref('tasks').push({
-      title: document.getElementById('tTitle').value,
+    const title = document.getElementById('tTitle').value;
+    if(!title) return;
+    db.ref('tasks').push({
+      teacher: currentUser.name,
+      title: title,
+      subj: document.getElementById('tSubj').value,
+      class: document.getElementById('tClass').value,
       desc: document.getElementById('tDesc').value,
-      teacher: currentUser.name
+      timestamp: Date.now()
     });
+    document.getElementById('tTitle').value = '';
+    document.getElementById('tDesc').value = '';
+  }
+
+  function sendChat() {
+    const text = document.getElementById('chatMsg').value;
+    if(!text) return;
+    db.ref('announcements').push({
+      user: currentUser.name,
+      text: text,
+      timestamp: Date.now()
+    });
+    document.getElementById('chatMsg').value = '';
   }
 </script>
 </body>
