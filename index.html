@@ -29,11 +29,13 @@
       width: 100%; padding: 0.9rem; border: none; border-radius: 50px;
       font-weight: 700; cursor: pointer; transition: 0.3s;
     }
-    .btn-secondary { background: var(--surface-elev); color: white; border: 1px solid var(--border); padding: 0.8rem; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 600; }
+    .btn-secondary { background: var(--surface-elev); color: white; border: 1px solid var(--border); padding: 8px 15px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.75rem; }
+    .btn-delete { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; font-weight: bold; }
+    .btn-delete:hover { background: var(--danger); color: white; }
 
     input, textarea, select { width: 100%; padding: 0.8rem; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border); color: white; border-radius: 12px; margin-bottom: 10px; }
 
-    .learner-row { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .learner-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
     .learner-row:last-child { border-bottom: none; }
     .email-tag { color: var(--text-muted); font-size: 0.75rem; }
 
@@ -71,14 +73,14 @@
         <h1 style="font-size: 1.8rem; background: linear-gradient(to right, #a78bfa, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Lumina</h1>
         <p style="font-size:0.7rem; letter-spacing:2px; font-weight:bold; color:var(--primary);">TEACHER CONTROL PANEL</p>
       </div>
-      <button class="btn-secondary" style="width:auto; padding: 8px 20px;" onclick="location.reload()">Sign Out</button>
+      <button class="btn-secondary" onclick="location.reload()">Sign Out</button>
     </header>
 
     <div class="dashboard-grid">
       <aside>
         <div class="card">
           <h3>Add Learner</h3>
-          <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">Register a student by email</p>
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">Enroll student by email</p>
           <input type="email" id="learnerEmail" placeholder="student@email.com">
           <input type="text" id="learnerName" placeholder="Student Full Name">
           <button class="btn-modern" style="padding:0.6rem;" onclick="addLearner()">Add to Class</button>
@@ -107,10 +109,10 @@
 
       <section>
         <div class="card">
-          <h3>Teacher Announcements</h3>
+          <h3>Announcements</h3>
           <div id="chatBox" class="chat-box" style="margin-top:10px;"></div>
           <div style="display:flex; gap:5px;">
-            <input type="text" id="chatInput" placeholder="Type message..." style="margin:0;">
+            <input type="text" id="chatInput" placeholder="Type..." style="margin:0;">
             <button class="btn-modern" style="width:auto; padding:0 15px;" onclick="sendMsg()">Send</button>
           </div>
         </div>
@@ -122,8 +124,8 @@
 <script>
   let currentUser = null;
   const db = {
-    get: (k) => JSON.parse(localStorage.getItem('lumina_teacher_pro_' + k) || '[]'),
-    save: (k, d) => localStorage.setItem('lumina_teacher_pro_' + k, JSON.stringify(d))
+    get: (k) => JSON.parse(localStorage.getItem('lumina_v11_' + k) || '[]'),
+    save: (k, d) => localStorage.setItem('lumina_v11_' + k, JSON.stringify(d))
   };
 
   function toggleAuth() {
@@ -136,33 +138,22 @@
     const pass = document.getElementById('suPass').value;
     const subjs = document.getElementById('suSubjects').value;
     const classs = document.getElementById('suClasses').value;
-
     if(!name || !pass || !subjs || !classs) return alert("Fill all fields");
-
     let users = db.get('users');
-    users.push({
-      name, pass, 
-      subjects: subjs.split(',').map(s => s.trim()), 
-      classes: classs.split(',').map(c => c.trim()),
-      learners: [] 
-    });
+    users.push({ name, pass, subjects: subjs.split(',').map(s => s.trim()), classes: classs.split(',').map(c => c.trim()), learners: [] });
     db.save('users', users);
-    alert("Teacher Account Created!");
+    alert("Registered!");
     toggleAuth();
   }
 
   function handleLogin() {
     const user = db.get('users').find(u => u.name === document.getElementById('siUser').value && u.pass === document.getElementById('siPass').value);
     if(!user) return alert("Invalid Login");
-    
     currentUser = user;
     document.getElementById('authSection').classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
-    
-    // Setup Dropdowns
     document.getElementById('taskSubj').innerHTML = currentUser.subjects.map(s => `<option>${s}</option>`).join('');
     document.getElementById('taskClass').innerHTML = currentUser.classes.map(c => `<option>${c}</option>`).join('');
-    
     refreshUI();
   }
 
@@ -172,35 +163,38 @@
     if(!email || !name) return alert("Enter email and name");
 
     let users = db.get('users');
-    let teacherIdx = users.findIndex(u => u.name === currentUser.name);
-    
-    users[teacherIdx].learners.push({ name, email });
+    let tIdx = users.findIndex(u => u.name === currentUser.name);
+    users[tIdx].learners.push({ id: Date.now(), name, email });
     db.save('users', users);
-    currentUser = users[teacherIdx]; // Sync current state
+    currentUser = users[tIdx];
     
     document.getElementById('learnerEmail').value = '';
     document.getElementById('learnerName').value = '';
     refreshUI();
   }
 
+  function deleteLearner(id) {
+    if(!confirm("Are you sure you want to remove this student?")) return;
+
+    let users = db.get('users');
+    let tIdx = users.findIndex(u => u.name === currentUser.name);
+    users[tIdx].learners = users[tIdx].learners.filter(l => l.id !== id);
+    
+    db.save('users', users);
+    currentUser = users[tIdx];
+    refreshUI();
+  }
+
   function addTask() {
     let tasks = db.get('tasks');
-    tasks.push({
-      teacher: currentUser.name,
-      title: document.getElementById('taskTitle').value,
-      subj: document.getElementById('taskSubj').value,
-      class: document.getElementById('taskClass').value,
-      desc: document.getElementById('taskDesc').value,
-      id: Date.now()
-    });
+    tasks.push({ teacher: currentUser.name, title: document.getElementById('taskTitle').value, subj: document.getElementById('taskSubj').value, class: document.getElementById('taskClass').value, desc: document.getElementById('taskDesc').value, id: Date.now() });
     db.save('tasks', tasks);
     refreshUI();
   }
 
   function refreshUI() {
-    // Learners
     const dir = document.getElementById('learnerDirectory');
-    dir.innerHTML = currentUser.learners.length ? '' : '<p style="font-size:0.8rem; opacity:0.5;">No learners added.</p>';
+    dir.innerHTML = currentUser.learners.length ? '' : '<p style="font-size:0.8rem; opacity:0.5;">No students enrolled.</p>';
     currentUser.learners.forEach(l => {
       dir.innerHTML += `
         <div class="learner-row">
@@ -208,22 +202,17 @@
             <strong>${l.name}</strong><br>
             <span class="email-tag">${l.email}</span>
           </div>
-          <span style="color:var(--success)">● Active</span>
+          <button class="btn-delete" onclick="deleteLearner(${l.id})">Remove</button>
         </div>`;
     });
 
-    // Tasks
     const feed = document.getElementById('taskFeed');
     const myTasks = db.get('tasks').filter(t => t.teacher === currentUser.name);
-    feed.innerHTML = myTasks.length ? '' : '<p style="text-align:center; opacity:0.5; margin-top:20px;">No assignments created yet.</p>';
+    feed.innerHTML = myTasks.length ? '' : '<p style="text-align:center; opacity:0.5; margin-top:20px;">Dashboard empty.</p>';
     myTasks.forEach(t => {
-      feed.innerHTML += `
-        <div class="card" style="border-left: 4px solid var(--primary);">
-          <small style="color:var(--primary); font-weight:bold;">${t.subj} • ${t.class}</small>
-          <h3>${t.title}</h3>
-          <p style="font-size:0.9rem; margin-top:5px; opacity:0.8;">${t.desc}</p>
-        </div>`;
+      feed.innerHTML += `<div class="card" style="border-left: 4px solid var(--primary);"><small style="color:var(--primary); font-weight:bold;">${t.subj} • ${t.class}</small><h3>${t.title}</h3><p style="font-size:0.9rem; margin-top:5px; opacity:0.8;">${t.desc}</p></div>`;
     });
+    renderMsgs();
   }
 
   function sendMsg() {
