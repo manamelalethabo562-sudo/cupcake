@@ -1,130 +1,75 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lumina • Teacher Management</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Firebase SDKs (use latest version - shown here ~10.x / 11.x style) -->
-  <script type="module">
-    // Firebase imports
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { getDatabase, ref, push, set, onValue, remove, update, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
-    window.firebaseModules = { initializeApp, getDatabase, ref, push, set, onValue, remove, update, query, orderByChild, equalTo };
-  </script>
-
+  <title>LMS Admin Dashboard - Invite Learners</title>
   <style>
-    :root {
-      --bg: #0f172a; --surface: #1e293b; --surface-elev: #334155;
-      --text: #f8fafc; --text-muted: #94a3b8; --border: rgba(255, 255, 255, 0.1);
-      --primary: #8b5cf6; --danger: #ef4444; --warning: #f59e0b; --success: #10b981;
-      --radius: 24px;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
-    .container { max-width: 1300px; margin: 0 auto; padding: 2rem; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; }
-    .hidden { display: none !important; }
-    .brand-main { font-size: 3rem; font-weight: 800; background: linear-gradient(to right, #a78bfa, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; }
-    .brand-sub { text-align: center; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 4px; color: var(--text-muted); margin-bottom: 2rem; }
-    .dashboard-grid { display: grid; grid-template-columns: 320px 1fr 320px; gap: 20px; }
-    .btn-modern {
-      background: linear-gradient(135deg, var(--primary), #6366f1); color: white;
-      width: 100%; padding: 0.9rem; border: none; border-radius: 50px;
-      font-weight: 700; cursor: pointer; transition: 0.3s;
-    }
-    .btn-secondary { background: var(--surface-elev); color: white; border: 1px solid var(--border); padding: 8px 15px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.75rem; }
-    .btn-delete { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; font-weight: bold; }
-    .btn-delete:hover { background: var(--danger); color: white; }
-    input, textarea, select { width: 100%; padding: 0.8rem; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border); color: white; border-radius: 12px; margin-bottom: 10px; }
-    .learner-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
-    .learner-row:last-child { border-bottom: none; }
-    .email-tag { color: var(--text-muted); font-size: 0.75rem; }
-    .chat-box { height: 300px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 16px; margin-bottom: 10px; }
-    .msg { padding: 8px 12px; border-radius: 12px; background: var(--primary); margin-bottom: 8px; width: fit-content; max-width: 90%; font-size: 0.85rem; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f4f7fa; margin: 0; padding: 20px; color: #333; }
+    .container { max-width: 900px; margin: 0 auto; }
+    header { background: #1e3a8a; color: white; padding: 1.5rem; border-radius: 8px 8px 0 0; text-align: center; }
+    .card { background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 2rem; margin: 2rem 0; }
+    #auth-section, #dashboard { display: none; }
+    button { background: #4285f4; color: white; border: none; padding: 0.9rem 1.5rem; font-size: 1.1rem; border-radius: 4px; cursor: pointer; margin: 0.5rem; }
+    button:hover { background: #3367d6; }
+    #googleSignInBtn { background: #4285f4; }
+    #signOutBtn { background: #db4437; }
+    form { display: flex; flex-direction: column; gap: 1rem; }
+    input[type="email"] { padding: 0.8rem; font-size: 1rem; border: 1px solid #d1d5db; border-radius: 6px; }
+    #message { margin-top: 1rem; padding: 1rem; border-radius: 6px; }
+    .success { background: #d1fae5; color: #065f46; }
+    .error { background: #fee2e2; color: #991b1b; }
+    table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+    th, td { padding: 0.8rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+    th { background: #f3f4f6; }
   </style>
 </head>
 <body>
+
 <div class="container">
-  <div id="authSection" style="max-width: 400px; margin: 10vh auto;">
-    <h1 class="brand-main">Lumina</h1>
-    <p class="brand-sub">Teacher Portal</p>
-   
-    <div id="loginForm" class="card">
-      <input type="text" id="siUser" placeholder="Username">
-      <input type="password" id="siPass" placeholder="Password">
-      <button class="btn-modern" onclick="handleLogin()">Sign In</button>
-      <p style="text-align:center; margin-top:15px; font-size:0.8rem; cursor:pointer; color:var(--primary);" onclick="toggleAuth()">New Teacher? Create Account</p>
-    </div>
-    <div id="regForm" class="card hidden">
-      <input type="text" id="suUser" placeholder="Full Name / Username">
-      <input type="password" id="suPass" placeholder="Create Password">
-      <textarea id="suSubjects" placeholder="Subjects (Math, Physics...)"></textarea>
-      <textarea id="suClasses" placeholder="Grades (10A, 11B...)"></textarea>
-      <button class="btn-modern" onclick="handleRegister()">Register as Teacher</button>
-      <p style="text-align:center; margin-top:15px; font-size:0.8rem; cursor:pointer; color:var(--primary);" onclick="toggleAuth()">Already have an account? Sign In</p>
-    </div>
+  <header>
+    <h1>LMS Admin Dashboard</h1>
+    <p>Invite learners via email</p>
+  </header>
+
+  <div id="auth-section" class="card">
+    <h2>Admin Login</h2>
+    <p>Please sign in with Google to manage invitations.</p>
+    <button id="googleSignInBtn">Sign in with Google</button>
+    <div id="authMessage" style="margin-top:1rem;"></div>
   </div>
 
-  <div id="dashboard" class="hidden">
-    <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-      <div>
-        <h1 style="font-size: 1.8rem; background: linear-gradient(to right, #a78bfa, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Lumina</h1>
-        <p style="font-size:0.7rem; letter-spacing:2px; font-weight:bold; color:var(--primary);">TEACHER CONTROL PANEL</p>
+  <div id="dashboard">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2>Invite a Learner</h2>
+        <button id="signOutBtn">Sign Out</button>
       </div>
-      <button class="btn-secondary" onclick="location.reload()">Sign Out</button>
-    </header>
+      <form id="inviteForm">
+        <input type="email" id="learnerEmail" placeholder="Learner's email address" required />
+        <button type="submit">Send Invite</button>
+      </form>
+      <div id="message"></div>
+    </div>
 
-    <div class="dashboard-grid">
-      <aside>
-        <div class="card">
-          <h3>Add Learner</h3>
-          <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">Enroll student by email</p>
-          <input type="email" id="learnerEmail" placeholder="student@email.com">
-          <input type="text" id="learnerName" placeholder="Student Full Name">
-          <button class="btn-modern" style="padding:0.6rem;" onclick="addLearner()">Add to Class</button>
-        </div>
-        <div class="card">
-          <h3 style="margin-bottom:15px;">Class Directory</h3>
-          <div id="learnerDirectory"></div>
-        </div>
-      </aside>
-
-      <main>
-        <div class="card">
-          <h3>Create Assignment</h3>
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
-            <select id="taskSubj"></select>
-            <select id="taskClass"></select>
-          </div>
-          <input type="text" id="taskTitle" placeholder="Assignment Title">
-          <textarea id="taskDesc" rows="3" placeholder="Instructions..."></textarea>
-          <button class="btn-modern" onclick="addTask()">Post to Dashboard</button>
-        </div>
-        <div id="taskFeed"></div>
-      </main>
-
-      <section>
-        <div class="card">
-          <h3>Announcements</h3>
-          <div id="chatBox" class="chat-box" style="margin-top:10px;"></div>
-          <div style="display:flex; gap:5px;">
-            <input type="text" id="chatInput" placeholder="Type..." style="margin:0;">
-            <button class="btn-modern" style="width:auto; padding:0 15px;" onclick="sendMsg()">Send</button>
-          </div>
-        </div>
-      </section>
+    <div class="card">
+      <h2>Invited Learners (Real-time)</h2>
+      <table id="invitedTable">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Invited At</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
   </div>
 </div>
 
+<!-- Firebase SDK v10+ modular (latest as of 2026) -->
 <script type="module">
-  const { initializeApp, getDatabase, ref, push, set, onValue, remove, update, query, orderByChild, equalTo } = window.firebaseModules;
-
-  // ┌─────────────────────────────────────────────┐
-  // │           PASTE YOUR FIREBASE CONFIG HERE   │
-  // └─────────────────────────────────────────────┘
  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDLvkRwSpd-hbPaDP31pV1H-4N5_Re-_xc",
@@ -136,148 +81,115 @@ const firebaseConfig = {
   appId: "1:173549259244:web:f8722018a989c484a7d8c9",
   measurementId: "G-K1VW244B7P"
 };
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+  import { getDatabase, ref, push, set, serverTimestamp, onValue, query, orderByChild } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
   const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
   const db = getDatabase(app);
 
-  let currentUser = null;
-  let currentUserKey = null; // we'll store the firebase key of the teacher
+  const authSection = document.getElementById('auth-section');
+  const dashboard = document.getElementById('dashboard');
+  const googleBtn = document.getElementById('googleSignInBtn');
+  const signOutBtn = document.getElementById('signOutBtn');
+  const messageDiv = document.getElementById('message');
+  const tableBody = document.querySelector('#invitedTable tbody');
 
-  function toggleAuth() {
-    document.getElementById('loginForm').classList.toggle('hidden');
-    document.getElementById('regForm').classList.toggle('hidden');
-  }
-
-  async function handleRegister() {
-    const name = document.getElementById('suUser').value.trim();
-    const pass = document.getElementById('suPass').value;
-    const subjs = document.getElementById('suSubjects').value;
-    const classs = document.getElementById('suClasses').value;
-
-    if (!name || !pass || !subjs || !classs) {
-      return alert("Please fill all fields");
+  // Listen for auth state (show dashboard only when logged in)
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      authSection.style.display = 'none';
+      dashboard.style.display = 'block';
+      console.log("Admin signed in:", user.email);
+      loadInvitedList();
+    } else {
+      authSection.style.display = 'block';
+      dashboard.style.display = 'none';
     }
+  });
 
-    const teachersRef = ref(db, 'teachers');
-    const newTeacherRef = push(teachersRef);
+  // Google Sign-In
+  googleBtn.addEventListener('click', async () => {
+    const provider = new GoogleAuthProvider();
+    // Optional: provider.addScope('email'); // already default
 
-    await set(newTeacherRef, {
-      username: name,
-      password: pass,           // WARNING: Never store plain passwords in production!
-      subjects: subjs.split(',').map(s => s.trim()),
-      classes: classs.split(',').map(c => c.trim()),
-      createdAt: Date.now()
-    });
+    try {
+      await signInWithPopup(auth, provider);
+      // onAuthStateChanged will handle UI update
+    } catch (error) {
+      console.error("Google sign-in error:", error);
+      document.getElementById('authMessage').innerHTML = `<div class="error">Error: ${error.message}</div>`;
+    }
+  });
 
-    alert("Registered successfully! Please sign in.");
-    toggleAuth();
-  }
+  // Sign Out
+  signOutBtn.addEventListener('click', async () => {
+    await signOut(auth);
+  });
 
-  async function handleLogin() {
-    const username = document.getElementById('siUser').value.trim();
-    const pass = document.getElementById('siPass').value;
-
-    const teachersRef = ref(db, 'teachers');
-    const q = query(teachersRef, orderByChild('username'), equalTo(username));
+  // Load real-time invited learners
+  function loadInvitedList() {
+    const invitedRef = ref(db, 'invitedLearners');
+    const q = query(invitedRef, orderByChild('invitedAt'));
 
     onValue(q, (snapshot) => {
+      tableBody.innerHTML = '';
       if (!snapshot.exists()) {
-        alert("User not found");
+        tableBody.innerHTML = '<tr><td colspan="3">No invitations yet</td></tr>';
         return;
       }
 
-      let found = false;
+      const invites = [];
       snapshot.forEach((child) => {
-        const teacher = child.val();
-        if (teacher.password === pass) {   // WARNING: plain text comparison — insecure!
-          found = true;
-          currentUser = teacher;
-          currentUserKey = child.key;
-
-          document.getElementById('authSection').classList.add('hidden');
-          document.getElementById('dashboard').classList.remove('hidden');
-
-          document.getElementById('taskSubj').innerHTML = teacher.subjects.map(s => `<option>${s}</option>`).join('');
-          document.getElementById('taskClass').innerHTML = teacher.classes.map(c => `<option>${c}</option>`).join('');
-
-          listenToLearners();
-          // You can also listen to tasks & messages here later
-        }
+        const data = child.val();
+        invites.push({ key: child.key, ...data });
       });
 
-      if (!found) alert("Invalid password");
-    }, { onlyOnce: true });
-  }
+      // Sort descending by time (newest first)
+      invites.sort((a, b) => (b.invitedAt || 0) - (a.invitedAt || 0));
 
-  function listenToLearners() {
-    if (!currentUserKey) return;
-
-    const learnersRef = ref(db, `teachers/${currentUserKey}/learners`);
-
-    onValue(learnersRef, (snapshot) => {
-      const dir = document.getElementById('learnerDirectory');
-      dir.innerHTML = '';
-
-      if (!snapshot.exists() || snapshot.val() === null) {
-        dir.innerHTML = '<p style="font-size:0.8rem; opacity:0.5;">No students enrolled yet.</p>';
-        return;
-      }
-
-      const learners = snapshot.val();
-      Object.entries(learners).forEach(([key, learner]) => {
-        dir.innerHTML += `
-          <div class="learner-row">
-            <div>
-              <strong>${learner.name}</strong><br>
-              <span class="email-tag">${learner.email}</span>
-            </div>
-            <button class="btn-delete" onclick="deleteLearner('${key}')">Remove</button>
-          </div>`;
+      invites.forEach((data) => {
+        const row = document.createElement('tr');
+        const dateStr = data.invitedAt ? new Date(data.invitedAt).toLocaleString() : '—';
+        row.innerHTML = `
+          <td>${data.email}</td>
+          <td>${dateStr}</td>
+          <td>${data.status || 'Pending'}</td>
+        `;
+        tableBody.appendChild(row);
       });
     });
   }
 
-  async function addLearner() {
+  // Invite form submit
+  document.getElementById('inviteForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
     const email = document.getElementById('learnerEmail').value.trim();
-    const name = document.getElementById('learnerName').value.trim();
+    if (!email) return;
 
-    if (!email || !name) return alert("Enter email and name");
+    messageDiv.textContent = '';
+    messageDiv.className = '';
 
-    if (!currentUserKey) return alert("Not logged in");
+    try {
+      const newInviteRef = push(ref(db, 'invitedLearners'));
+      await set(newInviteRef, {
+        email: email,
+        invitedAt: serverTimestamp(),
+        status: 'Pending'
+        // Later: invitedBy: auth.currentUser.uid
+      });
 
-    const learnersRef = ref(db, `teachers/${currentUserKey}/learners`);
-    const newLearnerRef = push(learnersRef);
-
-    await set(newLearnerRef, {
-      name,
-      email,
-      addedAt: Date.now()
-    });
-
-    document.getElementById('learnerEmail').value = '';
-    document.getElementById('learnerName').value = '';
-    // UI will auto-update thanks to onValue listener
-  }
-
-  async function deleteLearner(learnerKey) {
-    if (!confirm("Remove this student?")) return;
-    if (!currentUserKey) return;
-
-    const learnerRef = ref(db, `teachers/${currentUserKey}/learners/${learnerKey}`);
-    await remove(learnerRef);
-    // UI auto-updates
-  }
-
-  // Placeholder – you can later store tasks under teachers/{key}/tasks
-  function addTask() {
-    alert("Task saving to Firebase coming soon...");
-    // Similar pattern: push(ref(db, `teachers/${currentUserKey}/tasks`), { ... })
-  }
-
-  function sendMsg() {
-    alert("Announcements to Firebase coming soon...");
-  }
-
+      messageDiv.textContent = `Invitation recorded for ${email}. (Email sending coming next)`;
+      messageDiv.className = 'success';
+      document.getElementById('inviteForm').reset();
+    } catch (err) {
+      console.error(err);
+      messageDiv.textContent = `Error: ${err.message}`;
+      messageDiv.className = 'error';
+    }
+  });
 </script>
+
 </body>
 </html>
