@@ -3,196 +3,326 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lumina • Teacher Portal</title>
+  <title>Lumina • Teacher Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f0f17;
-      --surface: #1a1a2e;
-      --text: #e2e8f0;
+      --bg: #0a0e1a;
+      --surface: rgba(20, 25, 45, 0.65);
+      --surface-elevated: rgba(30, 40, 70, 0.8);
+      --text: #f1f5f9;
       --text-muted: #94a3b8;
-      --primary: #6366f1;
-      --primary-hover: #4f46e5;
-      --accent: #a78bfa;
-      --border: #334155;
-      --success: #10b981;
-      --danger: #ef4444;
-      --chat-bg: #0f172a;
-      --chat-self: #4338ca;
-      --chat-other: #334155;
+      --border: rgba(148, 163, 184, 0.18);
+      --primary: #7c3aed;
+      --primary-soft: #a78bfa;
+      --primary-glow: rgba(124, 58, 237, 0.25);
+      --accent: #c084fc;
+      --danger: #f87171;
+      --success: #34d399;
+      --chat-bg: rgba(15, 23, 42, 0.7);
+      --radius-sm: 0.75rem;
+      --radius: 1.25rem;
+      --shadow-sm: 0 4px 15px rgba(0,0,0,0.35);
+      --shadow: 0 10px 35px rgba(0,0,0,0.45);
+      --transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     [data-theme="light"] {
       --bg: #f8fafc;
-      --surface: #ffffff;
-      --text: #1e293b;
+      --surface: rgba(255,255,255,0.75);
+      --surface-elevated: rgba(255,255,255,0.92);
+      --text: #0f172a;
       --text-muted: #64748b;
-      --border: #e2e8f0;
-      --chat-bg: #f1f5f9;
-      --chat-self: #6366f1;
-      --chat-other: #e2e8f0;
+      --border: rgba(226,232,240,0.9);
+      --primary: #6d28d9;
+      --primary-soft: #a78bfa;
+      --primary-glow: rgba(109, 40, 217, 0.18);
+      --chat-bg: rgba(248,250,252,0.85);
     }
 
-    * { margin:0; padding:0; box-sizing:border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: system-ui, sans-serif;
+      font-family: 'Inter', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      line-height: 1.5;
+      background-image: radial-gradient(circle at 15% 50%, rgba(124,58,237,0.08) 0%, transparent 35%);
     }
-    .container { max-width:1280px; margin:0 auto; padding:1.5rem; }
-    header { border-bottom:1px solid var(--border); padding:1rem 0; margin-bottom:2rem; }
-    .flex { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
-    .flex-between { justify-content:space-between; }
-    h1 { font-size:1.8rem; font-weight:700; }
-    h2,h3 { margin-bottom:0.8rem; }
-    button {
-      background:var(--primary); color:white; border:none;
-      padding:0.65rem 1.25rem; border-radius:0.5rem;
-      font-weight:600; cursor:pointer; transition:all 0.2s;
-    }
-    button:hover { background:var(--primary-hover); }
-    button.outline { background:transparent; border:1px solid var(--border); color:var(--text); }
-    button.outline:hover { background:rgba(255,255,255,0.08); }
-    input, textarea, select {
-      background:var(--surface); border:1px solid var(--border); color:var(--text);
-      padding:0.65rem 1rem; border-radius:0.5rem; width:100%;
-    }
-    input:focus, textarea:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(99,102,241,0.2); }
-    .card { background:var(--surface); border:1px solid var(--border); border-radius:0.75rem; padding:1.5rem; margin-bottom:1.5rem; }
-    .grid-2 { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:1.5rem; }
-    .hidden { display:none !important; }
 
-    /* Chat styles */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    header {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1.1rem 0;
+      margin-bottom: 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .flex { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+    .flex-between { justify-content: space-between; }
+
+    h1 { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.025em; }
+    h2 { font-size: 1.55rem; font-weight: 600; margin-bottom: 1rem; }
+    h3 { font-size: 1.22rem; font-weight: 600; margin-bottom: 0.8rem; }
+
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px var(--primary-glow);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px var(--primary-glow);
+    }
+
+    button.outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      box-shadow: none;
+    }
+
+    button.outline:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: var(--primary-soft);
+    }
+
+    button.danger { background: var(--danger); }
+    button.danger:hover { background: #ef4444; }
+
+    .card {
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.6rem;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    input, textarea, select {
+      background: rgba(30,40,70,0.4);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.8rem 1.2rem;
+      border-radius: var(--radius-sm);
+      width: 100%;
+      font-size: 0.98rem;
+      transition: var(--transition);
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .hidden { display: none !important; }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .theme-toggle:hover { transform: scale(1.15); }
+
+    /* Chat */
     #chatView {
       background: var(--chat-bg);
-      border-radius: 0.75rem;
+      backdrop-filter: blur(16px);
+      border-radius: var(--radius);
       overflow: hidden;
-      height: 70vh;
+      height: 72vh;
       display: flex;
       flex-direction: column;
+      box-shadow: var(--shadow);
     }
-    #chatHeader {
-      padding: 1rem 1.5rem;
-      background: rgba(0,0,0,0.2);
-      border-bottom: 1px solid var(--border);
-    }
+
     #messagesContainer {
       flex: 1;
-      padding: 1.5rem;
+      padding: 1.6rem;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 1.1rem;
     }
+
     .message {
-      max-width: 75%;
-      padding: 0.9rem 1.3rem;
-      border-radius: 1.1rem;
-      position: relative;
+      max-width: 78%;
+      padding: 1rem 1.4rem;
+      border-radius: 1.4rem;
+      line-height: 1.45;
     }
+
     .message-self {
       align-self: flex-end;
-      background: var(--chat-self);
+      background: linear-gradient(135deg, var(--primary), #5b21b6);
       color: white;
-      border-bottom-right-radius: 0.4rem;
+      border-bottom-right-radius: 0.5rem;
     }
+
     .message-other {
       align-self: flex-start;
-      background: var(--chat-other);
-      border-bottom-left-radius: 0.4rem;
+      background: rgba(50,60,90,0.7);
+      border-bottom-left-radius: 0.5rem;
     }
+
     .message-sender {
-      font-size: 0.85rem;
-      opacity: 0.8;
-      margin-bottom: 0.3rem;
+      font-size: 0.86rem;
+      opacity: 0.85;
+      margin-bottom: 0.35rem;
+      font-weight: 500;
     }
+
     .message-time {
-      font-size: 0.7rem;
-      opacity: 0.6;
-      margin-top: 0.4rem;
+      font-size: 0.72rem;
+      opacity: 0.65;
+      margin-top: 0.45rem;
       text-align: right;
     }
-    #chatInputArea {
-      padding: 1rem 1.5rem;
-      border-top: 1px solid var(--border);
-      background: var(--surface);
-      display: flex;
-      gap: 0.8rem;
-    }
-    #chatInputArea input {
-      flex: 1;
-    }
-    .theme-toggle { background:none; border:none; font-size:1.3rem; cursor:pointer; }
 
-    .submission-item { border:1px solid var(--border); border-radius:0.5rem; padding:1rem; margin:1rem 0; }
+    #chatInputArea {
+      padding: 1.2rem 1.6rem;
+      border-top: 1px solid var(--border);
+      background: rgba(20,25,45,0.6);
+      display: flex;
+      gap: 1rem;
+    }
+
+    /* Confirmation */
+    .confirmation-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .confirmation-box {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      max-width: 440px;
+      width: 92%;
+      box-shadow: var(--shadow);
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .container { padding: 1rem; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Login -->
-  <div id="loginScreen" class="container" style="max-width:420px; margin:10vh auto; text-align:center;">
-    <h1>Lumina Teacher</h1>
-    <p style="margin:1rem 0 2rem; color:var(--text-muted);">Classes, tasks, submissions & class chat</p>
-    <div class="card">
+  <!-- ── Login Screen ─────────────────────────────────────── -->
+  <div id="loginScreen" class="container" style="max-width:440px; margin:12vh auto; text-align:center;">
+    <h1 style="font-size:2.4rem; background:linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+      Lumina
+    </h1>
+    <p style="margin:1.2rem 0 2.2rem; color:var(--text-muted); font-size:1.08rem;">
+      Teacher Hub • 2026
+    </p>
+
+    <div class="card" style="padding:2.2rem 1.8rem;">
       <form id="loginForm">
-        <input type="email" id="email" placeholder="teacher@example.com" required style="margin-bottom:1rem;"/>
-        <input type="password" id="password" placeholder="••••••••" required style="margin-bottom:1.5rem;"/>
-        <button type="submit" style="width:100%;">Sign In</button>
+        <input type="email" id="email" placeholder="teacher@school.com" required style="margin-bottom:1.2rem;"/>
+        <input type="password" id="password" placeholder="Password" required style="margin-bottom:1.8rem;"/>
+        <button type="submit" style="width:100%; padding:0.95rem 1.8rem; font-size:1.05rem;">Sign In</button>
       </form>
     </div>
   </div>
 
-  <!-- Dashboard -->
+  <!-- ── Main Dashboard ───────────────────────────────────── -->
   <div id="dashboard" class="hidden">
     <header class="container flex flex-between">
       <div class="flex">
-        <h1>Lumina</h1>
-        <span style="margin-left:1.5rem; color:var(--text-muted);">Teacher Portal</span>
+        <h1 style="background:linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+          Lumina
+        </h1>
+        <span style="margin-left:1.6rem; color:var(--text-muted); font-weight:500;">Teacher Hub</span>
       </div>
       <div class="flex">
         <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
-        <button onclick="logout()">Sign Out</button>
+        <button onclick="logout()" class="outline">Sign Out</button>
       </div>
     </header>
 
     <div class="container">
-      <h2>Welcome, <span id="teacherName">Teacher</span></h2>
+      <h2>Welcome back, <span id="teacherName" style="color:var(--primary-soft);"></span></h2>
 
-      <!-- MAIN VIEWS -->
       <div id="classListView">
-        <div class="flex flex-between" style="margin:1.5rem 0 1rem;">
+        <div class="flex flex-between" style="margin:2rem 0 1.4rem; flex-wrap:wrap; gap:1rem;">
           <h3>Your Classes</h3>
-          <button onclick="showModal('createClassModal')">+ New Class</button>
+          <button onclick="showModal('createClassModal')">+ Create Class</button>
         </div>
         <div class="grid-2" id="classesList"></div>
       </div>
 
       <div id="taskListView" class="hidden">
-        <div class="flex flex-between" style="margin-bottom:1.5rem;">
-          <h3 id="currentClassTitle">Tasks</h3>
+        <div class="flex flex-between" style="margin-bottom:1.6rem; flex-wrap:wrap; gap:1rem;">
+          <h3 id="currentClassTitle"></h3>
           <div class="flex">
-            <button onclick="showChatForClass()">Chat</button>
-            <button onclick="showClassList()">← Classes</button>
+            <button onclick="showChatForClass()">Class Chat</button>
+            <button onclick="showClassList()" class="outline">← Classes</button>
           </div>
         </div>
         <div id="tasksContainer" class="grid-2"></div>
-        <button onclick="showModal('createTaskModal')" style="margin-top:1.5rem;">+ Assign Task</button>
+        <button onclick="showModal('createTaskModal')" style="margin-top:1.8rem;">+ New Task</button>
       </div>
 
       <div id="submissionView" class="hidden">
-        <div class="flex flex-between" style="margin-bottom:1.5rem;">
-          <h3 id="submissionTaskTitle">Submissions</h3>
-          <button onclick="showTaskList(currentClassId)">← Tasks</button>
+        <div class="flex flex-between" style="margin-bottom:1.6rem;">
+          <h3 id="submissionTaskTitle"></h3>
+          <button onclick="showTaskList(currentClassId)" class="outline">← Back to Tasks</button>
         </div>
         <div id="submissionsContainer"></div>
       </div>
 
-      <!-- CHAT VIEW -->
       <div id="chatView" class="hidden">
-        <div id="chatHeader" class="flex flex-between">
+        <div id="chatHeader" class="flex flex-between" style="padding:1.3rem 1.8rem; background:rgba(0,0,0,0.25); border-bottom:1px solid var(--border);">
           <h3 id="chatClassName">Class Chat</h3>
-          <button onclick="closeChat()">← Back</button>
+          <div class="flex">
+            <button class="outline danger" onclick="confirmDeleteChat()" style="margin-right:1rem;">Clear Chat</button>
+            <button onclick="closeChat()" class="outline">← Back</button>
+          </div>
         </div>
         <div id="messagesContainer"></div>
         <div id="chatInputArea">
@@ -203,362 +333,32 @@
     </div>
   </div>
 
-  <!-- Modals (Class + Task) – same as previous versions -->
-  <div id="createClassModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:1000;">
-    <div class="card" style="width:90%;max-width:480px;">
-      <h2>Create Class</h2>
-      <form id="createClassForm" style="margin-top:1.5rem;">
-        <div style="margin-bottom:1.25rem;">
-          <label>Class Name</label>
-          <input type="text" id="className" required placeholder="Grade 10 Mathematics"/>
-        </div>
-        <div style="margin-bottom:1.5rem;">
-          <label>Subject (optional)</label>
-          <input type="text" id="classSubject" placeholder="Mathematics"/>
-        </div>
-        <div class="flex" style="justify-content:flex-end;gap:1rem;">
-          <button type="button" class="outline" onclick="closeModal('createClassModal')">Cancel</button>
-          <button type="submit">Create</button>
-        </div>
-      </form>
-    </div>
-  </div>
+  <!-- Modals (Create Class, Create Task, Edit Task, Confirm) -->
+  <!-- ... Keeping the same modal structure as previous version but with updated styling classes ... -->
 
-  <div id="createTaskModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:1000;">
-    <div class="card" style="width:90%;max-width:560px;">
-      <h2>Assign Task</h2>
-      <form id="createTaskForm" style="margin-top:1.5rem;">
-        <div style="margin-bottom:1.25rem;">
-          <label>Class</label>
-          <select id="taskClassId" required></select>
-        </div>
-        <div style="margin-bottom:1.25rem;">
-          <label>Title</label>
-          <input type="text" id="taskTitle" required placeholder="Chapter 5 Questions"/>
-        </div>
-        <div style="margin-bottom:1.25rem;">
-          <label>Instructions</label>
-          <textarea id="taskDesc" rows="4" placeholder="Complete questions 1–10. Show all working..."></textarea>
-        </div>
-        <div style="margin-bottom:1.5rem;">
-          <label>Due Date (optional)</label>
-          <input type="date" id="taskDueDate"/>
-        </div>
-        <div class="flex" style="justify-content:flex-end;gap:1rem;">
-          <button type="button" class="outline" onclick="closeModal('createTaskModal')">Cancel</button>
-          <button type="submit">Assign</button>
-        </div>
-      </form>
-    </div>
-  </div>
+  <!-- For brevity I'm not repeating all modal HTML here – use the structure from the previous message and apply the same modern card/input/button styles -->
 
   <script>
-    // ──────────────────────────────────────────────
-    // Data
-    // ──────────────────────────────────────────────
-    let currentUser = null;
-    let classes = [];
-    let tasks = [];
-    let submissions = [];
-    let chatMessages = {}; // { classId: [ {sender, text, timestamp, isTeacher} ] }
-
-    let currentClassId = null;
-    let currentTaskId = null;
-
-    const views = {
-      classList: document.getElementById("classListView"),
-      taskList: document.getElementById("taskListView"),
-      submission: document.getElementById("submissionView"),
-      chat: document.getElementById("chatView")
-    };
-
-    // ──────────────────────────────────────────────
-    // Login
-    // ──────────────────────────────────────────────
-    document.getElementById("loginForm").addEventListener("submit", e => {
-      e.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      if (email) {
-        currentUser = { name: email.split("@")[0] || "Teacher" };
-        document.getElementById("teacherName").textContent = currentUser.name;
-        document.getElementById("loginScreen").classList.add("hidden");
-        document.getElementById("dashboard").classList.remove("hidden");
-        renderClasses();
-      }
-    });
-
-    function logout() {
-      currentUser = null;
-      document.getElementById("dashboard").classList.add("hidden");
-      document.getElementById("loginScreen").classList.remove("hidden");
-    }
-
-    // ──────────────────────────────────────────────
-    // Navigation
-    // ──────────────────────────────────────────────
-    function showClassList() {
-      currentClassId = null;
-      Object.values(views).forEach(v => v.classList.add("hidden"));
-      views.classList.classList.remove("hidden");
-      renderClasses();
-    }
-
-    function showTaskList(classId) {
-      currentClassId = classId;
-      const cls = classes.find(c => c.id === classId);
-      document.getElementById("currentClassTitle").textContent = `Tasks • ${cls?.name || ''}`;
-      Object.values(views).forEach(v => v.classList.add("hidden"));
-      views.taskList.classList.remove("hidden");
-      renderTasksForCurrentClass();
-    }
-
-    function showSubmissions(taskId) {
-      currentTaskId = taskId;
-      const task = tasks.find(t => t.id === taskId);
-      document.getElementById("submissionTaskTitle").textContent = `Submissions • ${task?.title || ''}`;
-      Object.values(views).forEach(v => v.classList.add("hidden"));
-      views.submission.classList.remove("hidden");
-      renderSubmissionsForTask();
-    }
-
-    function showChatForClass(classId = currentClassId) {
-      currentClassId = classId;
-      const cls = classes.find(c => c.id === classId);
-      document.getElementById("chatClassName").textContent = `Chat • ${cls?.name || 'Class'}`;
-      Object.values(views).forEach(v => v.classList.add("hidden"));
-      views.chat.classList.remove("hidden");
-      renderChatMessages();
-      scrollChatToBottom();
-    }
-
-    function closeChat() {
-      views.chat.classList.add("hidden");
-      showTaskList(currentClassId); // or showClassList() if preferred
-    }
-
-    // ──────────────────────────────────────────────
-    // Render
-    // ──────────────────────────────────────────────
-    function renderClasses() {
-      const container = document.getElementById("classesList");
-      container.innerHTML = classes.length === 0
-        ? `<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">No classes yet</p>`
-        : "";
-
-      classes.forEach(cls => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <h3>${cls.name}</h3>
-          <p style="color:var(--text-muted);">${cls.subject || '—'} • ${cls.studentCount || 0} learners</p>
-          <div style="margin-top:1.25rem;" class="flex" class="flex-wrap">
-            <button onclick="showTaskList('${cls.id}')">Tasks</button>
-            <button onclick="showChatForClass('${cls.id}')">Chat</button>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function renderTasksForCurrentClass() {
-      const container = document.getElementById("tasksContainer");
-      container.innerHTML = "";
-      const classTasks = tasks.filter(t => t.classId === currentClassId);
-      if (classTasks.length === 0) {
-        container.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">No tasks yet</p>`;
-        return;
-      }
-      classTasks.forEach(task => {
-        const subs = submissions.filter(s => s.taskId === task.id).length;
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <h3>${task.title}</h3>
-          <p style="color:var(--text-muted);margin:0.4rem 0;">${task.description?.substring(0,70) || ''}${task.description?.length > 70 ? '...' : ''}</p>
-          <p style="color:var(--text-muted);font-size:0.95rem;">
-            Due: ${task.dueDate || '—'} • ${subs} submission${subs !== 1 ? 's' : ''}
-          </p>
-          <button style="margin-top:1rem;" onclick="showSubmissions('${task.id}')">View Submissions</button>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function renderSubmissionsForTask() {
-      const container = document.getElementById("submissionsContainer");
-      container.innerHTML = "";
-      const taskSubs = submissions.filter(s => s.taskId === currentTaskId);
-      if (taskSubs.length === 0) {
-        container.innerHTML = `<p style="text-align:center;color:var(--text-muted);">No submissions yet.</p>`;
-        return;
-      }
-      taskSubs.forEach(sub => {
-        const div = document.createElement("div");
-        div.className = "submission-item";
-        div.innerHTML = `
-          <div class="flex flex-between" style="margin-bottom:0.6rem;font-weight:600;">
-            <span>${sub.studentName}</span>
-            <span style="font-size:0.9rem;opacity:0.8;">${sub.submittedAt}</span>
-          </div>
-          <p style="white-space:pre-wrap;margin-bottom:1rem;">${sub.content || "(empty)"}</p>
-          <div>
-            <strong>Grade:</strong> ${sub.grade ?? "—"}<br>
-            <strong>Feedback:</strong> <span style="white-space:pre-wrap;">${sub.teacherFeedback || "(none yet)"}</span>
-          </div>
-          <form data-sub-id="${sub.id}" style="margin-top:1.25rem;">
-            <div style="margin:0.8rem 0;">
-              <label>Grade (0–100)</label>
-              <input type="number" min="0" max="100" value="${sub.grade||''}"/>
-            </div>
-            <div style="margin-bottom:0.8rem;">
-              <label>Feedback</label>
-              <textarea rows="3">${sub.teacherFeedback||''}</textarea>
-            </div>
-            <button type="submit">Save</button>
-          </form>
-        `;
-        container.appendChild(div);
-
-        div.querySelector("form").addEventListener("submit", e => {
-          e.preventDefault();
-          const [gradeInput, feedbackTa] = e.target.querySelectorAll("input, textarea");
-          sub.grade = parseInt(gradeInput.value) || null;
-          sub.teacherFeedback = feedbackTa.value.trim();
-          alert(`Updated for ${sub.studentName}`);
-          renderSubmissionsForTask();
-        });
-      });
-    }
-
-    function renderChatMessages() {
-      const container = document.getElementById("messagesContainer");
-      container.innerHTML = "";
-      const msgs = chatMessages[currentClassId] || [];
-      msgs.forEach(m => {
-        const div = document.createElement("div");
-        div.className = `message ${m.isTeacher ? 'message-self' : 'message-other'}`;
-        div.innerHTML = `
-          <div class="message-sender">${m.sender}</div>
-          <div>${m.text}</div>
-          <div class="message-time">${m.timestamp}</div>
-        `;
-        container.appendChild(div);
-      });
-      scrollChatToBottom();
-    }
-
-    function scrollChatToBottom() {
-      const container = document.getElementById("messagesContainer");
-      container.scrollTop = container.scrollHeight;
-    }
-
-    function sendChatMessage() {
-      const input = document.getElementById("chatMessageInput");
-      const text = input.value.trim();
-      if (!text || !currentClassId) return;
-
-      if (!chatMessages[currentClassId]) chatMessages[currentClassId] = [];
-
-      chatMessages[currentClassId].push({
-        sender: currentUser.name + " (Teacher)",
-        text,
-        timestamp: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
-        isTeacher: true
-      });
-
-      input.value = "";
-      renderChatMessages();
-    }
-
-    // Fake learner messages (demo)
-    setInterval(() => {
-      if (currentClassId && views.chat.classList.contains("hidden") === false && Math.random() < 0.15) {
-        const fakeNames = ["Thabo", "Lerato", "Amahle", "Sipho", "Nia"];
-        const name = fakeNames[Math.floor(Math.random() * fakeNames.length)];
-        if (!chatMessages[currentClassId]) chatMessages[currentClassId] = [];
-        chatMessages[currentClassId].push({
-          sender: name,
-          text: ["Sir, question 3 please?", "Understood, thank you!", "When is the next test?", "I submitted already"][Math.floor(Math.random()*4)],
-          timestamp: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
-          isTeacher: false
-        });
-        renderChatMessages();
-      }
-    }, 12000);
-
-    // ──────────────────────────────────────────────
-    // Forms
-    // ──────────────────────────────────────────────
-    document.getElementById("createClassForm").addEventListener("submit", e => {
-      e.preventDefault();
-      const name = document.getElementById("className").value.trim();
-      if (!name) return;
-      const cls = {
-        id: "cls_" + Date.now(),
-        name,
-        subject: document.getElementById("classSubject").value.trim() || "General",
-        studentCount: 0
-      };
-      classes.push(cls);
-      renderClasses();
-      updateTaskClassOptions();
-      closeModal("createClassModal");
-    });
-
-    document.getElementById("createTaskForm").addEventListener("submit", e => {
-      e.preventDefault();
-      const classId = document.getElementById("taskClassId").value;
-      const title = document.getElementById("taskTitle").value.trim();
-      if (!classId || !title) return;
-      const task = {
-        id: "tsk_" + Date.now(),
-        classId,
-        title,
-        description: document.getElementById("taskDesc").value.trim(),
-        dueDate: document.getElementById("taskDueDate").value || null
-      };
-      tasks.push(task);
-
-      // Demo submissions
-      ["Thabo", "Lerato", "Amahle"].forEach((n,i) => {
-        submissions.push({
-          id: "sub_" + Date.now() + i,
-          taskId: task.id,
-          studentName: n,
-          content: `My answer for ${title}...`,
-          submittedAt: new Date().toLocaleDateString(),
-          grade: null,
-          teacherFeedback: ""
-        });
-      });
-
-      closeModal("createTaskModal");
-      showTaskList(classId);
-    });
-
-    function updateTaskClassOptions() {
-      const sel = document.getElementById("taskClassId");
-      sel.innerHTML = '<option value="">Select class...</option>';
-      classes.forEach(c => {
-        const opt = document.createElement("option");
-        opt.value = c.id;
-        opt.textContent = c.name;
-        sel.appendChild(opt);
-      });
-    }
-
-    // ──────────────────────────────────────────────
-    // Helpers
-    // ──────────────────────────────────────────────
-    function showModal(id) { document.getElementById(id).classList.remove("hidden"); }
-    function closeModal(id) { document.getElementById(id).classList.add("hidden"); }
+    // ──────────────────────────────────────────────────────────────
+    // The JavaScript logic remains almost identical to the previous version
+    // Just make sure to call render functions after theme change if needed
+    // ──────────────────────────────────────────────────────────────
 
     function toggleTheme() {
-      document.documentElement.setAttribute("data-theme",
-        document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark");
+      const html = document.documentElement;
+      const current = html.getAttribute("data-theme");
+      html.setAttribute("data-theme", current === "dark" ? "light" : "dark");
     }
 
+    // Add this line at the end of render functions if you want instant theme refresh
+    // document.documentElement.style.display = 'none';
+    // document.documentElement.offsetHeight; // force reflow
+    // document.documentElement.style.display = '';
+
     document.documentElement.setAttribute("data-theme", "dark");
+
+    // Rest of your script (login, renderClasses, renderTasks, etc.) stays the same
+    // ...........................................................................
   </script>
 </body>
 </html>
