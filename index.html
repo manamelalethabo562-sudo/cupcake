@@ -168,7 +168,7 @@
               <thead>
                 <tr>
                   <th>Student Name</th>
-                  <th>Email</th>
+                  <th>Student Email</th>
                   <th>Assignment</th>
                   <th>Link</th>
                   <th>Actions</th>
@@ -264,28 +264,24 @@
       box.innerHTML = '';
       snap.forEach(child => {
         const d = child.val();
-        box.innerHTML += `<div class="msg"><b>${d.user || 'Unknown'}</b>${d.text}</div>`;
+        box.innerHTML += `<div class="msg"><b>${d.user || 'Unknown User'}</b>${d.text}</div>`;
       });
       box.scrollTop = box.scrollHeight;
     });
 
-    // Submissions Listener: Displays the Student Name correctly
     onValue(ref(db, 'submissions'), (snap) => {
       const list = document.getElementById('submissionList');
       list.innerHTML = '';
       snap.forEach(child => {
         const d = child.val();
-        // Priority: Use studentName, fallback to email, then fallback to 'Anonymous'
-        const studentName = d.studentName || d.studentEmail || "Anonymous Student";
-        const email = d.studentEmail || "N/A";
-        const assignment = d.assignmentTitle || "Assignment";
-        const link = d.link || "#";
-
+        const sName = d.studentName || "Anonymous";
+        const sEmail = d.studentEmail || "No Email Provided";
+        
         list.innerHTML += `<tr>
-          <td><b>${studentName}</b></td>
-          <td>${email}</td>
-          <td>${assignment}</td>
-          <td><a href="${link}" target="_blank">Open Link</a></td>
+          <td><b>${sName}</b></td>
+          <td>${sEmail}</td>
+          <td>${d.assignmentTitle || 'Assignment'}</td>
+          <td><a href="${d.link}" target="_blank">View Work</a></td>
           <td><button class="danger" onclick="deleteItem('submissions/${child.key}')">Remove</button></td>
         </tr>`;
       });
@@ -335,8 +331,9 @@
   document.getElementById('btnSendChat').onclick = async () => {
     const text = document.getElementById('chatInput').value;
     if(text && auth.currentUser) {
-        const senderName = auth.currentUser.displayName || auth.currentUser.email;
-        await push(ref(db, 'chats'), { user: senderName, text, ts: serverTimestamp() });
+        // Displays both Lecturer Name and Lecturer Email in the chat
+        const identifier = `${auth.currentUser.displayName} (${auth.currentUser.email})`;
+        await push(ref(db, 'chats'), { user: identifier, text, ts: serverTimestamp() });
         document.getElementById('chatInput').value = '';
     }
   };
