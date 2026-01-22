@@ -63,20 +63,20 @@
     <div class="logo"><i data-lucide="layers"></i><span>LMS Admin</span></div>
     <nav id="sidebar-nav" style="display:none">
       <ul>
-        <li><a class="nav-link" data-target="analytics-sec"><i data-lucide="bar-chart-3"></i><span>Analytics</span></a></li>
-        <li><a class="nav-link" data-target="invite-sec"><i data-lucide="user-plus"></i><span>Add Learner</span></a></li>
+        <li><a class="nav-link active" data-target="invite-sec"><i data-lucide="user-plus"></i><span>Add Learner</span></a></li>
         <li><a class="nav-link" data-target="directory-sec"><i data-lucide="users"></i><span>Directory</span></a></li>
         <li><a class="nav-link" data-target="materials-sec"><i data-lucide="book-open"></i><span>Materials</span></a></li>
         <li><a class="nav-link" data-target="assignments-sec"><i data-lucide="file-text"></i><span>Assignments</span></a></li>
         <li><a class="nav-link" data-target="timetable-sec"><i data-lucide="calendar"></i><span>Timetable</span></a></li>
         <li><a class="nav-link" data-target="chats-sec"><i data-lucide="message-square"></i><span>Chat</span></a></li>
+        <li><a class="nav-link" data-target="analytics-sec"><i data-lucide="bar-chart-3"></i><span>Analytics</span></a></li>
       </ul>
     </nav>
   </aside>
 
   <div class="main-wrapper">
     <header>
-      <h2 id="view-title">Dashboard</h2>
+      <h2 id="view-title">Add Learner</h2>
       <button id="signOutBtn" style="display:none;background:transparent;color:var(--text-main);border:1px solid var(--border)">Sign Out</button>
     </header>
 
@@ -88,7 +88,17 @@
 
       <div id="dashboard" style="display:none">
         
-        <section id="analytics-sec" class="content-section active">
+        <section id="invite-sec" class="content-section active">
+          <div class="card">
+            <h3>Enroll Learner</h3>
+            <label class="label">Email</label><input type="email" id="newLearnerEmail">
+            <label class="label">Course</label><select class="qual-drop" id="qualSelect"></select>
+            <label class="label">Subjects</label><textarea id="learnerSubjects" rows="2"></textarea>
+            <button id="provisionBtn" class="success" style="width:100%">Complete Enrollment</button>
+          </div>
+        </section>
+
+        <section id="analytics-sec" class="content-section">
           <div class="stat-grid">
             <div class="stat-card"><h4>Total Learners</h4><p id="stat-enrollment">0</p></div>
             <div class="stat-card" style="background:var(--success)"><h4>Work Submissions</h4><p id="stat-submissions">0</p></div>
@@ -99,16 +109,6 @@
               <thead><tr><th>Student</th><th>Assignment</th><th>Date</th><th>Work</th></tr></thead>
               <tbody id="submissionTable"></tbody>
             </table>
-          </div>
-        </section>
-
-        <section id="invite-sec" class="content-section">
-          <div class="card">
-            <h3>Enroll Learner</h3>
-            <label class="label">Email</label><input type="email" id="newLearnerEmail">
-            <label class="label">Course</label><select class="qual-drop" id="qualSelect"></select>
-            <label class="label">Subjects</label><textarea id="learnerSubjects" rows="2"></textarea>
-            <button id="provisionBtn" class="success" style="width:100%">Complete Enrollment</button>
           </div>
         </section>
 
