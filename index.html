@@ -19,29 +19,25 @@
     *{box-sizing:border-box;transition:background-color .2s,color .2s,border-color .2s,width .3s cubic-bezier(.4,0,.2,1)}
     body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);margin:0;color:var(--text-main);height:100vh;overflow:hidden}
     .layout{display:flex;height:100vh}
-    
-    /* Sidebar Base */
     aside{background:var(--card-bg);border-right:1px solid var(--border);padding:1.5rem 0;overflow:hidden;width:var(--sidebar-w);z-index:100;position:absolute;height:100vh;display:flex;flex-direction:column;box-shadow:var(--shadow)}
     aside:hover{width:var(--sidebar-w-expanded);backdrop-filter:blur(8px)}
-    
-    .logo{padding:0 1.5rem 2rem;font-size:1.25rem;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:18px}
-    .logo i { min-width: 24px; margin-left: 2px; }
     .logo span{opacity:0;transition:opacity .2s ease;white-space:nowrap}
     aside:hover .logo span{opacity:1}
-
+    .logo{padding:0 1.5rem 2rem;font-size:1.25rem;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:18px}
     nav ul{list-style:none;padding:0;margin:0}
     
-    /* Nav Items: Fixed to show icons always */
-    nav a{display:flex;align-items:center;padding:.9rem;color:var(--gray);text-decoration:none;font-weight:500;cursor:pointer;font-size:14px;white-space:nowrap;gap:24px;margin:4px 10px;border-radius:12px; transition: all 0.2s;}
-    nav a i{min-width:24px; margin-left: 11px;} /* Centers icon in the 74px bar */
+    /* Updated nav a to keep icons visible and centered in collapsed mode */
+    nav a{display:flex;align-items:center;padding:.9rem 0;padding-left: 25px;color:var(--gray);text-decoration:none;font-weight:500;cursor:pointer;font-size:14px;white-space:nowrap;gap:24px;margin:4px 12px;border-radius:12px}
     
     nav a span{opacity:0;transition:opacity .2s ease;pointer-events:none}
     aside:hover nav a span{opacity:1;pointer-events:auto}
     
+    /* Ensure icons don't shrink or disappear */
+    nav a i{min-width:24px; flex-shrink: 0;}
+    
     nav a:hover{background:var(--bg);color:var(--primary)}
     nav a.active{background:#eff6ff;color:var(--primary);font-weight:600}
     body.dark-mode nav a.active{background:#1e3a8a;color:#60a5fa}
-
     .main-wrapper{margin-left:var(--sidebar-w);width:calc(100% - var(--sidebar-w));display:flex;flex-direction:column}
     header{background:var(--card-bg);padding:0 2.5rem;display:flex;justify-content:space-between;align-items:center;min-height:70px;border-bottom:1px solid var(--border)}
     header h2{font-size:1.25rem;font-weight:700;margin:0}
@@ -292,6 +288,7 @@
     const day=document.getElementById('ttDay').value,time=document.getElementById('ttTime').value,sub=document.getElementById('ttSubject').value;
     if(day&&time&&sub)await push(ref(db,'timetable'),{day,time,subject:sub});
   };
+  /* ---- FIXED CHAT SENDER (no more “Unknown User”) ---- */
   document.getElementById('btnSendChat').onclick=async()=>{
     const text=document.getElementById('chatInput').value;
     if(text&&auth.currentUser){
