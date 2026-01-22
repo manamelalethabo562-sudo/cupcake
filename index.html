@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LMS Admin – Full Provisioning & Management</title>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     :root{
@@ -19,24 +20,16 @@
     *{box-sizing:border-box;transition:background-color .2s,color .2s,border-color .2s}
     body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);margin:0;color:var(--text-main);height:100vh;overflow:hidden}
     .layout{display:flex;height:100vh}
-    
-    /* Fixed Sidebar Styles */
     aside{background:var(--card-bg);border-right:1px solid var(--border);padding:1.5rem 0;width:var(--sidebar-w);z-index:100;height:100vh;display:flex;flex-direction:column;box-shadow:var(--shadow);flex-shrink: 0;}
-    
     .logo{padding:0 1.5rem 2rem;font-size:1.25rem;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:12px}
     .logo i { min-width: 24px; }
-    
     nav ul{list-style:none;padding:0;margin:0}
-    
-    /* Navigation: Icons and Text Always Visible */
     nav a{display:flex;align-items:center;padding:.8rem 1.2rem;color:var(--gray);text-decoration:none;font-weight:500;cursor:pointer;font-size:14px;white-space:nowrap;gap:12px;margin:4px 12px;border-radius:12px}
     nav a i{min-width:24px; flex-shrink: 0;}
     nav a span{opacity:1; pointer-events:auto}
-    
     nav a:hover{background:var(--bg);color:var(--primary)}
     nav a.active{background:#eff6ff;color:var(--primary);font-weight:600}
     body.dark-mode nav a.active{background:#1e3a8a;color:#60a5fa}
-
     .main-wrapper{flex:1; display:flex; flex-direction:column; min-width: 0;}
     header{background:var(--card-bg);padding:0 2.5rem;display:flex;justify-content:space-between;align-items:center;min-height:70px;border-bottom:1px solid var(--border)}
     header h2{font-size:1.25rem;font-weight:700;margin:0}
@@ -51,6 +44,7 @@
     th{background:var(--bg);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);font-weight:700}
     button{background:var(--primary);color:#fff;border:none;padding:.65rem 1.4rem;border-radius:9999px;cursor:pointer;font-weight:600;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
     button:active{transform:scale(.98)}
+    button.secondary{background:var(--gray)}
     button.danger{background:var(--danger)}
     button.success{background:var(--success)}
     input,select,textarea{padding:.75rem;border:1px solid var(--border);border-radius:10px;width:100%;margin-bottom:12px;background:var(--bg);color:var(--text-main);font-size:14px}
@@ -62,6 +56,7 @@
     #chat-box{height:350px;overflow-y:auto;border:1px solid var(--border);padding:1.5rem;border-radius:16px;background:var(--bg);margin-bottom:1.5rem}
     .msg{margin-bottom:1rem;padding:1rem;border-radius:16px;background:var(--card-bg);border:1px solid var(--border);max-width:80%}
     .msg b{color:var(--primary);font-size:11px;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px}
+    .file-status{font-size: 12px; margin-bottom: 10px; display: block; color: var(--success); font-weight: 600;}
   </style>
 </head>
 <body>
@@ -122,10 +117,13 @@
         <section id="materials-sec" class="content-section">
           <div class="card">
             <h3 style="margin-top:0">Upload Learning Materials</h3>
-            <label class="label">Material Title</label><input type="text" id="matTitle" placeholder="e.g. Lecture 1: Intro to Accounting">
+            <label class="label">Material Title</label><input type="text" id="matTitle" placeholder="e.g. Lecture 1">
             <label class="label">Target Qualification</label><select class="qual-drop" id="matQual"></select>
-            <label class="label">Resource URL (Drive/PDF Link)</label><input type="text" id="matLink" placeholder="https://...">
-            <button id="btnUploadMat" class="success">Post Material</button>
+            <label class="label">PDF Document</label>
+            <span id="matFileStatus" class="file-status"></span>
+            <button id="btnUploadMatFile" class="secondary" style="margin-bottom: 12px; width: 100%"><i data-lucide="upload-cloud"></i> Select PDF File</button>
+            <input type="hidden" id="matLink">
+            <button id="btnUploadMat" class="success" style="width: 100%">Post Material</button>
           </div>
         </section>
 
@@ -135,7 +133,11 @@
             <input type="text" id="assTitle" placeholder="Assignment Name">
             <select class="qual-drop" id="assQual"></select>
             <label class="label">Due Date</label><input type="date" id="assDate">
-            <button id="btnPostAss" class="success">Post Assignment</button>
+            <label class="label">Assignment Brief (PDF)</label>
+            <span id="assFileStatus" class="file-status"></span>
+            <button id="btnUploadAssFile" class="secondary" style="margin-bottom: 12px; width: 100%"><i data-lucide="file-up"></i> Upload Assignment PDF</button>
+            <input type="hidden" id="assLink">
+            <button id="btnPostAss" class="success" style="width: 100%">Post Assignment</button>
           </div>
         </section>
 
@@ -198,6 +200,10 @@
   const db=getDatabase(app);
   lucide.createIcons();
 
+  // Cloudinary Config (Extracted from your URL)
+  const CLOUDINARY_CLOUD_NAME = "dxp01qjvb";
+  const CLOUDINARY_UPLOAD_PRESET = "ml_default"; // You might need to create an 'unsigned' preset in Cloudinary settings
+
   const themeToggle=document.getElementById('themeToggle');
   const themeIcon=document.getElementById('themeIcon');
   themeToggle.onclick=()=>{
@@ -221,6 +227,25 @@
     document.getElementById('signOutBtn').style.display=user?'block':'none';
     if(user)initApp();
   });
+
+  // --- File Upload Logic ---
+  const openUploadWidget = (targetInputId, statusId) => {
+    cloudinary.openUploadWidget({
+      cloudName: dxp01qjvb,
+      uploadPreset: CLOUDINARY_UPLOAD_PRESET,
+      sources: ['local', 'url', 'google_drive'],
+      clientAllowedFormats: ['pdf'],
+      multiple: false
+    }, (error, result) => {
+      if (!error && result && result.event === "success") {
+        document.getElementById(targetInputId).value = result.info.secure_url;
+        document.getElementById(statusId).innerText = "✅ PDF Ready: " + result.info.original_filename;
+      }
+    });
+  };
+
+  document.getElementById('btnUploadMatFile').onclick = () => openUploadWidget('matLink', 'matFileStatus');
+  document.getElementById('btnUploadAssFile').onclick = () => openUploadWidget('assLink', 'assFileStatus');
 
   function initApp(){
     document.querySelectorAll('.qual-drop').forEach(sel=>{
@@ -272,11 +297,21 @@
   };
   document.getElementById('btnUploadMat').onclick=async()=>{
     const t=document.getElementById('matTitle').value,q=document.getElementById('matQual').value,l=document.getElementById('matLink').value;
-    if(t&&q&&l){await push(ref(db,'materials'),{title:t,qual:q,link:l});alert("Material Uploaded")}
+    if(t&&q&&l){
+        await push(ref(db,'materials'),{title:t,qual:q,link:l});
+        alert("Material Posted!");
+        document.getElementById('matTitle').value = '';
+        document.getElementById('matFileStatus').innerText = '';
+    } else { alert("Please upload a PDF first."); }
   };
   document.getElementById('btnPostAss').onclick=async()=>{
-    const t=document.getElementById('assTitle').value,q=document.getElementById('assQual').value,d=document.getElementById('assDate').value;
-    if(t&&q&&d){await push(ref(db,'assignments'),{title:t,qual:q,dueDate:d});alert("Assignment Issued")}
+    const t=document.getElementById('assTitle').value,q=document.getElementById('assQual').value,d=document.getElementById('assDate').value,l=document.getElementById('assLink').value;
+    if(t&&q&&d&&l){
+        await push(ref(db,'assignments'),{title:t,qual:q,dueDate:d,link:l});
+        alert("Assignment Issued!");
+        document.getElementById('assTitle').value = '';
+        document.getElementById('assFileStatus').innerText = '';
+    } else { alert("Please complete all fields and upload the PDF."); }
   };
   document.getElementById('btnAddTT').onclick=async()=>{
     const day=document.getElementById('ttDay').value,time=document.getElementById('ttTime').value,sub=document.getElementById('ttSubject').value;
