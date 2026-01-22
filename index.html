@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LMS Admin – Full Provisioning & Management</title>
+  <title>LMS Admin – Full Management Suite</title>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
   <style>
@@ -15,14 +15,14 @@
     }
     body.dark-mode{
       --bg:#020617;--card-bg:#0f172a;--text-main:#f8fafc;--border:#1e293b;--gray:#94a3b8;
-      --shadow:0 10px 15px -3px rgb(0 0 0 / 0.5);
     }
-    *{box-sizing:border-box;transition:background-color .2s,color .2s,border-color .2s}
+    *{box-sizing:border-box;transition:background-color .2s,color .2s}
     body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);margin:0;color:var(--text-main);height:100vh;overflow:hidden}
     .layout{display:flex;height:100vh}
-    aside{background:var(--card-bg);border-right:1px solid var(--border);padding:1.5rem 0;width:var(--sidebar-w);z-index:100;height:100vh;display:flex;flex-direction:column;box-shadow:var(--shadow);flex-shrink: 0;}
+    aside{background:var(--card-bg);border-right:1px solid var(--border);padding:1.5rem 0;width:var(--sidebar-w);z-index:100;display:flex;flex-direction:column;box-shadow:var(--shadow)}
     .logo{padding:0 1.5rem 2rem;font-size:1.25rem;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:12px}
-    nav a{display:flex;align-items:center;padding:.8rem 1.2rem;color:var(--gray);text-decoration:none;font-weight:500;cursor:pointer;font-size:14px;white-space:nowrap;gap:12px;margin:4px 12px;border-radius:12px}
+    nav a{display:flex;align-items:center;padding:.8rem 1.2rem;color:var(--gray);text-decoration:none;font-weight:500;cursor:pointer;font-size:14px;margin:4px 12px;border-radius:12px}
+    nav a:hover{background:var(--bg);color:var(--primary)}
     nav a.active{background:#eff6ff;color:var(--primary);font-weight:600}
     .main-wrapper{flex:1; display:flex; flex-direction:column; min-width: 0;}
     header{background:var(--card-bg);padding:0 2.5rem;display:flex;justify-content:space-between;align-items:center;min-height:70px;border-bottom:1px solid var(--border)}
@@ -34,16 +34,16 @@
     button{background:var(--primary);color:#fff;border:none;padding:.65rem 1.4rem;border-radius:9999px;cursor:pointer;font-weight:600;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
     button.success{background:var(--success)}
     button.danger{background:var(--danger)}
-    input,select,textarea{padding:.75rem;border:1px solid var(--border);border-radius:10px;width:100%;margin-bottom:12px;background:var(--bg);color:var(--text-main)}
-    .label{font-size:12px;color:var(--gray);font-weight:600;display:block;margin-bottom:8px;text-transform:uppercase}
-    .file-status{font-size: 12px; margin-bottom: 10px; display: block; color: var(--success); font-weight: 600;}
+    input,select,textarea{padding:.75rem;border:1px solid var(--border);border-radius:10px;width:100%;margin-bottom:12px;background:var(--bg);color:var(--text-main);font-family: inherit;}
+    .label{font-size:11px;color:var(--gray);font-weight:700;display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px}
+    .file-status{font-size: 12px; margin-bottom: 12px; display: block; color: var(--success); font-weight: 600;}
     .content-section{display:none}
     .content-section.active{display:block}
   </style>
 </head>
 <body>
 <div class="layout">
-  <aside id="sidebar">
+  <aside>
     <div class="logo"><i data-lucide="layers"></i><span>LMS Admin</span></div>
     <nav id="sidebar-nav" style="display:none">
       <ul>
@@ -53,7 +53,6 @@
         <li><a class="nav-link" data-target="assignments-sec"><i data-lucide="file-text"></i><span>Assignments</span></a></li>
         <li><a class="nav-link" data-target="timetable-sec"><i data-lucide="calendar"></i><span>Timetable</span></a></li>
         <li><a class="nav-link" data-target="chats-sec"><i data-lucide="message-square"></i><span>Chats</span></a></li>
-        <li><a class="nav-link" data-target="reports-sec"><i data-lucide="bar-chart-3"></i><span>Analytics</span></a></li>
       </ul>
     </nav>
   </aside>
@@ -61,9 +60,7 @@
   <div class="main-wrapper">
     <header>
       <h2 id="view-title">Provisioning</h2>
-      <div style="display:flex;gap:15px;align-items:center">
-        <button id="signOutBtn" style="display:none;background:transparent;color:var(--text-main);border:1px solid var(--border)">Sign Out</button>
-      </div>
+      <button id="signOutBtn" style="display:none;background:transparent;color:var(--text-main);border:1px solid var(--border)">Sign Out</button>
     </header>
 
     <main>
@@ -73,19 +70,20 @@
       </div>
 
       <div id="dashboard" style="display:none">
+        
         <section id="invite-sec" class="content-section active">
           <div class="card">
             <h3>New Learner Provisioning</h3>
             <label class="label">Learner Email</label>
-            <input type="email" id="newLearnerEmail" placeholder="student@example.com">
+            <input type="email" id="newLearnerEmail" placeholder="student@example.ac.za">
             
-            <label class="label">Qualification</label>
+            <label class="label">Assign Qualification</label>
             <select class="qual-drop" id="qualSelect"></select>
             
-            <label class="label">Included Subjects (Comma separated)</label>
-            <textarea id="learnerSubjects" placeholder="Enter subjects for this student..." rows="3" style="width:100%"></textarea>
+            <label class="label">Included Subjects (Editable)</label>
+            <textarea id="learnerSubjects" placeholder="Select a qualification to see default subjects..." rows="3"></textarea>
             
-            <button id="provisionBtn" class="success" style="width:100%; margin-top:1rem">Invite & Enroll Learner</button>
+            <button id="provisionBtn" class="success" style="width:100%">Invite & Enroll Learner</button>
           </div>
         </section>
 
@@ -93,8 +91,8 @@
           <div class="card">
             <h3>Learner Directory</h3>
             <table>
-                <thead><tr><th>Email</th><th>Qualification</th><th>Subjects</th><th>Actions</th></tr></thead>
-                <tbody id="directoryList"></tbody>
+              <thead><tr><th>Email</th><th>Qual</th><th>Subjects</th><th>Action</th></tr></thead>
+              <tbody id="directoryList"></tbody>
             </table>
           </div>
         </section>
@@ -105,16 +103,40 @@
             <input type="text" id="matTitle" placeholder="Material Title">
             <select class="qual-drop" id="matQual"></select>
             <span id="matFileStatus" class="file-status"></span>
-            <button id="btnUploadMatFile" style="width:100%;margin-bottom:1rem">1. Upload PDF</button>
+            <button id="btnUploadMatFile" style="width:100%; margin-bottom:1rem; background:var(--bg); color:var(--text-main); border:1px dashed var(--border)">
+              <i data-lucide="upload-cloud"></i> 1. Upload PDF
+            </button>
             <input type="hidden" id="matLink">
             <button id="btnUploadMat" class="success" style="width:100%">2. Post Material</button>
           </div>
         </section>
 
-        <section id="assignments-sec" class="content-section"><div class="card"><h3>Assignments</h3><p>Manage assignments here.</p></div></section>
-        <section id="timetable-sec" class="content-section"><div class="card"><h3>Timetable</h3><p>Manage schedule here.</p></div></section>
-        <section id="chats-sec" class="content-section"><div class="card"><h3>Chat</h3><div id="chat-box"></div></div></section>
-        <section id="reports-sec" class="content-section"><div class="card"><h3>Analytics</h3><p>View reports here.</p></div></section>
+        <section id="assignments-sec" class="content-section">
+          <div class="card">
+            <h3>Issue New Assignment</h3>
+            <input type="text" id="assTitle" placeholder="Assignment Title">
+            <select class="qual-drop" id="assQual"></select>
+            <label class="label">Due Date</label>
+            <input type="date" id="assDate">
+            <span id="assFileStatus" class="file-status"></span>
+            <button id="btnUploadAssFile" style="width:100%; margin-bottom:1rem; background:var(--bg); color:var(--text-main); border:1px dashed var(--border)">
+              <i data-lucide="file-up"></i> 1. Upload Assignment Brief (PDF)
+            </button>
+            <input type="hidden" id="assLink">
+            <button id="btnPostAss" class="success" style="width:100%">2. Post Assignment</button>
+          </div>
+          <div class="card">
+            <h3>Active Assignments</h3>
+            <table>
+              <thead><tr><th>Title</th><th>Due</th><th>Brief</th><th>Action</th></tr></thead>
+              <tbody id="assTableList"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="timetable-sec" class="content-section"><div class="card"><h3>Timetable Management</h3><p>Manage weekly schedules here.</p></div></section>
+        <section id="chats-sec" class="content-section"><div class="card"><h3>Broadcasting</h3><p>Broadcast messages to students.</p></div></section>
+
       </div>
     </main>
   </div>
@@ -141,9 +163,9 @@
   lucide.createIcons();
 
   const curriculum = {
-    "BCom Accounting":["Financial Accounting","Commercial Law","Taxation"],
-    "BSc Computer Science":["Algorithms","Web Dev","Database Systems"],
-    "LLB Law":["Legal Research","Civil Procedure","Constitutional Law"]
+    "BCom Accounting":["Financial Accounting","Business Management","Commercial Law"],
+    "BSc Computer Science":["Algorithms","Web Dev","Calculus"],
+    "LLB Law":["Legal History","Family Law","Constitutional Law"]
   };
 
   onAuthStateChanged(auth, user => {
@@ -155,69 +177,80 @@
   });
 
   function initApp() {
-    // Populate Dropdowns
+    // Dropdowns
     document.querySelectorAll('.qual-drop').forEach(sel => {
-      sel.innerHTML = '<option value="">-- Select Qual --</option>';
+      sel.innerHTML = '<option value="">Select Qualification</option>';
       Object.keys(curriculum).forEach(q => sel.innerHTML += `<option value="${q}">${q}</option>`);
     });
 
-    // Auto-fill subjects when qualification is selected
+    // Auto-fill subjects
     document.getElementById('qualSelect').onchange = (e) => {
-      const selectedQual = e.target.value;
-      const subjects = curriculum[selectedQual] || [];
+      const subjects = curriculum[e.target.value] || [];
       document.getElementById('learnerSubjects').value = subjects.join(", ");
     };
 
-    // Directory Listener
+    // Directory Table
     onValue(ref(db, 'learners'), snap => {
       const list = document.getElementById('directoryList'); list.innerHTML = '';
       snap.forEach(c => {
         const d = c.val();
-        list.innerHTML += `<tr>
-            <td>${d.email}</td>
-            <td><b>${d.assignedQual}</b></td>
-            <td style="font-size:12px; color:var(--gray)">${d.subjects || 'None'}</td>
-            <td><button class="danger" onclick="deleteItem('learners/${c.key}')">Remove</button></td>
-        </tr>`;
+        list.innerHTML += `<tr><td>${d.email}</td><td>${d.assignedQual}</td><td style="font-size:11px">${d.subjects}</td><td><button class="danger" onclick="deleteItem('learners/${c.key}')">Remove</button></td></tr>`;
       });
     });
 
-    // Cloudinary Upload (Functionality Fix)
-    document.getElementById('btnUploadMatFile').onclick = () => {
-        window.cloudinary.openUploadWidget({
-            cloudName: "dxp01qjvb", 
-            uploadPreset: "ml_default"
-        }, (error, result) => {
-            if (!error && result.event === "success") {
-                document.getElementById('matLink').value = result.info.secure_url;
-                document.getElementById('matFileStatus').innerText = "✅ PDF Ready: " + result.info.original_filename;
-            }
-        });
-    };
+    // Assignments Table
+    onValue(ref(db, 'assignments'), snap => {
+      const list = document.getElementById('assTableList'); list.innerHTML = '';
+      snap.forEach(c => {
+        const d = c.val();
+        list.innerHTML += `<tr><td>${d.title}</td><td>${d.dueDate}</td><td><a href="${d.link}" target="_blank">View Brief</a></td><td><button class="danger" onclick="deleteItem('assignments/${c.key}')">X</button></td></tr>`;
+      });
+    });
   }
 
-  // Provision Learner with custom subjects
+  // --- CLOUDINARY LOGIC ---
+  const uploadToCloudinary = (linkId, statusId) => {
+    window.cloudinary.openUploadWidget({
+      cloudName: "dxp01qjvb",
+      uploadPreset: "ml_default",
+      clientAllowedFormats: ['pdf']
+    }, (error, result) => {
+      if (!error && result.event === "success") {
+        document.getElementById(linkId).value = result.info.secure_url;
+        document.getElementById(statusId).innerText = "✅ Uploaded: " + result.info.original_filename;
+      }
+    });
+  };
+
+  document.getElementById('btnUploadMatFile').onclick = () => uploadToCloudinary('matLink', 'matFileStatus');
+  document.getElementById('btnUploadAssFile').onclick = () => uploadToCloudinary('assLink', 'assFileStatus');
+
+  // --- FIREBASE SAVE LOGIC ---
   document.getElementById('provisionBtn').onclick = async () => {
     const email = document.getElementById('newLearnerEmail').value;
     const qual = document.getElementById('qualSelect').value;
     const subjects = document.getElementById('learnerSubjects').value;
-    
     if(email && qual && subjects) {
-        await push(ref(db, 'learners'), {
-            email, 
-            assignedQual: qual, 
-            subjects: subjects,
-            createdAt: serverTimestamp()
-        });
-        alert("Learner Provisioned Successfully!");
-        document.getElementById('newLearnerEmail').value = '';
-        document.getElementById('learnerSubjects').value = '';
-    } else {
-        alert("Please fill in all fields.");
+      await push(ref(db, 'learners'), {email, assignedQual: qual, subjects});
+      alert("Learner added!");
+      document.getElementById('newLearnerEmail').value = '';
     }
   };
 
-  window.deleteItem = path => { if(confirm("Delete?")) remove(ref(db, path)); };
+  document.getElementById('btnPostAss').onclick = async () => {
+    const title = document.getElementById('assTitle').value;
+    const qual = document.getElementById('assQual').value;
+    const date = document.getElementById('assDate').value;
+    const link = document.getElementById('assLink').value;
+    if(title && qual && date && link) {
+      await push(ref(db, 'assignments'), {title, qual, dueDate: date, link});
+      alert("Assignment Posted!");
+      document.getElementById('assTitle').value = '';
+      document.getElementById('assFileStatus').innerText = '';
+    } else { alert("Please complete all fields and upload PDF."); }
+  };
+
+  window.deleteItem = path => { if(confirm("Delete item?")) remove(ref(db, path)); };
 
   // Nav Logic
   document.querySelectorAll('.nav-link').forEach(link => {
