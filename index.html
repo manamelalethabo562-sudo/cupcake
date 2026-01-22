@@ -9,34 +9,35 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     :root{
       --primary:#2563eb;--primary-hover:#1d4ed8;--success:#10b981;--warning:#f59e0b;--danger:#ef4444;
-      --gray:#64748b;--bg:#f8fafc;--card-bg:#ffffff;--text-main:#0f172a;--sidebar-w:74px;
-      --sidebar-w-expanded:260px;--border:#e2e8f0;--shadow:0 4px 6px -1px rgb(0 0 0 / 0.1),0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --gray:#64748b;--bg:#f8fafc;--card-bg:#ffffff;--text-main:#0f172a;--sidebar-w:260px;
+      --border:#e2e8f0;--shadow:0 4px 6px -1px rgb(0 0 0 / 0.1),0 2px 4px -2px rgb(0 0 0 / 0.1);
     }
     body.dark-mode{
       --bg:#020617;--card-bg:#0f172a;--text-main:#f8fafc;--border:#1e293b;--gray:#94a3b8;
       --shadow:0 10px 15px -3px rgb(0 0 0 / 0.5);
     }
-    *{box-sizing:border-box;transition:background-color .2s,color .2s,border-color .2s,width .3s cubic-bezier(.4,0,.2,1)}
+    *{box-sizing:border-box;transition:background-color .2s,color .2s,border-color .2s}
     body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);margin:0;color:var(--text-main);height:100vh;overflow:hidden}
     .layout{display:flex;height:100vh}
-    aside{background:var(--card-bg);border-right:1px solid var(--border);padding:1.5rem 0;overflow:hidden;width:var(--sidebar-w);z-index:100;position:absolute;height:100vh;display:flex;flex-direction:column;box-shadow:var(--shadow)}
-    aside:hover{width:var(--sidebar-w-expanded);backdrop-filter:blur(8px)}
-    .logo span{opacity:0;transition:opacity .2s ease;white-space:nowrap}
-    aside:hover .logo span{opacity:1}
-    .logo{padding:0 1.5rem 2rem;font-size:1.25rem;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:18px}
+    
+    /* Fixed Sidebar Styles */
+    aside{background:var(--card-bg);border-right:1px solid var(--border);padding:1.5rem 0;width:var(--sidebar-w);z-index:100;height:100vh;display:flex;flex-direction:column;box-shadow:var(--shadow);flex-shrink: 0;}
+    
+    .logo{padding:0 1.5rem 2rem;font-size:1.25rem;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:12px}
+    .logo i { min-width: 24px; }
+    
     nav ul{list-style:none;padding:0;margin:0}
     
-    /* CSS ADAPTED FOR PERMANENT ICON VISIBILITY AND ALIGNMENT */
-    nav a{display:flex;align-items:center;padding:.9rem 0;padding-left: 25px;color:var(--gray);text-decoration:none;font-weight:500;cursor:pointer;font-size:14px;white-space:nowrap;gap:24px;margin:4px 12px;border-radius:12px}
-    nav a i{min-width:24px; flex-shrink: 0; display: block;}
-    
-    nav a span{opacity:0;transition:opacity .2s ease;pointer-events:none}
-    aside:hover nav a span{opacity:1;pointer-events:auto}
+    /* Navigation: Icons and Text Always Visible */
+    nav a{display:flex;align-items:center;padding:.8rem 1.2rem;color:var(--gray);text-decoration:none;font-weight:500;cursor:pointer;font-size:14px;white-space:nowrap;gap:12px;margin:4px 12px;border-radius:12px}
+    nav a i{min-width:24px; flex-shrink: 0;}
+    nav a span{opacity:1; pointer-events:auto}
     
     nav a:hover{background:var(--bg);color:var(--primary)}
     nav a.active{background:#eff6ff;color:var(--primary);font-weight:600}
     body.dark-mode nav a.active{background:#1e3a8a;color:#60a5fa}
-    .main-wrapper{margin-left:var(--sidebar-w);width:calc(100% - var(--sidebar-w));display:flex;flex-direction:column}
+
+    .main-wrapper{flex:1; display:flex; flex-direction:column; min-width: 0;}
     header{background:var(--card-bg);padding:0 2.5rem;display:flex;justify-content:space-between;align-items:center;min-height:70px;border-bottom:1px solid var(--border)}
     header h2{font-size:1.25rem;font-weight:700;margin:0}
     main{padding:2.5rem;overflow-y:auto;flex:1}
@@ -197,7 +198,6 @@
   const db=getDatabase(app);
   lucide.createIcons();
 
-  /* ---------- theme ---------- */
   const themeToggle=document.getElementById('themeToggle');
   const themeIcon=document.getElementById('themeIcon');
   themeToggle.onclick=()=>{
@@ -207,7 +207,6 @@
     lucide.createIcons();
   };
 
-  /* ---------- curriculum ---------- */
   const tertiaryCurriculum={
     "BCom Accounting":["Financial Accounting 101","Business Management","Commercial Law"],
     "BSc Computer Science":["Intro to Programming","Calculus 1","Data Structures"],
@@ -215,7 +214,6 @@
     "Diploma in Engineering":["Engineering Physics","Technical Drawing","Mechanics"]
   };
 
-  /* ---------- auth ---------- */
   onAuthStateChanged(auth,user=>{
     document.getElementById('auth-section').style.display=user?'none':'block';
     document.getElementById('dashboard').style.display=user?'block':'none';
@@ -265,10 +263,8 @@
     });
   }
 
-  /* ---------- helpers ---------- */
   window.deleteItem=path=>{if(confirm("Delete this?"))remove(ref(db,path))};
 
-  /* ---------- actions ---------- */
   document.getElementById('provisionBtn').onclick=async()=>{
     const email=document.getElementById('newLearnerEmail').value;
     const qual=document.getElementById('qualSelect').value;
@@ -289,15 +285,12 @@
   document.getElementById('btnSendChat').onclick=async()=>{
     const text=document.getElementById('chatInput').value;
     if(text&&auth.currentUser){
-      const identifier=auth.currentUser.displayName
-        ?`${auth.currentUser.displayName} (${auth.currentUser.email})`
-        :auth.currentUser.email;
+      const identifier=auth.currentUser.displayName ? `${auth.currentUser.displayName} (${auth.currentUser.email})` : auth.currentUser.email;
       await push(ref(db,'chats'),{user:identifier,text,ts:serverTimestamp()});
       document.getElementById('chatInput').value='';
     }
   };
 
-  /* ---------- nav ---------- */
   document.querySelectorAll('.nav-link').forEach(link=>{
     link.onclick=()=>{
       document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
@@ -308,7 +301,6 @@
     };
   });
 
-  /* ---------- auth buttons ---------- */
   document.getElementById('googleSignInBtn').onclick=()=>signInWithPopup(auth,new GoogleAuthProvider());
   document.getElementById('signOutBtn').onclick=()=>signOut(auth);
 </script>
