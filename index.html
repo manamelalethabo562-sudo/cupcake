@@ -250,7 +250,7 @@
     });
 
     // Real-time Chat
-    onValue(ref(db, 'lecturer_chat/messages'), (snap) => {
+    onValue(ref(db, 'chats'), (snap) => {
       const box = document.getElementById('chat-box');
       box.innerHTML = '';
       snap.forEach(child => {
