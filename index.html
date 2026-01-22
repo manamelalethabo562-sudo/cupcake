@@ -269,23 +269,23 @@
       box.scrollTop = box.scrollHeight;
     });
 
-    // Submissions Listener to display student work
+    // Submissions Listener: Displays the Student Name correctly
     onValue(ref(db, 'submissions'), (snap) => {
       const list = document.getElementById('submissionList');
       list.innerHTML = '';
       snap.forEach(child => {
         const d = child.val();
-        // Fallback checks to prevent "undefined"
-        const studentName = d.studentName || "Anonymous";
-        const studentEmail = d.studentEmail || "No Email";
-        const assignmentTitle = d.assignmentTitle || "General Submission";
+        // Priority: Use studentName, fallback to email, then fallback to 'Anonymous'
+        const studentName = d.studentName || d.studentEmail || "Anonymous Student";
+        const email = d.studentEmail || "N/A";
+        const assignment = d.assignmentTitle || "Assignment";
         const link = d.link || "#";
 
         list.innerHTML += `<tr>
           <td><b>${studentName}</b></td>
-          <td>${studentEmail}</td>
-          <td>${assignmentTitle}</td>
-          <td><a href="${link}" target="_blank">View PDF/Link</a></td>
+          <td>${email}</td>
+          <td>${assignment}</td>
+          <td><a href="${link}" target="_blank">Open Link</a></td>
           <td><button class="danger" onclick="deleteItem('submissions/${child.key}')">Remove</button></td>
         </tr>`;
       });
