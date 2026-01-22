@@ -26,14 +26,12 @@
     .logo{padding:0 1.5rem 2rem;font-size:1.25rem;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:18px}
     nav ul{list-style:none;padding:0;margin:0}
     
-    /* Updated nav a to keep icons visible and centered in collapsed mode */
+    /* CSS ADAPTED FOR PERMANENT ICON VISIBILITY AND ALIGNMENT */
     nav a{display:flex;align-items:center;padding:.9rem 0;padding-left: 25px;color:var(--gray);text-decoration:none;font-weight:500;cursor:pointer;font-size:14px;white-space:nowrap;gap:24px;margin:4px 12px;border-radius:12px}
+    nav a i{min-width:24px; flex-shrink: 0; display: block;}
     
     nav a span{opacity:0;transition:opacity .2s ease;pointer-events:none}
     aside:hover nav a span{opacity:1;pointer-events:auto}
-    
-    /* Ensure icons don't shrink or disappear */
-    nav a i{min-width:24px; flex-shrink: 0;}
     
     nav a:hover{background:var(--bg);color:var(--primary)}
     nav a.active{background:#eff6ff;color:var(--primary);font-weight:600}
@@ -288,7 +286,6 @@
     const day=document.getElementById('ttDay').value,time=document.getElementById('ttTime').value,sub=document.getElementById('ttSubject').value;
     if(day&&time&&sub)await push(ref(db,'timetable'),{day,time,subject:sub});
   };
-  /* ---- FIXED CHAT SENDER (no more “Unknown User”) ---- */
   document.getElementById('btnSendChat').onclick=async()=>{
     const text=document.getElementById('chatInput').value;
     if(text&&auth.currentUser){
