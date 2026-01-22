@@ -307,7 +307,9 @@
   document.getElementById('btnSendChat').onclick = async () => {
     const text = document.getElementById('chatInput').value;
     if(text && auth.currentUser) {
-        await push(ref(db, 'chats'), { user: auth.currentUser.email, text, ts: serverTimestamp() });
+        // Updated to use the person's full name from their Google Account
+        const senderName = auth.currentUser.displayName || auth.currentUser.email;
+        await push(ref(db, 'chats'), { user: senderName, text, ts: serverTimestamp() });
         document.getElementById('chatInput').value = '';
     }
   };
