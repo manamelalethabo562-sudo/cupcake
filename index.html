@@ -161,19 +161,20 @@
             <div class="card" style="flex:1"><h3>Students</h3><h1 id="count-learners">0</h1></div>
             <div class="card" style="flex:1"><h3>Materials</h3><h1 id="count-mats">0</h1></div>
           </div>
-          
+
           <div class="card">
             <h3>Student Assignment Submissions</h3>
             <table>
-                <thead>
-                    <tr>
-                        <th>Student Email</th>
-                        <th>Assignment</th>
-                        <th>Link</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="submissionList"></tbody>
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Email</th>
+                  <th>Assignment</th>
+                  <th>Link</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="submissionList"></tbody>
             </table>
           </div>
         </section>
@@ -209,7 +210,6 @@
     "Diploma in Engineering": ["Engineering Physics", "Technical Drawing", "Mechanics"]
   };
 
-  // Auth Observer
   onAuthStateChanged(auth, (user) => {
     document.getElementById('auth-section').style.display = user ? 'none' : 'block';
     document.getElementById('dashboard').style.display = user ? 'block' : 'none';
@@ -219,7 +219,6 @@
   });
 
   function initApp() {
-    // Populate all qualification dropdowns
     document.querySelectorAll('.qual-drop').forEach(select => {
         select.innerHTML = '<option value="">-- Select Qual --</option>';
         Object.keys(tertiaryCurriculum).forEach(q => {
@@ -227,13 +226,11 @@
         });
     });
 
-    // Preview modules for learner provisioning
     document.getElementById('qualSelect').onchange = (e) => {
         const mods = tertiaryCurriculum[e.target.value] || [];
         document.getElementById('modulePreview').innerHTML = mods.map(m => `<span class="subject-tag">${m}</span>`).join('');
     };
 
-    // Real-time Learners List
     onValue(ref(db, 'learners'), (snap) => {
       const list = document.getElementById('directoryList');
       list.innerHTML = '';
@@ -247,14 +244,12 @@
       document.getElementById('count-learners').textContent = count;
     });
 
-    // Real-time Materials Count
     onValue(ref(db, 'materials'), (snap) => {
       let count = 0;
       snap.forEach(() => count++);
       document.getElementById('count-mats').textContent = count;
     });
 
-    // Real-time Timetable
     onValue(ref(db, 'timetable'), (snap) => {
       const list = document.getElementById('timetableList');
       list.innerHTML = '';
@@ -264,36 +259,39 @@
       });
     });
 
-    // Real-time Chat
     onValue(ref(db, 'chats'), (snap) => {
       const box = document.getElementById('chat-box');
       box.innerHTML = '';
       snap.forEach(child => {
         const d = child.val();
-        box.innerHTML += `<div class="msg"><b>${d.user}</b>${d.text}</div>`;
+        box.innerHTML += `<div class="msg"><b>${d.user || 'Unknown'}</b>${d.text}</div>`;
       });
       box.scrollTop = box.scrollHeight;
     });
 
-    // Real-time Assignment Submissions (Added for Lecturer View)
+    // Submissions Listener to display student work
     onValue(ref(db, 'submissions'), (snap) => {
       const list = document.getElementById('submissionList');
       list.innerHTML = '';
       snap.forEach(child => {
         const d = child.val();
+        // Fallback checks to prevent "undefined"
+        const studentName = d.studentName || "Anonymous";
+        const studentEmail = d.studentEmail || "No Email";
+        const assignmentTitle = d.assignmentTitle || "General Submission";
+        const link = d.link || "#";
+
         list.innerHTML += `<tr>
-            <td>${d.studentEmail}</td>
-            <td>${d.assignmentTitle}</td>
-            <td><a href="${d.link}" target="_blank">View Work</a></td>
-            <td><button class="danger" onclick="deleteItem('submissions/${child.key}')">Remove</button></td>
+          <td><b>${studentName}</b></td>
+          <td>${studentEmail}</td>
+          <td>${assignmentTitle}</td>
+          <td><a href="${link}" target="_blank">View PDF/Link</a></td>
+          <td><button class="danger" onclick="deleteItem('submissions/${child.key}')">Remove</button></td>
         </tr>`;
       });
     });
   }
 
-  // --- Actions ---
-
-  // Global Delete Helper
   window.deleteItem = (path) => { if(confirm("Delete this?")) remove(ref(db, path)); };
 
   document.getElementById('provisionBtn').onclick = async () => {
@@ -343,7 +341,6 @@
     }
   };
 
-  // UI Navigation
   document.querySelectorAll('.nav-link').forEach(link => {
     link.onclick = () => {
       document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
