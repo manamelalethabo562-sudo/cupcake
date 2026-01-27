@@ -5,76 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>All"Apps | Home</title>
+    <title>All"Apps | Discover</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
+    </style>
 </head>
-<body class="bg-white md:bg-gray-50 pb-20 md:pb-0">
+<body class="bg-[#f2f2f7] text-gray-900 pb-24 md:pb-0">
 
-    <header class="hidden md:block bg-white border-b sticky top-0 z-50 p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-black text-blue-600 tracking-tighter">All"Apps</h1>
-            <form action="/" method="GET" class="flex-1 max-w-xl mx-10">
-                <input type="text" name="search" value="<%= query %>" placeholder="Search for apps & games..." 
-                       class="w-full border rounded-lg px-4 py-2 bg-gray-100 focus:bg-white focus:ring-2 focus:ring-blue-400 outline-none">
-            </form>
-            <div class="flex items-center space-x-4">
-                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold">Sign In</button>
+    <aside class="hidden md:flex flex-col w-64 fixed h-full bg-white border-r p-6 z-50">
+        <h1 class="text-2xl font-black text-blue-600 tracking-tighter mb-10">All"Apps</h1>
+        <nav class="space-y-2 flex-1">
+            <a href="#" class="flex items-center space-x-3 bg-blue-50 text-blue-600 p-3 rounded-xl font-bold">
+                <i class="fa-solid fa-house"></i> <span>Discover</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 text-gray-500 hover:bg-gray-50 p-3 rounded-xl transition">
+                <i class="fa-solid fa-gamepad"></i> <span>Games</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 text-gray-500 hover:bg-gray-50 p-3 rounded-xl transition">
+                <i class="fa-solid fa-layer-group"></i> <span>Apps</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 text-gray-500 hover:bg-gray-50 p-3 rounded-xl transition">
+                <i class="fa-solid fa-star"></i> <span>Arcade</span>
+            </a>
+        </nav>
+        <div class="mt-auto pt-6 border-t">
+            <div class="flex items-center space-x-3 p-2">
+                <div class="w-10 h-10 bg-gray-200 rounded-full"></div>
+                <div>
+                    <p class="text-sm font-bold">Sign In</p>
+                    <p class="text-[10px] text-gray-400">Manage account</p>
+                </div>
             </div>
         </div>
-    </header>
+    </aside>
 
-    <main class="container mx-auto py-6 px-4">
+    <main class="md:ml-64 min-h-screen">
         
-        <% if(query) { %>
-            <h2 class="mb-6 text-gray-500 text-lg">Results for "<%= query %>"</h2>
-        <% } %>
+        <header class="p-4 md:p-6 flex justify-between items-center sticky top-0 z-40 md:bg-transparent glass md:backdrop-blur-none">
+            <div class="md:hidden">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tuesday, Jan 27</p>
+                <h1 class="text-3xl font-black">Discover</h1>
+            </div>
+            <div class="hidden md:block w-full max-w-md">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" placeholder="Search apps..." class="w-full pl-11 pr-4 py-2 bg-gray-200/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+            <div class="md:hidden w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white">
+                <i class="fa-solid fa-user"></i>
+            </div>
+        </header>
 
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold text-gray-800">New & Updated</h2>
-            <a href="#" class="text-blue-600 font-bold text-sm">See more</a>
-        </div>
+        <section class="px-4 md:px-8 pb-10">
+            <div class="relative w-full h-[450px] md:h-[400px] rounded-[2rem] overflow-hidden shadow-2xl mb-10 group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=1000" class="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-105" alt="Feature">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                <div class="absolute bottom-8 left-8 text-white">
+                    <p class="text-sm font-bold uppercase opacity-80 mb-1">Big Update</p>
+                    <h2 class="text-4xl font-black mb-4 leading-tight">Master the Galaxy:<br>No Man's Sky</h2>
+                    <button class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm hover:bg-blue-600 hover:text-white transition">Explore</button>
+                </div>
+            </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <% apps.forEach(app => { %>
-                <div class="flex items-center space-x-4 bg-white p-2 rounded-2xl hover:bg-gray-50 transition cursor-pointer">
-                    <div class="w-16 h-16 bg-gradient-to-br <%= app.iconColor %> rounded-[1.2rem] flex items-center justify-center text-white text-2xl shadow-lg shrink-0">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h2 class="text-2xl font-black">New & Updated</h2>
+                    <p class="text-gray-500 text-sm">Hand-picked by our editors</p>
+                </div>
+                <a href="#" class="text-blue-600 font-bold text-sm">See All</a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <% apps.forEach(app => { %>
+                <div class="flex items-center space-x-4 bg-white p-4 rounded-[1.5rem] shadow-sm hover:shadow-md transition group">
+                    <div class="w-16 h-16 bg-gradient-to-br <%= app.iconColor %> rounded-[1.2rem] flex items-center justify-center text-white text-2xl shadow-inner shrink-0 group-hover:rotate-3 transition">
                         <i class="fa-solid <%= app.isDemo ? 'fa-rocket' : 'fa-app-store' %>"></i>
                     </div>
-                    
                     <div class="flex-1 min-w-0">
-                        <h3 class="font-bold text-gray-900 truncate"><%= app.name %></h3>
-                        <p class="text-xs text-gray-500 font-medium"><%= app.category %></p>
-                        <p class="text-[10px] text-gray-400 mb-2"><%= app.size %> • 4.8 <i class="fa-solid fa-star text-[8px]"></i></p>
-                        
-                        <% if(app.isDemo) { %>
-                            <button onclick="alert('Starting Download for <%= app.name %>...')" 
-                                    class="bg-gray-100 text-blue-700 px-4 py-1 rounded-full text-xs font-bold hover:bg-blue-600 hover:text-white transition">
-                                Install
-                            </button>
-                        <% } else { %>
-                            <a href="/downloads/<%= app.filename %>" download 
-                               class="bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-bold hover:bg-blue-700 transition">
-                               Install
-                            </a>
-                        <% } %>
+                        <h3 class="font-bold text-gray-900 truncate leading-tight"><%= app.name %></h3>
+                        <p class="text-xs text-gray-500 mb-1"><%= app.category %></p>
+                        <div class="flex items-center space-x-2">
+                             <a href="#" class="bg-gray-100 text-blue-600 px-5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider hover:bg-blue-600 hover:text-white transition">
+                                Get
+                             </a>
+                             <span class="text-[10px] text-gray-400 font-medium">In-App Purchases</span>
+                        </div>
                     </div>
                 </div>
-            <% }) %>
-        </div>
+                <% }) %>
+            </div>
+        </section>
     </main>
 
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-3 text-gray-400 z-50">
-        <a href="/" class="flex flex-col items-center text-blue-600">
-            <i class="fa-solid fa-house text-xl"></i>
-            <span class="text-[10px] mt-1">Games</span>
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 glass border-t flex justify-around py-4 text-gray-400 z-50">
+        <a href="#" class="flex flex-col items-center text-blue-600">
+            <i class="fa-solid fa-house text-lg"></i>
+            <span class="text-[9px] font-bold mt-1">Today</span>
         </a>
-        <div class="flex flex-col items-center">
-            <i class="fa-solid fa-layer-group text-xl"></i>
-            <span class="text-[10px] mt-1">Apps</span>
-        </div>
-        <div class="flex flex-col items-center">
-            <i class="fa-solid fa-magnifying-glass text-xl"></i>
-            <span class="text-[10px] mt-1">Search</span>
-        </div>
+        <a href="#" class="flex flex-col items-center hover:text-gray-600">
+            <i class="fa-solid fa-gamepad text-lg"></i>
+            <span class="text-[9px] font-bold mt-1">Games</span>
+        </a>
+        <a href="#" class="flex flex-col items-center hover:text-gray-600">
+            <i class="fa-solid fa-layer-group text-lg"></i>
+            <span class="text-[9px] font-bold mt-1">Apps</span>
+        </a>
+        <a href="#" class="flex flex-col items-center hover:text-gray-600">
+            <i class="fa-solid fa-magnifying-glass text-lg"></i>
+            <span class="text-[9px] font-bold mt-1">Search</span>
+        </a>
     </nav>
 
 </body>
