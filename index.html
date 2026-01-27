@@ -5,114 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>All"Apps | Store</title>
-    <style>
-        /* Hide scrollbars but allow scrolling */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* Mobile-specific bottom nav styling */
-        @media (max-width: 768px) {
-            .app-card { width: 140px; flex-shrink: 0; }
-        }
-    </style>
+    <title>All"Apps | Home</title>
 </head>
-<body class="bg-white md:bg-gray-50 font-sans pb-20 md:pb-0">
+<body class="bg-white md:bg-gray-50 pb-20 md:pb-0">
 
-    <header class="hidden md:block bg-white shadow-sm border-b sticky top-0 z-50 p-4">
+    <header class="hidden md:block bg-white border-b sticky top-0 z-50 p-4">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-2xl font-black text-blue-600 tracking-tighter">All"Apps</h1>
-            <div class="flex-1 max-w-xl mx-10">
-                <input type="text" placeholder="Search for apps & games" class="w-full border rounded-lg px-4 py-2 bg-gray-100 focus:bg-white focus:ring-2 focus:ring-blue-400 outline-none transition">
-            </div>
-            <div class="flex items-center space-x-6 text-gray-600">
-                <i class="fa-solid fa-circle-question text-xl cursor-pointer"></i>
-                <div class="w-10 h-10 bg-green-700 text-white rounded-full flex items-center justify-center font-bold">U</div>
+            <form action="/" method="GET" class="flex-1 max-w-xl mx-10">
+                <input type="text" name="search" value="<%= query %>" placeholder="Search for apps & games..." 
+                       class="w-full border rounded-lg px-4 py-2 bg-gray-100 focus:bg-white focus:ring-2 focus:ring-blue-400 outline-none">
+            </form>
+            <div class="flex items-center space-x-4">
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold">Sign In</button>
             </div>
         </div>
     </header>
 
-    <div class="md:hidden flex justify-between items-center p-4 bg-white sticky top-0 z-50">
-        <h1 class="text-xl font-bold text-gray-800">All"Apps</h1>
-        <div class="flex space-x-4 text-gray-600">
-            <i class="fa-solid fa-magnifying-glass text-lg"></i>
-            <i class="fa-solid fa-circle-user text-xl"></i>
-        </div>
-    </div>
-
-    <main class="container mx-auto py-6 px-4 md:px-0">
+    <main class="container mx-auto py-6 px-4">
         
-        <section class="hidden md:block mb-10 bg-gradient-to-r from-blue-600 to-indigo-700 p-8 rounded-3xl text-white shadow-xl">
-            <h2 class="text-2xl font-bold mb-2">Developer Dashboard</h2>
-            <p class="mb-6 opacity-80">Publish your new application to the global market.</p>
-            <form action="/upload" method="POST" enctype="multipart/form-data" class="flex gap-4 bg-white/10 p-4 rounded-xl backdrop-blur-md">
-                <input type="text" name="appName" placeholder="App Name" class="bg-white text-black p-3 rounded-lg flex-1 outline-none" required>
-                <input type="file" name="appFile" class="p-2 text-sm" required>
-                <button type="submit" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition">Publish</button>
-            </form>
-        </section>
+        <% if(query) { %>
+            <h2 class="mb-6 text-gray-500 text-lg">Results for "<%= query %>"</h2>
+        <% } %>
 
-        <div class="flex space-x-4 overflow-x-auto no-scrollbar mb-8 md:mb-12 py-2">
-            <button class="bg-blue-100 text-blue-700 px-6 py-2 rounded-full font-medium whitespace-nowrap">For you</button>
-            <button class="text-gray-600 px-6 py-2 rounded-full font-medium whitespace-nowrap hover:bg-gray-100">Top charts</button>
-            <button class="text-gray-600 px-6 py-2 rounded-full font-medium whitespace-nowrap hover:bg-gray-100">Categories</button>
-            <button class="text-gray-600 px-6 py-2 rounded-full font-medium whitespace-nowrap hover:bg-gray-100">Children</button>
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-gray-800">New & Updated</h2>
+            <a href="#" class="text-blue-600 font-bold text-sm">See more</a>
         </div>
 
-        <h2 class="text-xl font-bold mb-6 text-gray-800">New & Updated</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <% apps.forEach(app => { %>
-                <div class="flex md:flex-col items-center md:items-start bg-white md:p-5 p-2 rounded-2xl md:shadow-sm md:border border-transparent hover:bg-gray-50 transition cursor-pointer">
-                    <div class="w-16 h-16 md:w-32 md:h-32 bg-gradient-to-tr from-gray-100 to-gray-200 rounded-2xl md:rounded-3xl flex items-center justify-center text-blue-600 text-3xl font-bold mb-0 md:mb-4 mr-4 md:mr-0 shrink-0">
-                        <%= app.name.charAt(0).toUpperCase() %>
+                <div class="flex items-center space-x-4 bg-white p-2 rounded-2xl hover:bg-gray-50 transition cursor-pointer">
+                    <div class="w-16 h-16 bg-gradient-to-br <%= app.iconColor %> rounded-[1.2rem] flex items-center justify-center text-white text-2xl shadow-lg shrink-0">
+                        <i class="fa-solid <%= app.isDemo ? 'fa-rocket' : 'fa-app-store' %>"></i>
                     </div>
+                    
                     <div class="flex-1 min-w-0">
-                        <h3 class="font-semibold text-gray-900 text-base md:text-lg truncate"><%= app.name %></h3>
-                        <p class="text-xs md:text-sm text-gray-500 mb-2">Free • <%= app.size %></p>
-                        <a href="/downloads/<%= app.filename %>" download 
-                           class="inline-block md:w-full text-center bg-blue-600 text-white px-6 md:py-2 py-1 rounded-full md:rounded-lg text-sm font-bold hover:bg-blue-700 transition">
-                           Install
-                        </a>
+                        <h3 class="font-bold text-gray-900 truncate"><%= app.name %></h3>
+                        <p class="text-xs text-gray-500 font-medium"><%= app.category %></p>
+                        <p class="text-[10px] text-gray-400 mb-2"><%= app.size %> • 4.8 <i class="fa-solid fa-star text-[8px]"></i></p>
+                        
+                        <% if(app.isDemo) { %>
+                            <button onclick="alert('Starting Download for <%= app.name %>...')" 
+                                    class="bg-gray-100 text-blue-700 px-4 py-1 rounded-full text-xs font-bold hover:bg-blue-600 hover:text-white transition">
+                                Install
+                            </button>
+                        <% } else { %>
+                            <a href="/downloads/<%= app.filename %>" download 
+                               class="bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-bold hover:bg-blue-700 transition">
+                               Install
+                            </a>
+                        <% } %>
                     </div>
                 </div>
             <% }) %>
         </div>
     </main>
 
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-3 text-gray-500 z-50">
-        <div class="flex flex-col items-center text-blue-600">
-            <i class="fa-solid fa-gamepad text-xl"></i>
-            <span class="text-[10px] mt-1 font-bold">Games</span>
-        </div>
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-3 text-gray-400 z-50">
+        <a href="/" class="flex flex-col items-center text-blue-600">
+            <i class="fa-solid fa-house text-xl"></i>
+            <span class="text-[10px] mt-1">Games</span>
+        </a>
         <div class="flex flex-col items-center">
-            <i class="fa-solid fa-border-all text-xl"></i>
+            <i class="fa-solid fa-layer-group text-xl"></i>
             <span class="text-[10px] mt-1">Apps</span>
         </div>
         <div class="flex flex-col items-center">
             <i class="fa-solid fa-magnifying-glass text-xl"></i>
             <span class="text-[10px] mt-1">Search</span>
         </div>
-        <div class="flex flex-col items-center">
-            <i class="fa-solid fa-download text-xl"></i>
-            <span class="text-[10px] mt-1">Updates</span>
-        </div>
     </nav>
-
-    <button onclick="document.getElementById('mobileUpload').classList.toggle('hidden')" class="md:hidden fixed bottom-24 right-6 bg-blue-600 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-2xl">
-        <i class="fa-solid fa-plus"></i>
-    </button>
-
-    <div id="mobileUpload" class="hidden fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-6">
-        <div class="bg-white w-full p-6 rounded-3xl">
-            <h2 class="text-xl font-bold mb-4">Upload App</h2>
-            <form action="/upload" method="POST" enctype="multipart/form-data" class="space-y-4">
-                <input type="text" name="appName" placeholder="App Name" class="w-full p-3 border rounded-xl" required>
-                <input type="file" name="appFile" class="w-full" required>
-                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold">Publish to All"Apps</button>
-                <button type="button" onclick="document.getElementById('mobileUpload').classList.add('hidden')" class="w-full text-gray-500 text-sm">Cancel</button>
-            </form>
-        </div>
-    </div>
 
 </body>
 </html>
