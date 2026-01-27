@@ -1,515 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Vynix Biz • Live Directory</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
-
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-  <style>
-    :root {
-      --bg-body: #F0F4F9;
-      --bg-sidebar: #F0F4F9;
-      --bg-surface: #FFFFFF;
-      --primary-gradient: linear-gradient(135deg, #4285F4, #D96570);
-      --text-main: #1F1F1F;
-      --text-secondary: #444746;
-      --text-muted: #8E918F;
-      --accent-color: #4285F4;
-      --sidebar-width: 260px;
-      --sidebar-collapsed: 72px;
-      --header-height: 70px;
-    }
-
-    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
-
-    body {
-      background: var(--bg-body);
-      color: var(--text-main);
-      font-family: 'Outfit', sans-serif;
-      height: 100vh;
-      display: flex;
-      overflow: hidden;
-    }
-
-    /* ─── Sidebar ────────────────────────────────────────── */
-    .sidebar {
-      background: var(--bg-sidebar);
-      width: var(--sidebar-collapsed);
-      display: flex;
-      flex-direction: column;
-      padding: 12px;
-      z-index: 50;
-      transition: width 0.3s cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    @media(min-width: 769px) {
-      .sidebar:hover { width: var(--sidebar-width); }
-      .sidebar:not(:hover) .nav-label, .sidebar:not(:hover) .brand-text { opacity: 0; display: none; }
-      .mobile-menu-trigger { display: none !important; }
-    }
-
-    @media(max-width: 768px) {
-      .sidebar {
-        position: fixed; left: 0; top: 0; bottom: 0;
-        width: 280px; background: #fff;
-        transform: translateX(-100%);
-        box-shadow: 4px 0 24px rgba(0,0,0,0.15);
-      }
-      .sidebar.open { transform: translateX(0); }
-    }
-
-    .nav-list { flex: 1; display: flex; flex-direction: column; gap: 4px; margin-top: 20px; }
-    .nav-item {
-      display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-radius: 24px;
-      color: var(--text-secondary); cursor: pointer; text-decoration: none; white-space: nowrap;
-      transition: background 0.2s;
-    }
-    .nav-item:hover { background: rgba(0,0,0,0.05); color: var(--text-main); }
-    .nav-item.active { background: #D3E3FD; color: #041E49; font-weight: 500; }
-    .nav-icon { font-size: 24px; }
-
-    /* ─── Main Content ───────────────────────────────────── */
-    .main {
-      flex: 1; display: flex; flex-direction: column; position: relative;
-      background: #FFFFFF; border-radius: 24px; margin: 16px 16px 16px 0;
-      box-shadow: 0 0 0 1px rgba(0,0,0,0.02); overflow: hidden;
-    }
-    @media(max-width: 768px) { .main { margin: 0; border-radius: 0; } }
-
-    .top-bar {
-      height: var(--header-height); display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px; border-bottom: 1px solid #f0f0f0; z-index: 10; background: rgba(255,255,255,0.9);
-      backdrop-filter: blur(10px); position: absolute; top: 0; width: 100%;
-    }
-
-    .user-pill {
-      display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 12px;
-      background: #F0F4F9; border-radius: 32px; cursor: pointer; transition: background 0.2s;
-    }
-    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background-size: cover; background-position: center; }
-
-    .content-scroll { flex: 1; overflow-y: auto; padding-top: var(--header-height); scroll-behavior: smooth; }
-
-    .hero-section { padding: 60px 24px 40px; text-align: center; }
-    .hero-title {
-      font-size: 2.5rem; font-weight: 700; margin-bottom: 12px;
-      background: var(--primary-gradient); -webkit-background-clip: text; color: transparent;
-    }
-
-    .search-wrapper { max-width: 600px; margin: 24px auto 0; position: relative; }
-    .search-input {
-      width: 100%; padding: 16px 24px 16px 50px; border-radius: 30px; border: 1px solid #e0e0e0;
-      font-size: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); outline: none;
-    }
-    .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-
-    .filter-bar {
-      display: flex; gap: 10px; overflow-x: auto; padding: 0 24px 20px;
-      justify-content: center; scrollbar-width: none;
-    }
-    .filter-bar::-webkit-scrollbar { display: none; }
-    .category-pill {
-      padding: 8px 16px; border-radius: 20px; border: 1px solid #e0e0e0;
-      font-size: 0.9rem; font-weight: 500; cursor: pointer; white-space: nowrap; transition: 0.2s;
-    }
-    .category-pill.active { background: var(--text-main); color: white; }
-
-    /* Directory Grid */
-    .business-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px; padding: 24px; max-width: 1200px; margin: 0 auto;
-    }
-
-    .category-header {
-      grid-column: 1 / -1; font-size: 1.25rem; font-weight: 700; 
-      padding: 20px 0 10px; border-bottom: 2px solid #f0f4f9; margin-bottom: 10px;
-      color: var(--text-main); display: flex; align-items: center; gap: 10px;
-    }
-
-    .business-card {
-      background: white; border: 1px solid #f0f0f0; border-radius: 16px;
-      overflow: hidden; transition: 0.2s; cursor: pointer; display: flex; flex-direction: column;
-    }
-    .business-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
-
-    .card-img { height: 140px; background-color: #f0f0f0; position: relative; background-size: cover; background-position: center; }
-    .card-category {
-      position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.9);
-      padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;
-    }
-
-    .card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
-    .biz-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
-    .biz-rating { display: flex; align-items: center; gap: 4px; font-size: 0.9rem; color: #F4B400; margin-bottom: 12px; }
-    .biz-info { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 6px; }
-
-    .action-btn {
-      flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #e0e0e0;
-      background: transparent; font-weight: 500; font-size: 0.85rem; cursor: pointer;
-    }
-    .action-btn.primary { background: var(--text-main); color: white; border: none; }
-
-    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 40; opacity: 0; pointer-events: none; transition: 0.3s; }
-    .overlay.active { opacity: 1; pointer-events: auto; }
-    .modal-sheet {
-      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95);
-      background: white; width: 90%; max-width: 500px; border-radius: 24px;
-      z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2); overflow: hidden;
-    }
-    .modal-sheet.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
-    .modal-img-header { height: 180px; background-size: cover; position: relative; background-color: #f0f4f9; }
-    .modal-close {
-      position: absolute; top: 16px; right: 16px; background: white; border: none;
-      width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
-    }
-    .modal-content { padding: 24px; max-height: 80vh; overflow-y: auto; }
-
-    .form-group { margin-bottom: 16px; }
-    .form-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
-    .form-input {
-      width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid #e0e0e0;
-      font-family: inherit; font-size: 0.95rem; outline: none; transition: 0.2s;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>All"Apps | Discover</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        .app-card:active { transform: scale(0.96); }
+    </style>
 </head>
-<body>
+<body class="bg-[#F2F2F7] text-gray-900 pb-24 md:pb-0">
 
-  <div class="overlay" id="overlay" onclick="closeOverlays()"></div>
-
-  <aside class="sidebar" id="sidebar">
-    <div style="padding: 10px 10px 20px;">
-        <h2 style="font-size: 1.2rem; font-weight: 700; display:flex; align-items:center; gap:10px;">
-           <span class="material-symbols-rounded" style="color: #4285F4;">business_center</span>
-           <span class="brand-text">Vynix Biz</span>
-        </h2>
-    </div>
-    <div class="nav-list">
-      <div class="nav-item active" id="nav-dir" onclick="switchView('all')"><span class="material-symbols-rounded nav-icon">storefront</span><span class="nav-label">Directory</span></div>
-      <div class="nav-item" id="nav-cat" onclick="switchView('categories')"><span class="material-symbols-rounded nav-icon">category</span><span class="nav-label">Categories</span></div>
-      <div class="nav-item" id="nav-fav" onclick="switchView('saved')"><span class="material-symbols-rounded nav-icon">favorite</span><span class="nav-label">Saved</span></div>
-      <div class="nav-item" onclick="openListModal()"><span class="material-symbols-rounded nav-icon">add_business</span><span class="nav-label">List Business</span></div>
-    </div>
-    <div style="margin-top: auto;">
-      <div class="nav-item" id="authBtnSidebar" onclick="handleAuth()">
-        <span class="material-symbols-rounded nav-icon">login</span>
-        <span class="nav-label">Sign In</span>
-      </div>
-    </div>
-  </aside>
-
-  <main class="main">
-    <div class="top-bar">
-      <div style="display:flex; align-items:center; gap:12px;">
-        <button class="mobile-menu-trigger" onclick="toggleSidebar()" style="background:none; border:none; padding:8px;"><span class="material-symbols-rounded">menu</span></button>
-        <span id="greetingName" style="font-weight:600; color:var(--text-secondary)">Hello, Guest</span>
-      </div>
-      <div class="user-pill" onclick="handleAuth()">
-        <div class="user-avatar" id="userAvatar" style="background-image: url('https://ui-avatars.com/api/?name=Guest')"></div>
-      </div>
-    </div>
-
-    <div class="content-scroll">
-      <div class="hero-section">
-        <h1 class="hero-title" id="pageTitle">Find Local Businesses</h1>
-        <p style="color:var(--text-secondary);" id="pageSubtitle">Live data powered by Vynix Cloud.</p>
-        <div class="search-wrapper">
-          <span class="material-symbols-rounded search-icon">search</span>
-          <input type="text" class="search-input" id="searchInput" placeholder="Search businesses..." autocomplete="off">
-        </div>
-      </div>
-
-      <div class="filter-bar" id="categoryContainer">
-        <div class="category-pill active" onclick="filterCategory('All', this)">All</div>
-        <div class="category-pill" onclick="filterCategory('Restaurant', this)">Restaurant</div>
-        <div class="category-pill" onclick="filterCategory('Retail', this)">Retail</div>
-        <div class="category-pill" onclick="filterCategory('Service', this)">Service</div>
-        <div class="category-pill" onclick="filterCategory('Tech', this)">Tech</div>
-      </div>
-
-      <div class="business-grid" id="businessGrid"></div>
-    </div>
-  </main>
-
-  <div class="modal-sheet" id="listModal">
-    <div class="modal-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h2 style="font-weight:700;">List Your Business</h2>
-            <button onclick="closeOverlays()" style="background:none; border:none; cursor:pointer;"><span class="material-symbols-rounded">close</span></button>
-        </div>
-        <form id="listingForm" onsubmit="registerBusiness(event)">
-            <div class="form-group"><label class="form-label">Name</label><input type="text" id="bizName" class="form-input" required></div>
-            <div class="form-group">
-                <label class="form-label">Category</label>
-                <select id="bizCat" class="form-input">
-                    <option value="Restaurant">Restaurant</option>
-                    <option value="Retail">Retail</option>
-                    <option value="Service">Service</option>
-                    <option value="Tech">Tech</option>
-                </select>
+    <aside class="hidden md:flex flex-col w-72 fixed h-full bg-white border-r p-8 z-50">
+        <h1 class="text-3xl font-black text-blue-600 tracking-tighter mb-10">All"Apps</h1>
+        <nav class="space-y-1 flex-1">
+            <a href="#" class="flex items-center space-x-4 bg-blue-50 text-blue-600 px-4 py-3 rounded-2xl font-bold">
+                <i class="fa-solid fa-house text-lg"></i> <span>Discover</span>
+            </a>
+            <a href="#" class="flex items-center space-x-4 text-gray-400 hover:bg-gray-50 px-4 py-3 rounded-2xl transition group">
+                <i class="fa-solid fa-gamepad text-lg group-hover:text-blue-500"></i> <span>Games</span>
+            </a>
+            <a href="#" class="flex items-center space-x-4 text-gray-400 hover:bg-gray-50 px-4 py-3 rounded-2xl transition group">
+                <i class="fa-solid fa-layer-group text-lg group-hover:text-blue-500"></i> <span>Apps</span>
+            </a>
+            <a href="#" class="flex items-center space-x-4 text-gray-400 hover:bg-gray-50 px-4 py-3 rounded-2xl transition group">
+                <i class="fa-solid fa-rocket text-lg group-hover:text-blue-500"></i> <span>Arcade</span>
+            </a>
+        </nav>
+        <div class="mt-auto flex items-center space-x-3 p-4 bg-gray-50 rounded-2xl cursor-pointer">
+            <div class="w-10 h-10 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold">JS</div>
+            <div>
+                <p class="text-sm font-bold">John Smith</p>
+                <p class="text-[10px] text-gray-400">Pro Account</p>
             </div>
-            <div class="form-group"><label class="form-label">Address</label><input type="text" id="bizAddress" class="form-input" required></div>
-            <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="bizPhone" class="form-input" required></div>
-            <div class="form-group"><label class="form-label">Image URL</label><input type="url" id="bizImg" class="form-input" required></div>
-            <button type="submit" class="action-btn primary" style="width:100%; padding:14px;">Register Business</button>
-        </form>
-    </div>
-  </div>
-
-  <div class="modal-sheet" id="detailModal">
-    <div class="modal-img-header" id="modalImg">
-        <button class="modal-close" onclick="closeOverlays()"><span class="material-symbols-rounded">close</span></button>
-        <span class="card-category" id="modalCat" style="top:auto; bottom:12px; left:12px;">Category</span>
-    </div>
-    <div class="modal-content">
-        <h2 id="modalTitle" style="font-weight:700; margin-bottom:8px;">Business Name</h2>
-        <div class="biz-rating" style="margin-bottom:20px;">
-            <span class="material-symbols-rounded" style="font-size:20px;">star</span>
-            <strong id="modalRating" style="color:#1f1f1f;">5.0</strong> <span id="modalReviews">(0 reviews)</span>
         </div>
-        <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
-            <div class="biz-info"><span class="material-symbols-rounded">location_on</span> <span id="modalAddress">Address</span></div>
-            <div class="biz-info"><span class="material-symbols-rounded">call</span> <span id="modalPhone">Phone</span></div>
-        </div>
-        <button id="saveBizBtn" class="action-btn" style="width:100%; padding:14px; margin-bottom:12px; border:2px solid #eee;">Save to Favorites</button>
-        <button class="action-btn primary" style="width:100%; padding:14px;">Contact Now</button>
-    </div>
-  </div>
+    </aside>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyAojYRIH8FJL5B8yg1b3qxsc29vB3vLC-8",
-      authDomain: "allbusiness-596cc.firebaseapp.com",
-      projectId: "allbusiness-596cc",
-      storageBucket: "allbusiness-596cc.firebasestorage.app",
-      messagingSenderId: "665302840524",
-      appId: "1:665302840524:web:e9c1078e14bc0de6a87e69",
-      measurementId: "G-EMZFX7CE8V"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.database();
-    const provider = new firebase.auth.GoogleAuthProvider();
-
-    let allBusinesses = [];
-    let savedIds = []; 
-    let currentCategory = 'All';
-    let currentView = 'all'; 
-
-    const els = {
-      grid: document.getElementById('businessGrid'),
-      search: document.getElementById('searchInput'),
-      sidebar: document.getElementById('sidebar'),
-      overlay: document.getElementById('overlay'),
-      detailModal: document.getElementById('detailModal'),
-      listModal: document.getElementById('listModal'),
-      greeting: document.getElementById('greetingName'),
-      avatar: document.getElementById('userAvatar')
-    };
-
-    // ─── Listeners ──────────────────────────────────────────────────
-    
-    function initDatabaseListener() {
-        db.ref('businesses').on('value', (snapshot) => {
-            const data = snapshot.val();
-            allBusinesses = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
-            filterBusinesses();
-        });
-    }
-
-    function initSavedListener(uid) {
-        db.ref(`users_saved/${uid}`).on('value', (snapshot) => {
-            const data = snapshot.val();
-            savedIds = data ? Object.keys(data) : [];
-            filterBusinesses();
-        });
-    }
-
-    // ─── Core Logic ─────────────────────────────────────────────────
-
-    function switchView(view) {
-        currentView = view;
-        document.getElementById('nav-dir').classList.remove('active');
-        document.getElementById('nav-fav').classList.remove('active');
-        document.getElementById('nav-cat').classList.remove('active');
+    <main class="md:ml-72 min-h-screen">
         
-        if(view === 'all') {
-            document.getElementById('nav-dir').classList.add('active');
-            document.getElementById('pageTitle').innerText = "Find Local Businesses";
-            document.getElementById('categoryContainer').style.display = "flex";
-        } else if(view === 'categories') {
-            document.getElementById('nav-cat').classList.add('active');
-            document.getElementById('pageTitle').innerText = "Browse by Category";
-            document.getElementById('categoryContainer').style.display = "none";
-        } else {
-            document.getElementById('nav-fav').classList.add('active');
-            document.getElementById('pageTitle').innerText = "Saved Favorites";
-            document.getElementById('categoryContainer').style.display = "flex";
-        }
-        filterBusinesses();
-        closeOverlays();
-    }
-
-    function filterBusinesses() {
-        const query = els.search.value.toLowerCase();
-        
-        if (currentView === 'categories') {
-            renderByCategory(query);
-            return;
-        }
-
-        const filtered = allBusinesses.filter(biz => {
-            const matchesSearch = biz.name.toLowerCase().includes(query);
-            const matchesCat = currentCategory === 'All' || biz.cat === currentCategory;
-            const matchesView = currentView === 'all' || savedIds.includes(biz.id);
-            return matchesSearch && matchesCat && matchesView;
-        });
-        renderCards(filtered);
-    }
-
-    // NEW FUNCTION: Renders businesses grouped by category
-    function renderByCategory(query) {
-        els.grid.innerHTML = '';
-        const categories = ["Restaurant", "Retail", "Service", "Tech"];
-        
-        categories.forEach(category => {
-            const filtered = allBusinesses.filter(biz => 
-                biz.cat === category && biz.name.toLowerCase().includes(query)
-            );
-
-            if (filtered.length > 0) {
-                // Add category header
-                const header = document.createElement('div');
-                header.className = 'category-header';
-                header.innerHTML = `<span class="material-symbols-rounded">label</span> ${category}`;
-                els.grid.appendChild(header);
-
-                // Add business cards for this category
-                filtered.forEach(biz => {
-                    els.grid.appendChild(createCard(biz));
-                });
-            }
-        });
-
-        if (els.grid.innerHTML === '') {
-            els.grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding: 40px; color: #888;">No results found.</p>';
-        }
-    }
-
-    function createCard(biz) {
-        const card = document.createElement('div');
-        card.className = 'business-card';
-        card.onclick = () => openDetailModal(biz);
-        card.innerHTML = `
-            <div class="card-img" style="background-image: url('${biz.img}')">
-                <span class="card-category">${biz.cat}</span>
+        <header class="p-6 md:p-10 flex justify-between items-end sticky top-0 z-40 md:static glass md:bg-transparent md:backdrop-blur-none">
+            <div>
+                <p class="text-[11px] font-extrabold text-gray-400 uppercase tracking-[0.2em]">Tuesday, Jan 27</p>
+                <h1 class="text-4xl font-black tracking-tight">Today</h1>
             </div>
-            <div class="card-body">
-                <div class="biz-name">${biz.name}</div>
-                <div class="biz-rating"><span class="material-symbols-rounded" style="font-size:16px;">star</span>${biz.rating}</div>
-                <div class="biz-info"><span class="material-symbols-rounded" style="font-size:16px">location_on</span>${biz.address}</div>
-            </div>`;
-        return card;
-    }
+            <div class="hidden md:block w-80">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" placeholder="Search apps..." class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-100 transition shadow-sm">
+                </div>
+            </div>
+            <div class="md:hidden w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
+                <img src="https://ui-avatars.com/api/?name=John+Smith&background=0D8ABC&color=fff" alt="Profile">
+            </div>
+        </header>
 
-    function renderCards(data) {
-        els.grid.innerHTML = data.length === 0 ? '<p style="grid-column: 1/-1; text-align:center; padding: 40px; color: #888;">No results found.</p>' : '';
-        data.forEach(biz => {
-            els.grid.appendChild(createCard(biz));
-        });
-    }
+        <section class="px-6 md:px-10 pb-12 max-w-7xl">
+            <div class="relative w-full h-[500px] rounded-[2.5rem] overflow-hidden shadow-2xl mb-12 group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1200" class="absolute inset-0 w-full h-full object-cover transition duration-1000 group-hover:scale-105" alt="Feature">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-10 left-10 right-10 text-white">
+                    <p class="text-xs font-bold uppercase opacity-70 tracking-widest mb-2">Editor's Choice</p>
+                    <h2 class="text-5xl font-black mb-4 leading-none">Retro Vibes:<br>Ultimate Synth</h2>
+                    <p class="text-lg text-gray-300 max-w-md mb-6 hidden md:block">Step into the 80s with the most advanced synthesizer app ever built for mobile.</p>
+                    <button class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-sm hover:scale-105 transition active:scale-95 shadow-lg shadow-blue-500/50">Get Now</button>
+                </div>
+            </div>
 
-    function openDetailModal(biz) {
-        document.getElementById('modalTitle').innerText = biz.name;
-        document.getElementById('modalCat').innerText = biz.cat;
-        document.getElementById('modalAddress').innerText = biz.address;
-        document.getElementById('modalPhone').innerText = biz.phone;
-        document.getElementById('modalImg').style.backgroundImage = `url('${biz.img}')`;
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-3xl font-black">Must-Have Apps</h2>
+                    <p class="text-gray-500 font-medium">Updated just now</p>
+                </div>
+                <a href="#" class="text-blue-600 font-bold hover:underline">See All</a>
+            </div>
+
+            <div id="app-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+        </section>
+    </main>
+
+    <nav class="md:hidden fixed bottom-6 left-6 right-6 h-16 glass border border-white/20 shadow-2xl rounded-3xl flex justify-around items-center text-gray-400 z-50">
+        <a href="#" class="flex flex-col items-center text-blue-600">
+            <i class="fa-solid fa-house text-xl"></i>
+            <span class="text-[9px] font-bold mt-1">Today</span>
+        </a>
+        <a href="#" class="flex flex-col items-center">
+            <i class="fa-solid fa-gamepad text-xl"></i>
+            <span class="text-[9px] font-bold mt-1">Games</span>
+        </a>
+        <a href="#" class="flex flex-col items-center">
+            <i class="fa-solid fa-layer-group text-xl"></i>
+            <span class="text-[9px] font-bold mt-1">Apps</span>
+        </a>
+        <a href="#" class="flex flex-col items-center">
+            <i class="fa-solid fa-magnifying-glass text-xl"></i>
+            <span class="text-[9px] font-bold mt-1">Search</span>
+        </a>
+    </nav>
+
+    <script>
+        // MOCK DATA ARRAY
+        const mockApps = [
+            { name: "ProCreate Pocket", category: "Graphics & Design", icon: "fa-palette", color: "from-purple-500 to-pink-500", rating: "4.9", price: "Free" },
+            { name: "Sky Guide", category: "Education", icon: "fa-star", color: "from-blue-600 to-indigo-900", rating: "4.8", price: "Free" },
+            { name: "LumaFusion", category: "Video Editing", icon: "fa-clapperboard", color: "from-orange-400 to-red-600", rating: "4.7", price: "Get" },
+            { name: "Streaks", category: "Health & Fitness", icon: "fa-check", color: "from-emerald-400 to-teal-600", rating: "4.9", price: "Free" },
+            { name: "Overcast", category: "Entertainment", icon: "fa-podcast", color: "from-orange-500 to-yellow-500", rating: "4.8", price: "Free" },
+            { name: "Bear Notes", category: "Productivity", icon: "fa-pen-nib", color: "from-gray-700 to-black", rating: "4.6", price: "Get" }
+        ];
+
+        // RENDER LOGIC
+        const grid = document.getElementById('app-grid');
         
-        const saveBtn = document.getElementById('saveBizBtn');
-        const isAlreadySaved = savedIds.includes(biz.id);
-
-        saveBtn.innerText = isAlreadySaved ? "Remove from Favorites" : "Save to Favorites";
-        saveBtn.style.background = isAlreadySaved ? "#FEE7E9" : "transparent";
-        saveBtn.style.color = isAlreadySaved ? "#D96570" : "inherit";
-
-        saveBtn.onclick = () => {
-            if(!auth.currentUser) return alert("Please sign in to save!");
-            const favRef = db.ref(`users_saved/${auth.currentUser.uid}/${biz.id}`);
-            if(isAlreadySaved) favRef.remove();
-            else favRef.set(true);
-            closeOverlays();
-        };
-
-        els.detailModal.classList.add('active');
-        els.overlay.classList.add('active');
-    }
-
-    function registerBusiness(e) {
-        e.preventDefault();
-        const newBiz = {
-            name: document.getElementById('bizName').value,
-            cat: document.getElementById('bizCat').value,
-            address: document.getElementById('bizAddress').value,
-            phone: document.getElementById('bizPhone').value,
-            img: document.getElementById('bizImg').value,
-            rating: 5.0, reviews: 0
-        };
-        db.ref('businesses').push(newBiz).then(() => {
-            document.getElementById('listingForm').reset();
-            closeOverlays();
+        mockApps.forEach(app => {
+            const card = `
+                <div class="app-card flex items-center space-x-4 bg-white p-5 rounded-[2rem] shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group border border-transparent hover:border-blue-100">
+                    <div class="w-20 h-20 bg-gradient-to-br ${app.color} rounded-[1.5rem] flex items-center justify-center text-white text-3xl shadow-lg shrink-0 group-hover:rotate-2 transition">
+                        <i class="fa-solid ${app.icon}"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-extrabold text-gray-900 truncate text-lg tracking-tight leading-tight">${app.name}</h3>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">${app.category}</p>
+                        <div class="flex items-center justify-between">
+                             <button class="bg-[#F0F0F7] text-blue-600 px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition">
+                                ${app.price}
+                             </button>
+                             <div class="flex items-center space-x-1">
+                                <span class="text-xs font-bold text-gray-800">${app.rating}</span>
+                                <i class="fa-solid fa-star text-[10px] text-yellow-400"></i>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += card;
         });
-    }
+    </script>
 
-    function closeOverlays() {
-        els.sidebar.classList.remove('open');
-        els.detailModal.classList.remove('active');
-        els.listModal.classList.remove('active');
-        els.overlay.classList.remove('active');
-    }
-
-    function openListModal() { els.listModal.classList.add('active'); els.overlay.classList.add('active'); }
-    function toggleSidebar() { els.sidebar.classList.add('open'); els.overlay.classList.add('active'); }
-
-    function filterCategory(cat, btn) {
-        currentCategory = cat;
-        document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('active'));
-        btn.classList.add('active');
-        // If they click a pill while in category view, switch back to directory for better UX
-        if (currentView === 'categories') switchView('all');
-        else filterBusinesses();
-    }
-
-    els.search.addEventListener('input', filterBusinesses);
-
-    function handleAuth() {
-        if(auth.currentUser) auth.signOut().then(() => location.reload());
-        else auth.signInWithPopup(provider).catch(e => alert(e.message));
-    }
-
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            els.greeting.innerText = `Hello, ${user.displayName.split(' ')[0]}`;
-            els.avatar.style.backgroundImage = `url(${user.photoURL})`;
-            document.getElementById('authBtnSidebar').querySelector('.nav-label').innerText = "Sign Out";
-            initSavedListener(user.uid);
-        } else {
-            savedIds = [];
-            filterBusinesses();
-        }
-    });
-
-    initDatabaseListener();
-  </script>
 </body>
 </html>
