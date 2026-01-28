@@ -156,7 +156,7 @@
       messagingSenderId: "1010760921119",
       appId: "1:1010760921119:web:de982c51da96df3fe7252a",
       measurementId: "G-55PTWEXBXD",
-      databaseURL: "https://visual-journeys-default-rtdb.firebaseio.com" // Update if your URL is different
+      databaseURL: "https://visual-journeys-default-rtdb.firebaseio.com"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -210,6 +210,7 @@
         window.location.hash = "directory";
       } catch (error) {
         console.error("Transmission error:", error);
+        alert("Error connecting to database. Check security rules.");
       } finally {
         btn.innerText = "Submit Realtime";
         btn.disabled = false;
@@ -220,7 +221,7 @@
       const search = document.getElementById('searchInput').value.toLowerCase();
       const filter = document.getElementById('specialtyFilter').value;
       const filtered = allPhotographers.filter(p => {
-        const matchesName = p.name.toLowerCase().includes(search);
+        const matchesName = (p.name || "").toLowerCase().includes(search);
         const matchesType = filter === 'all' || p.specialty === filter;
         return matchesName && matchesType;
       });
