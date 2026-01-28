@@ -4,216 +4,278 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>VISUAL JOURNEY | Lethabo Photography</title>
-  <meta name="description" content="Professional photography by Lethabo. Capturing authentic stories in Durban through Portraits, Landscapes, and Weddings." />
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --primary: #1a1a1a;
-      --accent: #d4af37; /* Gold */
-      --text: #e0e0e0;
-      --bg: #0f0f0f;
-      --card-bg: #161616;
+      --primary: #ffffff;
+      --secondary: #fdfbf7; /* Pearl White */
+      --accent: #c5a059;    /* Champagne Gold */
+      --text-main: #1a1a1a;
+      --text-muted: #666666;
+      --glass: rgba(255, 255, 255, 0.7);
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      scroll-behavior: smooth;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Roboto', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--primary);
+      color: var(--text-main);
+      line-height: 1.7;
       overflow-x: hidden;
     }
 
-    h1, h2, h3 { font-family: 'Playfair Display', serif; }
-
-    /* Navigation */
-    header {
-      position: fixed;
-      top: 0; width: 100%;
-      background: rgba(10, 10, 10, 0.85);
-      backdrop-filter: blur(10px);
-      z-index: 1000;
-      transition: 0.3s;
-    }
-
-    header.scrolled {
-      background: rgba(10, 10, 10, 0.98);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    }
-
-    nav {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 1.2rem 5%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 1.5rem;
-      letter-spacing: 4px;
-      color: var(--accent);
-      text-decoration: none;
+    h1, h2, h3, .logo {
+      font-family: 'Cormorant Garamond', serif;
       font-weight: 700;
     }
 
-    .nav-links {
-      list-style: none;
+    /* --- Animations --- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-out;
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* --- Navigation --- */
+    header {
+      position: fixed;
+      top: 0; width: 100%;
+      padding: 1.5rem 0;
+      z-index: 1000;
+      transition: all 0.4s ease;
+    }
+
+    header.scrolled {
+      background: var(--glass);
+      backdrop-filter: blur(15px);
+      padding: 1rem 0;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+
+    nav {
+      max-width: 1300px;
+      margin: 0 auto;
       display: flex;
-      gap: 2rem;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 5%;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      text-decoration: none;
+      color: var(--text-main);
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 3rem;
+      list-style: none;
     }
 
     .nav-links a {
-      color: var(--text);
       text-decoration: none;
+      color: var(--text-main);
       font-size: 0.85rem;
-      text-transform: uppercase;
+      font-weight: 600;
       letter-spacing: 1px;
+      text-transform: uppercase;
       transition: 0.3s;
     }
 
-    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+    .nav-links a:hover { color: var(--accent); }
 
-    /* Hero */
+    /* --- Hero Section --- */
     #hero {
       height: 100vh;
-      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)),
-                  url('https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
-      text-align: center;
+      background: var(--secondary);
+      position: relative;
+      overflow: hidden;
     }
 
-    .hero-content h1 { font-size: clamp(4rem, 10vw, 6rem); color: #fff; margin-bottom: 0.5rem; }
-    .hero-content p { font-size: 1.2rem; letter-spacing: 2px; }
+    .hero-image {
+      position: absolute;
+      right: 5%;
+      width: 45%;
+      height: 80%;
+      background: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1000&q=80') center/cover;
+      border-radius: 300px 300px 0 0;
+      z-index: 1;
+    }
 
-    .cta-btn {
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1300px;
+      width: 90%;
+      margin: 0 auto;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(4rem, 12vw, 9rem);
+      line-height: 0.9;
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+
+    .hero-content p {
+      font-size: 1.1rem;
+      max-width: 400px;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+
+    .btn-main {
       display: inline-block;
-      padding: 1rem 2.5rem;
-      background: var(--accent);
-      color: #000;
+      padding: 1.2rem 3rem;
+      background: var(--text-main);
+      color: white;
       text-decoration: none;
-      font-weight: 600;
-      border-radius: 50px;
-      margin-top: 2rem;
-      transition: 0.3s;
-      border: none;
-      cursor: pointer;
-    }
-
-    .cta-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 20px rgba(212,175,55,0.3);
-    }
-
-    /* Sections General */
-    section { padding: 8rem 5%; max-width: 1400px; margin: 0 auto; }
-    h2 { font-size: 3rem; text-align: center; margin-bottom: 3rem; color: var(--accent); }
-
-    /* Portfolio Tabs */
-    .tabs { display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap; }
-    .tab-link {
-      padding: 0.6rem 1.5rem;
-      background: transparent;
-      border: 1px solid #444;
-      color: var(--text);
-      cursor: pointer;
-      border-radius: 4px;
-      transition: 0.3s;
-    }
-    .tab-link.active { background: var(--accent); color: #000; border-color: var(--accent); }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .portfolio-item { position: relative; overflow: hidden; aspect-ratio: 4/5; cursor: pointer; border-radius: 8px; }
-    .portfolio-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-    .portfolio-item:hover img { transform: scale(1.1); }
-    .overlay {
-      position: absolute; inset: 0; background: rgba(0,0,0,0.7);
-      display: flex; flex-direction: column; justify-content: center;
-      align-items: center; opacity: 0; transition: 0.4s;
-    }
-    .portfolio-item:hover .overlay { opacity: 1; }
-
-    /* Services Section */
-    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-    .service-card {
-      background: var(--card-bg);
-      padding: 3rem 2rem;
-      border-radius: 15px;
-      text-align: center;
-      border: 1px solid #222;
+      font-size: 0.9rem;
+      border-radius: 0;
       transition: 0.4s;
+    }
+
+    .btn-main:hover {
+      background: var(--accent);
+      transform: scale(1.05);
+    }
+
+    /* --- Services Section --- */
+    #services {
+      padding: 10rem 5%;
+      background: #fff;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 3.5rem;
+      margin-bottom: 4rem;
+      text-align: center;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 3rem;
+    }
+
+    .service-card {
+      padding: 4rem 3rem;
+      background: var(--secondary);
+      border-radius: 4px;
+      transition: 0.5s;
+      border: 1px solid transparent;
+    }
+
+    .service-card:hover {
+      background: white;
+      border-color: var(--accent);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+    }
+
+    .service-card h3 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .service-card p {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .price-tag {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 2rem;
+    }
+
+    /* --- Portfolio --- */
+    #portfolio { padding: 10rem 5%; background: var(--secondary); }
+    
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+    }
+
+    .gallery-item {
+      grid-column: span 4;
+      height: 500px;
+      overflow: hidden;
       position: relative;
     }
-    .service-card:hover { border-color: var(--accent); transform: translateY(-10px); }
-    .service-card h3 { color: var(--accent); font-size: 1.8rem; margin-bottom: 1rem; }
-    .price { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; color: #fff; }
-    .service-features { list-style: none; margin-bottom: 2rem; text-align: left; color: #bbb; }
-    .service-features li { margin-bottom: 0.8rem; display: flex; align-items: center; gap: 10px; }
-    .service-features li::before { content: "✓"; color: var(--accent); }
-    .badge {
-      position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-      background: var(--accent); color: #000; padding: 5px 15px;
-      border-radius: 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase;
+
+    .gallery-item:nth-child(2) { grid-column: span 8; }
+    .gallery-item:nth-child(3) { grid-column: span 7; }
+    .gallery-item:nth-child(4) { grid-column: span 5; }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: 1s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
-    /* Featured Project */
-    #featured { background: var(--card-bg); border-radius: 24px; margin: 4rem auto; }
-    .featured-container { display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: center; }
-    .featured-img img { width: 100%; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+    .gallery-item:hover img { transform: scale(1.08); }
 
-    /* About Section */
-    .about-container { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-    .about-img img { width: 100%; border-radius: 4px; filter: grayscale(20%); }
-    .stats { display: flex; gap: 3rem; margin-top: 2rem; }
-    .stat-box h3 { font-size: 2.5rem; color: var(--accent); }
-
-    /* Contact Section */
-    .contact-wrapper { max-width: 800px; margin: 0 auto; }
-    form { display: grid; gap: 1.2rem; }
-    .input-group { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-    input, textarea, select {
-      width: 100%; padding: 1.1rem; background: #1a1a1a;
-      border: 1px solid #333; color: #fff; border-radius: 8px; font-family: inherit;
+    /* --- Contact --- */
+    #contact {
+      padding: 10rem 5%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      max-width: 1300px;
+      margin: 0 auto;
     }
-    input:focus, textarea:focus { outline: none; border-color: var(--accent); }
 
-    /* Footer */
-    footer { padding: 4rem 5%; background: #050505; text-align: center; border-top: 1px solid #111; }
-    .social-links { margin: 1.5rem 0; }
-    .social-links a { color: var(--text); margin: 0 1rem; text-decoration: none; transition: 0.3s; }
-    .social-links a:hover { color: var(--accent); }
+    input, textarea {
+      width: 100%;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border: none;
+      background: var(--secondary);
+      font-family: inherit;
+      font-size: 1rem;
+    }
 
-    /* Mobile Styles */
-    .menu-toggle { display: none; font-size: 1.8rem; cursor: pointer; color: var(--accent); }
-    @media (max-width: 992px) {
-      .featured-container, .about-container, .input-group { grid-template-columns: 1fr; }
-      .nav-links {
-        display: none; position: absolute; top: 100%; left: 0; width: 100%;
-        background: #0a0a0a; flex-direction: column; padding: 2rem; text-align: center;
-      }
-      .nav-links.active { display: flex; }
-      .menu-toggle { display: block; }
-      section { padding: 5rem 5%; }
+    input:focus, textarea:focus {
+      outline: 1px solid var(--accent);
+    }
+
+    /* --- Footer --- */
+    footer {
+      padding: 5rem 5%;
+      border-top: 1px solid #eee;
+      text-align: center;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 900px) {
+      .hero-image { display: none; }
+      #contact, .gallery-item { grid-template-columns: 1fr; grid-column: span 12 !important; }
+      .nav-links { display: none; }
+      .hero-content h1 { font-size: 4rem; }
     }
   </style>
 </head>
@@ -221,207 +283,100 @@
 
   <header id="header">
     <nav>
-      <a href="#" class="logo">VISUAL JOURNEY</a>
-      <div class="menu-toggle" id="menuToggle">☰</div>
-      <ul class="nav-links" id="navLinks">
+      <a href="#" class="logo">Lethabo</a>
+      <ul class="nav-links">
         <li><a href="#hero">Home</a></li>
-        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#portfolio">Work</a></li>
         <li><a href="#services">Services</a></li>
-        <li><a href="#featured">Featured</a></li>
-        <li><a href="#about">Story</a></li>
-        <li><a href="#contact">Book</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
   </header>
 
   <section id="hero">
+    <div class="hero-image"></div>
     <div class="hero-content">
-      <h1>Lethabo</h1>
-      <p>AUTHENTIC STORYTELLING THROUGH THE LENS</p>
-      <a href="#contact" class="cta-btn">Book a Session</a>
+      <p class="reveal">South Africa — Studio</p>
+      <h1 class="reveal">Visual<br>Journey</h1>
+      <a href="#portfolio" class="btn-main reveal">Explore Gallery</a>
+    </div>
+  </section>
+
+  <section id="services" class="reveal">
+    <h2 class="section-title">The Offerings</h2>
+    <div class="service-grid">
+      <div class="service-card">
+        <h3>Editorial Portraits</h3>
+        <p>Premium studio sessions focused on high-fashion lighting and creative direction for brands and individuals.</p>
+        <span class="price-tag">Starting at R 1,800</span>
+        <a href="#contact" style="color: var(--text-main); font-weight: 600;">Book Session →</a>
+      </div>
+
+      <div class="service-card">
+        <h3>Luxe Weddings</h3>
+        <p>Documentary-style wedding photography that captures the raw, unscripted elegance of your special day.</p>
+        <span class="price-tag">Starting at R 12,500</span>
+        <a href="#contact" style="color: var(--text-main); font-weight: 600;">Check Availability →</a>
+      </div>
+
+      <div class="service-card">
+        <h3>Commercial Art</h3>
+        <p>Visual storytelling for architectural spaces, products, and lifestyle hospitality brands.</p>
+        <span class="price-tag">Custom Quote</span>
+        <a href="#contact" style="color: var(--text-main); font-weight: 600;">Inquire →</a>
+      </div>
     </div>
   </section>
 
   <section id="portfolio">
-    <h2>The Galleries</h2>
-    <div class="tabs">
-      <button class="tab-link active" data-tab="portraits">Portraits</button>
-      <button class="tab-link" data-tab="landscapes">Landscapes</button>
-      <button class="tab-link" data-tab="weddings">Weddings</button>
-    </div>
-
-    <div class="tab-content active" id="portraits">
-      <div class="gallery-grid">
-        <div class="portfolio-item">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800" alt="Portrait">
-          <div class="overlay"><h3>Natural Light</h3></div>
-        </div>
-        <div class="portfolio-item">
-          <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800" alt="Portrait">
-          <div class="overlay"><h3>Studio Session</h3></div>
-        </div>
-        <div class="portfolio-item">
-          <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=800" alt="Portrait">
-          <div class="overlay"><h3>Urban Editorial</h3></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-content" id="landscapes">
-      <div class="gallery-grid">
-        <div class="portfolio-item">
-          <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800" alt="Landscape">
-          <div class="overlay"><h3>Durban Coast</h3></div>
-        </div>
-        <div class="portfolio-item">
-          <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=800" alt="Landscape">
-          <div class="overlay"><h3>Valley of 1000 Hills</h3></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-content" id="weddings">
-      <div class="gallery-grid">
-        <div class="portfolio-item">
-          <img src="https://images.unsplash.com/photo-1519741497674-00b5e0e0a2c8?auto=format&fit=crop&w=800" alt="Wedding">
-          <div class="overlay"><h3>Summer Vows</h3></div>
-        </div>
-      </div>
+    <h2 class="section-title reveal">Selected Work</h2>
+    <div class="gallery">
+      <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000" alt=""></div>
+      <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1000" alt=""></div>
+      <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1519741497674-00b5e0e0a2c8?auto=format&fit=crop&w=1000" alt=""></div>
+      <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=1000" alt=""></div>
     </div>
   </section>
 
-  <section id="services">
-    <h2>Services & Packages</h2>
-    <div class="services-grid">
-      <div class="service-card">
-        <h3>Lifestyle</h3>
-        <div class="price">R 1,200</div>
-        <ul class="service-features">
-          <li>60 Minute Session</li>
-          <li>1 Location</li>
-          <li>20 Edited Images</li>
-          <li>Online Gallery</li>
-        </ul>
-        <a href="#contact" class="cta-btn">Select</a>
-      </div>
-
-      <div class="service-card">
-        <div class="badge">Popular</div>
-        <h3>Weddings</h3>
-        <div class="price">R 9,500</div>
-        <ul class="service-features">
-          <li>8 Hours Coverage</li>
-          <li>Engagement Session</li>
-          <li>300+ Edited Images</li>
-          <li>Print Box Included</li>
-        </ul>
-        <a href="#contact" class="cta-btn">Select</a>
-      </div>
-
-      <div class="service-card">
-        <h3>Commercial</h3>
-        <div class="price">Custom</div>
-        <ul class="service-features">
-          <li>Product Photography</li>
-          <li>Brand Storytelling</li>
-          <li>Full Licensing</li>
-          <li>Quick Turnaround</li>
-        </ul>
-        <a href="#contact" class="cta-btn">Enquire</a>
-      </div>
+  <section id="contact" class="reveal">
+    <div>
+      <h2 style="text-align: left; font-size: 4rem;">Let's create<br>together.</h2>
+      <p style="margin-top: 2rem; color: var(--text-muted);">Available for projects worldwide. Based in Durban, South Africa.</p>
     </div>
-  </section>
-
-  <section id="featured">
-    <div class="featured-container">
-      <div class="featured-img">
-        <img src="https://images.unsplash.com/photo-1511285560929-80b456fe4726?auto=format&fit=crop&w=1200" alt="Featured">
-      </div>
-      <div class="featured-text">
-        <span style="color: var(--accent); letter-spacing: 2px;">FEATURED SERIES</span>
-        <h3 style="font-size: 2.5rem; margin: 1rem 0;">"The Golden Hour"</h3>
-        <p>This series captures the intimate moments of a Durban summer sunset. It focuses on the play between warm highlights and deep shadows to create a nostalgic, cinematic feel.</p>
-        <p style="margin-top: 1rem; opacity: 0.7;">Awarded "Series of the Month" - 2025 Visual Arts</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="about">
-    <div class="about-container">
-      <div class="about-text">
-        <h2>My Story</h2>
-        <p>I am Lethabo, a photographer based in Durban, South Africa. My passion lies in finding the extraordinary within the ordinary.</p>
-        <p style="margin-top: 1rem;">With a background in fine arts and over 10 years behind the lens, I treat every session as a collaboration to create something timeless.</p>
-        <div class="stats">
-          <div class="stat-box"><h3>10+</h3><p>Years</p></div>
-          <div class="stat-box"><h3>500+</h3><p>Clients</p></div>
-        </div>
-      </div>
-      <div class="about-img">
-        <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=800" alt="Lethabo">
-      </div>
-    </div>
-  </section>
-
-  <section id="contact">
-    <h2>Start Your Journey</h2>
-    <div class="contact-wrapper">
-      <form id="contactForm">
-        <div class="input-group">
-          <input type="text" placeholder="Your Name" required>
-          <input type="email" placeholder="Email Address" required>
-        </div>
-        <select required>
-          <option value="" disabled selected>Select a Service</option>
-          <option value="lifestyle">Lifestyle Portrait</option>
-          <option value="wedding">Wedding Coverage</option>
-          <option value="commercial">Commercial/Brand</option>
-        </select>
-        <textarea rows="5" placeholder="Tell me about your project..." required></textarea>
-        <button type="submit" class="cta-btn" style="width: 100%; margin-top: 0;">Send Message</button>
-      </form>
-    </div>
+    <form>
+      <input type="text" placeholder="Your Name">
+      <input type="email" placeholder="Email Address">
+      <textarea rows="5" placeholder="Tell me about your vision"></textarea>
+      <button type="submit" class="btn-main" style="width: 100%; border: none; cursor: pointer;">Send Inquiry</button>
+    </form>
   </section>
 
   <footer>
-    <p>&copy; 2026 VISUAL JOURNEY | Lethabo Photography | Durban, SA</p>
-    <div class="social-links">
-      <a href="#">Instagram</a>
-      <a href="#">Facebook</a>
-      <a href="#">Twitter</a>
-    </div>
+    <p class="logo" style="font-size: 1.2rem;">Lethabo Photography</p>
+    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem;">&copy; 2026 VISUAL JOURNEY. All Rights Reserved.</p>
   </footer>
 
   <script>
-    // Navigation Scroll Effect
+    // Header Scroll Effect
     window.addEventListener('scroll', () => {
-      document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+      const header = document.querySelector('header');
+      header.classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // Mobile Menu Toggle
-    const menuToggle = document.getElementById('menuToggle');
-    const navLinks = document.getElementById('navLinks');
-    menuToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
+    // Intersection Observer for Reveal Animations
+    const observerOptions = {
+      threshold: 0.1
+    };
 
-    // Portfolio Tab Logic
-    document.querySelectorAll('.tab-link').forEach(button => {
-      button.addEventListener('click', () => {
-        const tabId = button.getAttribute('data-tab');
-        
-        document.querySelectorAll('.tab-link').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-        
-        button.classList.add('active');
-        document.getElementById(tabId).classList.add('active');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
       });
-    });
+    }, observerOptions);
 
-    // Form Handling
-    document.getElementById('contactForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      alert("Thank you! Your message has been sent to Lethabo.");
-      e.target.reset();
-    });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
