@@ -14,7 +14,6 @@
     </style>
 </head>
 <body class="bg-[#F2F2F7] text-gray-900 pb-24 md:pb-0">
-
     <aside class="hidden md:flex flex-col w-72 fixed h-full bg-white border-r p-8 z-50">
         <h1 class="text-3xl font-black text-blue-600 tracking-tighter mb-10">All"Apps</h1>
         <nav class="space-y-1 flex-1">
@@ -39,9 +38,8 @@
             </div>
         </div>
     </aside>
-
     <main class="md:ml-72 min-h-screen">
-        
+       
         <header class="p-6 md:p-10 flex justify-between items-end sticky top-0 z-40 md:static glass md:bg-transparent md:backdrop-blur-none">
             <div>
                 <p class="text-[11px] font-extrabold text-gray-400 uppercase tracking-[0.2em]">Tuesday, Jan 27</p>
@@ -57,7 +55,6 @@
                 <img src="https://ui-avatars.com/api/?name=John+Smith&background=0D8ABC&color=fff" alt="Profile">
             </div>
         </header>
-
         <section class="px-6 md:px-10 pb-12 max-w-7xl">
             <div class="relative w-full h-[500px] rounded-[2.5rem] overflow-hidden shadow-2xl mb-12 group cursor-pointer">
                 <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1200" class="absolute inset-0 w-full h-full object-cover transition duration-1000 group-hover:scale-105" alt="Feature">
@@ -69,7 +66,6 @@
                     <button class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-sm hover:scale-105 transition active:scale-95 shadow-lg shadow-blue-500/50">Get Now</button>
                 </div>
             </div>
-
             <div class="flex justify-between items-end mb-8">
                 <div>
                     <h2 class="text-3xl font-black">Must-Have Apps</h2>
@@ -77,12 +73,11 @@
                 </div>
                 <a href="#" class="text-blue-600 font-bold hover:underline">See All</a>
             </div>
-
             <div id="app-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                </div>
+                <!-- Apps will be dynamically inserted here via Firebase -->
+            </div>
         </section>
     </main>
-
     <nav class="md:hidden fixed bottom-6 left-6 right-6 h-16 glass border border-white/20 shadow-2xl rounded-3xl flex justify-around items-center text-gray-400 z-50">
         <a href="#" class="flex flex-col items-center text-blue-600">
             <i class="fa-solid fa-house text-xl"></i>
@@ -102,81 +97,73 @@
         </a>
     </nav>
 
-  <script type="module">
-  // ──────────────────────────────────────────────────────────────
-  // 1. Your existing Firebase imports & initialization
-  //    (keep this part exactly as you have it, just showing context)
-  // ──────────────────────────────────────────────────────────────
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-  // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js"; // optional
+    <!-- Firebase SDK (Modular v10 style) -->
+    <script type="module">
+        // Import only the modules we need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
-  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCLqZqiW91FlivfkL3ZGtWUh7x2XpX4HPo",
+            authDomain: "all-apps-36756.firebaseapp.com",
+            databaseURL: "https://all-apps-36756-default-rtdb.firebaseio.com",
+            projectId: "all-apps-36756",
+            storageBucket: "all-apps-36756.firebasestorage.app",
+            messagingSenderId: "1088890111578",
+            appId: "1:1088890111578:web:9cb544e599626b61a63a63",
+            measurementId: "G-5Z763J47HR"
+        };
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCLqZqiW91FlivfkL3ZGtWUh7x2XpX4HPo",
-    authDomain: "all-apps-36756.firebaseapp.com",
-    databaseURL: "https://all-apps-36756-default-rtdb.firebaseio.com",
-    projectId: "all-apps-36756",
-    storageBucket: "all-apps-36756.firebasestorage.app",
-    messagingSenderId: "1088890111578",
-    appId: "1:1088890111578:web:9cb544e599626b61a63a63",
-    measurementId: "G-5Z763J47HR"
-  };
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  // const analytics = getAnalytics(app); // optional
+        // Real-time listener for /apps
+        const grid = document.getElementById('app-grid');
+        const appsRef = ref(db, 'apps');
 
-  // ──────────────────────────────────────────────────────────────
-  // 2. Real-time listener – replaces your mock data rendering
-  // ──────────────────────────────────────────────────────────────
-  const grid = document.getElementById('app-grid');
-  const appsRef = ref(db, 'apps');
+        onValue(appsRef, (snapshot) => {
+            grid.innerHTML = ''; // Clear previous cards
 
-  onValue(appsRef, (snapshot) => {
-    grid.innerHTML = ''; // Clear previous cards
+            if (!snapshot.exists()) {
+                grid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">No apps found yet...</p>';
+                return;
+            }
 
-    if (!snapshot.exists()) {
-      grid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">No apps found yet...</p>';
-      return;
-    }
+            const appsData = snapshot.val();
+            const appList = Object.entries(appsData).map(([id, app]) => ({ id, ...app }));
 
-    const appsData = snapshot.val();
-    
-    // Convert object → array and sort by name (alphabetical)
-    const appList = Object.entries(appsData).map(([id, app]) => ({ id, ...app }));
-    appList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+            // Sort alphabetically by name
+            appList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
-    appList.forEach(app => {
-      const card = `
-        <div class="app-card flex items-center space-x-4 bg-white p-5 rounded-[2rem] shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group border border-transparent hover:border-blue-100">
-          <div class="w-20 h-20 bg-gradient-to-br ${app.color || 'from-gray-400 to-gray-600'} rounded-[1.5rem] flex items-center justify-center text-white text-3xl shadow-lg shrink-0 group-hover:rotate-2 transition">
-            <i class="fa-solid ${app.icon || 'fa-cube'}"></i>
-          </div>
-          <div class="flex-1 min-w-0">
-            <h3 class="font-extrabold text-gray-900 truncate text-lg tracking-tight leading-tight">${app.name || 'Unnamed App'}</h3>
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">${app.category || 'Unknown'}</p>
-            <div class="flex items-center justify-between">
-              <button class="bg-[#F0F0F7] text-blue-600 px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition">
-                ${app.price || 'Get'}
-              </button>
-              <div class="flex items-center space-x-1">
-                <span class="text-xs font-bold text-gray-800">${app.rating || '—'}</span>
-                <i class="fa-solid fa-star text-[10px] text-yellow-400"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-      grid.innerHTML += card;
-    });
-  }, (error) => {
-    console.error("Firebase Realtime Database error:", error);
-    grid.innerHTML = '<p class="col-span-full text-center text-red-600 py-10">Error loading apps...</p>';
-  });
-
-  // Optional: one-time read to debug quickly (remove later)
-  // get(appsRef).then(snap => console.log("One-time read:", snap.val()));
-</script>
+            appList.forEach(app => {
+                const card = `
+                    <div class="app-card flex items-center space-x-4 bg-white p-5 rounded-[2rem] shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group border border-transparent hover:border-blue-100">
+                        <div class="w-20 h-20 bg-gradient-to-br ${app.color || 'from-gray-400 to-gray-600'} rounded-[1.5rem] flex items-center justify-center text-white text-3xl shadow-lg shrink-0 group-hover:rotate-2 transition">
+                            <i class="fa-solid ${app.icon || 'fa-cube'}"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-extrabold text-gray-900 truncate text-lg tracking-tight leading-tight">${app.name || 'Unnamed App'}</h3>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">${app.category || 'Unknown'}</p>
+                            <div class="flex items-center justify-between">
+                                <button class="bg-[#F0F0F7] text-blue-600 px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition">
+                                    ${app.price || 'Get'}
+                                </button>
+                                <div class="flex items-center space-x-1">
+                                    <span class="text-xs font-bold text-gray-800">${app.rating || '—'}</span>
+                                    <i class="fa-solid fa-star text-[10px] text-yellow-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+        }, (error) => {
+            console.error("Firebase Realtime Database error:", error);
+            grid.innerHTML = '<p class="col-span-full text-center text-red-600 py-10">Error loading apps...</p>';
+        });
+    </script>
 </body>
 </html>
