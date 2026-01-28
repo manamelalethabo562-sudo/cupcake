@@ -20,15 +20,15 @@
       --color-1: #f4e9e2;
       --color-2: #e8f0f2;
       --color-3: #f2edf4;
-      --color-4: #1a3c40; /* Deep Teal */
+      --color-4: #1a3c40; 
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body { font-family: 'Inter', sans-serif; background-color: var(--primary); color: var(--text-main); line-height: 1.7; overflow-x: hidden; }
-    h1, h2, h3, .logo, .brand-name { font-family: 'Cormorant Gramamond', serif; font-weight: 700; }
+    h1, h2, h3, .logo, .brand-name { font-family: 'Cormorant Garamond', serif; font-weight: 700; }
 
-    /* --- BEAUTIFIED NAVIGATION --- */
+    /* Navigation */
     header { position: fixed; top: 0; width: 100%; padding: 1.5rem 0; z-index: 1000; background: var(--glass); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(0,0,0,0.05); transition: 0.3s; }
     nav { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; }
     .brand-name { font-size: 1.8rem; letter-spacing: 4px; color: var(--color-4); text-transform: uppercase; text-decoration: none; }
@@ -36,7 +36,7 @@
     .nav-links a { text-decoration: none; color: var(--text-main); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
     .nav-links a:hover { color: var(--accent); }
 
-    /* --- BEAUTIFIED HERO SECTION --- */
+    /* Hero Section */
     #hero { 
         height: 100vh; display: flex; align-items: center; 
         background: linear-gradient(to right, var(--secondary) 60%, var(--color-2) 40%); 
@@ -61,7 +61,7 @@
         padding: 2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.1); border-radius: 4px;
     }
 
-    /* --- BEAUTIFIED ABOUT SECTION --- */
+    /* About Section */
     #about-app { padding: 12rem 5%; background: var(--color-4); color: white; position: relative; }
     .about-flex { 
         max-width: 1200px; margin: 0 auto; display: flex; 
@@ -75,7 +75,7 @@
     .about-container h2 { font-size: 4rem; color: var(--accent); margin-bottom: 2rem; line-height: 1; }
     .about-container p { font-size: 1.2rem; line-height: 2; opacity: 0.9; font-weight: 200; }
 
-    /* --- DIRECTORY STYLES (Kept Original Logic) --- */
+    /* Directory */
     #directory { background: var(--color-2); padding: 10rem 5% 5rem; }
     .directory-header { text-align: center; margin-bottom: 4rem; }
     .filter-container { max-width: 1300px; margin: 0 auto 4rem; display: flex; gap: 1rem; justify-content: center; }
@@ -87,7 +87,7 @@
     .photographer-card:hover { transform: translateY(-20px); box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
     .photographer-card img { width: 100%; height: 350px; object-fit: cover; margin-bottom: 1.5rem; }
 
-    /* Registration */
+    /* Registration Form */
     #register-section { background: var(--color-1); padding: 10rem 5%; }
     .reg-card { max-width: 700px; margin: 0 auto; background: white; padding: 4rem; border-radius: 4px; }
     input, textarea, select { width: 100%; padding: 1.2rem; margin-bottom: 1.2rem; border: 1px solid #eee; background: #fafafa; font-family: inherit; }
@@ -95,8 +95,7 @@
 
     /* Modal */
     .profile-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
-    .modal-content { background: white; width: 100%; max-width: 1100px; height: 85vh; display: grid; grid-template-columns: 1fr 1.2fr; overflow: hidden; position: relative; animation: slideUp 0.5s ease; }
-    @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-content { background: white; width: 100%; max-width: 1100px; height: 85vh; display: grid; grid-template-columns: 1fr 1.2fr; overflow: hidden; position: relative; }
     .modal-left { background: var(--color-4); color: white; padding: 4rem; overflow-y: auto; }
     .modal-right { padding: 4rem; overflow-y: auto; }
     .close-btn { position: absolute; top: 20px; right: 25px; font-size: 2.5rem; cursor: pointer; color: #1a1a1a; z-index: 10; }
@@ -109,7 +108,6 @@
         .hero-content-wrap, .about-flex, .modal-content { grid-template-columns: 1fr; display: block; }
         .hero-visual, .about-image { display: none; }
         .search-input { width: 100%; }
-        .about-container h2 { font-size: 2.5rem; }
     }
   </style>
 </head>
@@ -180,8 +178,8 @@
   <section id="register-section">
     <div class="reg-card reveal">
       <h2 style="font-size: 2.5rem; color: var(--color-4); margin-bottom: 1rem;">Join the Journey</h2>
-      <p style="margin-bottom: 2.5rem; font-size: 1rem; color: #666;">Submit your portfolio to be featured in our elite global directory.</p>
-      <form onsubmit="event.preventDefault(); alert('Application submitted! Our curators will be in touch.');">
+      <p style="margin-bottom: 2.5rem; font-size: 1rem; color: #666;">Submit your details to be featured in our elite global directory.</p>
+      <form onsubmit="event.preventDefault(); alert('Application & Portfolio submitted! Our curators will be in touch.');">
         <input type="text" placeholder="Full Name" required>
         <input type="email" placeholder="Professional Email" required>
         <select required>
@@ -191,7 +189,12 @@
             <option>Wedding</option>
             <option>Wildlife</option>
         </select>
-        <input type="url" placeholder="Portfolio Link (URL)">
+        
+        <div style="margin-bottom: 1.2rem; text-align: left;">
+            <label style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; color: var(--accent); font-weight: 700;">Upload Portfolio (PDF or ZIP)</label>
+            <input type="file" style="padding: 0.8rem; background: white; border: 1px dashed var(--accent); cursor: pointer;" accept=".pdf,.zip" required>
+        </div>
+
         <textarea placeholder="Describe your visual language..." rows="4"></textarea>
         <button type="submit" class="btn-submit">Submit Application</button>
       </form>
