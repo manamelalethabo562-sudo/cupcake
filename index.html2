@@ -3,245 +3,252 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cupcake – Your Profile</title>
+  <title>VISUAL JOURNEYS | Live Firebase Network</title>
   
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,700;1,400&family=Inter:wght@200;400;600&display=swap" rel="stylesheet">
+
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    
-    body {
-      font-family: 'Poppins', sans-serif;
-      min-height: 100vh;
-      background: #fff8f5;
-      color: #2d1b12;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      background: url('https://images.unsplash.com/photo-1550617931-eb3a88e84519?auto=format&fit=crop&q=80') center/cover no-repeat;
+    :root {
+      --primary: #ffffff;
+      --secondary: #fdfbf7; 
+      --accent: #c5a059;    
+      --text-main: #1a1a1a;
+      --text-muted: #666666;
+      --glass: rgba(255, 255, 255, 0.9);
+      --color-1: #f4e9e2;
+      --color-2: #e8f0f2;
+      --color-4: #1a3c40; 
     }
-    
-    .overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(255,245,240,0.92), rgba(255,230,235,0.94));
-      z-index: -1;
-    }
-    
-    .profile-card {
-      background: white;
-      border-radius: 24px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-      padding: 3rem 2.2rem;
-      width: 100%;
-      max-width: 500px;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-    
-    .avatar {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 5px solid #ffebee;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
-    
-    .avatar-placeholder {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: #ffebee;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3.5rem;
-      margin: 0 auto 1.5rem;
-      border: 5px solid #ffebee;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
-    
-    h1 {
-      font-size: 2.4rem;
-      color: #c44569;
-      margin-bottom: 0.5rem;
-    }
-    
-    .email {
-      font-size: 1.15rem;
-      color: #555;
-      margin-bottom: 2rem;
-    }
-    
-    .info {
-      background: #fff5f5;
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin: 1.5rem 0;
-      text-align: left;
-    }
-    
-    .info p {
-      margin: 0.8rem 0;
-      font-size: 1.05rem;
-    }
-    
-    .info strong {
-      color: #c44569;
-    }
-    
-    .signout-btn {
-      padding: 14px 40px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: white;
-      background: #e84a5f;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      margin-top: 2rem;
-      box-shadow: 0 8px 25px rgba(232,74,95,0.35);
-      transition: all 0.3s;
-    }
-    
-    .signout-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 35px rgba(232,74,95,0.5);
-    }
-    
-    .loading {
-      font-size: 1.3rem;
-      color: #777;
-    }
-    
-    .redirect-msg {
-      font-size: 1.2rem;
-      color: #c62828;
-      margin-top: 2rem;
-    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background-color: var(--primary); color: var(--text-main); line-height: 1.7; overflow-x: hidden; }
+    h1, h2, h3, .brand-name { font-family: 'Cormorant Garamond', serif; font-weight: 700; }
+
+    header { position: fixed; top: 0; width: 100%; padding: 1.5rem 0; z-index: 1000; background: var(--glass); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+    nav { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; }
+    .brand-name { font-size: 1.8rem; letter-spacing: 4px; color: var(--color-4); text-transform: uppercase; text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--text-main); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+    #hero { height: 100vh; display: flex; align-items: center; background: linear-gradient(to right, var(--secondary) 60%, var(--color-2) 40%); position: relative; }
+    .hero-content-wrap { max-width: 1400px; width: 90%; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; align-items: center; gap: 4rem; }
+    .hero-text-area h1 { font-size: clamp(3.5rem, 8vw, 7rem); line-height: 0.9; color: var(--color-4); font-style: italic; margin-bottom: 2rem; }
+    .main-hero-img { width: 100%; height: 70vh; background: url('https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=1200') center/cover; border-radius: 400px 400px 0 0; box-shadow: 30px 30px 0 var(--color-1); }
+
+    #directory { background: var(--color-2); padding: 8rem 5%; min-height: 600px; }
+    .directory-header { text-align: center; margin-bottom: 4rem; }
+    .filter-container { display: flex; gap: 1rem; justify-content: center; margin-bottom: 4rem; flex-wrap: wrap; }
+    .search-input { padding: 1rem 2rem; width: 350px; border: none; border-radius: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); outline: none; }
+    .filter-select { padding: 1rem 2rem; border: none; border-radius: 40px; background: white; cursor: pointer; }
+
+    .photographer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 3rem; max-width: 1300px; margin: 0 auto; }
+    .photographer-card { background: white; padding: 1.5rem; transition: 0.5s; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+    .photographer-card:hover { transform: translateY(-15px); box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
+    .photographer-card img { width: 100%; height: 350px; object-fit: cover; margin-bottom: 1.5rem; }
+
+    #register-section { background: var(--color-1); padding: 8rem 5%; }
+    .reg-card { max-width: 600px; margin: 0 auto; background: white; padding: 4rem; border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); }
+    input, textarea, select { width: 100%; padding: 1.2rem; margin-bottom: 1.2rem; border: 1px solid #eee; background: #fafafa; font-family: inherit; font-size: 1rem; }
+    .btn-submit { background: var(--color-4); color: white; border: none; padding: 1.2rem; cursor: pointer; width: 100%; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
+
+    .profile-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
+    .modal-content { background: white; width: 100%; max-width: 1000px; height: 80vh; display: grid; grid-template-columns: 1fr 1.2fr; overflow: hidden; position: relative; }
+    .modal-left { background: var(--color-4); color: white; padding: 3rem; overflow-y: auto; }
+    .modal-right { padding: 3rem; overflow-y: auto; }
+    .close-btn { position: absolute; top: 20px; right: 25px; font-size: 2.5rem; cursor: pointer; color: var(--text-main); z-index: 10; }
+
+    .reveal { opacity: 0; transform: translateY(40px); transition: 1s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    .loading-spinner { text-align: center; font-style: italic; color: var(--accent); grid-column: 1 / -1; }
   </style>
 </head>
 <body>
 
-  <div class="overlay"></div>
+  <header>
+    <nav>
+      <a href="#" class="brand-name">Visual Journeys</a>
+      <ul class="nav-links">
+        <li><a href="#hero">The Vision</a></li>
+        <li><a href="#directory">Collective</a></li>
+        <li><a href="#register-section">Join</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  <div class="profile-card" id="profileContent">
-    <div id="loading" class="loading">Loading your profile...</div>
-    
-    <div id="userInfo" style="display:none;">
-      <img id="photo" class="avatar" alt="Profile Photo" style="display:none;">
-      <div id="placeholder" class="avatar-placeholder">👤</div>
-      
-      <h1 id="name">Welcome</h1>
-      <p class="email" id="email"></p>
-      
-      <div class="info">
-        <p><strong>User ID:</strong> <span id="uid"></span></p>
-        <p><strong>Last Sign-in:</strong> <span id="lastSignIn"></span></p>
-        <p><strong>Account Created:</strong> <span id="creationTime"></span></p>
+  <section id="hero">
+    <div class="hero-content-wrap">
+      <div class="hero-text-area reveal">
+        <span style="text-transform: uppercase; letter-spacing: 5px; color: var(--accent); font-weight: 600;">Est. 2026</span>
+        <h1>Visionary <br>Journey</h1>
+        <p>A cloud-powered network for the elite photography collective, built on Firebase.</p>
+        <a href="#directory" style="text-decoration: none; color: var(--color-4); font-weight: 700; border-bottom: 2px solid var(--accent); padding-bottom: 8px;">EXPLORE COLLECTIVE</a>
       </div>
-      
-      <button id="signOutBtn" class="signout-btn">Sign Out</button>
+      <div class="hero-visual reveal">
+        <div class="main-hero-img"></div>
+      </div>
     </div>
-    
-    <p id="redirectMsg" class="redirect-msg" style="display:none;">
-      No user signed in. Redirecting to login...
-    </p>
+  </section>
+
+  <section id="directory">
+    <div class="directory-header reveal">
+      <h2 style="font-size: 3rem; color: var(--color-4);">Creator Collective</h2>
+    </div>
+
+    <div class="filter-container reveal">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search creators..." onkeyup="filterPhotographers()">
+      <select id="specialtyFilter" class="filter-select" onchange="filterPhotographers()">
+        <option value="all">All Specialties</option>
+        <option value="Fashion">Fashion</option>
+        <option value="Street">Street</option>
+        <option value="Nature">Nature</option>
+        <option value="Wedding">Wedding</option>
+      </select>
+    </div>
+
+    <div class="photographer-grid reveal" id="photographerGrid">
+      <p class="loading-spinner">Connecting to the cloud...</p>
+    </div>
+  </section>
+
+  <section id="register-section">
+    <div class="reg-card reveal">
+      <h2 style="font-size: 2.2rem; color: var(--color-4); margin-bottom: 1rem;">Join the Journey</h2>
+      <p style="margin-bottom: 2rem; color: #666;">Submit your details to the live directory.</p>
+      <form id="applyForm">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="email" id="email" placeholder="Professional Email" required>
+        <select id="specialty" required>
+            <option value="">Select Specialty</option>
+            <option value="Fashion">Fashion</option>
+            <option value="Street">Street</option>
+            <option value="Wedding">Wedding</option>
+            <option value="Nature">Nature</option>
+        </select>
+        <textarea id="bio" placeholder="Describe your visual language..." rows="4" required></textarea>
+        <button type="submit" class="btn-submit" id="submitBtn">Submit Application</button>
+      </form>
+    </div>
+  </section>
+
+  <div class="profile-modal" id="profileModal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeProfile()">&times;</span>
+      <div class="modal-left" id="modalLeft"></div>
+      <div class="modal-right" id="modalRight">
+        <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Portfolio Preview</h3>
+        <div id="modalGallery" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- Firebase SDK v10 modular -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { 
-      getAuth, 
-      onAuthStateChanged,
-      signOut 
-    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+    // Your Integrated Config
     const firebaseConfig = {
-      apiKey: "AIzaSyCPTCZqUPrHgfwqVmNe4aLtVLEXqAdLpmA",
-      authDomain: "cupcake-202c4.firebaseapp.com",
-      projectId: "cupcake-202c4",
-      storageBucket: "cupcake-202c4.firebasestorage.app",
-      messagingSenderId: "549565498078",
-      appId: "1:549565498078:web:4efd4d7c7fd4561882784f",
-      measurementId: "G-9PK7NV0K5N"
+      apiKey: "AIzaSyDAEgfpL5UuAnzzcpsz0-GTwlfa0bnAZxg",
+      authDomain: "visual-journeys.firebaseapp.com",
+      projectId: "visual-journeys",
+      storageBucket: "visual-journeys.firebasestorage.app",
+      messagingSenderId: "1010760921119",
+      appId: "1:1010760921119:web:de982c51da96df3fe7252a",
+      measurementId: "G-55PTWEXBXD"
     };
 
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const creatorsCol = collection(db, "photographers");
 
-    const loadingEl     = document.getElementById('loading');
-    const userInfoEl    = document.getElementById('userInfo');
-    const redirectMsgEl = document.getElementById('redirectMsg');
-    const photoEl       = document.getElementById('photo');
-    const placeholderEl = document.getElementById('placeholder');
-    const nameEl        = document.getElementById('name');
-    const emailEl       = document.getElementById('email');
-    const uidEl         = document.getElementById('uid');
-    const lastSignInEl  = document.getElementById('lastSignIn');
-    const creationEl    = document.getElementById('creationTime');
-    const signOutBtn    = document.getElementById('signOutBtn');
+    let allPhotographers = [];
 
-    onAuthStateChanged(auth, (user) => {
-      loadingEl.style.display = 'none';
-
-      if (user) {
-        // User is signed in → show profile
-        userInfoEl.style.display = 'block';
-        redirectMsgEl.style.display = 'none';
-
-        // Profile photo (Google usually provides one)
-        if (user.photoURL) {
-          photoEl.src = user.photoURL;
-          photoEl.style.display = 'block';
-          placeholderEl.style.display = 'none';
-        } else {
-          photoEl.style.display = 'none';
-          placeholderEl.style.display = 'flex';
-        }
-
-        nameEl.textContent = user.displayName || "Cupcake Friend";
-        emailEl.textContent = user.email || "No email available";
-        uidEl.textContent = user.uid;
-
-        // Timestamps (convert to readable date)
-        const lastSignIn = user.metadata?.lastSignInTime 
-          ? new Date(user.metadata.lastSignInTime).toLocaleString() 
-          : "Unknown";
-        const creation = user.metadata?.creationTime 
-          ? new Date(user.metadata.creationTime).toLocaleString() 
-          : "Unknown";
-
-        lastSignInEl.textContent = lastSignIn;
-        creationEl.textContent = creation;
-
-        // Optional: console.log full user for debugging
-        console.log("Signed-in user:", user);
-      } else {
-        // No user → redirect after short message
-        redirectMsgEl.style.display = 'block';
-        setTimeout(() => {
-          window.location.href = 'index.html';  // ← change to your login/landing page
-        }, 2000);
-      }
+    // Real-time Database Listener
+    onSnapshot(query(creatorsCol, orderBy("createdAt", "desc")), (snapshot) => {
+      allPhotographers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      renderDirectory(allPhotographers);
+      console.log("Firebase Data Synced.");
+    }, (error) => {
+      console.error("Firestore error:", error);
+      document.getElementById('photographerGrid').innerHTML = `<p class="loading-spinner">Database Error: Make sure your Firestore rules are set to public for testing.</p>`;
     });
 
-    // Sign out button
-    signOutBtn.addEventListener('click', async () => {
+    window.renderDirectory = (data) => {
+      const grid = document.getElementById('photographerGrid');
+      if (data.length === 0) {
+        grid.innerHTML = '<p class="loading-spinner">Collective is empty. Be the first to join.</p>';
+        return;
+      }
+      grid.innerHTML = data.map(p => `
+        <div class="photographer-card reveal active" onclick="openProfile('${p.id}')">
+          <img src="${p.img || 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=600'}" alt="${p.name}">
+          <span style="color:var(--accent); font-size:0.7rem; font-weight:700; text-transform:uppercase;">${p.specialty}</span>
+          <h4 style="font-size: 1.4rem; margin: 0.5rem 0;">${p.name}</h4>
+          <p style="font-size: 0.8rem; color: #888;">VIEW LIVE PROFILE —</p>
+        </div>
+      `).join('');
+    };
+
+    document.getElementById('applyForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.innerText = "Connecting...";
+      btn.disabled = true;
+
       try {
-        await signOut(auth);
-        window.location.href = 'index.html';  // back to landing/login
+        await addDoc(creatorsCol, {
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          specialty: document.getElementById('specialty').value,
+          bio: document.getElementById('bio').value,
+          img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=600",
+          createdAt: new Date()
+        });
+        
+        document.getElementById('applyForm').reset();
+        alert("Success! Your profile is now live in the cloud.");
+        window.location.href = "#directory";
       } catch (error) {
-        console.error("Sign out error:", error);
-        alert("Could not sign out. Try again.");
+        console.error("Submission error:", error);
+        alert("Error: Check your Firebase rules.");
+      } finally {
+        btn.innerText = "Submit Application";
+        btn.disabled = false;
       }
     });
-  </script>
 
+    window.filterPhotographers = () => {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const filter = document.getElementById('specialtyFilter').value;
+      const filtered = allPhotographers.filter(p => {
+        const matchesName = p.name.toLowerCase().includes(search);
+        const matchesType = filter === 'all' || p.specialty === filter;
+        return matchesName && matchesType;
+      });
+      renderDirectory(filtered);
+    };
+
+    window.openProfile = (id) => {
+      const p = allPhotographers.find(item => item.id === id);
+      document.getElementById('modalLeft').innerHTML = `
+        <h2 style="font-size: 3rem; margin-bottom: 1rem;">${p.name}</h2>
+        <p style="color:var(--accent); text-transform:uppercase; margin-bottom:2rem;">${p.specialty} Artist</p>
+        <p>${p.bio}</p>
+        <p style="margin-top: 2rem;"><b>Inquiries:</b> ${p.email}</p>
+      `;
+      document.getElementById('modalGallery').innerHTML = `<img src="${p.img}" style="width:100%; height:200px; object-fit:cover;">`;
+      document.getElementById('profileModal').style.display = 'flex';
+    };
+
+    window.closeProfile = () => { document.getElementById('profileModal').style.display = 'none'; };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
