@@ -67,7 +67,7 @@
   <section id="directory">
     <h2 style="text-align:center; font-size: 3rem; color: var(--color-4);">Creator Collective</h2>
     <div class="photographer-grid" id="photographerGrid">
-      <p class="status-msg">Loading the collective...</p>
+      <p class="status-msg">Connecting to collective...</p>
     </div>
   </section>
 
@@ -94,16 +94,16 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    // Your Specific Configuration
+    // Your Updated Configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyDAEgfpL5UuAnzzcpsz0-GTwlfa0bnAZxg",
-      authDomain: "visual-journeys.firebaseapp.com",
-      projectId: "visual-journeys",
-      storageBucket: "visual-journeys.firebasestorage.app",
-      messagingSenderId: "1010760921119",
-      appId: "1:1010760921119:web:de982c51da96df3fe7252a",
-      measurementId: "G-55PTWEXBXD",
-      databaseURL: "https://visual-journeys-default-rtdb.firebaseio.com" // Standard URL for your project
+      apiKey: "AIzaSyDgp_IUt8KfhbmeJdDaYldV2UoI2eUG-f0",
+      authDomain: "tttttt-70c0b.firebaseapp.com",
+      projectId: "tttttt-70c0b",
+      storageBucket: "tttttt-70c0b.firebasestorage.app",
+      messagingSenderId: "1048135433846",
+      appId: "1:1048135433846:web:f3a728e92619f90e06a957",
+      measurementId: "G-50KDKGJM11",
+      databaseURL: "https://tttttt-70c0b-default-rtdb.firebaseio.com"
     };
 
     // Initialize Firebase
@@ -154,7 +154,7 @@
         window.location.hash = "directory";
       } catch (error) {
         console.error("Firebase Error:", error);
-        alert("Sync failed. Ensure Database Rules are set to public.");
+        alert("Sync failed. Ensure your Realtime Database Rules allow public writes.");
       } finally {
         btn.innerText = "Submit to Firebase";
         btn.disabled = false;
