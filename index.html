@@ -102,44 +102,81 @@
         </a>
     </nav>
 
-    <script>
-        // MOCK DATA ARRAY
-        const mockApps = [
-            { name: "ProCreate Pocket", category: "Graphics & Design", icon: "fa-palette", color: "from-purple-500 to-pink-500", rating: "4.9", price: "Free" },
-            { name: "Sky Guide", category: "Education", icon: "fa-star", color: "from-blue-600 to-indigo-900", rating: "4.8", price: "Free" },
-            { name: "LumaFusion", category: "Video Editing", icon: "fa-clapperboard", color: "from-orange-400 to-red-600", rating: "4.7", price: "Get" },
-            { name: "Streaks", category: "Health & Fitness", icon: "fa-check", color: "from-emerald-400 to-teal-600", rating: "4.9", price: "Free" },
-            { name: "Overcast", category: "Entertainment", icon: "fa-podcast", color: "from-orange-500 to-yellow-500", rating: "4.8", price: "Free" },
-            { name: "Bear Notes", category: "Productivity", icon: "fa-pen-nib", color: "from-gray-700 to-black", rating: "4.6", price: "Get" }
-        ];
+  <script type="module">
+  // ──────────────────────────────────────────────────────────────
+  // 1. Your existing Firebase imports & initialization
+  //    (keep this part exactly as you have it, just showing context)
+  // ──────────────────────────────────────────────────────────────
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+  // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js"; // optional
 
-        // RENDER LOGIC
-        const grid = document.getElementById('app-grid');
-        
-        mockApps.forEach(app => {
-            const card = `
-                <div class="app-card flex items-center space-x-4 bg-white p-5 rounded-[2rem] shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group border border-transparent hover:border-blue-100">
-                    <div class="w-20 h-20 bg-gradient-to-br ${app.color} rounded-[1.5rem] flex items-center justify-center text-white text-3xl shadow-lg shrink-0 group-hover:rotate-2 transition">
-                        <i class="fa-solid ${app.icon}"></i>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <h3 class="font-extrabold text-gray-900 truncate text-lg tracking-tight leading-tight">${app.name}</h3>
-                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">${app.category}</p>
-                        <div class="flex items-center justify-between">
-                             <button class="bg-[#F0F0F7] text-blue-600 px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition">
-                                ${app.price}
-                             </button>
-                             <div class="flex items-center space-x-1">
-                                <span class="text-xs font-bold text-gray-800">${app.rating}</span>
-                                <i class="fa-solid fa-star text-[10px] text-yellow-400"></i>
-                             </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            grid.innerHTML += card;
-        });
-    </script>
+  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyCLqZqiW91FlivfkL3ZGtWUh7x2XpX4HPo",
+    authDomain: "all-apps-36756.firebaseapp.com",
+    databaseURL: "https://all-apps-36756-default-rtdb.firebaseio.com",
+    projectId: "all-apps-36756",
+    storageBucket: "all-apps-36756.firebasestorage.app",
+    messagingSenderId: "1088890111578",
+    appId: "1:1088890111578:web:9cb544e599626b61a63a63",
+    measurementId: "G-5Z763J47HR"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  // const analytics = getAnalytics(app); // optional
+
+  // ──────────────────────────────────────────────────────────────
+  // 2. Real-time listener – replaces your mock data rendering
+  // ──────────────────────────────────────────────────────────────
+  const grid = document.getElementById('app-grid');
+  const appsRef = ref(db, 'apps');
+
+  onValue(appsRef, (snapshot) => {
+    grid.innerHTML = ''; // Clear previous cards
+
+    if (!snapshot.exists()) {
+      grid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">No apps found yet...</p>';
+      return;
+    }
+
+    const appsData = snapshot.val();
+    
+    // Convert object → array and sort by name (alphabetical)
+    const appList = Object.entries(appsData).map(([id, app]) => ({ id, ...app }));
+    appList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+    appList.forEach(app => {
+      const card = `
+        <div class="app-card flex items-center space-x-4 bg-white p-5 rounded-[2rem] shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group border border-transparent hover:border-blue-100">
+          <div class="w-20 h-20 bg-gradient-to-br ${app.color || 'from-gray-400 to-gray-600'} rounded-[1.5rem] flex items-center justify-center text-white text-3xl shadow-lg shrink-0 group-hover:rotate-2 transition">
+            <i class="fa-solid ${app.icon || 'fa-cube'}"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="font-extrabold text-gray-900 truncate text-lg tracking-tight leading-tight">${app.name || 'Unnamed App'}</h3>
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">${app.category || 'Unknown'}</p>
+            <div class="flex items-center justify-between">
+              <button class="bg-[#F0F0F7] text-blue-600 px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition">
+                ${app.price || 'Get'}
+              </button>
+              <div class="flex items-center space-x-1">
+                <span class="text-xs font-bold text-gray-800">${app.rating || '—'}</span>
+                <i class="fa-solid fa-star text-[10px] text-yellow-400"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      grid.innerHTML += card;
+    });
+  }, (error) => {
+    console.error("Firebase Realtime Database error:", error);
+    grid.innerHTML = '<p class="col-span-full text-center text-red-600 py-10">Error loading apps...</p>';
+  });
+
+  // Optional: one-time read to debug quickly (remove later)
+  // get(appsRef).then(snap => console.log("One-time read:", snap.val()));
+</script>
 </body>
 </html>
