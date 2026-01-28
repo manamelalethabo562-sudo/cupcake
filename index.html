@@ -3,229 +3,244 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>VISUAL JOURNEYS | The Creative Network</title>
+  <title>VISUAL JOURNEYS | Premium Photography Network</title>
   
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --primary: #ffffff;
+      --secondary: #fdfbf7; 
       --accent: #c5a059;    
-      --dark: #1a3c40; 
-      --soft-bg: #f9fbfc;
+      --text-main: #1a1a1a;
+      --text-muted: #666666;
       --glass: rgba(255, 255, 255, 0.9);
+      --color-1: #f4e9e2;
+      --color-2: #e8f0f2;
+      --color-3: #f2edf4;
+      --color-4: #1a3c40;
     }
 
+    /* Standard Reset */
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: var(--primary); color: #1a1a1a; scroll-behavior: smooth; }
-    h1, h2, h3, h4, .brand { font-family: 'Cormorant Garamond', serif; font-weight: 700; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background-color: var(--primary); color: var(--text-main); line-height: 1.7; overflow-x: hidden; }
+    h1, h2, h3, .logo, .brand-name { font-family: 'Cormorant Garamond', serif; font-weight: 700; }
 
-    /* --- Brand Header --- */
-    header {
-      position: fixed; top: 0; width: 100%; z-index: 1000;
-      background: var(--glass); backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0,0,0,0.05);
+    /* Navigation Enhancements */
+    header { position: fixed; top: 0; width: 100%; padding: 1rem 0; z-index: 1000; background: var(--glass); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+    nav { max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; }
+    .brand-name { font-size: 1.6rem; letter-spacing: 3px; color: var(--color-4); text-transform: uppercase; text-decoration: none; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--text-main); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* About Section */
+    #about-app { background: var(--color-4); color: white; padding: 6rem 5%; text-align: center; }
+    .about-container { max-width: 800px; margin: 0 auto; }
+    .about-container h2 { font-size: 3rem; color: var(--accent); margin-bottom: 1.5rem; }
+
+    /* Search & Filter Bar */
+    .filter-container { 
+      max-width: 1300px; margin: 0 auto 3rem auto; 
+      display: flex; gap: 1rem; align-items: center; justify-content: center;
+      padding: 0 5%;
+    }
+    .search-input { 
+      padding: 0.8rem 1.5rem; width: 300px; border: 1px solid #ddd; 
+      border-radius: 30px; font-family: 'Inter'; font-size: 0.9rem;
+    }
+    .filter-select {
+      padding: 0.8rem 1rem; border: 1px solid #ddd; border-radius: 30px;
+      background: white; color: var(--text-main); cursor: pointer;
     }
 
-    nav {
-      max-width: 1300px; margin: 0 auto; padding: 1.2rem 5%;
-      display: flex; justify-content: space-between; align-items: center;
+    /* Existing Directory Adjustments */
+    #directory { background: var(--color-2); padding-top: 5rem; }
+    .directory-header { text-align: center; margin-bottom: 3rem; }
+    .photographer-grid { 
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+      gap: 2rem; max-width: 1300px; margin: 0 auto; 
     }
-
-    .brand { font-size: 1.8rem; letter-spacing: 3px; text-decoration: none; color: var(--dark); }
-
-    .nav-tabs { display: flex; gap: 2rem; list-style: none; }
-    .nav-tabs a { 
-        text-decoration: none; color: #555; font-size: 0.8rem; 
-        font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-        transition: 0.3s;
+    .photographer-card { 
+      background: white; padding: 1.5rem; border-radius: 8px; 
+      cursor: pointer; transition: 0.4s; border: 1px solid transparent;
     }
-    .nav-tabs a:hover, .nav-tabs a.active { color: var(--accent); }
+    .photographer-card:hover { transform: translateY(-10px); border-color: var(--accent); }
+    .photographer-card img { width: 100%; height: 300px; object-fit: cover; border-radius: 4px; margin-bottom: 1rem; }
 
-    /* --- About Section --- */
-    #about-app { padding: 10rem 5%; background: var(--dark); color: white; text-align: center; }
-    .about-content { max-width: 800px; margin: 0 auto; }
-    .about-content h2 { font-size: 3.5rem; margin-bottom: 1.5rem; color: var(--accent); }
-    .about-content p { font-size: 1.1rem; line-height: 1.8; opacity: 0.8; }
+    /* Modal Styles */
+    .profile-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-content { background: white; width: 100%; max-width: 1000px; height: 80vh; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; position: relative; }
+    .modal-left { background: var(--color-4); color: white; padding: 3rem; overflow-y: auto; }
+    .modal-right { padding: 3rem; overflow-y: auto; }
+    .close-btn { position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; color: #1a1a1a; }
 
-    /* --- Main Sections --- */
-    section { padding: 8rem 5%; }
-    .tab-content { display: none; animation: fadeIn 0.5s ease; }
-    .tab-content.active { display: block; }
+    /* Registration Tab */
+    #register-section { background: var(--color-1); padding: 8rem 5%; }
+    .reg-card { max-width: 600px; margin: 0 auto; background: white; padding: 3rem; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+    .reg-card h2 { margin-bottom: 1.5rem; color: var(--color-4); }
+    input, textarea, select { width: 100%; padding: 1rem; margin-bottom: 1rem; border: 1px solid #eee; background: #fafafa; }
+    .btn-submit { background: var(--color-4); color: white; border: none; padding: 1rem 2rem; cursor: pointer; width: 100%; font-weight: 600; }
 
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    /* --- Directory Styles --- */
-    .directory-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 2.5rem; max-width: 1300px; margin: 0 auto;
-    }
-
-    .profile-card {
-      background: #fff; border-radius: 15px; overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.05); cursor: pointer;
-      transition: 0.3s; border: 1px solid #eee;
-    }
-    .profile-card:hover { transform: translateY(-10px); border-color: var(--accent); }
-    .profile-card img { width: 100%; height: 350px; object-fit: cover; }
-    .card-meta { padding: 1.5rem; }
-
-    /* --- Registration Form --- */
-    .register-container {
-      max-width: 700px; margin: 0 auto; background: var(--soft-bg);
-      padding: 4rem; border-radius: 20px; border: 1px solid #eee;
-    }
-    .form-group { margin-bottom: 1.5rem; }
-    label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
-    input, textarea, select {
-      width: 100%; padding: 1rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;
-    }
-    .submit-btn {
-      width: 100%; padding: 1.2rem; background: var(--dark); color: white;
-      border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s;
-    }
-    .submit-btn:hover { background: var(--accent); }
-
-    /* --- Modal --- */
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-      z-index: 2000; display: none; align-items: center; justify-content: center; padding: 2rem;
-    }
-    .modal-content {
-      background: white; width: 100%; max-width: 900px; height: 80vh;
-      border-radius: 20px; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden;
-    }
-
-    @media (max-width: 800px) {
-      .modal-content { grid-template-columns: 1fr; }
-      .register-container { padding: 2rem; }
-    }
+    /* Hidden/Reveal logic */
+    .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    
+    @media (max-width: 850px) { .modal-content { grid-template-columns: 1fr; } .modal-left { display: none; } .search-input { width: 100%; } }
   </style>
 </head>
 <body>
 
   <header>
     <nav>
-      <a href="#" class="brand">VISUAL JOURNEYS</a>
-      <ul class="nav-tabs">
-        <li><a href="javascript:void(0)" class="tab-link active" onclick="showTab('home')">Explore</a></li>
-        <li><a href="javascript:void(0)" class="tab-link" onclick="showTab('directory')">Directory</a></li>
-        <li><a href="javascript:void(0)" class="tab-link" onclick="showTab('register')">Join as Creator</a></li>
+      <a href="#" class="brand-name">Visual Journeys</a>
+      <ul class="nav-links">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#directory">Photographers</a></li>
+        <li><a href="#register-section">Join Network</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
   </header>
 
-  <section id="about-app">
-    <div class="about-content">
-      <h2>About the App</h2>
-      <p>
-        <strong>Visual Journeys</strong> is a premier digital ecosystem designed to bridge the gap between world-class photographers and visionary clients. We believe that every shutter click tells a story. Our platform serves as a gallery of excellence, a directory for discovery, and a home for the African creative spirit.
-      </p>
+  <section id="hero" style="height: 80vh; display: flex; align-items: center; justify-content: center; background: var(--color-2);">
+    <div style="text-align: center;">
+      <h1 style="font-size: 5rem; color: var(--color-4);">Visual Journeys</h1>
+      <p style="letter-spacing: 5px; text-transform: uppercase; font-size: 0.8rem;">Connecting Vision to Reality</p>
     </div>
   </section>
 
-  <div id="home" class="tab-content active">
-    <section>
-        <h2 style="text-align: center; font-size: 3rem; margin-bottom: 3rem;">Today's Featured Work</h2>
-        <div class="directory-grid">
-            <div class="profile-card"><img src="https://images.unsplash.com/photo-1511285560929-80b456fe4726?auto=format&fit=crop&w=600" alt=""></div>
-            <div class="profile-card"><img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=600" alt=""></div>
-            <div class="profile-card"><img src="https://images.unsplash.com/photo-1551316679-9c6ae9dec224?auto=format&fit=crop&w=600" alt=""></div>
-        </div>
-    </section>
-  </div>
+  <section id="about-app">
+    <div class="about-container reveal">
+      <h2>About the App</h2>
+      <p>Visual Journeys is a curated ecosystem designed for the South African creative landscape. We provide a bridge between luxury clientele and the finest photographic talent across the continent. Whether you are looking for an editorial specialist or a wildlife documentarian, our network is built on the foundation of high-art and professional integrity.</p>
+    </div>
+  </section>
 
-  <div id="directory" class="tab-content">
-    <section>
-      <h2 style="text-align: center; font-size: 3rem; margin-bottom: 3rem;">Creative Directory</h2>
-      <div class="directory-grid">
-        <div class="profile-card" onclick="openProfile('lethabo')">
-          <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=600" alt="">
-          <div class="card-meta">
-            <span style="color: var(--accent); font-weight: 700; font-size: 0.7rem;">FOUNDER / PORTRAITS</span>
-            <h3>Lethabo M.</h3>
-            <p>Master of natural light storytelling.</p>
-          </div>
-        </div>
-        <div class="profile-card" onclick="openProfile('sarah')">
-          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600" alt="">
-          <div class="card-meta">
-            <span style="color: var(--accent); font-weight: 700; font-size: 0.7rem;">WEDDING SPECIALIST</span>
-            <h3>Sarah J.</h3>
-            <p>Capturing the elegance of luxury unions.</p>
-          </div>
-        </div>
+  <section id="directory">
+    <div class="directory-header reveal">
+      <h2 style="font-size: 3rem; color: var(--color-4);">Creator Directory</h2>
+      <p>Explore our elite network of visual storytellers.</p>
+    </div>
+
+    <div class="filter-container reveal">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search by name..." onkeyup="filterPhotographers()">
+      <select id="specialtyFilter" class="filter-select" onchange="filterPhotographers()">
+        <option value="all">All Specialties</option>
+        <option value="Street">Street Photography</option>
+        <option value="Fashion">Fashion & Beauty</option>
+        <option value="Nature">Nature & Wildlife</option>
+        <option value="Wedding">Wedding Specialist</option>
+      </select>
+    </div>
+
+    <div class="photographer-grid reveal" id="photographerGrid">
       </div>
-    </section>
-  </div>
+  </section>
 
-  <div id="register" class="tab-content">
-    <section>
-      <div class="register-container">
-        <h2 style="font-size: 2.5rem; margin-bottom: 1rem; text-align: center;">Join the Journey</h2>
-        <p style="text-align: center; margin-bottom: 3rem; color: #666;">Apply to showcase your portfolio and reach new clients globally.</p>
-        
-        <form id="regForm" onsubmit="handleRegistration(event)">
-          <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" placeholder="e.g., John Doe" required>
-          </div>
-          <div class="form-group">
-            <label>Photography Specialty</label>
-            <select required>
-              <option value="">Select Category</option>
-              <option value="portrait">Portraits</option>
-              <option value="wedding">Weddings</option>
-              <option value="commercial">Commercial</option>
-              <option value="wildlife">Wildlife</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Portfolio Link (URL)</label>
-            <input type="url" placeholder="https://yourwork.com" required>
-          </div>
-          <div class="form-group">
-            <label>Short Bio</label>
-            <textarea rows="4" placeholder="Tell us about your creative style..."></textarea>
-          </div>
-          <button type="submit" class="submit-btn">Apply for Profile</button>
-        </form>
+  <section id="register-section">
+    <div class="reg-card reveal">
+      <h2>Register as a Creator</h2>
+      <p style="margin-bottom: 2rem; font-size: 0.9rem; color: #666;">Submit your portfolio to be featured in the Visual Journeys directory.</p>
+      <form onsubmit="event.preventDefault(); alert('Application submitted! Our curators will be in touch.');">
+        <input type="text" placeholder="Full Name" required>
+        <input type="email" placeholder="Professional Email" required>
+        <select required>
+            <option value="">Select Primary Specialty</option>
+            <option>Fashion</option>
+            <option>Commercial</option>
+            <option>Wedding</option>
+            <option>Wildlife</option>
+        </select>
+        <input type="url" placeholder="Portfolio Link (Website/Behance)">
+        <textarea placeholder="Tell us about your visual style..." rows="4"></textarea>
+        <button type="submit" class="btn-submit">Submit Application</button>
+      </form>
+    </div>
+  </section>
+
+  <section id="contact" style="padding: 10rem 5%; text-align: center;">
+    <h2 style="font-size: 3rem;">Let's Connect</h2>
+    <p>General inquiries: hello@visualjourneys.com</p>
+  </section>
+
+  <div class="profile-modal" id="profileModal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeProfile()">&times;</span>
+      <div class="modal-left" id="modalLeft"></div>
+      <div class="modal-right">
+        <h3>Recent Work</h3>
+        <div id="modalGallery" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:1.5rem;"></div>
+        <div id="modalReview" style="margin-top:2rem; padding-top:2rem; border-top:1px solid #eee;"></div>
       </div>
-    </section>
+    </div>
   </div>
-
-  <footer style="text-align: center; padding: 4rem; border-top: 1px solid #eee;">
-    <h2 class="brand" style="font-size: 1.2rem;">VISUAL JOURNEYS</h2>
-    <p style="font-size: 0.8rem; color: #999; margin-top: 10px;">The Future of Creative Discovery &copy; 2026</p>
-  </footer>
 
   <script>
-    // Tab Switching Logic
-    function showTab(tabId) {
-      // Remove active class from all links and contents
-      document.querySelectorAll('.tab-link').forEach(link => link.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-      
-      // Add active class to current selection
-      event.currentTarget.classList.add('active');
-      document.getElementById(tabId).classList.add('active');
-      
-      // Smooth scroll to top of content
-      window.scrollTo({ top: 400, behavior: 'smooth' });
+    const photographerData = [
+      { id: 'kabelo', name: "Kabelo D.", specialty: "Street", bio: "Exploring the heartbeat of Johannesburg's urban sprawl.", email: "kabelo@visual.com", img: "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=400" },
+      { id: 'elena', name: "Elena Rose", specialty: "Fashion", bio: "High-end editorial fashion with a focus on sustainable beauty.", email: "elena@visual.com", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400" },
+      { id: 'marcus', name: "Marcus V.", specialty: "Nature", bio: "Award-winning wildlife tracker and cinematographer.", email: "marcus@visual.com", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400" },
+      { id: 'simphiwe', name: "Simphiwe M.", specialty: "Wedding", bio: "Documenting the sacred moments of union across Africa.", email: "simphiwe@visual.com", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400" }
+    ];
+
+    function renderCards(data) {
+      const grid = document.getElementById('photographerGrid');
+      grid.innerHTML = data.map(p => `
+        <div class="photographer-card" onclick="openProfile('${p.id}')">
+          <img src="${p.img}" alt="${p.name}">
+          <span style="color:var(--accent); font-size:0.7rem; font-weight:700; text-transform:uppercase;">${p.specialty}</span>
+          <h4>${p.name}</h4>
+          <p style="font-size:0.8rem; color:#666;">View Mini-Profile →</p>
+        </div>
+      `).join('');
     }
 
-    // Registration Handler
-    function handleRegistration(e) {
-      e.preventDefault();
-      alert("Application received! Our curators will review your portfolio within 48 hours.");
-      e.target.reset();
-      showTab('home');
+    function filterPhotographers() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const filterValue = document.getElementById('specialtyFilter').value;
+      
+      const filtered = photographerData.filter(p => {
+        const matchesName = p.name.toLowerCase().includes(searchTerm);
+        const matchesType = filterValue === 'all' || p.specialty === filterValue;
+        return matchesName && matchesType;
+      });
+      renderCards(filtered);
     }
 
-    // Modal Logic (Simulated for this demo)
-    function openProfile(name) {
-      alert("Opening detailed profile for " + name + ". This would trigger the high-end modal viewer.");
+    function openProfile(id) {
+      const p = photographerData.find(item => item.id === id);
+      document.getElementById('modalLeft').innerHTML = `
+        <h2 style="font-size:3.5rem;">${p.name}</h2>
+        <p style="color:var(--accent); margin-bottom:2rem;">${p.specialty} Specialist</p>
+        <p style="opacity:0.8; margin-bottom:2rem;">${p.bio}</p>
+        <p><b>Contact:</b> ${p.email}</p>
+        <div style="margin-top:20px;"><a href="#" style="color:white; text-decoration:none; border-bottom:1px solid var(--accent);">Instagram Portfolio</a></div>
+      `;
+      document.getElementById('modalGallery').innerHTML = `
+        <img src="${p.img}" style="width:100%; height:150px; object-fit:cover;">
+        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=400" style="width:100%; height:150px; object-fit:cover;">
+      `;
+      document.getElementById('modalReview').innerHTML = `
+        <p style="color:var(--accent);">★★★★★</p>
+        <p style="font-style:italic;">"An incredible collaborator with a unique vision." - Client Review</p>
+      `;
+      document.getElementById('profileModal').style.display = 'flex';
     }
+
+    function closeProfile() { document.getElementById('profileModal').style.display = 'none'; }
+
+    // Initialize
+    renderCards(photographerData);
+    
+    // Reveal Animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
