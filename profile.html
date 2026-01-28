@@ -165,21 +165,19 @@
 
     let allPhotographers = [];
 
-    // REALTIME LISTENER: This ensures the list updates the moment data is saved
+    // REALTIME LISTENER: Data will show up on the page immediately when pushed
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
       allPhotographers = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
       renderDirectory(allPhotographers);
-      console.log("Realtime Sync: Collective updated.");
     });
 
     window.renderDirectory = (data) => {
       const grid = document.getElementById('photographerGrid');
       if (data.length === 0) {
-        grid.innerHTML = '<p class="status-msg">The collective is currently empty.</p>';
+        grid.innerHTML = '<p class="status-msg">Collective is empty. Start by joining below!</p>';
         return;
       }
-      // Reverse to show the newest entries first
       grid.innerHTML = [...data].reverse().map(p => `
         <div class="photographer-card reveal active" onclick="openProfile('${p.id}')">
           <img src="${p.img || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600'}" alt="${p.name}">
@@ -193,10 +191,10 @@
     document.getElementById('applyForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('submitBtn');
-      btn.innerText = "Transmitting...";
+      btn.innerText = "Transmitting to Firebase...";
       btn.disabled = true;
 
-      const newEntry = {
+      const newPhotographer = {
           name: document.getElementById('name').value,
           email: document.getElementById('email').value,
           specialty: document.getElementById('specialty').value,
@@ -206,17 +204,15 @@
       };
 
       try {
-        // Pushing data to the 'photographers' node in Realtime Database
-        await push(dbRef, newEntry);
+        // STORE DATA IN REALTIME DATABASE
+        await push(dbRef, newPhotographer);
         
         document.getElementById('applyForm').reset();
-        alert("Entry Synced Successfully!");
-        
-        // Smooth scroll to the updated directory
-        document.getElementById('directory').scrollIntoView({ behavior: 'smooth' });
+        alert("Synced to Firebase! Scroll up to see yourself in the collective.");
+        window.location.hash = "directory";
       } catch (error) {
-        console.error("Database error:", error);
-        alert("Sync failed. Check if Firebase Rules are set to public (.write: true)");
+        console.error("Transmission error:", error);
+        alert("Failed to store data. Please check your Firebase Security Rules.");
       } finally {
         btn.innerText = "Submit Realtime";
         btn.disabled = false;
