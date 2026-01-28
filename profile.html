@@ -1,145 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>All"Apps | Discover</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-        .app-card:active { transform: scale(0.96); }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VISUAL JOURNEYS | Live Firebase Collective</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,700;1,400&family=Inter:wght@200;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #ffffff;
+      --secondary: #fdfbf7; 
+      --accent: #c5a059;    
+      --text-main: #1a1a1a;
+      --text-muted: #666666;
+      --glass: rgba(255, 255, 255, 0.9);
+      --color-1: #f4e9e2;
+      --color-2: #e8f0f2;
+      --color-4: #1a3c40; 
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background-color: var(--primary); color: var(--text-main); line-height: 1.7; overflow-x: hidden; }
+    h1, h2, h3, .brand-name { font-family: 'Cormorant Garamond', serif; font-weight: 700; }
+
+    /* Navigation */
+    header { position: fixed; top: 0; width: 100%; padding: 1.5rem 0; z-index: 1000; background: var(--glass); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+    nav { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; }
+    .brand-name { font-size: 1.8rem; letter-spacing: 4px; color: var(--color-4); text-transform: uppercase; text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--text-main); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* Hero */
+    #hero { height: 100vh; display: flex; align-items: center; background: linear-gradient(to right, var(--secondary) 60%, var(--color-2) 40%); position: relative; }
+    .hero-content-wrap { max-width: 1400px; width: 90%; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; align-items: center; gap: 4rem; }
+    .hero-text-area h1 { font-size: clamp(3.5rem, 8vw, 7rem); line-height: 0.9; color: var(--color-4); font-style: italic; margin-bottom: 2rem; }
+    .hero-text-area p { max-width: 450px; font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2.5rem; }
+    .main-hero-img { width: 100%; height: 70vh; background: url('https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=1200') center/cover; border-radius: 400px 400px 0 0; box-shadow: 30px 30px 0 var(--color-1); }
+
+    /* Directory */
+    #directory { background: var(--color-2); padding: 8rem 5%; min-height: 600px; }
+    .directory-header { text-align: center; margin-bottom: 4rem; }
+    .filter-container { display: flex; gap: 1rem; justify-content: center; margin-bottom: 4rem; flex-wrap: wrap; }
+    .search-input { padding: 1rem 2rem; width: 350px; border: none; border-radius: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); outline: none; font-family: inherit; }
+    .filter-select { padding: 1rem 2rem; border: none; border-radius: 40px; background: white; cursor: pointer; font-family: inherit; }
+
+    .photographer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 3rem; max-width: 1300px; margin: 0 auto; }
+    .photographer-card { background: white; padding: 1.5rem; transition: 0.5s; cursor: pointer; border: 1px solid transparent; }
+    .photographer-card:hover { transform: translateY(-15px); border-color: var(--accent); box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
+    .photographer-card img { width: 100%; height: 350px; object-fit: cover; margin-bottom: 1.5rem; }
+
+    /* Registration Form */
+    #register-section { background: var(--color-1); padding: 8rem 5%; }
+    .reg-card { max-width: 600px; margin: 0 auto; background: white; padding: 4rem; border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); }
+    input, textarea, select { width: 100%; padding: 1.2rem; margin-bottom: 1.2rem; border: 1px solid #eee; background: #fafafa; font-family: inherit; font-size: 1rem; }
+    .btn-submit { background: var(--color-4); color: white; border: none; padding: 1.2rem; cursor: pointer; width: 100%; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
+    .btn-submit:hover { background: var(--accent); }
+
+    /* Modal */
+    .profile-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
+    .modal-content { background: white; width: 100%; max-width: 1000px; height: 80vh; display: grid; grid-template-columns: 1fr 1.2fr; overflow: hidden; position: relative; }
+    .modal-left { background: var(--color-4); color: white; padding: 3rem; overflow-y: auto; }
+    .modal-right { padding: 3rem; overflow-y: auto; }
+    .close-btn { position: absolute; top: 20px; right: 25px; font-size: 2.5rem; cursor: pointer; color: var(--text-main); z-index: 10; }
+
+    /* Animations */
+    .reveal { opacity: 0; transform: translateY(40px); transition: 1s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    .status-msg { text-align: center; font-style: italic; color: var(--accent); grid-column: 1 / -1; margin-top: 2rem; }
+
+    @media (max-width: 900px) {
+      .hero-content-wrap, .modal-content { grid-template-columns: 1fr; display: block; }
+      .hero-visual { display: none; }
+      .reg-card { padding: 2rem; }
+    }
+  </style>
 </head>
-<body class="bg-[#F2F2F7] text-gray-900 pb-24 md:pb-0">
+<body>
 
-    <aside class="hidden md:flex flex-col w-72 fixed h-full bg-white border-r p-8 z-50">
-        <h1 class="text-3xl font-black text-blue-600 tracking-tighter mb-10">All"Apps</h1>
-        <nav class="space-y-1 flex-1">
-            <a href="#" class="flex items-center space-x-4 bg-blue-50 text-blue-600 px-4 py-3 rounded-2xl font-bold">
-                <i class="fa-solid fa-house text-lg"></i> <span>Discover</span>
-            </a>
-            <a href="#" class="flex items-center space-x-4 text-gray-400 hover:bg-gray-50 px-4 py-3 rounded-2xl transition group">
-                <i class="fa-solid fa-gamepad text-lg group-hover:text-blue-500"></i> <span>Games</span>
-            </a>
-            <a href="#" class="flex items-center space-x-4 text-gray-400 hover:bg-gray-50 px-4 py-3 rounded-2xl transition group">
-                <i class="fa-solid fa-layer-group text-lg group-hover:text-blue-500"></i> <span>Apps</span>
-            </a>
-            <a href="#" class="flex items-center space-x-4 text-gray-400 hover:bg-gray-50 px-4 py-3 rounded-2xl transition group">
-                <i class="fa-solid fa-rocket text-lg group-hover:text-blue-500"></i> <span>Arcade</span>
-            </a>
-        </nav>
-        <div class="mt-auto flex items-center space-x-3 p-4 bg-gray-50 rounded-2xl cursor-pointer">
-            <div class="w-10 h-10 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold">JS</div>
-            <div>
-                <p class="text-sm font-bold">John Smith</p>
-                <p class="text-[10px] text-gray-400">Pro Account</p>
-            </div>
-        </div>
-    </aside>
-
-    <main class="md:ml-72 min-h-screen">
-        
-        <header class="p-6 md:p-10 flex justify-between items-end sticky top-0 z-40 md:static glass md:bg-transparent md:backdrop-blur-none">
-            <div>
-                <p class="text-[11px] font-extrabold text-gray-400 uppercase tracking-[0.2em]">Tuesday, Jan 27</p>
-                <h1 class="text-4xl font-black tracking-tight">Today</h1>
-            </div>
-            <div class="hidden md:block w-80">
-                <div class="relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                    <input type="text" placeholder="Search apps..." class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-100 transition shadow-sm">
-                </div>
-            </div>
-            <div class="md:hidden w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
-                <img src="https://ui-avatars.com/api/?name=John+Smith&background=0D8ABC&color=fff" alt="Profile">
-            </div>
-        </header>
-
-        <section class="px-6 md:px-10 pb-12 max-w-7xl">
-            <div class="relative w-full h-[500px] rounded-[2.5rem] overflow-hidden shadow-2xl mb-12 group cursor-pointer">
-                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1200" class="absolute inset-0 w-full h-full object-cover transition duration-1000 group-hover:scale-105" alt="Feature">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                <div class="absolute bottom-10 left-10 right-10 text-white">
-                    <p class="text-xs font-bold uppercase opacity-70 tracking-widest mb-2">Editor's Choice</p>
-                    <h2 class="text-5xl font-black mb-4 leading-none">Retro Vibes:<br>Ultimate Synth</h2>
-                    <p class="text-lg text-gray-300 max-w-md mb-6 hidden md:block">Step into the 80s with the most advanced synthesizer app ever built for mobile.</p>
-                    <button class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-sm hover:scale-105 transition active:scale-95 shadow-lg shadow-blue-500/50">Get Now</button>
-                </div>
-            </div>
-
-            <div class="flex justify-between items-end mb-8">
-                <div>
-                    <h2 class="text-3xl font-black">Must-Have Apps</h2>
-                    <p class="text-gray-500 font-medium">Updated just now</p>
-                </div>
-                <a href="#" class="text-blue-600 font-bold hover:underline">See All</a>
-            </div>
-
-            <div id="app-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                </div>
-        </section>
-    </main>
-
-    <nav class="md:hidden fixed bottom-6 left-6 right-6 h-16 glass border border-white/20 shadow-2xl rounded-3xl flex justify-around items-center text-gray-400 z-50">
-        <a href="#" class="flex flex-col items-center text-blue-600">
-            <i class="fa-solid fa-house text-xl"></i>
-            <span class="text-[9px] font-bold mt-1">Today</span>
-        </a>
-        <a href="#" class="flex flex-col items-center">
-            <i class="fa-solid fa-gamepad text-xl"></i>
-            <span class="text-[9px] font-bold mt-1">Games</span>
-        </a>
-        <a href="#" class="flex flex-col items-center">
-            <i class="fa-solid fa-layer-group text-xl"></i>
-            <span class="text-[9px] font-bold mt-1">Apps</span>
-        </a>
-        <a href="#" class="flex flex-col items-center">
-            <i class="fa-solid fa-magnifying-glass text-xl"></i>
-            <span class="text-[9px] font-bold mt-1">Search</span>
-        </a>
+  <header>
+    <nav>
+      <a href="#" class="brand-name">Visual Journeys</a>
+      <ul class="nav-links">
+        <li><a href="#hero">The Vision</a></li>
+        <li><a href="#directory">Collective</a></li>
+        <li><a href="#register-section">Join</a></li>
+      </ul>
     </nav>
+  </header>
 
-    <script>
-        // MOCK DATA ARRAY
-        const mockApps = [
-            { name: "ProCreate Pocket", category: "Graphics & Design", icon: "fa-palette", color: "from-purple-500 to-pink-500", rating: "4.9", price: "Free" },
-            { name: "Sky Guide", category: "Education", icon: "fa-star", color: "from-blue-600 to-indigo-900", rating: "4.8", price: "Free" },
-            { name: "LumaFusion", category: "Video Editing", icon: "fa-clapperboard", color: "from-orange-400 to-red-600", rating: "4.7", price: "Get" },
-            { name: "Streaks", category: "Health & Fitness", icon: "fa-check", color: "from-emerald-400 to-teal-600", rating: "4.9", price: "Free" },
-            { name: "Overcast", category: "Entertainment", icon: "fa-podcast", color: "from-orange-500 to-yellow-500", rating: "4.8", price: "Free" },
-            { name: "Bear Notes", category: "Productivity", icon: "fa-pen-nib", color: "from-gray-700 to-black", rating: "4.6", price: "Get" }
-        ];
+  <section id="hero">
+    <div class="hero-content-wrap">
+      <div class="hero-text-area reveal">
+        <span style="text-transform: uppercase; letter-spacing: 5px; color: var(--accent); font-weight: 600;">Est. 2026</span>
+        <h1>Visionary <br>Journey</h1>
+        <p>A cloud-synced ecosystem for Africa's most elite visual storytellers.</p>
+        <a href="#directory" style="text-decoration: none; color: var(--color-4); font-weight: 700; border-bottom: 2px solid var(--accent); padding-bottom: 8px;">EXPLORE COLLECTIVE</a>
+      </div>
+      <div class="hero-visual reveal">
+        <div class="main-hero-img"></div>
+      </div>
+    </div>
+  </section>
 
-        // RENDER LOGIC
-        const grid = document.getElementById('app-grid');
-        
-        mockApps.forEach(app => {
-            const card = `
-                <div class="app-card flex items-center space-x-4 bg-white p-5 rounded-[2rem] shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group border border-transparent hover:border-blue-100">
-                    <div class="w-20 h-20 bg-gradient-to-br ${app.color} rounded-[1.5rem] flex items-center justify-center text-white text-3xl shadow-lg shrink-0 group-hover:rotate-2 transition">
-                        <i class="fa-solid ${app.icon}"></i>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <h3 class="font-extrabold text-gray-900 truncate text-lg tracking-tight leading-tight">${app.name}</h3>
-                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">${app.category}</p>
-                        <div class="flex items-center justify-between">
-                             <button class="bg-[#F0F0F7] text-blue-600 px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition">
-                                ${app.price}
-                             </button>
-                             <div class="flex items-center space-x-1">
-                                <span class="text-xs font-bold text-gray-800">${app.rating}</span>
-                                <i class="fa-solid fa-star text-[10px] text-yellow-400"></i>
-                             </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            grid.innerHTML += card;
+  <section id="directory">
+    <div class="directory-header reveal">
+      <h2 style="font-size: 3rem; color: var(--color-4);">Creator Collective</h2>
+      <p style="color: var(--text-muted); margin-top: 10px;">Live Database Synced with Firebase</p>
+    </div>
+
+    <div class="filter-container reveal">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search by name..." onkeyup="filterPhotographers()">
+      <select id="specialtyFilter" class="filter-select" onchange="filterPhotographers()">
+        <option value="all">All Specialties</option>
+        <option value="Fashion">Fashion</option>
+        <option value="Street">Street</option>
+        <option value="Nature">Nature</option>
+        <option value="Wedding">Wedding</option>
+      </select>
+    </div>
+
+    <div class="photographer-grid reveal" id="photographerGrid">
+      <p class="status-msg">Initiating secure cloud connection...</p>
+    </div>
+  </section>
+
+  <section id="register-section">
+    <div class="reg-card reveal">
+      <h2 style="font-size: 2.2rem; color: var(--color-4); margin-bottom: 1rem;">Join the Journey</h2>
+      <p style="margin-bottom: 2rem; color: #666;">Apply to be featured in our real-time global directory.</p>
+      <form id="applyForm">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="email" id="email" placeholder="Professional Email" required>
+        <select id="specialty" required>
+            <option value="">Select Specialty</option>
+            <option value="Fashion">Fashion</option>
+            <option value="Street">Street</option>
+            <option value="Wedding">Wedding</option>
+            <option value="Nature">Nature</option>
+        </select>
+        <textarea id="bio" placeholder="Tell us about your visual language..." rows="4" required></textarea>
+        <button type="submit" class="btn-submit" id="submitBtn">Submit Application</button>
+      </form>
+    </div>
+  </section>
+
+  <div class="profile-modal" id="profileModal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeProfile()">&times;</span>
+      <div class="modal-left" id="modalLeft"></div>
+      <div class="modal-right" id="modalRight">
+        <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Portfolio</h3>
+        <div id="modalGallery" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // Your Specific Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDAEgfpL5UuAnzzcpsz0-GTwlfa0bnAZxg",
+      authDomain: "visual-journeys.firebaseapp.com",
+      projectId: "visual-journeys",
+      storageBucket: "visual-journeys.firebasestorage.app",
+      messagingSenderId: "1010760921119",
+      appId: "1:1010760921119:web:de982c51da96df3fe7252a",
+      measurementId: "G-55PTWEXBXD"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const creatorsCol = collection(db, "photographers");
+
+    let allPhotographers = [];
+
+    // --- REAL-TIME LISTENER ---
+    onSnapshot(query(creatorsCol, orderBy("createdAt", "desc")), (snapshot) => {
+      allPhotographers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      renderDirectory(allPhotographers);
+      console.log("Firebase Collective Updated.");
+    }, (err) => {
+      console.error("Firebase Sync Error:", err);
+      document.getElementById('photographerGrid').innerHTML = `<p class="status-msg">Check Firestore Security Rules. Ensure they allow 'read/write'.</p>`;
+    });
+
+    // --- RENDER FUNCTION ---
+    window.renderDirectory = (data) => {
+      const grid = document.getElementById('photographerGrid');
+      if (data.length === 0) {
+        grid.innerHTML = '<p class="status-msg">The collective is currently empty. Be the first to join.</p>';
+        return;
+      }
+      grid.innerHTML = data.map(p => `
+        <div class="photographer-card reveal active" onclick="openProfile('${p.id}')">
+          <img src="${p.img || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600'}" alt="${p.name}">
+          <span style="color:var(--accent); font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1px;">${p.specialty}</span>
+          <h4 style="font-size: 1.4rem; margin: 0.5rem 0;">${p.name}</h4>
+          <p style="font-size: 0.8rem; color: #888; font-weight:600;">VIEW PROFILE —</p>
+        </div>
+      `).join('');
+    };
+
+    // --- FORM SUBMISSION ---
+    document.getElementById('applyForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.innerText = "Syncing with Cloud...";
+      btn.disabled = true;
+
+      try {
+        await addDoc(creatorsCol, {
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          specialty: document.getElementById('specialty').value,
+          bio: document.getElementById('bio').value,
+          // Random premium placeholder image
+          img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=600",
+          createdAt: new Date()
         });
-    </script>
+        
+        document.getElementById('applyForm').reset();
+        alert("Application Saved! You are now live in the Visual Journeys directory.");
+        window.location.hash = "directory";
+      } catch (error) {
+        console.error("Submission Error:", error);
+        alert("Error connecting to Firebase. Check console.");
+      } finally {
+        btn.innerText = "Submit Application";
+        btn.disabled = false;
+      }
+    });
 
+    // --- FILTER & MODAL HELPERS ---
+    window.filterPhotographers = () => {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const filter = document.getElementById('specialtyFilter').value;
+      const filtered = allPhotographers.filter(p => {
+        const matchesName = p.name.toLowerCase().includes(search);
+        const matchesType = filter === 'all' || p.specialty === filter;
+        return matchesName && matchesType;
+      });
+      renderDirectory(filtered);
+    };
+
+    window.openProfile = (id) => {
+      const p = allPhotographers.find(item => item.id === id);
+      document.getElementById('modalLeft').innerHTML = `
+        <h2 style="font-size: 3rem; margin-bottom: 1rem;">${p.name}</h2>
+        <p style="color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:2rem; font-weight:700;">${p.specialty} Artist</p>
+        <p style="font-size: 1.1rem; opacity: 0.8; line-height: 1.8;">${p.bio}</p>
+        <p style="margin-top: 3rem; font-size: 0.9rem;"><b>Contact:</b> ${p.email}</p>
+      `;
+      document.getElementById('modalGallery').innerHTML = `<img src="${p.img}" style="width:100%; height:200px; object-fit:cover;">`;
+      document.getElementById('profileModal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeProfile = () => {
+      document.getElementById('profileModal').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    };
+
+    // Scroll Observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
