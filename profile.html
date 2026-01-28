@@ -165,12 +165,12 @@
 
     let allPhotographers = [];
 
-    // REALTIME LISTENER
+    // REALTIME LISTENER: This ensures the list updates the moment data is saved
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
       allPhotographers = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
       renderDirectory(allPhotographers);
-      console.log("Realtime Sync Complete.");
+      console.log("Realtime Sync: Collective updated.");
     });
 
     window.renderDirectory = (data) => {
@@ -179,7 +179,8 @@
         grid.innerHTML = '<p class="status-msg">The collective is currently empty.</p>';
         return;
       }
-      grid.innerHTML = data.reverse().map(p => `
+      // Reverse to show the newest entries first
+      grid.innerHTML = [...data].reverse().map(p => `
         <div class="photographer-card reveal active" onclick="openProfile('${p.id}')">
           <img src="${p.img || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600'}" alt="${p.name}">
           <span style="color:var(--accent); font-size:0.7rem; font-weight:700; text-transform:uppercase;">${p.specialty}</span>
@@ -195,22 +196,27 @@
       btn.innerText = "Transmitting...";
       btn.disabled = true;
 
-      try {
-        await push(dbRef, {
+      const newEntry = {
           name: document.getElementById('name').value,
           email: document.getElementById('email').value,
           specialty: document.getElementById('specialty').value,
           bio: document.getElementById('bio').value,
           img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=600",
           timestamp: Date.now()
-        });
+      };
+
+      try {
+        // Pushing data to the 'photographers' node in Realtime Database
+        await push(dbRef, newEntry);
         
         document.getElementById('applyForm').reset();
-        alert("Synced to Realtime Database!");
-        window.location.hash = "directory";
+        alert("Entry Synced Successfully!");
+        
+        // Smooth scroll to the updated directory
+        document.getElementById('directory').scrollIntoView({ behavior: 'smooth' });
       } catch (error) {
-        console.error("Transmission error:", error);
-        alert("Failed to save. Check your Firebase Rules.");
+        console.error("Database error:", error);
+        alert("Sync failed. Check if Firebase Rules are set to public (.write: true)");
       } finally {
         btn.innerText = "Submit Realtime";
         btn.disabled = false;
