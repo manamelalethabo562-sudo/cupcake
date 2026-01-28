@@ -156,7 +156,7 @@
       messagingSenderId: "1010760921119",
       appId: "1:1010760921119:web:de982c51da96df3fe7252a",
       measurementId: "G-55PTWEXBXD",
-      databaseURL: "https://visual-journeys-default-rtdb.firebaseio.com"
+      databaseURL: "https://visual-journeys-default-rtdb.firebaseio.com" 
     };
 
     const app = initializeApp(firebaseConfig);
@@ -210,7 +210,7 @@
         window.location.hash = "directory";
       } catch (error) {
         console.error("Transmission error:", error);
-        alert("Error connecting to database. Check security rules.");
+        alert("Failed to save. Check your Firebase Rules.");
       } finally {
         btn.innerText = "Submit Realtime";
         btn.disabled = false;
@@ -230,6 +230,7 @@
 
     window.openProfile = (id) => {
       const p = allPhotographers.find(item => item.id === id);
+      if(!p) return;
       document.getElementById('modalLeft').innerHTML = `
         <h2 style="font-size: 3rem; margin-bottom: 1rem;">${p.name}</h2>
         <p style="color:var(--accent); text-transform:uppercase; margin-bottom:2rem; font-weight:700;">${p.specialty} Artist</p>
