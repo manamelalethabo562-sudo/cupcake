@@ -94,7 +94,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    // Your Updated Configuration
+    // --- YOUR SPECIFIC CONFIGURATION ---
     const firebaseConfig = {
       apiKey: "AIzaSyDgp_IUt8KfhbmeJdDaYldV2UoI2eUG-f0",
       authDomain: "tttttt-70c0b.firebaseapp.com",
@@ -111,7 +111,7 @@
     const db = getDatabase(app);
     const dbRef = ref(db, 'photographers');
 
-    // 1. LISTEN for changes (Instant Update)
+    // 1. LISTEN for changes (Instant Update for Creator Collective)
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
       const grid = document.getElementById('photographerGrid');
@@ -121,6 +121,7 @@
         return;
       }
 
+      // Convert objects to array and reverse to show newest applicants first
       const items = Object.keys(data).map(key => ({ id: key, ...data[key] }));
       grid.innerHTML = items.reverse().map(p => `
         <div class="photographer-card">
@@ -132,7 +133,7 @@
       `).join('');
     });
 
-    // 2. SEND data to Firebase
+    // 2. SEND data to Firebase (Store Applicant Details)
     document.getElementById('applyForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('submitBtn');
@@ -148,9 +149,12 @@
       };
 
       try {
+        // This adds the details to Firebase Realtime Database
         await push(dbRef, newEntry);
         document.getElementById('applyForm').reset();
         alert("Entry Synced Successfully!");
+        
+        // Navigate back to the collective section
         window.location.hash = "directory";
       } catch (error) {
         console.error("Firebase Error:", error);
