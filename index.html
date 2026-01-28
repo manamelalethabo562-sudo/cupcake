@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>VISUAL JOURNEY | Lethabo Photography</title>
-  <meta name="description" content="Visual Journey – Capturing authentic stories through photography in Durban. Explore featured projects and book your session." />
+  <meta name="description" content="Professional photography by Lethabo. Capturing authentic stories in Durban through Portraits, Landscapes, and Weddings." />
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,15 +34,12 @@
       overflow-x: hidden;
     }
 
-    h1, h2, h3 {
-      font-family: 'Playfair Display', serif;
-    }
+    h1, h2, h3 { font-family: 'Playfair Display', serif; }
 
     /* Navigation */
     header {
       position: fixed;
-      top: 0;
-      width: 100%;
+      top: 0; width: 100%;
       background: rgba(10, 10, 10, 0.85);
       backdrop-filter: blur(10px);
       z-index: 1000;
@@ -74,35 +71,19 @@
     .nav-links {
       list-style: none;
       display: flex;
-      gap: 2.5rem;
+      gap: 2rem;
     }
 
     .nav-links a {
       color: var(--text);
       text-decoration: none;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 1px;
       transition: 0.3s;
     }
 
-    .nav-links a:hover, .nav-links a.active {
-      color: var(--accent);
-    }
-
-    /* Sections */
-    section {
-      padding: 8rem 5%;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    h2 {
-      font-size: 3.5rem;
-      text-align: center;
-      margin-bottom: 4rem;
-      color: var(--accent);
-    }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
 
     /* Hero */
     #hero {
@@ -113,14 +94,10 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      max-width: 100%;
     }
 
-    .hero-content h1 {
-      font-size: 6rem;
-      color: #fff;
-      margin-bottom: 0.5rem;
-    }
+    .hero-content h1 { font-size: clamp(4rem, 10vw, 6rem); color: #fff; margin-bottom: 0.5rem; }
+    .hero-content p { font-size: 1.2rem; letter-spacing: 2px; }
 
     .cta-btn {
       display: inline-block;
@@ -132,6 +109,8 @@
       border-radius: 50px;
       margin-top: 2rem;
       transition: 0.3s;
+      border: none;
+      cursor: pointer;
     }
 
     .cta-btn:hover {
@@ -139,14 +118,12 @@
       box-shadow: 0 10px 20px rgba(212,175,55,0.3);
     }
 
-    /* Portfolio Tabs */
-    .tabs {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 3rem;
-    }
+    /* Sections General */
+    section { padding: 8rem 5%; max-width: 1400px; margin: 0 auto; }
+    h2 { font-size: 3rem; text-align: center; margin-bottom: 3rem; color: var(--accent); }
 
+    /* Portfolio Tabs */
+    .tabs { display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap; }
     .tab-link {
       padding: 0.6rem 1.5rem;
       background: transparent;
@@ -156,13 +133,7 @@
       border-radius: 4px;
       transition: 0.3s;
     }
-
-    .tab-link.active {
-      background: var(--accent);
-      color: #000;
-      border-color: var(--accent);
-    }
-
+    .tab-link.active { background: var(--accent); color: #000; border-color: var(--accent); }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
@@ -172,155 +143,77 @@
       gap: 1.5rem;
     }
 
-    .portfolio-item {
-      position: relative;
-      overflow: hidden;
-      aspect-ratio: 4/5;
-      cursor: pointer;
-    }
-
-    .portfolio-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: 0.5s;
-    }
-
+    .portfolio-item { position: relative; overflow: hidden; aspect-ratio: 4/5; cursor: pointer; border-radius: 8px; }
+    .portfolio-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
     .portfolio-item:hover img { transform: scale(1.1); }
-
     .overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transition: 0.4s;
+      position: absolute; inset: 0; background: rgba(0,0,0,0.7);
+      display: flex; flex-direction: column; justify-content: center;
+      align-items: center; opacity: 0; transition: 0.4s;
     }
-
     .portfolio-item:hover .overlay { opacity: 1; }
 
-    /* Featured Project */
-    #featured {
+    /* Services Section */
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+    .service-card {
       background: var(--card-bg);
-      border-radius: 24px;
-      padding: 6rem 5%;
-      margin: 4rem auto;
+      padding: 3rem 2rem;
+      border-radius: 15px;
+      text-align: center;
+      border: 1px solid #222;
+      transition: 0.4s;
+      position: relative;
+    }
+    .service-card:hover { border-color: var(--accent); transform: translateY(-10px); }
+    .service-card h3 { color: var(--accent); font-size: 1.8rem; margin-bottom: 1rem; }
+    .price { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; color: #fff; }
+    .service-features { list-style: none; margin-bottom: 2rem; text-align: left; color: #bbb; }
+    .service-features li { margin-bottom: 0.8rem; display: flex; align-items: center; gap: 10px; }
+    .service-features li::before { content: "✓"; color: var(--accent); }
+    .badge {
+      position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+      background: var(--accent); color: #000; padding: 5px 15px;
+      border-radius: 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase;
     }
 
-    .featured-container {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .featured-img img {
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-    }
+    /* Featured Project */
+    #featured { background: var(--card-bg); border-radius: 24px; margin: 4rem auto; }
+    .featured-container { display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: center; }
+    .featured-img img { width: 100%; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
 
     /* About Section */
-    .about-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: center;
-    }
+    .about-container { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .about-img img { width: 100%; border-radius: 4px; filter: grayscale(20%); }
+    .stats { display: flex; gap: 3rem; margin-top: 2rem; }
+    .stat-box h3 { font-size: 2.5rem; color: var(--accent); }
 
-    .about-img img {
-      width: 100%;
-      filter: grayscale(100%);
-      border-radius: 4px;
-    }
-
-    .stats {
-      display: flex;
-      gap: 3rem;
-      margin-top: 2rem;
-    }
-
-    .stat-box h3 {
-      font-size: 2.5rem;
-      color: var(--accent);
-    }
-
-    /* Contact Form */
-    .contact-wrapper {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    form {
-      display: grid;
-      gap: 1.5rem;
-    }
-
-    .input-group {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-    }
-
+    /* Contact Section */
+    .contact-wrapper { max-width: 800px; margin: 0 auto; }
+    form { display: grid; gap: 1.2rem; }
+    .input-group { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
     input, textarea, select {
-      width: 100%;
-      padding: 1.2rem;
-      background: #1a1a1a;
-      border: 1px solid #333;
-      color: #fff;
-      border-radius: 8px;
+      width: 100%; padding: 1.1rem; background: #1a1a1a;
+      border: 1px solid #333; color: #fff; border-radius: 8px; font-family: inherit;
     }
-
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-
-    button[type="submit"] {
-      padding: 1.2rem;
-      background: var(--accent);
-      border: none;
-      font-weight: 700;
-      cursor: pointer;
-      text-transform: uppercase;
-      border-radius: 8px;
-    }
+    input:focus, textarea:focus { outline: none; border-color: var(--accent); }
 
     /* Footer */
-    footer {
-      padding: 4rem 5%;
-      background: #050505;
-      text-align: center;
-      border-top: 1px solid #111;
-    }
+    footer { padding: 4rem 5%; background: #050505; text-align: center; border-top: 1px solid #111; }
+    .social-links { margin: 1.5rem 0; }
+    .social-links a { color: var(--text); margin: 0 1rem; text-decoration: none; transition: 0.3s; }
+    .social-links a:hover { color: var(--accent); }
 
-    .social-links { margin: 2rem 0; }
-    .social-links a {
-      color: var(--text);
-      margin: 0 1rem;
-      text-decoration: none;
-    }
-
-    /* Mobile Menu */
-    .menu-toggle { display: none; font-size: 1.8rem; cursor: pointer; }
-
+    /* Mobile Styles */
+    .menu-toggle { display: none; font-size: 1.8rem; cursor: pointer; color: var(--accent); }
     @media (max-width: 992px) {
       .featured-container, .about-container, .input-group { grid-template-columns: 1fr; }
-      .hero-content h1 { font-size: 4rem; }
       .nav-links {
-        display: none;
-        position: absolute;
-        top: 100%; left: 0; width: 100%;
-        background: #0a0a0a;
-        flex-direction: column;
-        padding: 2rem;
-        text-align: center;
+        display: none; position: absolute; top: 100%; left: 0; width: 100%;
+        background: #0a0a0a; flex-direction: column; padding: 2rem; text-align: center;
       }
       .nav-links.active { display: flex; }
       .menu-toggle { display: block; }
+      section { padding: 5rem 5%; }
     }
   </style>
 </head>
@@ -333,6 +226,7 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="#hero">Home</a></li>
         <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#services">Services</a></li>
         <li><a href="#featured">Featured</a></li>
         <li><a href="#about">Story</a></li>
         <li><a href="#contact">Book</a></li>
@@ -343,8 +237,8 @@
   <section id="hero">
     <div class="hero-content">
       <h1>Lethabo</h1>
-      <p>Stories told through light and shadow.</p>
-      <a href="#contact" class="cta-btn">Enquire Now</a>
+      <p>AUTHENTIC STORYTELLING THROUGH THE LENS</p>
+      <a href="#contact" class="cta-btn">Book a Session</a>
     </div>
   </section>
 
@@ -360,11 +254,15 @@
       <div class="gallery-grid">
         <div class="portfolio-item">
           <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800" alt="Portrait">
-          <div class="overlay"><h3>Vogue Session</h3></div>
+          <div class="overlay"><h3>Natural Light</h3></div>
         </div>
         <div class="portfolio-item">
           <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800" alt="Portrait">
-          <div class="overlay"><h3>Character Study</h3></div>
+          <div class="overlay"><h3>Studio Session</h3></div>
+        </div>
+        <div class="portfolio-item">
+          <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=800" alt="Portrait">
+          <div class="overlay"><h3>Urban Editorial</h3></div>
         </div>
       </div>
     </div>
@@ -375,6 +273,61 @@
           <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800" alt="Landscape">
           <div class="overlay"><h3>Durban Coast</h3></div>
         </div>
+        <div class="portfolio-item">
+          <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=800" alt="Landscape">
+          <div class="overlay"><h3>Valley of 1000 Hills</h3></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="weddings">
+      <div class="gallery-grid">
+        <div class="portfolio-item">
+          <img src="https://images.unsplash.com/photo-1519741497674-00b5e0e0a2c8?auto=format&fit=crop&w=800" alt="Wedding">
+          <div class="overlay"><h3>Summer Vows</h3></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <h2>Services & Packages</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <h3>Lifestyle</h3>
+        <div class="price">R 1,200</div>
+        <ul class="service-features">
+          <li>60 Minute Session</li>
+          <li>1 Location</li>
+          <li>20 Edited Images</li>
+          <li>Online Gallery</li>
+        </ul>
+        <a href="#contact" class="cta-btn">Select</a>
+      </div>
+
+      <div class="service-card">
+        <div class="badge">Popular</div>
+        <h3>Weddings</h3>
+        <div class="price">R 9,500</div>
+        <ul class="service-features">
+          <li>8 Hours Coverage</li>
+          <li>Engagement Session</li>
+          <li>300+ Edited Images</li>
+          <li>Print Box Included</li>
+        </ul>
+        <a href="#contact" class="cta-btn">Select</a>
+      </div>
+
+      <div class="service-card">
+        <h3>Commercial</h3>
+        <div class="price">Custom</div>
+        <ul class="service-features">
+          <li>Product Photography</li>
+          <li>Brand Storytelling</li>
+          <li>Full Licensing</li>
+          <li>Quick Turnaround</li>
+        </ul>
+        <a href="#contact" class="cta-btn">Enquire</a>
       </div>
     </div>
   </section>
@@ -382,13 +335,13 @@
   <section id="featured">
     <div class="featured-container">
       <div class="featured-img">
-        <img src="https://images.unsplash.com/photo-1519741497674-00b5e0e0a2c8?auto=format&fit=crop&w=1200" alt="Featured Project">
+        <img src="https://images.unsplash.com/photo-1511285560929-80b456fe4726?auto=format&fit=crop&w=1200" alt="Featured">
       </div>
       <div class="featured-text">
-        <span style="color: var(--accent); letter-spacing: 2px;">PROJECT SPOTLIGHT</span>
-        <h3 style="font-size: 2.5rem; margin: 1rem 0;">"The Golden Hour Series"</h3>
-        <p>A deep dive into the warm aesthetics of KwaZulu-Natal's sunsets. This series explores the fleeting moments between day and night, capturing the raw emotion of the South African landscape.</p>
-        <p style="margin-top: 1.5rem; opacity: 0.8;">Captured on: 35mm Digital | Durban, 2025</p>
+        <span style="color: var(--accent); letter-spacing: 2px;">FEATURED SERIES</span>
+        <h3 style="font-size: 2.5rem; margin: 1rem 0;">"The Golden Hour"</h3>
+        <p>This series captures the intimate moments of a Durban summer sunset. It focuses on the play between warm highlights and deep shadows to create a nostalgic, cinematic feel.</p>
+        <p style="margin-top: 1rem; opacity: 0.7;">Awarded "Series of the Month" - 2025 Visual Arts</p>
       </div>
     </div>
   </section>
@@ -396,42 +349,42 @@
   <section id="about">
     <div class="about-container">
       <div class="about-text">
-        <h2>Our Story</h2>
-        <p>I am Lethabo, a visual storyteller based in Durban. My work is defined by a pursuit of authenticity—capturing people not just as they look, but as they are.</p>
-        <p style="margin-top: 1rem;">With over a decade of experience across Africa, I specialize in lifestyle and cinematic photography that stands the test of time.</p>
+        <h2>My Story</h2>
+        <p>I am Lethabo, a photographer based in Durban, South Africa. My passion lies in finding the extraordinary within the ordinary.</p>
+        <p style="margin-top: 1rem;">With a background in fine arts and over 10 years behind the lens, I treat every session as a collaboration to create something timeless.</p>
         <div class="stats">
-          <div class="stat-box"><h3>12+</h3><p>Years</p></div>
-          <div class="stat-box"><h3>400+</h3><p>Projects</p></div>
+          <div class="stat-box"><h3>10+</h3><p>Years</p></div>
+          <div class="stat-box"><h3>500+</h3><p>Clients</p></div>
         </div>
       </div>
       <div class="about-img">
-        <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=800" alt="Lethabo">
+        <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=800" alt="Lethabo">
       </div>
     </div>
   </section>
 
   <section id="contact">
-    <h2>Get In Touch</h2>
+    <h2>Start Your Journey</h2>
     <div class="contact-wrapper">
       <form id="contactForm">
         <div class="input-group">
-          <input type="text" placeholder="Full Name" required>
+          <input type="text" placeholder="Your Name" required>
           <input type="email" placeholder="Email Address" required>
         </div>
-        <select>
-          <option>Portrait Session</option>
-          <option>Wedding Coverage</option>
-          <option>Commercial/Brand</option>
-          <option>Other</option>
+        <select required>
+          <option value="" disabled selected>Select a Service</option>
+          <option value="lifestyle">Lifestyle Portrait</option>
+          <option value="wedding">Wedding Coverage</option>
+          <option value="commercial">Commercial/Brand</option>
         </select>
-        <textarea rows="5" placeholder="Tell me about your vision..."></textarea>
-        <button type="submit">Send Message</button>
+        <textarea rows="5" placeholder="Tell me about your project..." required></textarea>
+        <button type="submit" class="cta-btn" style="width: 100%; margin-top: 0;">Send Message</button>
       </form>
     </div>
   </section>
 
   <footer>
-    <p>&copy; 2026 VISUAL JOURNEY | Lethabo Photography</p>
+    <p>&copy; 2026 VISUAL JOURNEY | Lethabo Photography | Durban, SA</p>
     <div class="social-links">
       <a href="#">Instagram</a>
       <a href="#">Facebook</a>
@@ -440,9 +393,9 @@
   </footer>
 
   <script>
-    // Header background change
+    // Navigation Scroll Effect
     window.addEventListener('scroll', () => {
-      document.getElementById('header').classList.toggle('scrolled', window.scrollY > 100);
+      document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
     });
 
     // Mobile Menu Toggle
@@ -450,23 +403,23 @@
     const navLinks = document.getElementById('navLinks');
     menuToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
 
-    // Tab Switching
+    // Portfolio Tab Logic
     document.querySelectorAll('.tab-link').forEach(button => {
       button.addEventListener('click', () => {
-        const tab = button.getAttribute('data-tab');
+        const tabId = button.getAttribute('data-tab');
         
         document.querySelectorAll('.tab-link').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
         
         button.classList.add('active');
-        document.getElementById(tab).classList.add('active');
+        document.getElementById(tabId).classList.add('active');
       });
     });
 
-    // Simple Form Submission
+    // Form Handling
     document.getElementById('contactForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      alert("Thank you, Lethabo will contact you shortly!");
+      alert("Thank you! Your message has been sent to Lethabo.");
       e.target.reset();
     });
   </script>
