@@ -37,8 +37,7 @@
 
     #directory { background: var(--color-2); padding: 8rem 5%; min-height: 600px; }
     .photographer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 3rem; max-width: 1300px; margin: 4rem auto; }
-    .photographer-card { background: white; padding: 1.5rem; transition: 0.5s; border: 1px solid transparent; }
-    .photographer-card:hover { transform: translateY(-10px); border-color: var(--accent); }
+    .photographer-card { background: white; padding: 1.5rem; transition: 0.5s; border: 1px solid transparent; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
     .photographer-card img { width: 100%; height: 350px; object-fit: cover; margin-bottom: 1.5rem; }
 
     #register-section { background: var(--color-1); padding: 8rem 5%; }
@@ -68,7 +67,7 @@
   <section id="directory">
     <h2 style="text-align:center; font-size: 3rem; color: var(--color-4);">Creator Collective</h2>
     <div class="photographer-grid" id="photographerGrid">
-      <p class="status-msg">Connecting to Firebase...</p>
+      <p class="status-msg">Loading the collective...</p>
     </div>
   </section>
 
@@ -95,24 +94,30 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+    // Your Specific Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyDAEgfpL5UuAnzzcpsz0-GTwlfa0bnAZxg",
       authDomain: "visual-journeys.firebaseapp.com",
-      databaseURL: "https://visual-journeys-default-rtdb.firebaseio.com",
-      projectId: "visual-journeys"
+      projectId: "visual-journeys",
+      storageBucket: "visual-journeys.firebasestorage.app",
+      messagingSenderId: "1010760921119",
+      appId: "1:1010760921119:web:de982c51da96df3fe7252a",
+      measurementId: "G-55PTWEXBXD",
+      databaseURL: "https://visual-journeys-default-rtdb.firebaseio.com" // Standard URL for your project
     };
 
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const dbRef = ref(db, 'photographers');
 
-    // 1. REALTIME LISTENER (Updates the directory instantly)
+    // 1. LISTEN for changes (Instant Update)
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
       const grid = document.getElementById('photographerGrid');
       
       if (!data) {
-        grid.innerHTML = '<p class="status-msg">Collective is empty. Be the first to join!</p>';
+        grid.innerHTML = '<p class="status-msg">The collective is empty. Join us below!</p>';
         return;
       }
 
@@ -127,7 +132,7 @@
       `).join('');
     });
 
-    // 2. FORM SUBMISSION (Stores data in Firebase)
+    // 2. SEND data to Firebase
     document.getElementById('applyForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('submitBtn');
@@ -145,11 +150,11 @@
       try {
         await push(dbRef, newEntry);
         document.getElementById('applyForm').reset();
-        alert("Success! Check your Firebase Console Data tab.");
+        alert("Entry Synced Successfully!");
         window.location.hash = "directory";
       } catch (error) {
         console.error("Firebase Error:", error);
-        alert("Failed to save. Ensure Rules are set to public in Firebase Console.");
+        alert("Sync failed. Ensure Database Rules are set to public.");
       } finally {
         btn.innerText = "Submit to Firebase";
         btn.disabled = false;
