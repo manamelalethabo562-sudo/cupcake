@@ -1,290 +1,524 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>All"Apps | Discover</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-        .app-card:active { transform: scale(0.96); }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VISUAL JOURNEY | Lethabo Photography</title>
+  <meta name="description" content="Visual Journey – Capturing authentic stories through photography in Durban and beyond. Portfolio, personal story, and booking for sessions." />
+  
+  <!-- Basic SEO & Open Graph -->
+  <meta property="og:title" content="VISUAL JOURNEY – Lethabo Photography" />
+  <meta property="og:description" content="Professional photography showcasing portraits, landscapes, weddings, and more. Book your session today." />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" />
+  <meta property="og:url" content="https://yourdomain.com" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #1a1a1a;
+      --accent: #d4af37; /* Gold for elegance */
+      --text: #e0e0e0;
+      --bg: #0f0f0f;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+    }
+
+    /* Navigation */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      transition: background 0.3s;
+    }
+
+    header.scrolled {
+      background: rgba(10, 10, 10, 0.95);
+    }
+
+    nav {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      letter-spacing: 4px;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -6px;
+      left: 0;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--accent);
+    }
+
+    /* Hero Section */
+    #hero {
+      height: 100vh;
+      min-height: 800px;
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)),
+                  url('https://images.unsplash.com/photo-1554048612-b6a482bc67e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 5%;
+    }
+
+    .hero-content {
+      max-width: 900px;
+    }
+
+    .hero-content h1 {
+      font-size: 5.5rem;
+      margin-bottom: 1rem;
+      color: white;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.7);
+    }
+
+    .hero-content p {
+      font-size: 1.5rem;
+      margin-bottom: 2.5rem;
+      color: #ddd;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--accent);
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 50px;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(212,175,55,0.3);
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(212,175,55,0.5);
+    }
+
+    /* Sections */
+    section {
+      padding: 10rem 5%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-size: 4rem;
+      text-align: center;
+      margin-bottom: 4rem;
+      color: var(--accent);
+      position: relative;
+    }
+
+    h2::after {
+      content: '';
+      width: 100px;
+      height: 3px;
+      background: var(--accent);
+      display: block;
+      margin: 1.5rem auto 0;
+    }
+
+    /* Portfolio Grid */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+
+    .portfolio-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transition: transform 0.4s ease;
+    }
+
+    .portfolio-item:hover {
+      transform: scale(1.05);
+    }
+
+    .portfolio-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+
+    .portfolio-item:hover img {
+      transform: scale(1.15);
+    }
+
+    .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+      padding: 2rem 1.5rem;
+      transform: translateY(100%);
+      transition: transform 0.4s ease;
+    }
+
+    .portfolio-item:hover .overlay {
+      transform: translateY(0);
+    }
+
+    .overlay h3 {
+      margin-bottom: 0.5rem;
+      color: white;
+    }
+
+    /* About */
+    .about-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4rem;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-text {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .about-img {
+      flex: 1;
+      max-width: 500px;
+    }
+
+    .about-img img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    /* Contact */
+    .contact-form {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    form {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid #444;
+      background: #111;
+      color: white;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.2);
+    }
+
+    button {
+      padding: 1.2rem;
+      background: var(--accent);
+      color: var(--primary);
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      background: #e6c567;
+      transform: translateY(-3px);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3rem 5%;
+      background: #000;
+      border-top: 1px solid #222;
+    }
+
+    .social-links {
+      margin: 1.5rem 0;
+    }
+
+    .social-links a {
+      color: var(--text);
+      margin: 0 1rem;
+      font-size: 1.5rem;
+      transition: color 0.3s;
+    }
+
+    .social-links a:hover {
+      color: var(--accent);
+    }
+
+    /* Mobile Menu (Hamburger) */
+    .menu-toggle {
+      display: none;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(10,10,10,0.95);
+        flex-direction: column;
+        padding: 2rem;
+        gap: 2rem;
+        transform: translateY(-100%);
+        opacity: 0;
+        transition: all 0.4s ease;
+      }
+
+      .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .hero-content h1 {
+        font-size: 4rem;
+      }
+
+      .hero-content p {
+        font-size: 1.3rem;
+      }
+
+      .about-content {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
-<body class="bg-[#F2F2F7] text-gray-900 pb-24 md:pb-0">
-    <aside class="hidden md:flex flex-col w-72 fixed h-full bg-white border-r p-8 z-50">
-        <h1 class="text-3xl font-black text-blue-600 tracking-tighter mb-10">All"Apps</h1>
-        <nav class="space-y-1 flex-1">
-            <a href="#" class="flex items-center space-x-4 bg-blue-50 text-blue-600 px-4 py-3 rounded-2xl font-bold">
-                <i class="fa-solid fa-house text-lg"></i> <span>Discover</span>
-            </a>
-            <a href="#" class="flex items-center space-x-4 text-gray-400 hover:bg-gray-50 px-4 py-3 rounded-2xl transition group">
-                <i class="fa-solid fa-gamepad text-lg group-hover:text-blue-500"></i> <span>Games</span>
-            </a>
-            <a href="#" class="flex items-center space-x-4 text-gray-400 hover:bg-gray-50 px-4 py-3 rounded-2xl transition group">
-                <i class="fa-solid fa-layer-group text-lg group-hover:text-blue-500"></i> <span>Apps</span>
-            </a>
-            <a href="#" class="flex items-center space-x-4 text-gray-400 hover:bg-gray-50 px-4 py-3 rounded-2xl transition group">
-                <i class="fa-solid fa-rocket text-lg group-hover:text-blue-500"></i> <span>Arcade</span>
-            </a>
-        </nav>
-        <div class="mt-auto flex items-center space-x-3 p-4 bg-gray-50 rounded-2xl cursor-pointer">
-            <div class="w-10 h-10 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold">JS</div>
-            <div>
-                <p class="text-sm font-bold">John Smith</p>
-                <p class="text-[10px] text-gray-400">Pro Account</p>
-            </div>
-        </div>
-    </aside>
-    <main class="md:ml-72 min-h-screen">
-       
-        <header class="p-6 md:p-10 flex justify-between items-end sticky top-0 z-40 md:static glass md:bg-transparent md:backdrop-blur-none">
-            <div>
-                <p class="text-[11px] font-extrabold text-gray-400 uppercase tracking-[0.2em]">Tuesday, Jan 27</p>
-                <h1 class="text-4xl font-black tracking-tight">Today</h1>
-            </div>
-            <div class="hidden md:block w-80">
-                <div class="relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                    <input type="text" placeholder="Search apps..." class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-100 transition shadow-sm">
-                </div>
-            </div>
-            <div class="md:hidden w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
-                <img src="https://ui-avatars.com/api/?name=John+Smith&background=0D8ABC&color=fff" alt="Profile">
-            </div>
-        </header>
-        <section class="px-6 md:px-10 pb-12 max-w-7xl">
-            <div class="relative w-full h-[500px] rounded-[2.5rem] overflow-hidden shadow-2xl mb-12 group cursor-pointer">
-                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1200" class="absolute inset-0 w-full h-full object-cover transition duration-1000 group-hover:scale-105" alt="Feature">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                <div class="absolute bottom-10 left-10 right-10 text-white">
-                    <p class="text-xs font-bold uppercase opacity-70 tracking-widest mb-2">Editor's Choice</p>
-                    <h2 class="text-5xl font-black mb-4 leading-none">Retro Vibes:<br>Ultimate Synth</h2>
-                    <p class="text-lg text-gray-300 max-w-md mb-6 hidden md:block">Step into the 80s with the most advanced synthesizer app ever built for mobile.</p>
-                    <button class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-sm hover:scale-105 transition active:scale-95 shadow-lg shadow-blue-500/50">Get Now</button>
-                </div>
-            </div>
-            <div class="flex justify-between items-end mb-8">
-                <div>
-                    <h2 class="text-3xl font-black">Must-Have Apps</h2>
-                    <p class="text-gray-500 font-medium">Updated just now</p>
-                </div>
-                <a href="#" class="text-blue-600 font-bold hover:underline">See All</a>
-            </div>
-            <div id="app-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Apps will be rendered here dynamically -->
-            </div>
-        </section>
-    </main>
-    <nav class="md:hidden fixed bottom-6 left-6 right-6 h-16 glass border border-white/20 shadow-2xl rounded-3xl flex justify-around items-center text-gray-400 z-50">
-        <a href="#" class="flex flex-col items-center text-blue-600">
-            <i class="fa-solid fa-house text-xl"></i>
-            <span class="text-[9px] font-bold mt-1">Today</span>
-        </a>
-        <a href="#" class="flex flex-col items-center">
-            <i class="fa-solid fa-gamepad text-xl"></i>
-            <span class="text-[9px] font-bold mt-1">Games</span>
-        </a>
-        <a href="#" class="flex flex-col items-center">
-            <i class="fa-solid fa-layer-group text-xl"></i>
-            <span class="text-[9px] font-bold mt-1">Apps</span>
-        </a>
-        <a href="#" class="flex flex-col items-center">
-            <i class="fa-solid fa-magnifying-glass text-xl"></i>
-            <span class="text-[9px] font-bold mt-1">Search</span>
-        </a>
+<body>
+
+  <!-- Navigation -->
+  <header id="header">
+    <nav>
+      <a href="#" class="logo">VISUAL JOURNEY</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#hero" class="active">Home</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="menu-toggle" id="menuToggle">☰</div>
     </nav>
+  </header>
 
-    <!-- Floating Action Button for Upload -->
-    <div class="fixed bottom-24 right-6 md:bottom-10 md:right-10 z-50">
-        <button id="uploadBtn" class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-2xl hover:bg-blue-700 transition transform hover:scale-110 active:scale-95">
-            <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
-        </button>
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-content">
+      <h1>Lethabo</h1>
+      <p>Capturing authentic moments and untold stories through the lens</p>
+      <a href="#contact" class="cta-btn">Book a Session</a>
     </div>
+  </section>
 
-    <!-- Upload Modal -->
-    <div id="uploadModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-        <div class="bg-white rounded-3xl p-8 max-w-lg w-full mx-4 shadow-2xl">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl md:text-3xl font-black text-gray-900">Upload Your App</h2>
-                <button id="closeModalBtn" class="text-gray-500 hover:text-gray-900 text-2xl">&times;</button>
-            </div>
-            <form id="uploadForm" class="space-y-5">
-                <div>
-                    <label for="appName" class="block text-sm font-bold text-gray-700 mb-2">App Name *</label>
-                    <input type="text" id="appName" required placeholder="e.g. My Cool App" class="w-full p-4 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label for="appCategory" class="block text-sm font-bold text-gray-700 mb-2">Category *</label>
-                    <input type="text" id="appCategory" required placeholder="e.g. Productivity, Graphics & Design" class="w-full p-4 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label for="appPrice" class="block text-sm font-bold text-gray-700 mb-2">Price *</label>
-                    <input type="text" id="appPrice" required placeholder="e.g. Free or $4.99" class="w-full p-4 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label for="appRating" class="block text-sm font-bold text-gray-700 mb-2">Rating (optional)</label>
-                    <input type="text" id="appRating" placeholder="e.g. 4.8" class="w-full p-4 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label for="appIcon" class="block text-sm font-bold text-gray-700 mb-2">App Icon (optional - PNG/JPG recommended)</label>
-                    <input type="file" id="appIcon" accept="image/*" class="w-full p-3 border border-gray-300 rounded-2xl bg-gray-50">
-                </div>
-                <div class="flex justify-end space-x-4 pt-4">
-                    <button type="button" id="cancelBtn" class="px-8 py-4 bg-gray-200 text-gray-800 font-bold rounded-full hover:bg-gray-300 transition">Cancel</button>
-                    <button type="submit" class="px-8 py-4 bg-blue-600 text-white font-bold rounded-full hover:bg-blue-700 transition">Upload App</button>
-                </div>
-            </form>
+  <!-- Portfolio -->
+  <section id="portfolio">
+    <h2>My Work</h2>
+    <div class="portfolio-grid">
+      <!-- Replace these with your own high-res photos -->
+      <div class="portfolio-item">
+        <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Portrait session in Durban">
+        <div class="overlay">
+          <h3>Urban Portraits</h3>
+          <p>Durban streets, natural light</p>
         </div>
+      </div>
+      <div class="portfolio-item">
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Landscape photography">
+        <div class="overlay">
+          <h3>Landscapes</h3>
+          <p>Sunsets & nature captures</p>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <img src="https://images.unsplash.com/photo-1519741497674-00b5e0e0a2c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Wedding photography">
+        <div class="overlay">
+          <h3>Weddings</h3>
+          <p>Timeless love stories</p>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Fashion editorial">
+        <div class="overlay">
+          <h3>Fashion & Editorial</h3>
+          <p>Creative storytelling</p>
+        </div>
+      </div>
+      <!-- Add more items as needed -->
     </div>
+  </section>
 
-    <!-- Firebase SDK + App Logic -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js';
-        import { getDatabase, ref, onValue, push } from 'https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js';
-        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/12.8.0/firebase-storage.js';
+  <!-- About -->
+  <section id="about">
+    <h2>My Story</h2>
+    <div class="about-content">
+      <div class="about-text">
+        <p>Hello, I'm Lethabo, a Durban-based photographer passionate about capturing the raw beauty of everyday moments and the unique stories people carry.</p>
+        <p>My journey began with a simple camera and a desire to freeze time – from the vibrant streets of KwaZulu-Natal to quiet personal milestones. I believe every person, place, and moment has a story worth telling, and my goal is to tell it with honesty, warmth, and artistry.</p>
+        <p>Whether it's a wedding, portrait session, or commercial shoot, I focus on creating images that feel real, emotional, and timeless.</p>
+        <p>Let's create something beautiful together.</p>
+      </div>
+      <div class="about-img">
+        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Lethabo - Photographer">
+      </div>
+    </div>
+  </section>
 
-        // Your Firebase config
-        const firebaseConfig = {
-          apiKey: "AIzaSyCLqZqiW91FlivfkL3ZGtWUh7x2XpX4HPo",
-          authDomain: "all-apps-36756.firebaseapp.com",
-          databaseURL: "https://all-apps-36756-default-rtdb.firebaseio.com",
-          projectId: "all-apps-36756",
-          storageBucket: "all-apps-36756.firebasestorage.app",
-          messagingSenderId: "1088890111578",
-          appId: "1:1088890111578:web:9cb544e599626b61a63a63",
-          measurementId: "G-5Z763J47HR"
-        };
+  <!-- Contact -->
+  <section id="contact">
+    <h2>Get in Touch</h2>
+    <div class="contact-form">
+      <form id="contactForm">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <input type="tel" name="phone" placeholder="Your Phone (optional)">
+        <textarea name="message" rows="6" placeholder="Tell me about your project..." required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+  </section>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const storage = getStorage(app);
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 VISUAL JOURNEY | Lethabo Photography | Durban, South Africa</p>
+    <div class="social-links">
+      <a href="https://instagram.com" target="_blank">Instagram</a>
+      <a href="https://facebook.com" target="_blank">Facebook</a>
+      <a href="https://x.com" target="_blank">X</a>
+    </div>
+  </footer>
 
-        console.log("Firebase initialized successfully!");
+  <script>
+    // Smooth scrolling for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+        // Close mobile menu if open
+        document.getElementById('navLinks').classList.remove('active');
+      });
+    });
 
-        // MOCK DATA (fallback if no apps in database)
-        const mockApps = [
-            { name: "ProCreate Pocket", category: "Graphics & Design", rating: "4.9", price: "Free" },
-            { name: "Sky Guide", category: "Education", rating: "4.8", price: "Free" },
-            { name: "LumaFusion", category: "Video Editing", rating: "4.7", price: "Get" },
-            { name: "Streaks", category: "Health & Fitness", rating: "4.9", price: "Free" },
-            { name: "Overcast", category: "Entertainment", rating: "4.8", price: "Free" },
-            { name: "Bear Notes", category: "Productivity", rating: "4.6", price: "Get" }
-        ];
+    // Active nav link on scroll
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('section');
+      const navLinks = document.querySelectorAll('.nav-links a');
+      let current = '';
 
-        const grid = document.getElementById('app-grid');
-
-        function renderApps(appsList) {
-            grid.innerHTML = '';
-            appsList.forEach(app => {
-                const iconUrl = app.iconUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(app.name)}&background=0D8ABC&color=fff&size=128&bold=true`;
-                const card = `
-                    <div class="app-card flex items-center space-x-4 bg-white p-5 rounded-[2rem] shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group border border-transparent hover:border-blue-100">
-                        <div class="w-20 h-20 rounded-[1.5rem] overflow-hidden shrink-0 group-hover:rotate-3 transition-transform duration-300">
-                            <img src="${iconUrl}" alt="${app.name}" class="w-full h-full object-cover">
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="font-extrabold text-gray-900 truncate text-lg tracking-tight leading-tight">${app.name}</h3>
-                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">${app.category}</p>
-                            <div class="flex items-center justify-between">
-                                <button class="bg-[#F0F0F7] text-blue-600 px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition">
-                                    ${app.price}
-                                </button>
-                                <div class="flex items-center space-x-1">
-                                    <span class="text-xs font-bold text-gray-800">${app.rating || 'N/A'}</span>
-                                    <i class="fa-solid fa-star text-[10px] text-yellow-400"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                grid.innerHTML += card;
-            });
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 200;
+        if (scrollY >= sectionTop) {
+          current = section.getAttribute('id');
         }
+      });
 
-        // Listen for real-time updates from Firebase Realtime Database
-        const appsRef = ref(db, 'apps');
-        onValue(appsRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data && Object.keys(data).length > 0) {
-                const fetchedApps = Object.values(data);
-                renderApps(fetchedApps);
-            } else {
-                // Fallback to mock data if database is empty
-                renderApps(mockApps);
-            }
-        });
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
 
-        // Upload Modal Controls
-        const uploadBtn = document.getElementById('uploadBtn');
-        const modal = document.getElementById('uploadModal');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const uploadForm = document.getElementById('uploadForm');
+      // Header scroll effect
+      document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+    });
 
-        const openModal = () => modal.classList.remove('hidden');
-        const closeModal = () => {
-            modal.classList.add('hidden');
-            uploadForm.reset();
-        };
+    // Mobile menu toggle
+    document.getElementById('menuToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('active');
+    });
 
-        uploadBtn.addEventListener('click', openModal);
-        cancelBtn.addEventListener('click', closeModal);
-        closeModalBtn.addEventListener('click', closeModal);
-
-        // Close modal when clicking outside
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
-        });
-
-        // Handle form submission
-        uploadForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const name = document.getElementById('appName').value.trim();
-            const category = document.getElementById('appCategory').value.trim();
-            const price = document.getElementById('appPrice').value.trim();
-            const rating = document.getElementById('appRating').value.trim();
-            const file = document.getElementById('appIcon').files[0];
-
-            if (!name || !category || !price) {
-                alert('Please fill in all required fields (App Name, Category, Price).');
-                return;
-            }
-
-            let iconUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0D8ABC&color=fff&size=128&bold=true`;
-
-            if (file) {
-                try {
-                    const storagePathRef = storageRef(storage, `app-icons/${Date.now()}_${file.name}`);
-                    await uploadBytes(storagePathRef, file);
-                    iconUrl = await getDownloadURL(storagePathRef);
-                } catch (err) {
-                    console.error('Storage upload error:', err);
-                    alert('Failed to upload icon. Using default avatar instead.');
-                }
-            }
-
-            const newApp = {
-                name,
-                category,
-                price,
-                rating: rating || 'N/A',
-                iconUrl,
-                uploadedAt: new Date().toISOString()
-            };
-
-            try {
-                await push(ref(db, 'apps'), newApp);
-                alert('App uploaded successfully!');
-                closeModal();
-            } catch (error) {
-                console.error('Database push error:', error);
-                alert('Failed to upload app. Check console for details.');
-            }
-        });
-    </script>
+    // Simple form submission alert (replace with real backend later)
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Thank you! Your message has been sent. I will get back to you soon.');
+      e.target.reset();
+    });
+  </script>
 </body>
 </html>
