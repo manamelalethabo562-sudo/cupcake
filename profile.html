@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>VISUAL JOURNEYS | Live Firebase Collective</title>
+  <title>VISUAL JOURNEYS | Realtime Database Network</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,58 +27,41 @@
     body { font-family: 'Inter', sans-serif; background-color: var(--primary); color: var(--text-main); line-height: 1.7; overflow-x: hidden; }
     h1, h2, h3, .brand-name { font-family: 'Cormorant Garamond', serif; font-weight: 700; }
 
-    /* Navigation */
     header { position: fixed; top: 0; width: 100%; padding: 1.5rem 0; z-index: 1000; background: var(--glass); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(0,0,0,0.05); }
     nav { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; }
     .brand-name { font-size: 1.8rem; letter-spacing: 4px; color: var(--color-4); text-transform: uppercase; text-decoration: none; }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a { text-decoration: none; color: var(--text-main); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
-    .nav-links a:hover { color: var(--accent); }
+    .nav-links a { text-decoration: none; color: var(--text-main); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
-    /* Hero */
     #hero { height: 100vh; display: flex; align-items: center; background: linear-gradient(to right, var(--secondary) 60%, var(--color-2) 40%); position: relative; }
     .hero-content-wrap { max-width: 1400px; width: 90%; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; align-items: center; gap: 4rem; }
     .hero-text-area h1 { font-size: clamp(3.5rem, 8vw, 7rem); line-height: 0.9; color: var(--color-4); font-style: italic; margin-bottom: 2rem; }
-    .hero-text-area p { max-width: 450px; font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2.5rem; }
     .main-hero-img { width: 100%; height: 70vh; background: url('https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=1200') center/cover; border-radius: 400px 400px 0 0; box-shadow: 30px 30px 0 var(--color-1); }
 
-    /* Directory */
     #directory { background: var(--color-2); padding: 8rem 5%; min-height: 600px; }
     .directory-header { text-align: center; margin-bottom: 4rem; }
     .filter-container { display: flex; gap: 1rem; justify-content: center; margin-bottom: 4rem; flex-wrap: wrap; }
-    .search-input { padding: 1rem 2rem; width: 350px; border: none; border-radius: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); outline: none; font-family: inherit; }
-    .filter-select { padding: 1rem 2rem; border: none; border-radius: 40px; background: white; cursor: pointer; font-family: inherit; }
+    .search-input { padding: 1rem 2rem; width: 350px; border: none; border-radius: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); outline: none; }
 
     .photographer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 3rem; max-width: 1300px; margin: 0 auto; }
     .photographer-card { background: white; padding: 1.5rem; transition: 0.5s; cursor: pointer; border: 1px solid transparent; }
     .photographer-card:hover { transform: translateY(-15px); border-color: var(--accent); box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
     .photographer-card img { width: 100%; height: 350px; object-fit: cover; margin-bottom: 1.5rem; }
 
-    /* Registration Form */
     #register-section { background: var(--color-1); padding: 8rem 5%; }
     .reg-card { max-width: 600px; margin: 0 auto; background: white; padding: 4rem; border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); }
     input, textarea, select { width: 100%; padding: 1.2rem; margin-bottom: 1.2rem; border: 1px solid #eee; background: #fafafa; font-family: inherit; font-size: 1rem; }
-    .btn-submit { background: var(--color-4); color: white; border: none; padding: 1.2rem; cursor: pointer; width: 100%; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
-    .btn-submit:hover { background: var(--accent); }
+    .btn-submit { background: var(--color-4); color: white; border: none; padding: 1.2rem; cursor: pointer; width: 100%; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
 
-    /* Modal */
     .profile-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
     .modal-content { background: white; width: 100%; max-width: 1000px; height: 80vh; display: grid; grid-template-columns: 1fr 1.2fr; overflow: hidden; position: relative; }
     .modal-left { background: var(--color-4); color: white; padding: 3rem; overflow-y: auto; }
     .modal-right { padding: 3rem; overflow-y: auto; }
     .close-btn { position: absolute; top: 20px; right: 25px; font-size: 2.5rem; cursor: pointer; color: var(--text-main); z-index: 10; }
 
-    /* Animations */
     .reveal { opacity: 0; transform: translateY(40px); transition: 1s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
     .reveal.active { opacity: 1; transform: translateY(0); }
-
-    .status-msg { text-align: center; font-style: italic; color: var(--accent); grid-column: 1 / -1; margin-top: 2rem; }
-
-    @media (max-width: 900px) {
-      .hero-content-wrap, .modal-content { grid-template-columns: 1fr; display: block; }
-      .hero-visual { display: none; }
-      .reg-card { padding: 2rem; }
-    }
+    .status-msg { text-align: center; color: var(--accent); grid-column: 1 / -1; }
   </style>
 </head>
 <body>
@@ -99,7 +82,7 @@
       <div class="hero-text-area reveal">
         <span style="text-transform: uppercase; letter-spacing: 5px; color: var(--accent); font-weight: 600;">Est. 2026</span>
         <h1>Visionary <br>Journey</h1>
-        <p>A cloud-synced ecosystem for Africa's most elite visual storytellers.</p>
+        <p>Ultra-low latency connection powered by Firebase Realtime Database.</p>
         <a href="#directory" style="text-decoration: none; color: var(--color-4); font-weight: 700; border-bottom: 2px solid var(--accent); padding-bottom: 8px;">EXPLORE COLLECTIVE</a>
       </div>
       <div class="hero-visual reveal">
@@ -111,7 +94,6 @@
   <section id="directory">
     <div class="directory-header reveal">
       <h2 style="font-size: 3rem; color: var(--color-4);">Creator Collective</h2>
-      <p style="color: var(--text-muted); margin-top: 10px;">Live Database Synced with Firebase</p>
     </div>
 
     <div class="filter-container reveal">
@@ -126,14 +108,14 @@
     </div>
 
     <div class="photographer-grid reveal" id="photographerGrid">
-      <p class="status-msg">Initiating secure cloud connection...</p>
+      <p class="status-msg">Listening for live updates...</p>
     </div>
   </section>
 
   <section id="register-section">
     <div class="reg-card reveal">
       <h2 style="font-size: 2.2rem; color: var(--color-4); margin-bottom: 1rem;">Join the Journey</h2>
-      <p style="margin-bottom: 2rem; color: #666;">Apply to be featured in our real-time global directory.</p>
+      <p style="margin-bottom: 2rem; color: #666;">Apply to be featured in our realtime directory.</p>
       <form id="applyForm">
         <input type="text" id="name" placeholder="Full Name" required>
         <input type="email" id="email" placeholder="Professional Email" required>
@@ -145,7 +127,7 @@
             <option value="Nature">Nature</option>
         </select>
         <textarea id="bio" placeholder="Tell us about your visual language..." rows="4" required></textarea>
-        <button type="submit" class="btn-submit" id="submitBtn">Submit Application</button>
+        <button type="submit" class="btn-submit" id="submitBtn">Submit Realtime</button>
       </form>
     </div>
   </section>
@@ -163,9 +145,9 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    // Your Specific Configuration
+    // --- INTEGRATED CONFIG ---
     const firebaseConfig = {
       apiKey: "AIzaSyDAEgfpL5UuAnzzcpsz0-GTwlfa0bnAZxg",
       authDomain: "visual-journeys.firebaseapp.com",
@@ -173,74 +155,67 @@
       storageBucket: "visual-journeys.firebasestorage.app",
       messagingSenderId: "1010760921119",
       appId: "1:1010760921119:web:de982c51da96df3fe7252a",
-      measurementId: "G-55PTWEXBXD"
+      measurementId: "G-55PTWEXBXD",
+      databaseURL: "https://visual-journeys-default-rtdb.firebaseio.com" // Update if your URL is different
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const creatorsCol = collection(db, "photographers");
+    const db = getDatabase(app);
+    const dbRef = ref(db, 'photographers');
 
     let allPhotographers = [];
 
-    // --- REAL-TIME LISTENER ---
-    onSnapshot(query(creatorsCol, orderBy("createdAt", "desc")), (snapshot) => {
-      allPhotographers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    // REALTIME LISTENER
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      allPhotographers = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
       renderDirectory(allPhotographers);
-      console.log("Firebase Collective Updated.");
-    }, (err) => {
-      console.error("Firebase Sync Error:", err);
-      document.getElementById('photographerGrid').innerHTML = `<p class="status-msg">Check Firestore Security Rules. Ensure they allow 'read/write'.</p>`;
+      console.log("Realtime Sync Complete.");
     });
 
-    // --- RENDER FUNCTION ---
     window.renderDirectory = (data) => {
       const grid = document.getElementById('photographerGrid');
       if (data.length === 0) {
-        grid.innerHTML = '<p class="status-msg">The collective is currently empty. Be the first to join.</p>';
+        grid.innerHTML = '<p class="status-msg">The collective is currently empty.</p>';
         return;
       }
-      grid.innerHTML = data.map(p => `
+      grid.innerHTML = data.reverse().map(p => `
         <div class="photographer-card reveal active" onclick="openProfile('${p.id}')">
           <img src="${p.img || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600'}" alt="${p.name}">
-          <span style="color:var(--accent); font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1px;">${p.specialty}</span>
+          <span style="color:var(--accent); font-size:0.7rem; font-weight:700; text-transform:uppercase;">${p.specialty}</span>
           <h4 style="font-size: 1.4rem; margin: 0.5rem 0;">${p.name}</h4>
           <p style="font-size: 0.8rem; color: #888; font-weight:600;">VIEW PROFILE —</p>
         </div>
       `).join('');
     };
 
-    // --- FORM SUBMISSION ---
     document.getElementById('applyForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('submitBtn');
-      btn.innerText = "Syncing with Cloud...";
+      btn.innerText = "Transmitting...";
       btn.disabled = true;
 
       try {
-        await addDoc(creatorsCol, {
+        await push(dbRef, {
           name: document.getElementById('name').value,
           email: document.getElementById('email').value,
           specialty: document.getElementById('specialty').value,
           bio: document.getElementById('bio').value,
-          // Random premium placeholder image
           img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=600",
-          createdAt: new Date()
+          timestamp: Date.now()
         });
         
         document.getElementById('applyForm').reset();
-        alert("Application Saved! You are now live in the Visual Journeys directory.");
+        alert("Synced to Realtime Database!");
         window.location.hash = "directory";
       } catch (error) {
-        console.error("Submission Error:", error);
-        alert("Error connecting to Firebase. Check console.");
+        console.error("Transmission error:", error);
       } finally {
-        btn.innerText = "Submit Application";
+        btn.innerText = "Submit Realtime";
         btn.disabled = false;
       }
     });
 
-    // --- FILTER & MODAL HELPERS ---
     window.filterPhotographers = () => {
       const search = document.getElementById('searchInput').value.toLowerCase();
       const filter = document.getElementById('specialtyFilter').value;
@@ -256,21 +231,16 @@
       const p = allPhotographers.find(item => item.id === id);
       document.getElementById('modalLeft').innerHTML = `
         <h2 style="font-size: 3rem; margin-bottom: 1rem;">${p.name}</h2>
-        <p style="color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:2rem; font-weight:700;">${p.specialty} Artist</p>
+        <p style="color:var(--accent); text-transform:uppercase; margin-bottom:2rem; font-weight:700;">${p.specialty} Artist</p>
         <p style="font-size: 1.1rem; opacity: 0.8; line-height: 1.8;">${p.bio}</p>
         <p style="margin-top: 3rem; font-size: 0.9rem;"><b>Contact:</b> ${p.email}</p>
       `;
       document.getElementById('modalGallery').innerHTML = `<img src="${p.img}" style="width:100%; height:200px; object-fit:cover;">`;
       document.getElementById('profileModal').style.display = 'flex';
-      document.body.style.overflow = 'hidden';
     };
 
-    window.closeProfile = () => {
-      document.getElementById('profileModal').style.display = 'none';
-      document.body.style.overflow = 'auto';
-    };
+    window.closeProfile = () => { document.getElementById('profileModal').style.display = 'none'; };
 
-    // Scroll Observer
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
