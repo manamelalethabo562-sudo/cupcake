@@ -74,7 +74,7 @@
                 <a href="#" class="text-blue-600 font-bold hover:underline">See All</a>
             </div>
             <div id="app-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Apps will be dynamically inserted here via Firebase -->
+                <!-- Apps will be rendered here dynamically -->
             </div>
         </section>
     </main>
@@ -97,61 +97,103 @@
         </a>
     </nav>
 
-    <!-- Firebase SDK (Modular v10 style) -->
-    <script type="module">
-        // Import only the modules we need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+    <!-- Floating Action Button for Upload -->
+    <div class="fixed bottom-24 right-6 md:bottom-10 md:right-10 z-50">
+        <button id="uploadBtn" class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-2xl hover:bg-blue-700 transition transform hover:scale-110 active:scale-95">
+            <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
+        </button>
+    </div>
 
-        // Your Firebase configuration
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 max-w-lg w-full mx-4 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-black text-gray-900">Upload Your App</h2>
+                <button id="closeModalBtn" class="text-gray-500 hover:text-gray-900 text-2xl">&times;</button>
+            </div>
+            <form id="uploadForm" class="space-y-5">
+                <div>
+                    <label for="appName" class="block text-sm font-bold text-gray-700 mb-2">App Name *</label>
+                    <input type="text" id="appName" required placeholder="e.g. My Cool App" class="w-full p-4 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label for="appCategory" class="block text-sm font-bold text-gray-700 mb-2">Category *</label>
+                    <input type="text" id="appCategory" required placeholder="e.g. Productivity, Graphics & Design" class="w-full p-4 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label for="appPrice" class="block text-sm font-bold text-gray-700 mb-2">Price *</label>
+                    <input type="text" id="appPrice" required placeholder="e.g. Free or $4.99" class="w-full p-4 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label for="appRating" class="block text-sm font-bold text-gray-700 mb-2">Rating (optional)</label>
+                    <input type="text" id="appRating" placeholder="e.g. 4.8" class="w-full p-4 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label for="appIcon" class="block text-sm font-bold text-gray-700 mb-2">App Icon (optional - PNG/JPG recommended)</label>
+                    <input type="file" id="appIcon" accept="image/*" class="w-full p-3 border border-gray-300 rounded-2xl bg-gray-50">
+                </div>
+                <div class="flex justify-end space-x-4 pt-4">
+                    <button type="button" id="cancelBtn" class="px-8 py-4 bg-gray-200 text-gray-800 font-bold rounded-full hover:bg-gray-300 transition">Cancel</button>
+                    <button type="submit" class="px-8 py-4 bg-blue-600 text-white font-bold rounded-full hover:bg-blue-700 transition">Upload App</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK + App Logic -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js';
+        import { getDatabase, ref, onValue, push } from 'https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js';
+        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/12.8.0/firebase-storage.js';
+
+        // Your Firebase config
         const firebaseConfig = {
-            apiKey: "AIzaSyCLqZqiW91FlivfkL3ZGtWUh7x2XpX4HPo",
-            authDomain: "all-apps-36756.firebaseapp.com",
-            databaseURL: "https://all-apps-36756-default-rtdb.firebaseio.com",
-            projectId: "all-apps-36756",
-            storageBucket: "all-apps-36756.firebasestorage.app",
-            messagingSenderId: "1088890111578",
-            appId: "1:1088890111578:web:9cb544e599626b61a63a63",
-            measurementId: "G-5Z763J47HR"
+          apiKey: "AIzaSyCLqZqiW91FlivfkL3ZGtWUh7x2XpX4HPo",
+          authDomain: "all-apps-36756.firebaseapp.com",
+          databaseURL: "https://all-apps-36756-default-rtdb.firebaseio.com",
+          projectId: "all-apps-36756",
+          storageBucket: "all-apps-36756.firebasestorage.app",
+          messagingSenderId: "1088890111578",
+          appId: "1:1088890111578:web:9cb544e599626b61a63a63",
+          measurementId: "G-5Z763J47HR"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+        const storage = getStorage(app);
 
-        // Real-time listener for /apps
+        console.log("Firebase initialized successfully!");
+
+        // MOCK DATA (fallback if no apps in database)
+        const mockApps = [
+            { name: "ProCreate Pocket", category: "Graphics & Design", rating: "4.9", price: "Free" },
+            { name: "Sky Guide", category: "Education", rating: "4.8", price: "Free" },
+            { name: "LumaFusion", category: "Video Editing", rating: "4.7", price: "Get" },
+            { name: "Streaks", category: "Health & Fitness", rating: "4.9", price: "Free" },
+            { name: "Overcast", category: "Entertainment", rating: "4.8", price: "Free" },
+            { name: "Bear Notes", category: "Productivity", rating: "4.6", price: "Get" }
+        ];
+
         const grid = document.getElementById('app-grid');
-        const appsRef = ref(db, 'apps');
 
-        onValue(appsRef, (snapshot) => {
-            grid.innerHTML = ''; // Clear previous cards
-
-            if (!snapshot.exists()) {
-                grid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">No apps found yet...</p>';
-                return;
-            }
-
-            const appsData = snapshot.val();
-            const appList = Object.entries(appsData).map(([id, app]) => ({ id, ...app }));
-
-            // Sort alphabetically by name
-            appList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-
-            appList.forEach(app => {
+        function renderApps(appsList) {
+            grid.innerHTML = '';
+            appsList.forEach(app => {
+                const iconUrl = app.iconUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(app.name)}&background=0D8ABC&color=fff&size=128&bold=true`;
                 const card = `
                     <div class="app-card flex items-center space-x-4 bg-white p-5 rounded-[2rem] shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group border border-transparent hover:border-blue-100">
-                        <div class="w-20 h-20 bg-gradient-to-br ${app.color || 'from-gray-400 to-gray-600'} rounded-[1.5rem] flex items-center justify-center text-white text-3xl shadow-lg shrink-0 group-hover:rotate-2 transition">
-                            <i class="fa-solid ${app.icon || 'fa-cube'}"></i>
+                        <div class="w-20 h-20 rounded-[1.5rem] overflow-hidden shrink-0 group-hover:rotate-3 transition-transform duration-300">
+                            <img src="${iconUrl}" alt="${app.name}" class="w-full h-full object-cover">
                         </div>
                         <div class="flex-1 min-w-0">
-                            <h3 class="font-extrabold text-gray-900 truncate text-lg tracking-tight leading-tight">${app.name || 'Unnamed App'}</h3>
-                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">${app.category || 'Unknown'}</p>
+                            <h3 class="font-extrabold text-gray-900 truncate text-lg tracking-tight leading-tight">${app.name}</h3>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">${app.category}</p>
                             <div class="flex items-center justify-between">
                                 <button class="bg-[#F0F0F7] text-blue-600 px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition">
-                                    ${app.price || 'Get'}
+                                    ${app.price}
                                 </button>
                                 <div class="flex items-center space-x-1">
-                                    <span class="text-xs font-bold text-gray-800">${app.rating || '—'}</span>
+                                    <span class="text-xs font-bold text-gray-800">${app.rating || 'N/A'}</span>
                                     <i class="fa-solid fa-star text-[10px] text-yellow-400"></i>
                                 </div>
                             </div>
@@ -160,9 +202,88 @@
                 `;
                 grid.innerHTML += card;
             });
-        }, (error) => {
-            console.error("Firebase Realtime Database error:", error);
-            grid.innerHTML = '<p class="col-span-full text-center text-red-600 py-10">Error loading apps...</p>';
+        }
+
+        // Listen for real-time updates from Firebase Realtime Database
+        const appsRef = ref(db, 'apps');
+        onValue(appsRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data && Object.keys(data).length > 0) {
+                const fetchedApps = Object.values(data);
+                renderApps(fetchedApps);
+            } else {
+                // Fallback to mock data if database is empty
+                renderApps(mockApps);
+            }
+        });
+
+        // Upload Modal Controls
+        const uploadBtn = document.getElementById('uploadBtn');
+        const modal = document.getElementById('uploadModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const uploadForm = document.getElementById('uploadForm');
+
+        const openModal = () => modal.classList.remove('hidden');
+        const closeModal = () => {
+            modal.classList.add('hidden');
+            uploadForm.reset();
+        };
+
+        uploadBtn.addEventListener('click', openModal);
+        cancelBtn.addEventListener('click', closeModal);
+        closeModalBtn.addEventListener('click', closeModal);
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Handle form submission
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('appName').value.trim();
+            const category = document.getElementById('appCategory').value.trim();
+            const price = document.getElementById('appPrice').value.trim();
+            const rating = document.getElementById('appRating').value.trim();
+            const file = document.getElementById('appIcon').files[0];
+
+            if (!name || !category || !price) {
+                alert('Please fill in all required fields (App Name, Category, Price).');
+                return;
+            }
+
+            let iconUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0D8ABC&color=fff&size=128&bold=true`;
+
+            if (file) {
+                try {
+                    const storagePathRef = storageRef(storage, `app-icons/${Date.now()}_${file.name}`);
+                    await uploadBytes(storagePathRef, file);
+                    iconUrl = await getDownloadURL(storagePathRef);
+                } catch (err) {
+                    console.error('Storage upload error:', err);
+                    alert('Failed to upload icon. Using default avatar instead.');
+                }
+            }
+
+            const newApp = {
+                name,
+                category,
+                price,
+                rating: rating || 'N/A',
+                iconUrl,
+                uploadedAt: new Date().toISOString()
+            };
+
+            try {
+                await push(ref(db, 'apps'), newApp);
+                alert('App uploaded successfully!');
+                closeModal();
+            } catch (error) {
+                console.error('Database push error:', error);
+                alert('Failed to upload app. Check console for details.');
+            }
         });
     </script>
 </body>
