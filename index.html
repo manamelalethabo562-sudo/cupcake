@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>VISUAL JOURNEY | Lethabo Photography</title>
-  <meta name="description" content="Visual Journey – Capturing authentic stories through photography in Durban and beyond. Portfolio, personal story, and booking for sessions." />
+  <meta name="description" content="Visual Journey – Capturing authentic stories through photography in Durban and beyond. Explore themed galleries, my personal story, and book your session." />
   
   <!-- Basic SEO & Open Graph -->
   <meta property="og:title" content="VISUAL JOURNEY – Lethabo Photography" />
-  <meta property="og:description" content="Professional photography showcasing portraits, landscapes, weddings, and more. Book your session today." />
+  <meta property="og:description" content="Professional photography galleries by theme: Portraits, Landscapes, Weddings, Travel & more. Durban-based photographer." />
   <meta property="og:image" content="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" />
   <meta property="og:url" content="https://yourdomain.com" />
 
@@ -166,7 +166,7 @@
     h2 {
       font-size: 4rem;
       text-align: center;
-      margin-bottom: 4rem;
+      margin-bottom: 3rem;
       color: var(--accent);
       position: relative;
     }
@@ -180,8 +180,42 @@
       margin: 1.5rem auto 0;
     }
 
-    /* Portfolio Grid */
-    .portfolio-grid {
+    /* Portfolio Tabs & Galleries */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .tab-link {
+      padding: 0.8rem 2rem;
+      background: transparent;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-size: 1.1rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 50px;
+      transition: all 0.3s;
+    }
+
+    .tab-link:hover,
+    .tab-link.active {
+      background: var(--accent);
+      color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .gallery-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
       gap: 2rem;
@@ -193,6 +227,7 @@
       border-radius: 12px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       transition: transform 0.4s ease;
+      cursor: pointer;
     }
 
     .portfolio-item:hover {
@@ -201,7 +236,7 @@
 
     .portfolio-item img {
       width: 100%;
-      height: 100%;
+      height: 450px;
       object-fit: cover;
       display: block;
       transition: transform 0.6s ease;
@@ -229,6 +264,42 @@
     .overlay h3 {
       margin-bottom: 0.5rem;
       color: white;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.95);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 12px;
+      box-shadow: 0 0 40px rgba(212,175,55,0.4);
+    }
+
+    .close {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      color: white;
+      font-size: 3rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .close:hover {
+      color: var(--accent);
     }
 
     /* About */
@@ -323,7 +394,7 @@
       color: var(--accent);
     }
 
-    /* Mobile Menu (Hamburger) */
+    /* Mobile Menu */
     .menu-toggle {
       display: none;
       font-size: 2rem;
@@ -366,6 +437,16 @@
       .about-content {
         flex-direction: column;
       }
+
+      .tabs {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .tab-link {
+        width: 100%;
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -394,42 +475,137 @@
     </div>
   </section>
 
-  <!-- Portfolio -->
+  <!-- Portfolio with Themed Galleries -->
   <section id="portfolio">
     <h2>My Work</h2>
-    <div class="portfolio-grid">
-      <!-- Replace these with your own high-res photos -->
-      <div class="portfolio-item">
-        <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Portrait session in Durban">
-        <div class="overlay">
-          <h3>Urban Portraits</h3>
-          <p>Durban streets, natural light</p>
+
+    <!-- Tabs for Themes -->
+    <div class="tabs">
+      <button class="tab-link active" data-tab="portraits">Portraits</button>
+      <button class="tab-link" data-tab="landscapes">Landscapes</button>
+      <button class="tab-link" data-tab="weddings">Weddings</button>
+      <button class="tab-link" data-tab="travel">Travel</button>
+      <!-- Add more themes here as needed -->
+    </div>
+
+    <!-- Portraits Gallery -->
+    <div class="tab-content active" id="portraits">
+      <div class="gallery-grid">
+        <div class="portfolio-item">
+          <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Natural light portrait in Durban">
+          <div class="overlay">
+            <h3>Natural Light Portrait</h3>
+            <p>Durban streets</p>
+          </div>
         </div>
-      </div>
-      <div class="portfolio-item">
-        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Landscape photography">
-        <div class="overlay">
-          <h3>Landscapes</h3>
-          <p>Sunsets & nature captures</p>
+        <div class="portfolio-item">
+          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Studio portrait session">
+          <div class="overlay">
+            <h3>Studio Portrait</h3>
+            <p>Emotional connection</p>
+          </div>
         </div>
-      </div>
-      <div class="portfolio-item">
-        <img src="https://images.unsplash.com/photo-1519741497674-00b5e0e0a2c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Wedding photography">
-        <div class="overlay">
-          <h3>Weddings</h3>
-          <p>Timeless love stories</p>
+        <div class="portfolio-item">
+          <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Urban portrait photography">
+          <div class="overlay">
+            <h3>Urban Portrait</h3>
+            <p>City vibes</p>
+          </div>
         </div>
+        <!-- Add more portrait items here -->
       </div>
-      <div class="portfolio-item">
-        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Fashion editorial">
-        <div class="overlay">
-          <h3>Fashion & Editorial</h3>
-          <p>Creative storytelling</p>
+    </div>
+
+    <!-- Landscapes Gallery -->
+    <div class="tab-content" id="landscapes">
+      <div class="gallery-grid">
+        <div class="portfolio-item">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dramatic landscape sunset">
+          <div class="overlay">
+            <h3>Sunset Over Durban</h3>
+            <p>Golden hour capture</p>
+          </div>
         </div>
+        <div class="portfolio-item">
+          <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Mountain landscape">
+          <div class="overlay">
+            <h3>Mountain Escape</h3>
+            <p>South African wilderness</p>
+          </div>
+        </div>
+        <div class="portfolio-item">
+          <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Forest landscape photography">
+          <div class="overlay">
+            <h3>Forest Serenity</h3>
+            <p>Peaceful nature</p>
+          </div>
+        </div>
+        <!-- Add more landscape items here -->
       </div>
-      <!-- Add more items as needed -->
+    </div>
+
+    <!-- Weddings Gallery -->
+    <div class="tab-content" id="weddings">
+      <div class="gallery-grid">
+        <div class="portfolio-item">
+          <img src="https://images.unsplash.com/photo-1519741497674-00b5e0e0a2c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Bride and groom wedding moment">
+          <div class="overlay">
+            <h3>Timeless Vows</h3>
+            <p>Emotional ceremony</p>
+          </div>
+        </div>
+        <div class="portfolio-item">
+          <img src="https://images.unsplash.com/photo-1567532939604-c8e4e8c0a0d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Wedding couple portrait">
+          <div class="overlay">
+            <h3>Couple Portrait</h3>
+            <p>Golden hour love</p>
+          </div>
+        </div>
+        <div class="portfolio-item">
+          <img src="https://images.unsplash.com/photo-1511285560929-80b456fe4726?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Wedding reception details">
+          <div class="overlay">
+            <h3>Reception Details</h3>
+            <p>Candid moments</p>
+          </div>
+        </div>
+        <!-- Add more wedding items here -->
+      </div>
+    </div>
+
+    <!-- Travel Gallery -->
+    <div class="tab-content" id="travel">
+      <div class="gallery-grid">
+        <div class="portfolio-item">
+          <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Travel adventure landscape">
+          <div class="overlay">
+            <h3>Coastal Journey</h3>
+            <p>Durban coastline</p>
+          </div>
+        </div>
+        <div class="portfolio-item">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Beach travel photography">
+          <div class="overlay">
+            <h3>Tropical Escape</h3>
+            <p>Beach serenity</p>
+          </div>
+        </div>
+        <div class="portfolio-item">
+          <img src="https://images.unsplash.com/photo-1540979388789-7cee28a1cdc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="City travel street scene">
+          <div class="overlay">
+            <h3>Urban Exploration</h3>
+            <p>City streets</p>
+          </div>
+        </div>
+        <!-- Add more travel items here -->
+      </div>
     </div>
   </section>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox" class="lightbox">
+    <span class="close">&times;</span>
+    <img class="lightbox-content" id="lightboxImg" src="" alt="Enlarged photo">
+  </div>
 
   <!-- About -->
   <section id="about">
@@ -438,11 +614,11 @@
       <div class="about-text">
         <p>Hello, I'm Lethabo, a Durban-based photographer passionate about capturing the raw beauty of everyday moments and the unique stories people carry.</p>
         <p>My journey began with a simple camera and a desire to freeze time – from the vibrant streets of KwaZulu-Natal to quiet personal milestones. I believe every person, place, and moment has a story worth telling, and my goal is to tell it with honesty, warmth, and artistry.</p>
-        <p>Whether it's a wedding, portrait session, or commercial shoot, I focus on creating images that feel real, emotional, and timeless.</p>
+        <p>Whether it's a wedding, portrait session, or commercial shoot, I focus on creating images that feel real, emotional, and timeless. Explore my themed galleries above to see my work organized by style and subject.</p>
         <p>Let's create something beautiful together.</p>
       </div>
       <div class="about-img">
-        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Lethabo - Photographer">
+        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Lethabo - Durban Photographer">
       </div>
     </div>
   </section>
@@ -455,7 +631,7 @@
         <input type="text" name="name" placeholder="Your Name" required>
         <input type="email" name="email" placeholder="Your Email" required>
         <input type="tel" name="phone" placeholder="Your Phone (optional)">
-        <textarea name="message" rows="6" placeholder="Tell me about your project..." required></textarea>
+        <textarea name="message" rows="6" placeholder="Tell me about your project or which theme interests you..." required></textarea>
         <button type="submit">Send Message</button>
       </form>
     </div>
@@ -472,19 +648,18 @@
   </footer>
 
   <script>
-    // Smooth scrolling for nav links
+    // Smooth scrolling
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();
         document.querySelector(this.getAttribute('href')).scrollIntoView({
           behavior: 'smooth'
         });
-        // Close mobile menu if open
         document.getElementById('navLinks').classList.remove('active');
       });
     });
 
-    // Active nav link on scroll
+    // Active nav on scroll
     window.addEventListener('scroll', () => {
       const sections = document.querySelectorAll('section');
       const navLinks = document.querySelectorAll('.nav-links a');
@@ -492,28 +667,58 @@
 
       sections.forEach(section => {
         const sectionTop = section.offsetTop - 200;
-        if (scrollY >= sectionTop) {
-          current = section.getAttribute('id');
-        }
+        if (scrollY >= sectionTop) current = section.getAttribute('id');
       });
 
       navLinks.forEach(link => {
         link.classList.remove('active');
-        if (link.getAttribute('href') === `#${current}`) {
-          link.classList.add('active');
-        }
+        if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
       });
 
-      // Header scroll effect
       document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // Mobile menu toggle
+    // Mobile menu
     document.getElementById('menuToggle').addEventListener('click', () => {
       document.getElementById('navLinks').classList.toggle('active');
     });
 
-    // Simple form submission alert (replace with real backend later)
+    // Tabs functionality
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        tabLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+
+        tabContents.forEach(content => content.classList.remove('active'));
+        document.getElementById(link.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Lightbox functionality
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const closeBtn = document.querySelector('.close');
+
+    document.querySelectorAll('.portfolio-item').forEach(item => {
+      item.addEventListener('click', () => {
+        lightboxImg.src = item.querySelector('img').src;
+        lightbox.style.display = 'flex';
+      });
+    });
+
+    closeBtn.addEventListener('click', () => {
+      lightbox.style.display = 'none';
+    });
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) lightbox.style.display = 'none';
+    });
+
+    // Form submission (placeholder)
     document.getElementById('contactForm').addEventListener('submit', (e) => {
       e.preventDefault();
       alert('Thank you! Your message has been sent. I will get back to you soon.');
