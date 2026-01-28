@@ -13,16 +13,16 @@
     :root {
       --primary: #ffffff;
       --secondary: #fdfbf7; 
-      --accent: #c5a059;    /* Champagne Gold */
+      --accent: #c5a059;    
       --text-main: #1a1a1a;
       --text-muted: #666666;
       --glass: rgba(255, 255, 255, 0.85);
       
-      /* New Editorial Colors */
-      --color-1: #f4e9e2; /* Soft Terracotta Blush */
+      /* Editorial Colors */
+      --color-1: #f4e9e2; /* Soft Terracotta */
       --color-2: #e8f0f2; /* Sky Mist */
-      --color-3: #f2edf4; /* Pale Lavender */
-      --color-4: #1a3c40; /* Deep Teal for contrast */
+      --color-3: #f2edf4; /* Lavender */
+      --color-4: #1a3c40; /* Deep Teal */
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -36,278 +36,69 @@
       overflow-x: hidden;
     }
 
-    h1, h2, h3, .logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 700;
-    }
+    h1, h2, h3, .logo { font-family: 'Cormorant Garamond', serif; font-weight: 700; }
 
-    /* --- Animations --- */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.8s ease-out;
-    }
-    .reveal.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    /* Animations */
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
 
-    /* --- Navigation --- */
-    header {
-      position: fixed;
-      top: 0; width: 100%;
-      padding: 1.5rem 0;
-      z-index: 1000;
-      transition: all 0.4s ease;
-    }
-
-    header.scrolled {
-      background: var(--glass);
-      backdrop-filter: blur(15px);
-      padding: 1rem 0;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-    }
-
-    nav {
-      max-width: 1300px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 5%;
-    }
-
-    .logo {
-      font-size: 1.8rem;
-      letter-spacing: 2px;
-      text-decoration: none;
-      color: var(--text-main);
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 3rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--text-main);
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      transition: 0.3s;
-    }
-
+    /* Navigation */
+    header { position: fixed; top: 0; width: 100%; padding: 1.5rem 0; z-index: 1000; transition: 0.4s; }
+    header.scrolled { background: var(--glass); backdrop-filter: blur(15px); padding: 1rem 0; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+    nav { max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; }
+    .logo { font-size: 1.8rem; letter-spacing: 2px; text-decoration: none; color: var(--text-main); text-transform: uppercase; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--text-main); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
     .nav-links a:hover { color: var(--accent); }
 
-    /* --- Hero Section (Color: Pearl Mist) --- */
-    #hero {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #fdfbf7 0%, #e8f0f2 100%);
-      position: relative;
-      overflow: hidden;
-    }
+    /* Hero */
+    #hero { height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #fdfbf7 0%, #e8f0f2 100%); position: relative; overflow: hidden; }
+    .hero-image { position: absolute; right: 5%; width: 45%; height: 80%; background: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1000&q=80') center/cover; border-radius: 300px 300px 0 0; z-index: 1; }
+    .hero-content { position: relative; z-index: 2; max-width: 1300px; width: 90%; margin: 0 auto; }
+    .hero-content h1 { font-size: clamp(4rem, 12vw, 9rem); line-height: 0.9; margin-bottom: 2rem; font-style: italic; color: var(--color-4); }
+    .btn-main { display: inline-block; padding: 1.2rem 3rem; background: var(--color-4); color: white; text-decoration: none; font-size: 0.9rem; transition: 0.4s; cursor: pointer; border: none; }
+    .btn-main:hover { background: var(--accent); transform: scale(1.05); }
 
-    .hero-image {
-      position: absolute;
-      right: 5%;
-      width: 45%;
-      height: 80%;
-      background: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1000&q=80') center/cover;
-      border-radius: 300px 300px 0 0;
-      z-index: 1;
-      box-shadow: 20px 20px 60px rgba(0,0,0,0.1);
-    }
+    section { padding: 10rem 5%; width: 100%; }
+    .section-title { font-size: 3.5rem; margin-bottom: 4rem; text-align: center; color: var(--color-4); }
 
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 1300px;
-      width: 90%;
-      margin: 0 auto;
-    }
+    /* Services */
+    #services { background-color: var(--color-1); }
+    .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1300px; margin: 0 auto; }
+    .service-card { padding: 3rem; background: white; transition: 0.5s; }
 
-    .hero-content h1 {
-      font-size: clamp(4rem, 12vw, 9rem);
-      line-height: 0.9;
-      margin-bottom: 2rem;
-      font-style: italic;
-      color: var(--color-4); /* Dark contrast */
-    }
+    /* Testimonials */
+    #testimonials { background: #fff; }
+    .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; max-width: 1300px; margin: 0 auto; }
+    .testimonial-card { text-align: center; padding: 2rem; border-left: 1px solid var(--color-1); }
+    .stars { color: var(--accent); margin-bottom: 1rem; font-size: 1.2rem; }
+    .quote { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-style: italic; margin-bottom: 1.5rem; }
+    .client-name { font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; }
 
-    .hero-content p {
-      font-size: 1.1rem;
-      max-width: 400px;
-      color: var(--accent); /* Colored detail */
-      margin-bottom: 2rem;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      font-weight: 600;
-    }
+    /* Directory */
+    #directory { background: var(--color-2); }
+    .directory-header { display: flex; justify-content: space-between; align-items: flex-end; max-width: 1300px; margin: 0 auto 4rem; }
+    .photographer-scroll { display: flex; gap: 2rem; overflow-x: auto; padding-bottom: 2rem; max-width: 1300px; margin: 0 auto; scrollbar-width: none; }
+    .photographer-card { min-width: 300px; background: white; padding: 1rem; border-radius: 4px; }
+    .photographer-card img { width: 100%; height: 250px; object-fit: cover; margin-bottom: 1rem; }
+    .photographer-card h4 { font-family: 'Inter'; font-size: 1rem; }
 
-    .btn-main {
-      display: inline-block;
-      padding: 1.2rem 3rem;
-      background: var(--color-4);
-      color: white;
-      text-decoration: none;
-      font-size: 0.9rem;
-      border-radius: 0;
-      transition: 0.4s;
-    }
-
-    .btn-main:hover {
-      background: var(--accent);
-      transform: scale(1.05);
-    }
-
-    /* --- Services Section (Color: Blush Terracotta) --- */
-    #services {
-      padding: 10rem 5%;
-      background-color: var(--color-1);
-      max-width: 100%;
-    }
-
-    .services-inner {
-      max-width: 1300px;
-      margin: 0 auto;
-    }
-
-    .section-title {
-      font-size: 3.5rem;
-      margin-bottom: 4rem;
-      text-align: center;
-      color: var(--color-4);
-    }
-
-    .service-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 3rem;
-    }
-
-    .service-card {
-      padding: 4rem 3rem;
-      background: white;
-      border-radius: 4px;
-      transition: 0.5s;
-      border: 1px solid rgba(197, 160, 89, 0.2);
-    }
-
-    .service-card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 20px 40px rgba(26, 60, 64, 0.1);
-      transform: translateY(-5px);
-    }
-
-    .service-card h3 {
-      font-size: 2rem;
-      margin-bottom: 1.5rem;
-      color: var(--color-4);
-    }
-
-    .service-card p {
-      color: var(--text-muted);
-      margin-bottom: 2rem;
-    }
-
-    .price-tag {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--accent);
-      display: block;
-      margin-bottom: 2rem;
-    }
-
-    /* --- Portfolio (Color: Lavender Sky) --- */
-    #portfolio { 
-      padding: 10rem 5%; 
-      background: var(--color-3); 
-    }
-    
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 20px;
-      max-width: 1300px;
-      margin: 0 auto;
-    }
-
-    .gallery-item {
-      grid-column: span 4;
-      height: 500px;
-      overflow: hidden;
-      position: relative;
-      border-radius: 4px;
-    }
-
+    /* Portfolio */
+    #portfolio { background: var(--color-3); }
+    .gallery { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; max-width: 1300px; margin: 0 auto; }
+    .gallery-item { grid-column: span 4; height: 500px; overflow: hidden; }
     .gallery-item:nth-child(2) { grid-column: span 8; }
-    .gallery-item:nth-child(3) { grid-column: span 7; }
-    .gallery-item:nth-child(4) { grid-column: span 5; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 1s; }
 
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: 1s cubic-bezier(0.19, 1, 0.22, 1);
-    }
+    /* Contact */
+    #contact { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; max-width: 1300px; margin: 0 auto; }
+    input, textarea { width: 100%; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid #eee; background: var(--secondary); font-family: inherit; }
 
-    .gallery-item:hover img { transform: scale(1.08); }
+    footer { padding: 5rem 5%; background: var(--color-4); color: white; text-align: center; }
 
-    /* --- Contact (Color: Deep Teal Contrast) --- */
-    #contact {
-      padding: 10rem 5%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      max-width: 1300px;
-      margin: 0 auto;
-    }
-
-    .contact-text h2 {
-      color: var(--color-4);
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid #eee;
-      background: var(--secondary);
-      font-family: inherit;
-      font-size: 1rem;
-      transition: 0.3s;
-    }
-
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-      background: white;
-    }
-
-    /* --- Footer --- */
-    footer {
-      padding: 5rem 5%;
-      background: var(--color-4);
-      color: white;
-      text-align: center;
-    }
-
-    footer .logo { color: var(--accent); }
-    footer p { opacity: 0.7; }
-
-    /* Mobile Responsive */
     @media (max-width: 900px) {
-      .hero-image { display: none; }
-      #contact, .gallery-item { grid-template-columns: 1fr; grid-column: span 12 !important; }
-      .nav-links { display: none; }
-      .hero-content h1 { font-size: 4rem; }
+      #contact, .hero-image { display: none; }
+      .directory-header { flex-direction: column; align-items: center; gap: 2rem; }
     }
   </style>
 </head>
@@ -320,6 +111,7 @@
         <li><a href="#hero">Home</a></li>
         <li><a href="#portfolio">Work</a></li>
         <li><a href="#services">Services</a></li>
+        <li><a href="#directory">Directory</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
@@ -335,29 +127,76 @@
   </section>
 
   <section id="services">
-    <div class="services-inner">
-      <h2 class="section-title reveal">The Offerings</h2>
-      <div class="service-grid">
-        <div class="service-card reveal">
-          <h3>Editorial Portraits</h3>
-          <p>Premium studio sessions focused on high-fashion lighting and creative direction for brands and individuals.</p>
-          <span class="price-tag">Starting at R 1,800</span>
-          <a href="#contact" style="color: var(--color-4); font-weight: 600; text-decoration: none;">Book Session →</a>
-        </div>
+    <h2 class="section-title reveal">The Offerings</h2>
+    <div class="service-grid">
+      <div class="service-card reveal">
+        <h3>Editorial Portraits</h3>
+        <span class="price-tag">Starting at R 1,800</span>
+        <p>Premium studio sessions focused on high-fashion lighting and creative direction.</p>
+      </div>
+      <div class="service-card reveal">
+        <h3>Luxe Weddings</h3>
+        <span class="price-tag">Starting at R 12,500</span>
+        <p>Documentary-style photography capturing raw, unscripted elegance.</p>
+      </div>
+      <div class="service-card reveal">
+        <h3>Commercial Art</h3>
+        <span class="price-tag">Custom Quote</span>
+        <p>Visual storytelling for brands and hospitality lifestyle.</p>
+      </div>
+    </div>
+  </section>
 
-        <div class="service-card reveal">
-          <h3>Luxe Weddings</h3>
-          <p>Documentary-style wedding photography that captures the raw, unscripted elegance of your special day.</p>
-          <span class="price-tag">Starting at R 12,500</span>
-          <a href="#contact" style="color: var(--color-4); font-weight: 600; text-decoration: none;">Check Availability →</a>
-        </div>
+  <section id="testimonials">
+    <h2 class="section-title reveal">Kind Words</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"Lethabo has a way of making you feel completely at ease. The photos were more like art than just pictures."</p>
+        <p class="client-name">— Sarah Jenkins</p>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"Captured our wedding day with such grace. I didn't even notice the camera, yet every emotion was caught."</p>
+        <p class="client-name">— Thabo Mokoena</p>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"Professional, creative, and a brilliant eye for detail. Highly recommended for commercial brand work."</p>
+        <p class="client-name">— Vogue SA</p>
+      </div>
+    </div>
+  </section>
 
-        <div class="service-card reveal">
-          <h3>Commercial Art</h3>
-          <p>Visual storytelling for architectural spaces, products, and lifestyle hospitality brands.</p>
-          <span class="price-tag">Custom Quote</span>
-          <a href="#contact" style="color: var(--color-4); font-weight: 600; text-decoration: none;">Inquire →</a>
-        </div>
+  <section id="directory">
+    <div class="directory-header reveal">
+      <div style="max-width: 600px;">
+        <h2 style="text-align: left; font-size: 3.5rem; color: var(--color-4);">Creator Directory</h2>
+        <p>A curated space for South African photographers to showcase their unique perspectives.</p>
+      </div>
+      <a href="#contact" class="btn-main" style="background: var(--accent);">Join the Directory</a>
+    </div>
+    
+    <div class="photographer-scroll reveal">
+      <div class="photographer-card">
+        <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=400" alt="">
+        <h4>Kabelo D.</h4>
+        <p style="font-size: 0.8rem; color: var(--accent);">Street Photography</p>
+      </div>
+      <div class="photographer-card">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400" alt="">
+        <h4>Elena Rose</h4>
+        <p style="font-size: 0.8rem; color: var(--accent);">Fashion & Beauty</p>
+      </div>
+      <div class="photographer-card">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400" alt="">
+        <h4>Marcus V.</h4>
+        <p style="font-size: 0.8rem; color: var(--accent);">Nature & Wildlife</p>
+      </div>
+      <div class="photographer-card">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400" alt="">
+        <h4>Simphiwe M.</h4>
+        <p style="font-size: 0.8rem; color: var(--accent);">Wedding Specialist</p>
       </div>
     </div>
   </section>
@@ -367,40 +206,32 @@
     <div class="gallery">
       <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000" alt=""></div>
       <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1000" alt=""></div>
-      <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1519741497674-00b5e0e0a2c8?auto=format&fit=crop&w=1000" alt=""></div>
-      <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=1000" alt=""></div>
     </div>
   </section>
 
   <section id="contact" class="reveal">
     <div class="contact-text">
       <h2 style="text-align: left; font-size: 4rem;">Let's create<br>together.</h2>
-      <p style="margin-top: 2rem; color: var(--text-muted);">Available for projects worldwide. Based in Durban, South Africa.</p>
+      <p style="margin-top: 2rem; color: var(--text-muted);">Available for projects or directory registration. Based in Durban.</p>
     </div>
     <form>
       <input type="text" placeholder="Your Name">
       <input type="email" placeholder="Email Address">
-      <textarea rows="5" placeholder="Tell me about your vision"></textarea>
-      <button type="submit" class="btn-main" style="width: 100%; border: none; cursor: pointer;">Send Inquiry</button>
+      <textarea rows="5" placeholder="Tell me about your vision or apply for the directory"></textarea>
+      <button type="submit" class="btn-main" style="width: 100%;">Send Inquiry</button>
     </form>
   </section>
 
   <footer>
-    <p class="logo" style="font-size: 1.5rem;">Lethabo Photography</p>
+    <p class="logo" style="font-size: 1.5rem; color: var(--accent);">Lethabo Photography</p>
     <p style="font-size: 0.8rem; margin-top: 1rem;">&copy; 2026 VISUAL JOURNEY. All Rights Reserved.</p>
   </footer>
 
   <script>
-    // Header Scroll Effect
     window.addEventListener('scroll', () => {
       const header = document.querySelector('header');
       header.classList.toggle('scrolled', window.scrollY > 50);
     });
-
-    // Intersection Observer for Reveal Animations
-    const observerOptions = {
-      threshold: 0.1
-    };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -408,7 +239,7 @@
           entry.target.classList.add('active');
         }
       });
-    }, observerOptions);
+    }, { threshold: 0.1 });
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
