@@ -3,244 +3,215 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>VISUAL JOURNEYS | Premium Photography Network</title>
+  <title>VISUAL JOURNEYS | Elite Creator Network</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,700;1,400&family=Inter:wght@200;400;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --primary: #ffffff;
-      --secondary: #fdfbf7; 
       --accent: #c5a059;    
+      --dark: #1a3c40; 
+      --mist: #f4f7f8;
       --text-main: #1a1a1a;
-      --text-muted: #666666;
-      --glass: rgba(255, 255, 255, 0.9);
-      --color-1: #f4e9e2;
-      --color-2: #e8f0f2;
-      --color-3: #f2edf4;
-      --color-4: #1a3c40;
+      --glass: rgba(255, 255, 255, 0.8);
     }
 
-    /* Standard Reset */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', sans-serif; background-color: var(--primary); color: var(--text-main); line-height: 1.7; overflow-x: hidden; }
-    h1, h2, h3, .logo, .brand-name { font-family: 'Cormorant Garamond', serif; font-weight: 700; }
+    body { font-family: 'Inter', sans-serif; background-color: var(--primary); color: var(--text-main); line-height: 1.6; }
+    h1, h2, h3, .brand-name { font-family: 'Cormorant Garamond', serif; font-weight: 700; }
 
-    /* Navigation Enhancements */
-    header { position: fixed; top: 0; width: 100%; padding: 1rem 0; z-index: 1000; background: var(--glass); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.05); }
-    nav { max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; }
-    .brand-name { font-size: 1.6rem; letter-spacing: 3px; color: var(--color-4); text-transform: uppercase; text-decoration: none; }
-    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
-    .nav-links a { text-decoration: none; color: var(--text-main); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
+    /* --- ENHANCED NAVIGATION --- */
+    header { 
+        position: fixed; top: 0; width: 100%; z-index: 2000; 
+        transition: 0.5s; padding: 1.5rem 0;
+    }
+    header.scrolled { 
+        background: var(--glass); backdrop-filter: blur(15px); 
+        padding: 0.8rem 0; border-bottom: 1px solid rgba(0,0,0,0.05); 
+    }
+    nav { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; }
+    .brand-name { font-size: 1.8rem; letter-spacing: 4px; color: var(--dark); text-decoration: none; text-transform: uppercase; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--text-main); font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
     .nav-links a:hover { color: var(--accent); }
 
-    /* About Section */
-    #about-app { background: var(--color-4); color: white; padding: 6rem 5%; text-align: center; }
-    .about-container { max-width: 800px; margin: 0 auto; }
-    .about-container h2 { font-size: 3rem; color: var(--accent); margin-bottom: 1.5rem; }
-
-    /* Search & Filter Bar */
-    .filter-container { 
-      max-width: 1300px; margin: 0 auto 3rem auto; 
-      display: flex; gap: 1rem; align-items: center; justify-content: center;
-      padding: 0 5%;
+    /* --- BEAUTIFIED HERO SECTION --- */
+    #hero { 
+        height: 100vh; display: flex; align-items: center; 
+        background: var(--mist); position: relative; overflow: hidden; 
     }
-    .search-input { 
-      padding: 0.8rem 1.5rem; width: 300px; border: 1px solid #ddd; 
-      border-radius: 30px; font-family: 'Inter'; font-size: 0.9rem;
+    .hero-split { 
+        display: grid; grid-template-columns: 1.2fr 1fr; 
+        width: 100%; height: 100%; align-items: center; 
     }
-    .filter-select {
-      padding: 0.8rem 1rem; border: 1px solid #ddd; border-radius: 30px;
-      background: white; color: var(--text-main); cursor: pointer;
-    }
-
-    /* Existing Directory Adjustments */
-    #directory { background: var(--color-2); padding-top: 5rem; }
-    .directory-header { text-align: center; margin-bottom: 3rem; }
-    .photographer-grid { 
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-      gap: 2rem; max-width: 1300px; margin: 0 auto; 
-    }
-    .photographer-card { 
-      background: white; padding: 1.5rem; border-radius: 8px; 
-      cursor: pointer; transition: 0.4s; border: 1px solid transparent;
-    }
-    .photographer-card:hover { transform: translateY(-10px); border-color: var(--accent); }
-    .photographer-card img { width: 100%; height: 300px; object-fit: cover; border-radius: 4px; margin-bottom: 1rem; }
-
-    /* Modal Styles */
-    .profile-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
-    .modal-content { background: white; width: 100%; max-width: 1000px; height: 80vh; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; position: relative; }
-    .modal-left { background: var(--color-4); color: white; padding: 3rem; overflow-y: auto; }
-    .modal-right { padding: 3rem; overflow-y: auto; }
-    .close-btn { position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; color: #1a1a1a; }
-
-    /* Registration Tab */
-    #register-section { background: var(--color-1); padding: 8rem 5%; }
-    .reg-card { max-width: 600px; margin: 0 auto; background: white; padding: 3rem; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
-    .reg-card h2 { margin-bottom: 1.5rem; color: var(--color-4); }
-    input, textarea, select { width: 100%; padding: 1rem; margin-bottom: 1rem; border: 1px solid #eee; background: #fafafa; }
-    .btn-submit { background: var(--color-4); color: white; border: none; padding: 1rem 2rem; cursor: pointer; width: 100%; font-weight: 600; }
-
-    /* Hidden/Reveal logic */
-    .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s; }
-    .reveal.active { opacity: 1; transform: translateY(0); }
+    .hero-text { padding: 0 10%; z-index: 10; }
+    .hero-text span { text-transform: uppercase; letter-spacing: 6px; font-size: 0.8rem; color: var(--accent); font-weight: 600; display: block; margin-bottom: 1rem; }
+    .hero-text h1 { font-size: clamp(4rem, 10vw, 8.5rem); line-height: 0.85; color: var(--dark); margin-bottom: 2rem; }
+    .hero-text h1 i { font-weight: 300; }
     
-    @media (max-width: 850px) { .modal-content { grid-template-columns: 1fr; } .modal-left { display: none; } .search-input { width: 100%; } }
+    .hero-visual { 
+        height: 90%; width: 90%; background: url('https://images.unsplash.com/photo-1519741497674-00b5e0e0a2c8?auto=format&fit=crop&w=1200&q=80') center/cover;
+        border-radius: 400px 400px 0 0; position: relative; box-shadow: 40px 40px 0 var(--color-1);
+    }
+    .floating-badge {
+        position: absolute; bottom: 10%; left: -15%; background: white; 
+        padding: 2rem; box-shadow: 0 30px 60px rgba(0,0,0,0.1); border-radius: 4px;
+    }
+
+    /* --- BEAUTIFIED ABOUT SECTION --- */
+    #about-app { padding: 12rem 5%; background: white; position: relative; }
+    .about-grid { 
+        max-width: 1200px; margin: 0 auto; display: grid; 
+        grid-template-columns: 1fr 1fr; gap: 8rem; align-items: center; 
+    }
+    .about-image-frame { position: relative; }
+    .about-image-frame img { width: 100%; height: 600px; object-fit: cover; filter: grayscale(100%); transition: 1s; }
+    .about-image-frame img:hover { filter: grayscale(0%); }
+    .about-image-frame::after { 
+        content: ''; position: absolute; top: 20px; left: 20px; 
+        width: 100%; height: 100%; border: 1px solid var(--accent); z-index: -1; 
+    }
+    
+    .about-text h2 { font-size: 4rem; color: var(--dark); line-height: 1; margin-bottom: 2rem; }
+    .about-text p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2rem; line-height: 2; }
+    .stat-row { display: flex; gap: 3rem; margin-top: 3rem; border-top: 1px solid #eee; padding-top: 2rem; }
+    .stat-item h4 { font-size: 2rem; color: var(--accent); }
+    .stat-item p { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; }
+
+    /* --- DIRECTORY SECTION --- */
+    #directory { padding: 8rem 5%; background: var(--mist); }
+    .filter-bar { 
+        max-width: 1200px; margin: 0 auto 4rem; display: flex; 
+        justify-content: space-between; align-items: center; 
+    }
+    .search-box { border-bottom: 2px solid var(--dark); padding: 0.5rem 0; width: 300px; }
+    .search-box input { border: none; background: transparent; width: 100%; outline: none; font-size: 1rem; }
+
+    .photographer-grid { 
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+        gap: 3rem; max-width: 1200px; margin: 0 auto; 
+    }
+    .p-card { background: white; padding: 1.5rem; transition: 0.5s; cursor: pointer; }
+    .p-card:hover { transform: translateY(-15px); box-shadow: 0 40px 80px rgba(0,0,0,0.05); }
+    .p-card img { width: 100%; height: 450px; object-fit: cover; margin-bottom: 1.5rem; }
+
+    /* --- ANIMATIONS --- */
+    .reveal { opacity: 0; transform: translateY(40px); transition: 1s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    /* --- SCROLL INDICATOR --- */
+    .scroll-down {
+        position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+        font-size: 0.7rem; text-transform: uppercase; letter-spacing: 4px;
+    }
+
+    @media (max-width: 900px) {
+        .hero-split, .about-grid { grid-template-columns: 1fr; }
+        .hero-visual { display: none; }
+        .about-image-frame { order: 2; }
+    }
   </style>
 </head>
 <body>
 
-  <header>
+  <header id="main-nav">
     <nav>
       <a href="#" class="brand-name">Visual Journeys</a>
       <ul class="nav-links">
-        <li><a href="#hero">Home</a></li>
-        <li><a href="#directory">Photographers</a></li>
-        <li><a href="#register-section">Join Network</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="#hero">The Vision</a></li>
+        <li><a href="#directory">Directory</a></li>
+        <li><a href="#register">Apply</a></li>
       </ul>
     </nav>
   </header>
 
-  <section id="hero" style="height: 80vh; display: flex; align-items: center; justify-content: center; background: var(--color-2);">
-    <div style="text-align: center;">
-      <h1 style="font-size: 5rem; color: var(--color-4);">Visual Journeys</h1>
-      <p style="letter-spacing: 5px; text-transform: uppercase; font-size: 0.8rem;">Connecting Vision to Reality</p>
+  <section id="hero">
+    <div class="hero-split">
+      <div class="hero-text reveal">
+        <span>Curated Excellence</span>
+        <h1>Capture <br><i>the</i> Soul.</h1>
+        <p style="max-width: 400px; margin-bottom: 3rem; color: var(--text-muted);">A premium network connecting world-class photographers with visionary brands and individuals across South Africa.</p>
+        <a href="#directory" style="text-decoration: none; color: var(--dark); font-weight: 700; border-bottom: 2px solid var(--accent); padding-bottom: 5px;">DISCOVER ARTISTS</a>
+      </div>
+      <div class="hero-visual reveal">
+        <div class="floating-badge">
+            <h4 style="font-size: 0.7rem; letter-spacing: 2px; margin-bottom: 0.5rem;">ARTIST OF THE MONTH</h4>
+            <p style="font-family: 'Cormorant Garamond'; font-size: 1.5rem;">Lethabo Mokoena</p>
+        </div>
+      </div>
     </div>
+    <div class="scroll-down">Scroll</div>
   </section>
 
   <section id="about-app">
-    <div class="about-container reveal">
-      <h2>About the App</h2>
-      <p>Visual Journeys is a curated ecosystem designed for the South African creative landscape. We provide a bridge between luxury clientele and the finest photographic talent across the continent. Whether you are looking for an editorial specialist or a wildlife documentarian, our network is built on the foundation of high-art and professional integrity.</p>
+    <div class="about-grid">
+      <div class="about-image-frame reveal">
+        <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=800&q=80" alt="Studio work">
+      </div>
+      <div class="about-text reveal">
+        <h2>The Bridge <br>between Art <br>and Commerce.</h2>
+        <p>Visual Journeys isn't just a directory; it's a statement. We have hand-selected a collective of South Africa's most evocative photographers to ensure your story is told with the precision it deserves.</p>
+        
+        <div class="stat-row">
+            <div class="stat-item">
+                <h4>150+</h4>
+                <p>Curated Artists</p>
+            </div>
+            <div class="stat-item">
+                <h4>12k</h4>
+                <p>Works Captured</p>
+            </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <section id="directory">
-    <div class="directory-header reveal">
-      <h2 style="font-size: 3rem; color: var(--color-4);">Creator Directory</h2>
-      <p>Explore our elite network of visual storytellers.</p>
+    <div class="filter-bar reveal">
+        <h2 style="font-size: 2.5rem;">The Collective</h2>
+        <div class="search-box">
+            <input type="text" placeholder="Search by name or style..." id="searchInput" onkeyup="filterData()">
+        </div>
     </div>
 
-    <div class="filter-container reveal">
-      <input type="text" id="searchInput" class="search-input" placeholder="Search by name..." onkeyup="filterPhotographers()">
-      <select id="specialtyFilter" class="filter-select" onchange="filterPhotographers()">
-        <option value="all">All Specialties</option>
-        <option value="Street">Street Photography</option>
-        <option value="Fashion">Fashion & Beauty</option>
-        <option value="Nature">Nature & Wildlife</option>
-        <option value="Wedding">Wedding Specialist</option>
-      </select>
-    </div>
-
-    <div class="photographer-grid reveal" id="photographerGrid">
+    <div class="photographer-grid" id="pGrid">
       </div>
   </section>
-
-  <section id="register-section">
-    <div class="reg-card reveal">
-      <h2>Register as a Creator</h2>
-      <p style="margin-bottom: 2rem; font-size: 0.9rem; color: #666;">Submit your portfolio to be featured in the Visual Journeys directory.</p>
-      <form onsubmit="event.preventDefault(); alert('Application submitted! Our curators will be in touch.');">
-        <input type="text" placeholder="Full Name" required>
-        <input type="email" placeholder="Professional Email" required>
-        <select required>
-            <option value="">Select Primary Specialty</option>
-            <option>Fashion</option>
-            <option>Commercial</option>
-            <option>Wedding</option>
-            <option>Wildlife</option>
-        </select>
-        <input type="url" placeholder="Portfolio Link (Website/Behance)">
-        <textarea placeholder="Tell us about your visual style..." rows="4"></textarea>
-        <button type="submit" class="btn-submit">Submit Application</button>
-      </form>
-    </div>
-  </section>
-
-  <section id="contact" style="padding: 10rem 5%; text-align: center;">
-    <h2 style="font-size: 3rem;">Let's Connect</h2>
-    <p>General inquiries: hello@visualjourneys.com</p>
-  </section>
-
-  <div class="profile-modal" id="profileModal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeProfile()">&times;</span>
-      <div class="modal-left" id="modalLeft"></div>
-      <div class="modal-right">
-        <h3>Recent Work</h3>
-        <div id="modalGallery" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:1.5rem;"></div>
-        <div id="modalReview" style="margin-top:2rem; padding-top:2rem; border-top:1px solid #eee;"></div>
-      </div>
-    </div>
-  </div>
 
   <script>
-    const photographerData = [
-      { id: 'kabelo', name: "Kabelo D.", specialty: "Street", bio: "Exploring the heartbeat of Johannesburg's urban sprawl.", email: "kabelo@visual.com", img: "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=400" },
-      { id: 'elena', name: "Elena Rose", specialty: "Fashion", bio: "High-end editorial fashion with a focus on sustainable beauty.", email: "elena@visual.com", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400" },
-      { id: 'marcus', name: "Marcus V.", specialty: "Nature", bio: "Award-winning wildlife tracker and cinematographer.", email: "marcus@visual.com", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400" },
-      { id: 'simphiwe', name: "Simphiwe M.", specialty: "Wedding", bio: "Documenting the sacred moments of union across Africa.", email: "simphiwe@visual.com", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400" }
-    ];
+    // Header Scroll Effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 100);
+    });
 
-    function renderCards(data) {
-      const grid = document.getElementById('photographerGrid');
-      grid.innerHTML = data.map(p => `
-        <div class="photographer-card" onclick="openProfile('${p.id}')">
-          <img src="${p.img}" alt="${p.name}">
-          <span style="color:var(--accent); font-size:0.7rem; font-weight:700; text-transform:uppercase;">${p.specialty}</span>
-          <h4>${p.name}</h4>
-          <p style="font-size:0.8rem; color:#666;">View Mini-Profile →</p>
-        </div>
-      `).join('');
-    }
-
-    function filterPhotographers() {
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-      const filterValue = document.getElementById('specialtyFilter').value;
-      
-      const filtered = photographerData.filter(p => {
-        const matchesName = p.name.toLowerCase().includes(searchTerm);
-        const matchesType = filterValue === 'all' || p.specialty === filterValue;
-        return matchesName && matchesType;
-      });
-      renderCards(filtered);
-    }
-
-    function openProfile(id) {
-      const p = photographerData.find(item => item.id === id);
-      document.getElementById('modalLeft').innerHTML = `
-        <h2 style="font-size:3.5rem;">${p.name}</h2>
-        <p style="color:var(--accent); margin-bottom:2rem;">${p.specialty} Specialist</p>
-        <p style="opacity:0.8; margin-bottom:2rem;">${p.bio}</p>
-        <p><b>Contact:</b> ${p.email}</p>
-        <div style="margin-top:20px;"><a href="#" style="color:white; text-decoration:none; border-bottom:1px solid var(--accent);">Instagram Portfolio</a></div>
-      `;
-      document.getElementById('modalGallery').innerHTML = `
-        <img src="${p.img}" style="width:100%; height:150px; object-fit:cover;">
-        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=400" style="width:100%; height:150px; object-fit:cover;">
-      `;
-      document.getElementById('modalReview').innerHTML = `
-        <p style="color:var(--accent);">★★★★★</p>
-        <p style="font-style:italic;">"An incredible collaborator with a unique vision." - Client Review</p>
-      `;
-      document.getElementById('profileModal').style.display = 'flex';
-    }
-
-    function closeProfile() { document.getElementById('profileModal').style.display = 'none'; }
-
-    // Initialize
-    renderCards(photographerData);
-    
     // Reveal Animation
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Data & Grid logic
+    const photographers = [
+        { name: "Kabelo D.", type: "Urban", img: "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=600" },
+        { name: "Elena Rose", type: "Fashion", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600" },
+        { name: "Marcus Venter", type: "Nature", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600" }
+    ];
+
+    function render() {
+        document.getElementById('pGrid').innerHTML = photographers.map(p => `
+            <div class="p-card reveal">
+                <img src="${p.img}">
+                <span style="font-size: 0.7rem; letter-spacing: 2px; color: var(--accent); font-weight: 700; text-transform: uppercase;">${p.type}</span>
+                <h3 style="font-size: 1.8rem; margin-top: 0.5rem;">${p.name}</h3>
+            </div>
+        `).join('');
+    }
+
+    render();
   </script>
 </body>
 </html>
