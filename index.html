@@ -179,7 +179,7 @@
     <div class="reg-card reveal">
       <h2 style="font-size: 2.5rem; color: var(--color-4); margin-bottom: 1rem;">Join the Journey</h2>
       <p style="margin-bottom: 2.5rem; font-size: 1rem; color: #666;">Submit your details to be featured in our elite global directory.</p>
-      <form onsubmit="event.preventDefault(); alert('Application & Portfolio submitted! Our curators will be in touch.');">
+      <form onsubmit="event.preventDefault(); alert('Application submitted! Our curators will be in touch.');">
         <input type="text" placeholder="Full Name" required>
         <input type="email" placeholder="Professional Email" required>
         <select required>
@@ -189,13 +189,7 @@
             <option>Wedding</option>
             <option>Wildlife</option>
         </select>
-        
-        <div style="margin-bottom: 1.2rem; text-align: left;">
-            <label style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; color: var(--accent); font-weight: 700;">Upload Portfolio (PDF or ZIP)</label>
-            <input type="file" style="padding: 0.8rem; background: white; border: 1px dashed var(--accent); cursor: pointer;" accept=".pdf,.zip" required>
-        </div>
-
-        <textarea placeholder="Describe your visual language..." rows="4"></textarea>
+        <textarea placeholder="Describe your visual language..." rows="4" required></textarea>
         <button type="submit" class="btn-submit">Submit Application</button>
       </form>
     </div>
