@@ -364,6 +364,23 @@
       color: #1a3c5e;
     }
 
+    /* Booking Info Styling */
+    .booking-info {
+      background: #f0f8ff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-top: 1.5rem;
+      border: 1px solid #cce5ff;
+    }
+
+    .booking-info ul {
+      margin-top: 1rem;
+    }
+
+    .booking-info li {
+      margin: 0.6rem 0;
+    }
+
     .book-btn {
       display: block;
       margin: 2rem auto 0;
@@ -485,6 +502,16 @@
       alert('Registration successful! (Demo mode)\n\nIn a real version this would create your account and take you to your new profile.');
     });
 
+    // Toggle booking info visibility
+    function toggleBooking(id) {
+      var el = document.getElementById('booking-' + id);
+      if (el.style.display === 'none' || el.style.display === '') {
+        el.style.display = 'block';
+      } else {
+        el.style.display = 'none';
+      }
+    }
+
     // Modal functionality
     const modal = document.getElementById('modal');
     const profileContent = document.getElementById('profileContent');
@@ -542,7 +569,18 @@
                 </li>
               </ul>
             </div>
-            <button class="btn book-btn" onclick="alert('Booking request sent! We will contact you soon.')">Book a Session</button>
+            <div id="booking-lethabo" class="profile-section booking-info" style="display:none;">
+              <h3>Booking Information</h3>
+              <p>To book a session with Lethabo M., contact him directly using the details above.</p>
+              <ul>
+                <li><strong>What to include in your inquiry:</strong> Preferred date(s), location (e.g., Durban beach or studio), type of shoot (portrait, lifestyle, family, etc.), number of people, and any special requests.</li>
+                <li><strong>Pricing:</strong> Starts from R3,000 for basic sessions; custom packages available (pricing upon request).</li>
+                <li><strong>Availability:</strong> Most weekends and select weekdays; check via email or phone for current slots.</li>
+                <li><strong>Deposit:</strong> 30% required to secure your date.</li>
+              </ul>
+              <p>Response time: Within 24 hours. Looking forward to capturing your story!</p>
+            </div>
+            <button class="btn book-btn" onclick="toggleBooking('lethabo')">Book a Session</button>
           `;
         } else if (id === 'alex') {
           html = `
@@ -589,7 +627,18 @@
                 </li>
               </ul>
             </div>
-            <button class="btn book-btn" onclick="alert('Booking request sent! We will contact you soon.')">Book a Session</button>
+            <div id="booking-alex" class="profile-section booking-info" style="display:none;">
+              <h3>Booking Information</h3>
+              <p>To book a session with Alex N., contact him directly using the details above.</p>
+              <ul>
+                <li><strong>What to include in your inquiry:</strong> Desired date(s), location (e.g., KZN coastline, Drakensberg, or custom adventure), type of shoot (landscape, adventure, commercial), and group size if applicable.</li>
+                <li><strong>Pricing:</strong> Starts from R4,500 for half-day shoots; full-day or drone-inclusive packages higher (pricing upon request).</li>
+                <li><strong>Availability:</strong> Flexible for sunrise/sunset shoots; book early for peak seasons.</li>
+                <li><strong>Deposit:</strong> 40% to confirm booking and secure permits if needed.</li>
+              </ul>
+              <p>Response time: Within 24 hours. Let's chase that perfect light!</p>
+            </div>
+            <button class="btn book-btn" onclick="toggleBooking('alex')">Book a Session</button>
           `;
         } else if (id === 'sarah') {
           html = `
@@ -636,7 +685,18 @@
                 </li>
               </ul>
             </div>
-            <button class="btn book-btn" onclick="alert('Booking request sent! We will contact you soon.')">Book a Session</button>
+            <div id="booking-sarah" class="profile-section booking-info" style="display:none;">
+              <h3>Booking Information</h3>
+              <p>To book a session with Sarah K., contact her directly using the details above.</p>
+              <ul>
+                <li><strong>What to include in your inquiry:</strong> Wedding/event date, venue (e.g., Durban beach or hotel), number of hours coverage, must-have shots, and guest count.</li>
+                <li><strong>Pricing:</strong> Wedding packages start from R12,000 (6 hours) to R25,000+ (full day with albums); events vary.</li>
+                <li><strong>Availability:</strong> Popular for weekends; book 6-12 months in advance for peak seasons.</li>
+                <li><strong>Deposit:</strong> 50% non-refundable to secure your date.</li>
+              </ul>
+              <p>Response time: Within 24 hours. Excited to document your special day!</p>
+            </div>
+            <button class="btn book-btn" onclick="toggleBooking('sarah')">Book a Session</button>
           `;
         } else if (id === 'thabo') {
           html = `
@@ -683,7 +743,18 @@
                 </li>
               </ul>
             </div>
-            <button class="btn book-btn" onclick="alert('Booking request sent! We will contact you soon.')">Book a Session</button>
+            <div id="booking-thabo" class="profile-section booking-info" style="display:none;">
+              <h3>Booking Information</h3>
+              <p>To book a session with Thabo R., contact him directly using the details above.</p>
+              <ul>
+                <li><strong>What to include in your inquiry:</strong> Project date, location (e.g., Durban streets, markets, or events), type (street series, documentary, commercial), and any specific themes or access requirements.</li>
+                <li><strong>Pricing:</strong> Starts from R5,000 for half-day documentary shoots; custom projects quoted individually.</li>
+                <li><strong>Availability:</strong> Flexible weekdays and weekends; ideal for ongoing series or events.</li>
+                <li><strong>Deposit:</strong> 30% to confirm and cover any permits/expenses.</li>
+              </ul>
+              <p>Response time: Within 24 hours. Ready to document the real Durban!</p>
+            </div>
+            <button class="btn book-btn" onclick="toggleBooking('thabo')">Book a Session</button>
           `;
         }
 
