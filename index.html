@@ -100,6 +100,8 @@
       font-size: 1.2rem;
       transition: all 0.4s ease;
       box-shadow: 0 8px 20px rgba(77,166,255,0.3);
+      cursor: pointer;
+      border: none;
     }
 
     .btn:hover {
@@ -235,11 +237,145 @@
       margin-top: 5rem;
     }
 
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.85);
+    }
+
+    .modal-content {
+      background: white;
+      margin: 5% auto;
+      padding: 2.5rem;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 900px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+      position: relative;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .close {
+      position: absolute;
+      right: 25px;
+      top: 15px;
+      color: #333;
+      font-size: 2.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #007bff;
+    }
+
+    .profile-header h2 {
+      font-family: 'Playfair Display', serif;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .specialties {
+      text-align: center;
+      font-size: 1.3rem;
+      color: #007bff;
+      margin-bottom: 0.5rem;
+    }
+
+    .location {
+      text-align: center;
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 1.5rem;
+    }
+
+    .profile-section h3 {
+      font-family: 'Playfair Display', serif;
+      color: #1a3c5e;
+      margin: 2rem 0 1rem;
+    }
+
+    .profile-section ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .profile-section li {
+      margin: 0.8rem 0;
+      font-size: 1.1rem;
+    }
+
+    .profile-section li strong {
+      color: #007bff;
+    }
+
+    /* Testimonials Styling */
+    .testimonials {
+      list-style: none;
+      padding: 0;
+    }
+
+    .testimonial {
+      background: #f8fbff;
+      border-left: 5px solid #007bff;
+      padding: 1.2rem 1.5rem;
+      margin: 1.2rem 0;
+      border-radius: 8px;
+      font-style: italic;
+      position: relative;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .testimonial::before {
+      content: '“';
+      font-size: 4rem;
+      color: #007bff;
+      opacity: 0.2;
+      position: absolute;
+      top: -10px;
+      left: 10px;
+    }
+
+    .testimonial::after {
+      content: '”';
+      font-size: 4rem;
+      color: #007bff;
+      opacity: 0.2;
+      position: absolute;
+      bottom: -20px;
+      right: 10px;
+    }
+
+    .testimonial-client {
+      display: block;
+      margin-top: 0.8rem;
+      font-style: normal;
+      font-weight: 600;
+      color: #1a3c5e;
+    }
+
+    .book-btn {
+      display: block;
+      margin: 2rem auto 0;
+      padding: 1rem 3rem;
+    }
+
     @media (max-width: 768px) {
       .hero h1 { font-size: 3.2rem; padding: 8rem 1rem 6rem; }
       .hero p { font-size: 1.3rem; }
       h2 { font-size: 2.5rem; }
       nav ul { gap: 1.5rem; font-size: 0.95rem; }
+      .modal-content { padding: 1.5rem; margin: 10% auto; }
     }
   </style>
 </head>
@@ -272,11 +408,11 @@
       <h2>Featured Photographers</h2>
       <div class="gallery">
         <div class="card">
-          <img src="https://images.pexels.com/photos/9148027/pexels-photo-9148027.jpeg" alt="Portrait photography">
+          <img src="https://images.pexels.com/photos/1029572/pexels-photo-1029572.jpeg" alt="Portrait photography">
           <div class="card-content">
             <h3>Lethabo M.</h3>
             <p>Durban | Portraits & Lifestyle</p>
-            <a href="#">View Portfolio</a>
+            <a href="#" class="portfolio-link" data-id="lethabo">View Portfolio</a>
           </div>
         </div>
 
@@ -285,25 +421,25 @@
           <div class="card-content">
             <h3>Alex N.</h3>
             <p>Landscape & Adventure</p>
-            <a href="#">View Portfolio</a>
+            <a href="#" class="portfolio-link" data-id="alex">View Portfolio</a>
           </div>
         </div>
 
         <div class="card">
-          <img src="https://images.pexels.com/photos/16446632/pexels-photo-16446632.jpeg" alt="Wedding photography">
+          <img src="https://images.pexels.com/photos/30679260/pexels-photo-30679260.jpeg?cs=srgb&dl=pexels-chidy-30679260.jpg&fm=jpg" alt="Wedding photography">
           <div class="card-content">
             <h3>Sarah K.</h3>
             <p>Weddings & Events</p>
-            <a href="#">View Portfolio</a>
+            <a href="#" class="portfolio-link" data-id="sarah">View Portfolio</a>
           </div>
         </div>
 
         <div class="card">
-          <img src="https://live.staticflickr.com/3232/2595327054_7a5b7187f4_b.jpg" alt="Street photography">
+          <img src="https://live.staticflickr.com/1366/1306991614_1dc8311d0d_b.jpg" alt="Street photography">
           <div class="card-content">
             <h3>Thabo R.</h3>
             <p>Street & Documentary</p>
-            <a href="#">View Portfolio</a>
+            <a href="#" class="portfolio-link" data-id="thabo">View Portfolio</a>
           </div>
         </div>
       </div>
@@ -328,6 +464,14 @@
     </div>
   </section>
 
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div id="profileContent"></div>
+    </div>
+  </div>
+
   <footer>
     <div class="container">
       <p>© 2026 Visual Journeys. Built for photographers in KwaZulu-Natal and beyond. Capture every moment.</p>
@@ -335,9 +479,227 @@
   </footer>
 
   <script>
+    // Registration form demo
     document.getElementById('registerForm').addEventListener('submit', function(e) {
       e.preventDefault();
       alert('Registration successful! (Demo mode)\n\nIn a real version this would create your account and take you to your new profile.');
+    });
+
+    // Modal functionality
+    const modal = document.getElementById('modal');
+    const profileContent = document.getElementById('profileContent');
+    const closeBtn = document.querySelector('.close');
+
+    const portfolioLinks = document.querySelectorAll('.portfolio-link');
+    portfolioLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const id = link.dataset.id;
+        let html = '';
+
+        if (id === 'lethabo') {
+          html = `
+            <div class="profile-header">
+              <h2>Lethabo M.</h2>
+              <p class="specialties">Specialties: Portraits & Lifestyle</p>
+              <p class="location">Location: Durban, KwaZulu-Natal</p>
+            </div>
+            <div class="profile-section">
+              <h3>Bio</h3>
+              <p>Durban-based photographer passionate about capturing authentic human stories through natural light portraits and lifestyle sessions. Every photo tells a journey.</p>
+            </div>
+            <div class="profile-section">
+              <h3>Contact Details</h3>
+              <ul>
+                <li><strong>Email:</strong> lethabo@visualjourneys.co.za</li>
+                <li><strong>Phone:</strong> +27 82 123 4567</li>
+                <li><strong>Instagram:</strong> @lethabom_photography</li>
+                <li><strong>Website:</strong> lethabom.co.za</li>
+              </ul>
+            </div>
+            <div class="profile-section">
+              <h3>Portfolio Gallery</h3>
+              <div class="gallery">
+                <img src="https://images.pexels.com/photos/1029572/pexels-photo-1029572.jpeg" alt="Portrait 1">
+                <img src="https://p0.piqsels.com/preview/86/334/391/south-africa-johannesburg-newtown.jpg" alt="Portrait 2">
+                <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg" alt="Portrait 3">
+              </div>
+            </div>
+            <div class="profile-section">
+              <h3>Testimonials</h3>
+              <ul class="testimonials">
+                <li class="testimonial">
+                  "Lethabo captured the essence of our family perfectly. His portraits are timeless!"
+                  <span class="testimonial-client">- Nomsa D., Durban (2025)</span>
+                </li>
+                <li class="testimonial">
+                  "Incredible natural light work! The lifestyle shots felt so genuine and relaxed."
+                  <span class="testimonial-client">- Sipho K., Johannesburg (2024)</span>
+                </li>
+                <li class="testimonial">
+                  "Best portrait photographer in Durban – highly recommended!"
+                  <span class="testimonial-client">- Zanele M., Client (2025)</span>
+                </li>
+              </ul>
+            </div>
+            <button class="btn book-btn" onclick="alert('Booking request sent! We will contact you soon.')">Book a Session</button>
+          `;
+        } else if (id === 'alex') {
+          html = `
+            <div class="profile-header">
+              <h2>Alex N.</h2>
+              <p class="specialties">Specialties: Landscape & Adventure</p>
+              <p class="location">Location: Durban, KwaZulu-Natal</p>
+            </div>
+            <div class="profile-section">
+              <h3>Bio</h3>
+              <p>Exploring the beauty of KZN's coastlines and beyond. Specializing in dramatic sunsets, beaches, and adventure shots that inspire wanderlust.</p>
+            </div>
+            <div class="profile-section">
+              <h3>Contact Details</h3>
+              <ul>
+                <li><strong>Email:</strong> alex@visualjourneys.co.za</li>
+                <li><strong>Phone:</strong> +27 83 987 6543</li>
+                <li><strong>Instagram:</strong> @alexn_adventures</li>
+                <li><strong>Website:</strong> alexnphotography.com</li>
+              </ul>
+            </div>
+            <div class="profile-section">
+              <h3>Portfolio Gallery</h3>
+              <div class="gallery">
+                <img src="https://images.pexels.com/photos/11311705/pexels-photo-11311705.jpeg" alt="Landscape 1">
+                <img src="https://images.pexels.com/photos/20544112/pexels-photo-20544112/free-photo-of-rowboat-on-beach-at-sunset.jpeg" alt="Landscape 2">
+                <img src="https://images.pexels.com/photos/11885971/pexels-photo-11885971.jpeg" alt="Landscape 3">
+              </div>
+            </div>
+            <div class="profile-section">
+              <h3>Testimonials</h3>
+              <ul class="testimonials">
+                <li class="testimonial">
+                  "Alex's landscape shots of Durban beaches are breathtaking – pure magic!"
+                  <span class="testimonial-client">- Travel Blog SA (2025)</span>
+                </li>
+                <li class="testimonial">
+                  "Captured our hiking adventure perfectly. The photos inspire me every day."
+                  <span class="testimonial-client">- Mark L., Adventure Enthusiast (2024)</span>
+                </li>
+                <li class="testimonial">
+                  "Stunning compositions and colors – the best landscape photographer around!"
+                  <span class="testimonial-client">- Lisa P., Client (2025)</span>
+                </li>
+              </ul>
+            </div>
+            <button class="btn book-btn" onclick="alert('Booking request sent! We will contact you soon.')">Book a Session</button>
+          `;
+        } else if (id === 'sarah') {
+          html = `
+            <div class="profile-header">
+              <h2>Sarah K.</h2>
+              <p class="specialties">Specialties: Weddings & Events</p>
+              <p class="location">Location: Durban, KwaZulu-Natal</p>
+            </div>
+            <div class="profile-section">
+              <h3>Bio</h3>
+              <p>Capturing love stories with emotion and elegance. From intimate ceremonies to vibrant celebrations, I preserve every heartfelt moment.</p>
+            </div>
+            <div class="profile-section">
+              <h3>Contact Details</h3>
+              <ul>
+                <li><strong>Email:</strong> sarah@visualjourneys.co.za</li>
+                <li><strong>Phone:</strong> +27 81 555 7890</li>
+                <li><strong>Instagram:</strong> @sarahk_weddings</li>
+                <li><strong>Website:</strong> sarahkweddings.co.za</li>
+              </ul>
+            </div>
+            <div class="profile-section">
+              <h3>Portfolio Gallery</h3>
+              <div class="gallery">
+                <img src="https://images.pexels.com/photos/30679260/pexels-photo-30679260.jpeg?cs=srgb&dl=pexels-chidy-30679260.jpg&fm=jpg" alt="Wedding 1">
+                <img src="https://images.squarespace-cdn.com/content/v1/5e575ffdabec06285101e4d6/746ea032-63ba-40ce-9419-acb44bc0bed9/party-celebrating-dance-floor-black-couple-viceroy-los-cabos.JPG" alt="Wedding 2">
+                <img src="https://images.squarespace-cdn.com/content/v1/5e575ffdabec06285101e4d6/1ee0963f-06da-4f93-a726-200623cbebef/engagement-sexy-african-american-couple-grass-malibu.jpg" alt="Wedding 3">
+              </div>
+            </div>
+            <div class="profile-section">
+              <h3>Testimonials</h3>
+              <ul class="testimonials">
+                <li class="testimonial">
+                  "Sarah made our wedding day unforgettable – the photos are pure emotion!"
+                  <span class="testimonial-client">- Thandi & Sipho, Durban (2025)</span>
+                </li>
+                <li class="testimonial">
+                  "Captured every tear, laugh, and dance perfectly. Best wedding photographer!"
+                  <span class="testimonial-client">- Nomvula R., Bride (2024)</span>
+                </li>
+                <li class="testimonial">
+                  "Elegant, professional, and creative – highly recommend for any event."
+                  <span class="testimonial-client">- Event Planner KZN (2025)</span>
+                </li>
+              </ul>
+            </div>
+            <button class="btn book-btn" onclick="alert('Booking request sent! We will contact you soon.')">Book a Session</button>
+          `;
+        } else if (id === 'thabo') {
+          html = `
+            <div class="profile-header">
+              <h2>Thabo R.</h2>
+              <p class="specialties">Specialties: Street & Documentary</p>
+              <p class="location">Location: Durban, KwaZulu-Natal</p>
+            </div>
+            <div class="profile-section">
+              <h3>Bio</h3>
+              <p>Documenting the raw energy of Durban streets and everyday life. Street photography that reveals culture, movement, and hidden stories.</p>
+            </div>
+            <div class="profile-section">
+              <h3>Contact Details</h3>
+              <ul>
+                <li><strong>Email:</strong> thabo@visualjourneys.co.za</li>
+                <li><strong>Phone:</strong> +27 84 321 0987</li>
+                <li><strong>Instagram:</strong> @thabor_street</li>
+                <li><strong>Website:</strong> thabor.co.za</li>
+              </ul>
+            </div>
+            <div class="profile-section">
+              <h3>Portfolio Gallery</h3>
+              <div class="gallery">
+                <img src="https://live.staticflickr.com/1366/1306991614_1dc8311d0d_b.jpg" alt="Street 1">
+                <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935f9d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Street 2">
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Street 3">
+              </div>
+            </div>
+            <div class="profile-section">
+              <h3>Testimonials</h3>
+              <ul class="testimonials">
+                <li class="testimonial">
+                  "Thabo's street shots capture the soul of Durban like no one else."
+                  <span class="testimonial-client">- Art Gallery Durban (2025)</span>
+                </li>
+                <li class="testimonial">
+                  "Powerful documentary work – his photos tell real stories."
+                  <span class="testimonial-client">- Journalist L., eThekwini (2024)</span>
+                </li>
+                <li class="testimonial">
+                  "Raw, authentic, and inspiring – a true talent!"
+                  <span class="testimonial-client">- Community Project (2025)</span>
+                </li>
+              </ul>
+            </div>
+            <button class="btn book-btn" onclick="alert('Booking request sent! We will contact you soon.')">Book a Session</button>
+          `;
+        }
+
+        profileContent.innerHTML = html;
+        modal.style.display = 'block';
+      });
+    });
+
+    closeBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
     });
   </script>
 
