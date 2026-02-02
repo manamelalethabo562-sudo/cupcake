@@ -3,170 +3,705 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Visual Journeys – Realtime Database Version</title>
+  <title>Visual Journeys – Showcase & Discover Photography</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Roboto', sans-serif; background: #f5f7fa; color: #2c3e50; line-height: 1.7; }
-    header { background: linear-gradient(to right, #0f2027, #203a43, #2c5364); color: white; padding: 1.5rem 0; position: sticky; top: 0; z-index: 100; }
-    .container { max-width: 1300px; margin: 0 auto; padding: 0 2rem; }
-    nav { display: flex; justify-content: space-between; align-items: center; }
-    .logo { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; }
-    nav ul { list-style: none; display: flex; gap: 2.5rem; }
-    nav a { color: white; text-decoration: none; cursor: pointer; }
-    
-    section { padding: 4rem 0; }
-    form, .profile-card { max-width: 600px; margin: 0 auto; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
-    input { width: 100%; padding: 1rem; margin: 0.5rem 0; border: 1px solid #ddd; border-radius: 8px; }
-    button { width: 100%; padding: 1rem; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-    
-    /* Hidden by default */
-    #profileSection, #register { display: none; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
-    .modal-content { background: white; margin: 10% auto; padding: 2rem; width: 80%; max-width: 500px; border-radius: 12px; position: relative; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f5f7fa;
+      color: #2c3e50;
+      line-height: 1.7;
+    }
+
+    header {
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: white;
+      padding: 1.5rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #a8d0ff;
+    }
+
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+                  url('https://images.pexels.com/photos/20544112/pexels-photo-20544112/free-photo-of-rowboat-on-beach-at-sunset.jpeg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-align: center;
+      padding: 12rem 2rem 9rem;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 4.5rem;
+      margin-bottom: 1.2rem;
+      text-shadow: 3px 3px 12px rgba(0,0,0,0.8);
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      max-width: 800px;
+      margin: 0 auto 2.5rem;
+      opacity: 0.95;
+    }
+
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #4da6ff, #007bff);
+      color: white;
+      padding: 1.2rem 3rem;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 20px rgba(77,166,255,0.3);
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 15px 30px rgba(77,166,255,0.5);
+    }
+
+    section {
+      padding: 7rem 0;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      text-align: center;
+      font-size: 3.2rem;
+      margin-bottom: 4rem;
+      color: #1a3c5e;
+      position: relative;
+    }
+
+    h2::after {
+      content: '';
+      width: 80px;
+      height: 4px;
+      background: #007bff;
+      display: block;
+      margin: 1rem auto 0;
+      border-radius: 2px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      transition: all 0.4s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-15px) scale(1.03);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+    }
+
+    .card img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .card:hover img {
+      transform: scale(1.08);
+    }
+
+    .card-content {
+      padding: 1.8rem;
+      text-align: center;
+    }
+
+    .card-content h3 {
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 0.8rem;
+      color: #1a3c5e;
+      font-size: 1.6rem;
+    }
+
+    .card-content p {
+      color: #555;
+      margin-bottom: 1.2rem;
+    }
+
+    .card-content a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    .card-content a:hover {
+      color: #0056b3;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 3rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    }
+
+    input, button {
+      width: 100%;
+      padding: 1.2rem;
+      margin: 1rem 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      transition: border 0.3s;
+    }
+
+    input:focus {
+      border-color: #007bff;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    }
+
+    button {
+      background: linear-gradient(135deg, #4da6ff, #007bff);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.4s;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      transform: translateY(-3px);
+    }
+
+    footer {
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #ccc;
+      text-align: center;
+      padding: 3rem 0;
+      margin-top: 5rem;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.85);
+    }
+
+    .modal-content {
+      background: white;
+      margin: 5% auto;
+      padding: 2.5rem;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 900px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+      position: relative;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .close {
+      position: absolute;
+      right: 25px;
+      top: 15px;
+      color: #333;
+      font-size: 2.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #007bff;
+    }
+
+    .profile-header h2 {
+      font-family: 'Playfair Display', serif;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .specialties {
+      text-align: center;
+      font-size: 1.3rem;
+      color: #007bff;
+      margin-bottom: 0.5rem;
+    }
+
+    .location {
+      text-align: center;
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 1.5rem;
+    }
+
+    .profile-section h3 {
+      font-family: 'Playfair Display', serif;
+      color: #1a3c5e;
+      margin: 2rem 0 1rem;
+    }
+
+    .profile-section ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .profile-section li {
+      margin: 0.8rem 0;
+      font-size: 1.1rem;
+    }
+
+    .profile-section li strong {
+      color: #007bff;
+    }
+
+    /* Testimonials Styling */
+    .testimonials {
+      list-style: none;
+      padding: 0;
+    }
+
+    .testimonial {
+      background: #f8fbff;
+      border-left: 5px solid #007bff;
+      padding: 1.2rem 1.5rem;
+      margin: 1.2rem 0;
+      border-radius: 8px;
+      font-style: italic;
+      position: relative;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .testimonial::before {
+      content: '“';
+      font-size: 4rem;
+      color: #007bff;
+      opacity: 0.2;
+      position: absolute;
+      top: -10px;
+      left: 10px;
+    }
+
+    .testimonial::after {
+      content: '”';
+      font-size: 4rem;
+      color: #007bff;
+      opacity: 0.2;
+      position: absolute;
+      bottom: -20px;
+      right: 10px;
+    }
+
+    .testimonial-client {
+      display: block;
+      margin-top: 0.8rem;
+      font-style: normal;
+      font-weight: 600;
+      color: #1a3c5e;
+    }
+
+    .book-btn {
+      display: block;
+      margin: 2rem auto 0;
+      padding: 1rem 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 3.2rem; padding: 8rem 1rem 6rem; }
+      .hero p { font-size: 1.3rem; }
+      h2 { font-size: 2.5rem; }
+      nav ul { gap: 1.5rem; font-size: 0.95rem; }
+      .modal-content { padding: 1.5rem; margin: 10% auto; }
+    }
   </style>
 </head>
-<body onload="initApp()">
+<body>
 
   <header>
     <div class="container">
       <nav>
         <div class="logo">Visual Journeys</div>
-        <ul id="navLinks">
-          </ul>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#register">Register</a></li>
+          <li><a href="#">Login</a></li>
+        </ul>
       </nav>
     </div>
   </header>
 
-  <section id="register">
+  <section class="hero" id="home">
     <div class="container">
-      <h2 style="text-align:center; margin-bottom: 2rem;">Register Account</h2>
-      <form id="registerForm">
-        <input type="text" id="regName" placeholder="Full Name" required>
-        <input type="email" id="regEmail" placeholder="Email Address" required>
-        <input type="password" id="regPass" placeholder="Password" required>
-        <button type="submit">Create Profile</button>
-      </form>
+      <h1>Visual Journeys</h1>
+      <p>Capture the world through your lens. Showcase your photography, connect with clients, and turn your passion into a journey worth sharing.</p>
+      <a href="#register" class="btn">Join as a Photographer Today</a>
     </div>
   </section>
 
-  <section id="profileSection">
+  <section id="gallery">
     <div class="container">
-      <div class="profile-card">
-        <h2 id="welcomeName">Welcome!</h2>
-        <p id="userEmail" style="color: #7f8c8d; margin-bottom: 1.5rem;"></p>
-        <hr>
-        <div style="margin-top: 1.5rem;">
-          <p><strong>Member Since:</strong> <span id="memberSince"></span></p>
+      <h2>Featured Photographers</h2>
+      <div class="gallery">
+        <div class="card">
+          <img src="https://images.pexels.com/photos/1029572/pexels-photo-1029572.jpeg" alt="Portrait photography">
+          <div class="card-content">
+            <h3>Lethabo M.</h3>
+            <p>Durban | Portraits & Lifestyle</p>
+            <a href="#" class="portfolio-link" data-id="lethabo">View Portfolio</a>
+          </div>
         </div>
-        <button onclick="logout()" style="background: #e74c3c; margin-top: 2rem;">Logout</button>
+
+        <div class="card">
+          <img src="https://images.pexels.com/photos/11311705/pexels-photo-11311705.jpeg" alt="Landscape photography">
+          <div class="card-content">
+            <h3>Alex N.</h3>
+            <p>Landscape & Adventure</p>
+            <a href="#" class="portfolio-link" data-id="alex">View Portfolio</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <img src="https://images.pexels.com/photos/30679260/pexels-photo-30679260.jpeg?cs=srgb&dl=pexels-chidy-30679260.jpg&fm=jpg" alt="Wedding photography">
+          <div class="card-content">
+            <h3>Sarah K.</h3>
+            <p>Weddings & Events</p>
+            <a href="#" class="portfolio-link" data-id="sarah">View Portfolio</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <img src="https://live.staticflickr.com/1366/1306991614_1dc8311d0d_b.jpg" alt="Street photography">
+          <div class="card-content">
+            <h3>Thabo R.</h3>
+            <p>Street & Documentary</p>
+            <a href="#" class="portfolio-link" data-id="thabo">View Portfolio</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <div id="loginModal" class="modal">
-    <div class="modal-content">
-      <h2>Login</h2>
-      <form id="loginForm">
-        <input type="email" id="loginEmail" placeholder="Email" required>
-        <input type="password" id="loginPass" placeholder="Password" required>
-        <button type="submit">Login</button>
+  <section id="register">
+    <div class="container">
+      <h2>Register as a Photographer</h2>
+      <form id="registerForm">
+        <input type="text" placeholder="Full Name" required>
+        <input type="email" placeholder="Email Address" required>
+        <input type="text" placeholder="Username" required>
+        <input type="password" placeholder="Password" required>
+        <input type="url" placeholder="Portfolio / Instagram Link (optional)">
+        <input type="file" accept="image/*" multiple placeholder="Upload profile photo or sample work">
+        <button type="submit">Create My Profile</button>
       </form>
-      <button onclick="document.getElementById('loginModal').style.display='none'" style="background:none; color:gray; border:none;">Close</button>
+      <p style="text-align:center; margin-top:2rem; color:#555; font-size:1.1rem;">
+        After registration you can upload photos, create a full portfolio, and start getting bookings.
+      </p>
+    </div>
+  </section>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div id="profileContent"></div>
     </div>
   </div>
 
+  <footer>
+    <div class="container">
+      <p>© 2026 Visual Journeys. Built for photographers in KwaZulu-Natal and beyond. Capture every moment.</p>
+    </div>
+  </footer>
+
   <script>
-    // --- 1. FIREBASE CONFIG ---
-    const firebaseConfig = {
-      apiKey: "AIzaSyD0bzLcbU6w6J3Zp-zYwsWLpmH5p64C6eQ",
-      authDomain: "visual-journeys-59b7a.firebaseapp.com",
-      databaseURL: "https://visual-journeys-59b7a-default-rtdb.firebaseio.com",
-      projectId: "visual-journeys-59b7a",
-      storageBucket: "visual-journeys-59b7a.firebasestorage.app",
-      messagingSenderId: "193489457433",
-      appId: "1:193489457433:web:69dcfe838303be8106b588",
-      measurementId: "G-3GPGR8TWD9"
-    };
+    // Registration form demo
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Registration successful! (Demo mode)\n\nIn a real version this would create your account and take you to your new profile.');
+    });
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const database = firebase.database();
+    // Modal functionality
+    const modal = document.getElementById('modal');
+    const profileContent = document.getElementById('profileContent');
+    const closeBtn = document.querySelector('.close');
 
-    function initApp() {
-      auth.onAuthStateChanged(user => {
-        const navLinks = document.getElementById('navLinks');
-        const regSec = document.getElementById('register');
-        const profSec = document.getElementById('profileSection');
+    const portfolioLinks = document.querySelectorAll('.portfolio-link');
+    portfolioLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const id = link.dataset.id;
+        let html = '';
 
-        if (user) {
-          // User is signed in: Show Profile, Hide Register
-          regSec.style.display = 'none';
-          profSec.style.display = 'block';
-          navLinks.innerHTML = `<li><a onclick="logout()">Logout</a></li>`;
-          
-          // Fetch additional info from Realtime Database
-          database.ref('users/' + user.uid).once('value').then((snapshot) => {
-            const data = snapshot.val();
-            if(data) {
-              document.getElementById('welcomeName').innerText = "Hello, " + data.username;
-              document.getElementById('userEmail').innerText = data.email;
-              document.getElementById('memberSince').innerText = new Date(data.registeredAt).toLocaleDateString();
-            }
-          });
-
-        } else {
-          // No user: Show Register, Hide Profile
-          regSec.style.display = 'block';
-          profSec.style.display = 'none';
-          navLinks.innerHTML = `<li><a href="#register">Register</a></li><li><a onclick="showLogin()">Login</a></li>`;
+        if (id === 'lethabo') {
+          html = `
+            <div class="profile-header">
+              <h2>Lethabo M.</h2>
+              <p class="specialties">Specialties: Portraits & Lifestyle</p>
+              <p class="location">Location: Durban, KwaZulu-Natal</p>
+            </div>
+            <div class="profile-section">
+              <h3>Bio</h3>
+              <p>Durban-based photographer passionate about capturing authentic human stories through natural light portraits and lifestyle sessions. Every photo tells a journey.</p>
+            </div>
+            <div class="profile-section">
+              <h3>Contact Details</h3>
+              <ul>
+                <li><strong>Email:</strong> lethabo@visualjourneys.co.za</li>
+                <li><strong>Phone:</strong> +27 82 123 4567</li>
+                <li><strong>Instagram:</strong> @lethabom_photography</li>
+                <li><strong>Website:</strong> lethabom.co.za</li>
+              </ul>
+            </div>
+            <div class="profile-section">
+              <h3>Portfolio Gallery</h3>
+              <div class="gallery">
+                <img src="https://images.pexels.com/photos/1029572/pexels-photo-1029572.jpeg" alt="Portrait 1">
+                <img src="https://p0.piqsels.com/preview/86/334/391/south-africa-johannesburg-newtown.jpg" alt="Portrait 2">
+                <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg" alt="Portrait 3">
+              </div>
+            </div>
+            <div class="profile-section">
+              <h3>Testimonials</h3>
+              <ul class="testimonials">
+                <li class="testimonial">
+                  "Lethabo captured the essence of our family perfectly. His portraits are timeless!"
+                  <span class="testimonial-client">- Nomsa D., Durban (2025)</span>
+                </li>
+                <li class="testimonial">
+                  "Incredible natural light work! The lifestyle shots felt so genuine and relaxed."
+                  <span class="testimonial-client">- Sipho K., Johannesburg (2024)</span>
+                </li>
+                <li class="testimonial">
+                  "Best portrait photographer in Durban – highly recommended!"
+                  <span class="testimonial-client">- Zanele M., Client (2025)</span>
+                </li>
+              </ul>
+            </div>
+            <button class="btn book-btn" onclick="alert('Booking request sent! We will contact you soon.')">Book a Session</button>
+          `;
+        } else if (id === 'alex') {
+          html = `
+            <div class="profile-header">
+              <h2>Alex N.</h2>
+              <p class="specialties">Specialties: Landscape & Adventure</p>
+              <p class="location">Location: Durban, KwaZulu-Natal</p>
+            </div>
+            <div class="profile-section">
+              <h3>Bio</h3>
+              <p>Exploring the beauty of KZN's coastlines and beyond. Specializing in dramatic sunsets, beaches, and adventure shots that inspire wanderlust.</p>
+            </div>
+            <div class="profile-section">
+              <h3>Contact Details</h3>
+              <ul>
+                <li><strong>Email:</strong> alex@visualjourneys.co.za</li>
+                <li><strong>Phone:</strong> +27 83 987 6543</li>
+                <li><strong>Instagram:</strong> @alexn_adventures</li>
+                <li><strong>Website:</strong> alexnphotography.com</li>
+              </ul>
+            </div>
+            <div class="profile-section">
+              <h3>Portfolio Gallery</h3>
+              <div class="gallery">
+                <img src="https://images.pexels.com/photos/11311705/pexels-photo-11311705.jpeg" alt="Landscape 1">
+                <img src="https://images.pexels.com/photos/20544112/pexels-photo-20544112/free-photo-of-rowboat-on-beach-at-sunset.jpeg" alt="Landscape 2">
+                <img src="https://images.pexels.com/photos/11885971/pexels-photo-11885971.jpeg" alt="Landscape 3">
+              </div>
+            </div>
+            <div class="profile-section">
+              <h3>Testimonials</h3>
+              <ul class="testimonials">
+                <li class="testimonial">
+                  "Alex's landscape shots of Durban beaches are breathtaking – pure magic!"
+                  <span class="testimonial-client">- Travel Blog SA (2025)</span>
+                </li>
+                <li class="testimonial">
+                  "Captured our hiking adventure perfectly. The photos inspire me every day."
+                  <span class="testimonial-client">- Mark L., Adventure Enthusiast (2024)</span>
+                </li>
+                <li class="testimonial">
+                  "Stunning compositions and colors – the best landscape photographer around!"
+                  <span class="testimonial-client">- Lisa P., Client (2025)</span>
+                </li>
+              </ul>
+            </div>
+            <button class="btn book-btn" onclick="alert('Booking request sent! We will contact you soon.')">Book a Session</button>
+          `;
+        } else if (id === 'sarah') {
+          html = `
+            <div class="profile-header">
+              <h2>Sarah K.</h2>
+              <p class="specialties">Specialties: Weddings & Events</p>
+              <p class="location">Location: Durban, KwaZulu-Natal</p>
+            </div>
+            <div class="profile-section">
+              <h3>Bio</h3>
+              <p>Capturing love stories with emotion and elegance. From intimate ceremonies to vibrant celebrations, I preserve every heartfelt moment.</p>
+            </div>
+            <div class="profile-section">
+              <h3>Contact Details</h3>
+              <ul>
+                <li><strong>Email:</strong> sarah@visualjourneys.co.za</li>
+                <li><strong>Phone:</strong> +27 81 555 7890</li>
+                <li><strong>Instagram:</strong> @sarahk_weddings</li>
+                <li><strong>Website:</strong> sarahkweddings.co.za</li>
+              </ul>
+            </div>
+            <div class="profile-section">
+              <h3>Portfolio Gallery</h3>
+              <div class="gallery">
+                <img src="https://images.pexels.com/photos/30679260/pexels-photo-30679260.jpeg?cs=srgb&dl=pexels-chidy-30679260.jpg&fm=jpg" alt="Wedding 1">
+                <img src="https://images.squarespace-cdn.com/content/v1/5e575ffdabec06285101e4d6/746ea032-63ba-40ce-9419-acb44bc0bed9/party-celebrating-dance-floor-black-couple-viceroy-los-cabos.JPG" alt="Wedding 2">
+                <img src="https://images.squarespace-cdn.com/content/v1/5e575ffdabec06285101e4d6/1ee0963f-06da-4f93-a726-200623cbebef/engagement-sexy-african-american-couple-grass-malibu.jpg" alt="Wedding 3">
+              </div>
+            </div>
+            <div class="profile-section">
+              <h3>Testimonials</h3>
+              <ul class="testimonials">
+                <li class="testimonial">
+                  "Sarah made our wedding day unforgettable – the photos are pure emotion!"
+                  <span class="testimonial-client">- Thandi & Sipho, Durban (2025)</span>
+                </li>
+                <li class="testimonial">
+                  "Captured every tear, laugh, and dance perfectly. Best wedding photographer!"
+                  <span class="testimonial-client">- Nomvula R., Bride (2024)</span>
+                </li>
+                <li class="testimonial">
+                  "Elegant, professional, and creative – highly recommend for any event."
+                  <span class="testimonial-client">- Event Planner KZN (2025)</span>
+                </li>
+              </ul>
+            </div>
+            <button class="btn book-btn" onclick="alert('Booking request sent! We will contact you soon.')">Book a Session</button>
+          `;
+        } else if (id === 'thabo') {
+          html = `
+            <div class="profile-header">
+              <h2>Thabo R.</h2>
+              <p class="specialties">Specialties: Street & Documentary</p>
+              <p class="location">Location: Durban, KwaZulu-Natal</p>
+            </div>
+            <div class="profile-section">
+              <h3>Bio</h3>
+              <p>Documenting the raw energy of Durban streets and everyday life. Street photography that reveals culture, movement, and hidden stories.</p>
+            </div>
+            <div class="profile-section">
+              <h3>Contact Details</h3>
+              <ul>
+                <li><strong>Email:</strong> thabo@visualjourneys.co.za</li>
+                <li><strong>Phone:</strong> +27 84 321 0987</li>
+                <li><strong>Instagram:</strong> @thabor_street</li>
+                <li><strong>Website:</strong> thabor.co.za</li>
+              </ul>
+            </div>
+            <div class="profile-section">
+              <h3>Portfolio Gallery</h3>
+              <div class="gallery">
+                <img src="https://live.staticflickr.com/1366/1306991614_1dc8311d0d_b.jpg" alt="Street 1">
+                <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935f9d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Street 2">
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Street 3">
+              </div>
+            </div>
+            <div class="profile-section">
+              <h3>Testimonials</h3>
+              <ul class="testimonials">
+                <li class="testimonial">
+                  "Thabo's street shots capture the soul of Durban like no one else."
+                  <span class="testimonial-client">- Art Gallery Durban (2025)</span>
+                </li>
+                <li class="testimonial">
+                  "Powerful documentary work – his photos tell real stories."
+                  <span class="testimonial-client">- Journalist L., eThekwini (2024)</span>
+                </li>
+                <li class="testimonial">
+                  "Raw, authentic, and inspiring – a true talent!"
+                  <span class="testimonial-client">- Community Project (2025)</span>
+                </li>
+              </ul>
+            </div>
+            <button class="btn book-btn" onclick="alert('Booking request sent! We will contact you soon.')">Book a Session</button>
+          `;
         }
+
+        profileContent.innerHTML = html;
+        modal.style.display = 'block';
       });
-    }
-
-    // --- 2. REGISTER ---
-    document.getElementById('registerForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('regEmail').value;
-      const password = document.getElementById('regPass').value;
-      const name = document.getElementById('regName').value;
-
-      auth.createUserWithEmailAndPassword(email, password)
-        .then(cred => {
-          return database.ref('users/' + cred.user.uid).set({
-            username: name,
-            email: email,
-            registeredAt: Date.now()
-          });
-        })
-        .then(() => {
-          document.getElementById('registerForm').reset();
-          // No need for alert, initApp() will automatically switch to Profile
-        })
-        .catch(err => alert("Error: " + err.message));
     });
 
-    // --- 3. LOGIN & LOGOUT ---
-    function showLogin() { document.getElementById('loginModal').style.display = 'block'; }
-    
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      auth.signInWithEmailAndPassword(document.getElementById('loginEmail').value, document.getElementById('loginPass').value)
-        .then(() => {
-          document.getElementById('loginModal').style.display = 'none';
-        })
-        .catch(err => alert(err.message));
+    closeBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
     });
 
-    function logout() {
-      auth.signOut();
-    }
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
   </script>
+
 </body>
 </html>
